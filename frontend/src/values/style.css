@@ -1,0 +1,52 @@
+.login-background{
+    -fx-background-radius: 30;
+}
+
+.background{
+    -fx-background-image: url("../img/background.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+
+}
+
+.label-login {
+    -fx-font-family: "Segoe UI";
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-text-fill: #002D62;
+    -fx-letter-spacing: 1px;
+}
+
+.frame-login{
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10;
+}
+
+.topic{
+    -fx-background-color: #FFDAB9;
+    -fx-background-radius: 100;
+}
+
+
+.search-box{
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 100;
+}
+
+.transparent{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.manager-button{
+    -fx-background-color: #0070f4;
+    -fx-background-radius: 10;
+}
+
+.sale-button{
+    -fx-background-color: #00b63e;
+    -fx-background-radius: 10;
+}
+
+.manager-dashboard{
+    -fx-background-color: #16a085;
+}

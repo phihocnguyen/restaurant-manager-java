@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="background" stylesheets="@../values/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane layoutX="67.0" layoutY="90.0" prefHeight="200.0" prefWidth="200.0" styleClass="login-background" stylesheets="@../values/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="320.0" styleClass="frame-login" stylesheets="@../values/style.css" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="105.0" left="150.0" right="150.0" top="105.0" />
+               </BorderPane.margin>
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="190.0" prefWidth="299.0">
+                     <children>
+                        <HBox alignment="TOP_CENTER" prefHeight="54.0" prefWidth="350.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <ImageView fitHeight="54.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                                 <image>
+                                    <Image url="@../img/logo.png" />
+                                 </image>
+                              </ImageView>
+                              <Label graphicTextGap="2.0" prefHeight="64.0" prefWidth="175.0" styleClass="label-login" stylesheets="@../values/style.css" text="Restaurant Manager" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="-5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="18.0" prefWidth="350.0" styleClass="topic" stylesheets="@../values/style.css" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets left="65.0" right="65.0" top="-5.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Bar - Cafe, Restaurant, Karaoke - Billiards" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="8.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="290.0" styleClass="search-box" stylesheets="@../values/style.css" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets left="30.0" right="30.0" />
+                           </VBox.margin>
+                           <children>
+                              <ImageView fitHeight="18.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/user.png" />
+                                 </image>
+                              </ImageView>
+                              <TextField prefHeight="26.0" prefWidth="240.0" promptText="Username" styleClass="transparent" stylesheets="@../values/style.css">
+                                 <font>
+                                    <Font name="Cambria" size="12.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" styleClass="search-box" stylesheets="@../values/style.css" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets left="30.0" right="30.0" top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/pw.png" />
+                                 </image>
+                              </ImageView>
+                              <TextField prefHeight="24.0" prefWidth="240.0" promptText="Password" styleClass="transparent" stylesheets="@../values/style.css">
+                                 <font>
+                                    <Font name="Cambria" size="12.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="350.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="30.0" right="30.0" top="-5.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Quên mật khẩu?" textFill="#002d62">
+                                 <font>
+                                    <Font name="Cambria" size="10.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="29.0" prefWidth="290.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="30.0" right="30.0" />
+                           </VBox.margin>
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="40.0" prefWidth="110.0" styleClass="manager-button" stylesheets="@../values/style.css" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <ImageView fitHeight="27.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/quanly.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button graphicTextGap="0.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="60.0" styleClass="transparent" stylesheets="@../values/style.css" text="Quản lý" textFill="WHITE">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets top="10.0" />
+                                 </opaqueInsets>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="14.0" />
+                              <HBox alignment="CENTER" prefHeight="40.0" prefWidth="106.0" styleClass="sale-button" stylesheets="@../values/style.css" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <ImageView fitHeight="24.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/banhang.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="71.0" styleClass="transparent" stylesheets="@../values/style.css" text="Bán hàng" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets top="30.0" />
+                           </opaqueInsets>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
