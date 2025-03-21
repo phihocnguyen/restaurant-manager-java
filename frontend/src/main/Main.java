@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    // them rtinh nang
+
     public static final String CURRENCY = "$";
     @Override
     public void start(Stage primaryStage) throws Exception{

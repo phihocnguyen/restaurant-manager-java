@@ -1,0 +1,81 @@
+* {
+    -fx-text-color1: #5c5c5c;
+    -fx-text-color2: #9f9f9f;
+    -fx-text-color3: #c4c4c4;
+    -fx-background-color-1: #ededed ;
+    -fx-background-and-text: #fffffe ;
+    -fx-primary-color1: #50c950;
+    -fx-primary-color2: #7beb7b;
+    -fx-primary-color3: #a0f9a0;
+
+}
+
+.padding-all-10{
+    -fx-padding: 10;
+}
+
+.container{
+    -fx-background-color: linear-gradient(to bottom right, -fx-background-and-text ,#E3F2FD);
+}
+.task{
+    -fx-background-color: #2C3E50;
+    -fx-background-radius: 30;
+}
+
+.icon {
+    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.icon:hover {
+    -fx-opacity: 0.7; /* Khi hover, làm icon mờ nhẹ */
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+.logo{
+    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.logo:hover{
+    -fx-opacity: 0.7; /* Khi hover, làm icon mờ nhẹ */
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+.button {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-border-radius: 100;
+    -fx-pref-width: 145px;
+    -fx-pref-height: 40px;
+}
+
+.button1:hover{
+    -fx-opacity: 0.7; /* Khi hover, làm icon mờ nhẹ */
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+.menu-item {
+    -fx-background-color: #2C3E50; /* Màu nền mặc định */
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+
+.menu-item:hover {
+    -fx-background-color: #9fd7f9; /* Màu khi rê chuột */
+    -fx-transition: background-color 0.3s ease-in-out;
+}
+
