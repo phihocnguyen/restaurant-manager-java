@@ -1,18 +1,18 @@
 .login-background{
-    -fx-background-radius: 30;
+    -fx-background-radius: 10;
 }
 
 .background{
-    -fx-background-image: url("../img/background.png");
+    -fx-background-image: url("../img/login.jpg");
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
-
+    -fx-background-radius: 10;
 }
 
 .label-login {
     -fx-font-family: "Segoe UI";
     -fx-font-weight: bold;
-    -fx-font-size: 18px;
+    -fx-font-size: 32px;
     -fx-text-fill: #002D62;
     -fx-letter-spacing: 1px;
 }
@@ -29,7 +29,7 @@
 
 
 .search-box{
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #CCCCCC;
     -fx-background-radius: 100;
 }
 
@@ -46,7 +46,26 @@
     -fx-background-color: #00b63e;
     -fx-background-radius: 10;
 }
+.taskbar-login{
+    -fx-background-color: rgba(255, 255, 255, 0.3); /* Màu trắng trong suốt 30% */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.2); /* Viền mờ */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 0);
+}
 
 .manager-dashboard{
-    -fx-background-color: #16a085;
+    -fx-background-color: #2C3E50;
+}
+
+.button1 {
+    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.button1:hover{
+    -fx-opacity: 0.7; /* Khi hover, làm icon mờ nhẹ */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 255), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }

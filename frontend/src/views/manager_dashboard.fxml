@@ -1,92 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootPane" prefHeight="810.0" prefWidth="1315.0" styleClass="container" stylesheets="@../values/manager_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerDashboardController">
    <children>
-      <BorderPane layoutX="90.0" layoutY="26.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane stylesheets="@../values/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <AnchorPane fx:id="sidebarContainer" onMouseEntered="#onMouseEnterSidebar" onMouseExited="#onMouseExitSidebar">
+               <fx:include fx:id="sidebarContent" source="item_smallSideBar.fxml" />
+            </AnchorPane>
+         </left>
          <top>
-            <HBox prefHeight="39.0" prefWidth="600.0" styleClass="manager-dashboard" stylesheets="@../values/style.css" BorderPane.alignment="CENTER">
+            <VBox prefHeight="49.0" prefWidth="1315.0" styleClass="manager-dashboard" stylesheets="@../values/manager_style.css" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER" prefHeight="39.0" prefWidth="98.0">
+                  <HBox prefHeight="50.0" prefWidth="1315.0">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/home_icon.png" />
-                           </image>
-                        </ImageView>
-                        <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="77.0" styleClass="transparent" stylesheets="@../values/style.css" text="Tổng quan" textFill="WHITE">
-                           <font>
-                              <Font name="Segoe UI Bold" size="12.0" />
-                           </font>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                                 <image>
+                                    <Image url="@../img/back.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
                            <HBox.margin>
-                              <Insets left="-5.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="39.0" prefWidth="98.0">
-                     <children>
-                        <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                        </HBox>
+                        <HBox prefHeight="50.0" prefWidth="1155.0" HBox.hgrow="ALWAYS" />
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
-                              <Image url="@../img/home_icon.png" />
+                              <Image url="@../img/hide_1.png" />
                            </image>
-                        </ImageView>
-                        <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="77.0" styleClass="transparent" stylesheets="@../values/style.css" text="Hàng hóa" textFill="WHITE">
-                           <font>
-                              <Font name="Segoe UI Bold" size="12.0" />
-                           </font>
                            <HBox.margin>
-                              <Insets left="-5.0" />
+                              <Insets bottom="5.0" right="10.0" top="5.0" />
                            </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="39.0" prefWidth="98.0">
-                     <children>
-                        <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                        </ImageView>
+                        <ImageView fx:id="exitButton" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
-                              <Image url="@../img/home_icon.png" />
+                              <Image url="@../img/exit.png" />
                            </image>
-                        </ImageView>
-                        <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="77.0" styleClass="transparent" stylesheets="@../values/style.css" text="Phòng bàn" textFill="WHITE">
-                           <font>
-                              <Font name="Segoe UI Bold" size="12.0" />
-                           </font>
                            <HBox.margin>
-                              <Insets left="-5.0" />
+                              <Insets bottom="5.0" right="10.0" top="5.0" />
                            </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="39.0" prefWidth="98.0">
-                     <children>
-                        <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/home_icon.png" />
-                           </image>
                         </ImageView>
-                        <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="77.0" styleClass="transparent" stylesheets="@../values/style.css" text="Báo cáo" textFill="WHITE">
-                           <font>
-                              <Font name="Segoe UI Bold" size="12.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="-5.0" />
-                           </HBox.margin>
-                        </Button>
                      </children>
                   </HBox>
                </children>
-            </HBox>
+               
+            </VBox>
          </top>
+         <right>
+            <VBox prefHeight="200.0" prefWidth="80.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox prefHeight="20.0" prefWidth="200.0" />
+                  <ImageView fx:id="logoAvatar" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#onLogoClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@../img/logo_1.png" />
+                     </image>
+                  </ImageView>
+                  <HBox prefHeight="20.0" prefWidth="20.0" />
+                  <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@../img/darkmode_1.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
+         </right>
+         <center>
+            <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="1165.0" BorderPane.alignment="CENTER" />
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>
