@@ -1,0 +1,85 @@
+.search-box {
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 100;
+}
+.tab-menu-button:hover {
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 100;
+    -fx-text-fill: white;
+}
+.tab-menu-button{
+    -fx-background-color: #F2F2F2;
+    -fx-text-fill: grey;
+}
+.button_menu:hover {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: grey;
+}
+.button_menu{
+    -fx-background-color: #00A98F;
+    -fx-text-fill: white;
+}
+.button_search {
+    -fx-background-color: rgb(123, 250, 201);
+    -fx-background-radius: 100;
+}
+.transparent {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+
+.shadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10.0, 0.0, 0.0, 10.0);
+}
+
+.combo-box {
+    -fx-background-radius: 30;
+    -fx-background-color: rgb(123, 250, 201);
+}
+.left-bar{
+    -fx-background-color: rgba(0, 62, 52, 0.95);
+}
+.fruit-background{
+    -fx-background-radius: 15;
+    -fx-background-color: #F2F2F2;
+
+}
+.fruit-background-left{
+    -fx-background-radius: 0 15 15 15 ;
+    -fx-background-color: #F2F2F2;
+
+}
+.button-notify {
+    -fx-background-color: #F2F2F2;
+    -fx-text-fill: #009688;
+    -fx-border-color: #009688;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER;
+    -fx-graphic-text-gap: 8;
+}
+.button-notify:hover {
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+}
+/* Góc cong trái */
+.tab-left {
+    -fx-background-radius: 18 25 0 0;
+}
+
+/* Góc cong phải */
+.tab-right {
+    -fx-background-radius: 18 0 0 0;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: grey;
+    -fx-alignment: CENTER-RIGHT;
+}
+.white-curve {
+    -fx-shape: "M 0 60 C 0 40, 20 20, 60 0 L 60 60 Z";
+    -fx-background-color: white;
+    -fx-pref-width: 60;
+    -fx-pref-height: 60;
+}
