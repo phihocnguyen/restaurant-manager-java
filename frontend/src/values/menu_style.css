@@ -1,0 +1,165 @@
+.search-box {
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 100;
+}
+.tab-menu:hover {
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 100;
+    -fx-text-fill: white;
+}
+.tab-menu{
+    -fx-background-color: #F2F2F2;
+    -fx-text-fill: grey;
+}
+.tab-menu-button{
+    -fx-background-color: rgb(242, 242, 242);
+    -fx-background-radius: 100;
+    -fx-text-fill: grey;
+    -fx-alignment: center;
+}
+.tab-menu-button:hover{
+    -fx-background-color: rgb(0, 169, 143);
+    -fx-background-radius: 100;
+    -fx-text-fill: white;
+}
+
+.button_menu:hover {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: grey;
+}
+.button_menu{
+    -fx-background-color:#018873;
+    -fx-text-fill: white;
+}
+.button_search {
+    -fx-background-color: rgb(123, 250, 201);
+    -fx-background-radius: 100;
+    -fx-alignment: center;
+}
+.transparent {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+
+.shadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10.0, 0.0, 0.0, 10.0);
+}
+
+.combo-box {
+    -fx-background-radius: 30;
+    -fx-background-color: rgb(123, 250, 201);
+}
+.left-bar{
+    -fx-background-color: rgba(0, 62, 52, 0.95);
+}
+.fruit-background{
+    -fx-background-radius: 25;
+    -fx-background-color: #ccf3ec;
+}
+.fruit-background-left{
+    -fx-background-radius: 0 15 15 15 ;
+    -fx-background-color: #F2F2F2;
+
+}
+.button-notify {
+    -fx-background-color: #F2F2F2;
+    -fx-text-fill: #009688;
+    -fx-border-color: #009688;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER;
+    -fx-graphic-text-gap: 8;
+}
+.button-notify:hover {
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+}
+/* Góc cong trái */
+.tab-left {
+    -fx-background-radius: 18 25 0 0;
+}
+
+/* Góc cong phải */
+.tab-right {
+    -fx-background-radius: 18 0 0 0;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: grey;
+    -fx-alignment: CENTER-RIGHT;
+}
+.table-right {
+    -fx-background-radius: 18 0 0 0;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: grey;
+    -fx-alignment: CENTER;
+}
+.white-curve {
+    -fx-shape: "M 0 60 C 0 40, 20 20, 60 0 L 60 60 Z";
+    -fx-background-color: white;
+    -fx-pref-width: 60;
+    -fx-pref-height: 60;
+}
+.menu-lblName{
+    -fx-background-color: #ccf3ec;
+
+}
+.menu-lblPrice {
+    -fx-background-color: rgba(215, 253, 237, 0.62);
+    -fx-text-fill: #008bfd; /* màu xanh đẹp */
+    -fx-background-radius: 10;
+    -fx-alignment: CENTER;
+}
+
+/* Tổng thể */
+.custom-tab-pane {
+    -fx-border-color: transparent;
+    -fx-background-color: #F2F2F2;
+}
+
+.custom-tab-pane .tab-header-area {
+    -fx-background-color: #F2F2F2;
+    -fx-padding: 4 10 4 10;
+}
+
+.custom-tab-pane .tab-header-background {
+    -fx-background-color: #F2F2F2;
+}
+
+/* Từng tab */
+.custom-tab-pane .tab {
+    -fx-background-color: #F2F2F2;
+    -fx-padding: 6 28;
+    -fx-background-insets: 0;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+}
+
+/* Màu chữ cho tab chưa chọn */
+.custom-tab-pane .tab .tab-label {
+    -fx-text-fill: grey;
+}
+
+/* Màu chữ cho tab đang được chọn */
+.custom-tab-pane .tab:selected .tab-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Tab được chọn */
+.custom-tab-pane .tab:selected {
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10.0, 0.0, 0.0, 10.0);
+
+}
+
+/* Vùng nội dung */
+.custom-tab-pane .tab-content-area {
+    -fx-background-color: #F2F2F2;
+    -fx-padding: 20;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+}

@@ -1,0 +1,11 @@
+.background-table{
+    -fx-background-radius: 20;
+    -fx-background-color: white;
+}
+.background-table:hover {
+    -fx-background-radius: 20;
+    -fx-background-color: #009688;
+    -fx-border-color: #00ffe7;
+    -fx-border-width: 2;
+    -fx-border-radius: 20;
+}
