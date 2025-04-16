@@ -6,61 +6,45 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="671.0" prefWidth="935.0" stylesheets="@../values/menu_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerMenu">
+<AnchorPane fx:id="anchorpane" prefHeight="810.0" prefWidth="1315.0" stylesheets="@../values/menu_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerMenu">
    <children>
-      <BorderPane prefHeight="671.0" prefWidth="935.0" styleClass="left-bar" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <VBox prefHeight="671.0" prefWidth="550.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="679.0" prefWidth="942.0" styleClass="left-bar" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <right>
+            <VBox prefHeight="200.0" prefWidth="435.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="550.0">
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="41.0" prefWidth="386.0">
                      <children>
-                        <HBox alignment="BOTTOM_LEFT" prefHeight="44.0" prefWidth="111.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="110.0" styleClass="table-right" stylesheets="@../values/menu_style.css">
+                           <HBox.margin>
+                              <Insets left="2.0" top="6.0" />
+                           </HBox.margin>
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" stylesheets="@../../../../../Cuoi%20kì/res_manager3/src/main/resources/com/example/res_manager3/css/market.css" text="Phòng bàn" textFill="WHITE">
+                              <ImageView fitHeight="20.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/ingredient.png" />
+                                 </image>
+                              </ImageView>
+                              <Label alignment="CENTER" text="Bàn 1" textAlignment="CENTER" textFill="GREY">
                                  <font>
                                     <Font name="Cambria Bold" size="14.0" />
                                  </font>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                                 <styleClass>
-                                    <String fx:value="shadow" />
-                                    <String fx:value="button_menu" />
-                                    <String fx:value="tab-left" />
-                                 </styleClass>
-                              </Button>
-                           </children>
-                        </HBox>
-                        <HBox alignment="BOTTOM_LEFT" prefHeight="44.0" prefWidth="102.0">
-                           <children>
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="99.0" stylesheets="@../../../../../Cuoi%20kì/res_manager3/src/main/resources/com/example/res_manager3/css/market.css" text="Thực đơn" textAlignment="RIGHT" textFill="WHITE">
-                                 <font>
-                                    <Font name="Cambria Bold" size="14.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                                 <styleClass>
-                                    <String fx:value="shadow" />
-                                    <String fx:value="tab-right" />
-                                 </styleClass>
-                              </Button>
+                              </Label>
                            </children>
                         </HBox>
                         <HBox alignment="BOTTOM_LEFT" prefHeight="44.0" prefWidth="68.0">
                            <children>
-                              <ImageView fitHeight="36.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="35.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../imgfood/svg.png" />
                                  </image>
@@ -70,152 +54,45 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="278.0" stylesheets="@../values/menu_style.css">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="42.0" prefWidth="340.0">
                            <children>
-                              <TextField prefHeight="28.0" prefWidth="197.0" promptText="Tìm món tại đây (F3)" styleClass="search-box" stylesheets="@../values/menu_style.css">
-                                 <font>
-                                    <Font name="Cambria" size="14.0" />
-                                 </font>
-                              </TextField>
-                              <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" styleClass="button_search" stylesheets="@../values/menu_style.css" text="Search">
-                                 <font>
-                                    <Font name="Cambria" size="13.0" />
-                                 </font>
+                              <ImageView fitHeight="36.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/logo_1.png" />
+                                 </image>
                                  <HBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                    <Insets right="10.0" />
                                  </HBox.margin>
-                              </Button>
+                              </ImageView>
+                              <ImageView fitHeight="27.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/menu_1.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <ImageView fx:id="exitButtonMenu" fitHeight="25.0" fitWidth="27.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/exit.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
                            </children>
-                           <HBox.margin>
-                              <Insets bottom="10.0" left="15.0" top="10.0" />
-                           </HBox.margin>
-                           <styleClass>
-                              <String fx:value="search-box" />
-                              <String fx:value="shadow" />
-                           </styleClass>
                         </HBox>
                      </children>
-                  </HBox>
-                  <VBox prefHeight="631.0" prefWidth="530.0" styleClass="fruit-background-left" stylesheets="@../values/menu_style.css">
                      <VBox.margin>
-                        <Insets bottom="5.0" left="10.0" right="5.0" />
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <VBox prefHeight="852.0" prefWidth="753.0" styleClass="fruit-background-left" stylesheets="@../values/menu_style.css">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="2.0" right="5.0" />
                      </VBox.margin>
                      <children>
-                        <HBox prefHeight="50.0" prefWidth="541.0" styleClass="fruit-background">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="30.0" prefWidth="114.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="89.0" styleClass="tab-menu-button" stylesheets="@../values/menu_style.css" text="Tất cả">
-                                       <font>
-                                          <Font name="Cambria Bold" size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="30.0" prefWidth="123.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" styleClass="tab-menu-button" text="Món ăn">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="30.0" prefWidth="122.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="92.0" styleClass="tab-menu-button" text="Nước uống">
-                                       <font>
-                                          <Font name="Cambria" size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="30.0" prefWidth="94.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="66.0" styleClass="tab-menu-button" text="Khác">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </HBox.margin>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="547.0" prefWidth="541.0">
-                           <children>
-                              <ScrollPane fx:id="scroll" prefHeight="547.0" prefWidth="562.0" styleClass="transparent" stylesheets="@../values/menu_style.css">
-                                 <content>
-                                    <GridPane fx:id="grid" hgap="20" prefHeight="0.0" prefWidth="10.0" vgap="20">
-                                       <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                       </columnConstraints>
-                                    </GridPane>
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-         </left>
-         <center>
-            <VBox prefHeight="200.0" prefWidth="435.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="41.0" prefWidth="386.0">
-                     <children>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/logo_1.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <ImageView fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/banhang.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/menu.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <ImageView fitHeight="29.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/exit.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <VBox prefHeight="634.0" prefWidth="382.0" styleClass="fruit-background" stylesheets="@../values/menu_style.css">
-                     <VBox.margin>
-                        <Insets bottom="5.0" right="5.0" />
-                     </VBox.margin>
-                     <children>
-                        <HBox prefHeight="498.0" prefWidth="380.0">
+                        <HBox alignment="CENTER" prefHeight="658.0" prefWidth="428.0">
                            <children>
                               <VBox alignment="TOP_CENTER" prefHeight="228.0" prefWidth="280.0">
                                  <HBox.margin>
@@ -229,7 +106,7 @@
                                     </ImageView>
                                     <Label text="Chưa có món nào trong đơn" textFill="#434242">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="Cambria" size="14.0" />
                                        </font>
                                        <VBox.margin>
                                           <Insets top="20.0" />
@@ -237,7 +114,7 @@
                                     </Label>
                                     <Label text="Vui lòng chọn món trong thực đơn bên trái " textFill="#434242">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="Cambria" size="14.0" />
                                        </font>
                                        <VBox.margin>
                                           <Insets top="5.0" />
@@ -249,16 +126,16 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="46.0" prefWidth="380.0">
                            <children>
-                              <HBox alignment="BOTTOM_CENTER" prefHeight="74.0" prefWidth="185.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="223.0">
                                  <children>
-                                    <ComboBox prefHeight="30.0" prefWidth="169.0" promptText="Nhân viên" stylesheets="@../values/menu_style.css">
+                                    <ComboBox prefHeight="30.0" prefWidth="221.0" promptText="Nhân viên" stylesheets="@../values/menu_style.css">
                                        <HBox.margin>
                                           <Insets left="7.0" />
                                        </HBox.margin>
                                     </ComboBox>
                                  </children>
                                  <HBox.margin>
-                                    <Insets right="40.0" />
+                                    <Insets right="32.0" />
                                  </HBox.margin>
                               </HBox>
                               <HBox alignment="BOTTOM_CENTER" prefHeight="74.0" prefWidth="90.0">
@@ -267,6 +144,9 @@
                                        <font>
                                           <Font name="Cambria Bold" size="16.0" />
                                        </font>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </HBox.margin>
                                     </Label>
                                  </children>
                                  <HBox.margin>
@@ -279,6 +159,9 @@
                                        <image>
                                           <Image url="@../img/revenue.png" />
                                        </image>
+                                       <HBox.margin>
+                                          <Insets bottom="2.0" />
+                                       </HBox.margin>
                                     </ImageView>
                                  </children>
                               </HBox>
@@ -288,6 +171,9 @@
                                        <font>
                                           <Font size="14.0" />
                                        </font>
+                                       <HBox.margin>
+                                          <Insets bottom="2.0" />
+                                       </HBox.margin>
                                     </Label>
                                  </children>
                                  <opaqueInsets>
@@ -301,16 +187,31 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER" prefHeight="87.0" prefWidth="164.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="150.0" styleClass="button-notify" text="Thông báo (F10)" />
+                                    <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="146.0" styleClass="button-notify" text="Thông báo">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font></Button>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="87.0" prefWidth="212.0">
+                                 <children>
+                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="56.0" prefWidth="133.0" styleClass="button-notify" text="Lưu và tạm tính">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="74.0" prefWidth="262.0">
+                              <HBox alignment="CENTER" prefHeight="87.0" prefWidth="256.0">
                                  <children>
-                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="56.0" prefWidth="210.0" styleClass="button-notify" text="Thanh toán (F9)">
+                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="56.0" prefWidth="276.0" styleClass="button-notify" text="Thanh toán">
                                        <HBox.margin>
-                                          <Insets />
+                                          <Insets right="5.0" />
                                        </HBox.margin>
                                     </Button>
                                  </children>
@@ -323,6 +224,165 @@
                <BorderPane.margin>
                   <Insets right="5.0" />
                </BorderPane.margin>
+            </VBox>
+         </right>
+         <center>
+            <VBox prefHeight="726.0" prefWidth="875.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox fx:id="headerContainer" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="550.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="610.0">
+                           <children>
+                              <HBox alignment="BOTTOM_LEFT" prefHeight="44.0" prefWidth="111.0">
+                                 <children>
+                                    <Button fx:id="btnPhongBan" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Phòng bàn" textFill="WHITE">
+                                       <font>
+                                          <Font name="Cambria Bold" size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                       <styleClass>
+                                          <String fx:value="shadow" />
+                                          <String fx:value="button_menu" />
+                                          <String fx:value="tab-left" />
+                                       </styleClass>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="BOTTOM_LEFT" prefHeight="44.0" prefWidth="102.0">
+                                 <children>
+                                    <Button fx:id="btnThucDon" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="35.0" prefWidth="129.0" text="Thực đơn" textAlignment="RIGHT" textFill="WHITE">
+                                       <font>
+                                          <Font name="Cambria Bold" size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <styleClass>
+                                          <String fx:value="shadow" />
+                                          <String fx:value="tab-right" />
+                                       </styleClass>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="BOTTOM_LEFT" prefHeight="44.0" prefWidth="68.0">
+                                 <children>
+                                    <ImageView fitHeight="36.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../imgfood/svg.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets right="28.0" top="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="1170.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="32.0" prefWidth="790.0" stylesheets="@../values/menu_style.css">
+                                 <children>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/banhang.png" />
+                                       </image>
+                                    </ImageView>
+                                    <TextField prefHeight="28.0" prefWidth="676.0" promptText="Tìm món tại đây (F3)" styleClass="search-box" stylesheets="@../values/menu_style.css">
+                                       <font>
+                                          <Font name="Cambria" size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" styleClass="button_search" stylesheets="@../values/menu_style.css" text="Tìm">
+                                       <font>
+                                          <Font name="Cambria" size="13.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="search-box" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                                 <HBox.margin>
+                                    <Insets bottom="4.0" right="6.0" top="4.0" />
+                                 </HBox.margin>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+                  <VBox prefHeight="847.0" prefWidth="860.0" styleClass="fruit-background-left" stylesheets="@../values/menu_style.css">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" right="5.0" />
+                     </VBox.margin>
+                     <children>
+                        <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="860.0">
+                           <children>
+                              <TabPane fx:id="menuTabPane" prefHeight="742.0" prefWidth="836.0" styleClass="custom-tab-pane" stylesheets="@../values/menu_style.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="NEVER">
+                                 <tabs>
+                                    <Tab fx:id="tabAll" text="Tất cả">
+
+                                       <ScrollPane fitToHeight="true" fitToWidth="true">
+                                          <VBox spacing="10">
+                                             <!-- nội dung cuộn -->
+                                             <Label text="Món 1" />
+                                             <Label text="Món 2" />
+                                             <Label text="Món 3" />
+                                             <!-- ... -->
+                                          </VBox>
+                                       </ScrollPane>
+
+                                    </Tab>
+                                    <Tab fx:id="tabFood" text="Món ăn">
+
+                                       <ScrollPane fitToHeight="true" fitToWidth="true">
+                                          <VBox spacing="10">
+                                             <!-- nội dung cuộn -->
+                                             <Label text="Món 1" />
+                                             <Label text="Món 2" />
+                                             <Label text="Món 3" />
+                                             <!-- ... -->
+                                          </VBox>
+                                       </ScrollPane>
+
+                                    </Tab>
+                                    <Tab fx:id="tabDrink" text="Nước uống">
+
+                                       <ScrollPane fitToHeight="true" fitToWidth="true">
+                                          <VBox spacing="10">
+                                             <!-- nội dung cuộn -->
+                                             <Label text="Món 1" />
+                                             <Label text="Món 2" />
+                                             <Label text="Món 3" />
+                                             <!-- ... -->
+                                          </VBox>
+                                       </ScrollPane>
+
+                                    </Tab>
+                                    <Tab fx:id="tabOther" text="Khác">
+
+                                       <ScrollPane fitToHeight="true" fitToWidth="true">
+                                          <VBox prefHeight="658.0" prefWidth="627.0" spacing="10">
+                                             <!-- nội dung cuộn -->
+                                             <Label text="Món 1" />
+                                             <Label text="Món 2" />
+                                             <Label text="Món 3" />
+                                             <!-- ... -->
+                                          </VBox>
+                                       </ScrollPane>
+
+                                    </Tab>
+                                 </tabs>
+                              </TabPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
             </VBox>
          </center>
       </BorderPane>
