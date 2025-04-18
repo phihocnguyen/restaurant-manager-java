@@ -1,0 +1,43 @@
+/* Tổng thể sidebar */
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+}
+
+/* Các item trong sidebar */
+.sidebar-item {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 10;
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-transition: all 0.2s;
+}
+
+.sidebar-item:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Label chữ */
+.sidebar-item Label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+.sidebar-item.selected {
+    -fx-background-color: #2196F3;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.5), 10, 0.3, 0, 0);
+}
+
+.sidebar-item.selected Label {
+    -fx-text-fill: white;
+}
+
+.icon.selected {
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.9), 10, 0.4, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+

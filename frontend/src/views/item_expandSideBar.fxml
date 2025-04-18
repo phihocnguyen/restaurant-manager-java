@@ -8,142 +8,142 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="expandSidebar" alignment="CENTER" layoutX="0" layoutY="0" prefWidth="200.0" styleClass="task" stylesheets="@../values/manager_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <HBox prefHeight="20.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
-         <children>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/home_icon.png" />
-               </image>
-            </ImageView>
-            <HBox prefHeight="50.0" prefWidth="20.0" />
-            <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Tổng quan" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
+<VBox fx:id="expandSidebar" alignment="CENTER" layoutX="0" layoutY="0" prefWidth="200.0" styleClass="task" stylesheets="@../values/manager_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SidebarController">
+   <HBox prefHeight="20.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   <HBox fx:id="boxOverview"  alignment="CENTER"  prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+      <children>
+         <ImageView onMouseClicked="#handleOverviewClick" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../img/home_icon.png" />
+            </image>
+         </ImageView>
+         <HBox prefHeight="50.0" prefWidth="20.0" />
+         <Button onMouseClicked="#handleOverviewClick" pickOnBounds="true" mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Tổng quan" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="14.0" />
+            </font>
+         </Button>
+      </children>
       <VBox.margin>
          <Insets />
       </VBox.margin>
       <padding>
          <Insets left="10.0" right="15.0" />
       </padding>
-      </HBox>
-      <HBox prefHeight="50.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
-         <children>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/employee_1.png" />
-               </image>
-            </ImageView>
-            <HBox prefHeight="50.0" prefWidth="20.0" />
-            <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nhân viên" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
+   </HBox>
+   <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+      <children>
+         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../img/employee_1.png" />
+            </image>
+         </ImageView>
+         <HBox prefHeight="50.0" prefWidth="20.0" />
+         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nhân viên" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="14.0" />
+            </font>
+         </Button>
+      </children>
       <VBox.margin>
          <Insets left="10.0" right="15.0" />
       </VBox.margin>
-      </HBox>
-      <HBox prefHeight="50.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
-         <children>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/customer_1.png" />
-               </image>
-            </ImageView>
-            <HBox prefHeight="100.0" prefWidth="20.0" />
-            <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Khách hàng" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
+   </HBox>
+   <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+      <children>
+         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../img/customer_1.png" />
+            </image>
+         </ImageView>
+         <HBox prefHeight="100.0" prefWidth="20.0" />
+         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Khách hàng" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="14.0" />
+            </font>
+         </Button>
+      </children>
       <VBox.margin>
          <Insets left="10.0" right="15.0" />
       </VBox.margin>
-      </HBox>
-      <HBox prefHeight="50.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
-         <children>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/revenue_1.png" />
-               </image>
-            </ImageView>
-            <HBox prefHeight="50.0" prefWidth="20.0" />
-            <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Doanh thu" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
+   </HBox>
+   <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+      <children>
+         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../img/revenue_1.png" />
+            </image>
+         </ImageView>
+         <HBox prefHeight="50.0" prefWidth="20.0" />
+         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Doanh thu" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="14.0" />
+            </font>
+         </Button>
+      </children>
       <VBox.margin>
          <Insets left="10.0" right="15.0" />
       </VBox.margin>
-      </HBox>
-      <HBox prefHeight="50.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
-         <children>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/storehouse_1.png" />
-               </image>
-            </ImageView>
-            <HBox prefHeight="50.0" prefWidth="20.0" />
-            <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Kho" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
+   </HBox>
+   <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+      <children>
+         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../img/storehouse_1.png" />
+            </image>
+         </ImageView>
+         <HBox prefHeight="50.0" prefWidth="20.0" />
+         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Kho" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="14.0" />
+            </font>
+         </Button>
+      </children>
       <VBox.margin>
          <Insets left="10.0" right="15.0" />
       </VBox.margin>
-      </HBox>
-      <HBox prefHeight="50.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
-         <children>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/ingredient_1.png" />
-               </image>
-            </ImageView>
-            <HBox prefHeight="50.0" prefWidth="20.0" />
-            <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nguyên liệu" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
+   </HBox>
+   <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+      <children>
+         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../img/ingredient_1.png" />
+            </image>
+         </ImageView>
+         <HBox prefHeight="50.0" prefWidth="20.0" />
+         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nguyên liệu" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="14.0" />
+            </font>
+         </Button>
+      </children>
       <VBox.margin>
          <Insets left="10.0" right="15.0" />
       </VBox.margin>
-      </HBox>
-      <HBox prefHeight="50.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
-         <children>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/food_1.png" />
-               </image>
-            </ImageView>
-            <HBox prefHeight="50.0" prefWidth="20.0" />
-            <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Món ăn" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
+   </HBox>
+   <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+      <children>
+         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../img/food_1.png" />
+            </image>
+         </ImageView>
+         <HBox prefHeight="50.0" prefWidth="20.0" />
+         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Món ăn" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="14.0" />
+            </font>
+         </Button>
+      </children>
       <VBox.margin>
          <Insets left="10.0" right="15.0" />
       </VBox.margin>
-      </HBox>
-      <HBox prefHeight="497.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+   </HBox>
+   <HBox prefHeight="300.0" prefWidth="200.0" />
 </VBox>
