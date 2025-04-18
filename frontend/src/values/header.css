@@ -1,0 +1,21 @@
+.hboxheader{
+    -fx-background-color: rgba(0, 62, 52, 0.84);
+}
+.header-menu-left{
+    -fx-background-radius: 0 25 0 0;
+    -fx-background-color: #018873;
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+
+}
+
+.header-menu-right {
+    -fx-background-radius: 18 0 0 0;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: grey;
+    -fx-alignment: CENTER-RIGHT;
+    -fx-translate-x: 6
+
+;
+
+}
