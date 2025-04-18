@@ -7,19 +7,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="166.0" prefWidth="231.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ItemTable">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="228.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ItemTable">
    <children>
-      <VBox alignment="CENTER" prefHeight="219.0" prefWidth="231.0" styleClass="background-table" stylesheets="@../values/table_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutY="-13.6" prefHeight="433.0" prefWidth="293.0" styleClass="background-table" stylesheets="@../values/table_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="img" fitHeight="136.0" fitWidth="144.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="img" fitHeight="147.0" fitWidth="118.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/table2.png" />
                </image>
             </ImageView>
-            <Label fx:id="number" prefHeight="82.0" prefWidth="231.0" styleClass="menu-lblPrice" stylesheets="@../values/menu_style.css" text="Bàn 1" textAlignment="CENTER">
+            <Label fx:id="number" prefHeight="78.0" prefWidth="194.0" styleClass="button-number" stylesheets="@../values/table_style.css" text="Bàn 1" textAlignment="CENTER">
                <font>
-                  <Font name="Cambria" size="28.0" />
+                  <Font name="Cambria Bold" size="28.0" />
                </font>
             </Label>
          </children>
