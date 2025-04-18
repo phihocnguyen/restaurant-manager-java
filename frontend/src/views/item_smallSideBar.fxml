@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="smallSidebar" layoutX="0" layoutY="0" prefWidth="70.0" styleClass="task" stylesheets="@../values/manager_style.css" BorderPane.alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-    <HBox prefHeight="20.0" prefWidth="200.0" />
-    <ImageView fx:id="iconHome" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+<VBox fx:id="smallSidebar" layoutX="0" layoutY="0" prefWidth="70.0" styleClass="task" stylesheets="@../values/manager_style.css" BorderPane.alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+    <HBox prefHeight="20.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+    <ImageView fx:id="boxOverviewSmall"  fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
         <image>
             <Image url="@../img/home_1.png" />
         </image>
@@ -17,7 +17,7 @@
             <Insets left="10.0" />
         </VBox.margin>
     </ImageView>
-    <HBox prefHeight="50.0" prefWidth="200.0" />
+    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
         <image>
             <Image url="@../img/employee_1.png" />
@@ -26,7 +26,7 @@
             <Insets left="10.0" />
         </VBox.margin>
     </ImageView>
-    <HBox prefHeight="50.0" prefWidth="200.0" />
+    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
         <image>
             <Image url="@../img/customer_1.png" />
@@ -35,7 +35,7 @@
             <Insets left="10.0" />
         </VBox.margin>
     </ImageView>
-    <HBox prefHeight="50.0" prefWidth="200.0" />
+    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
         <image>
             <Image url="@../img/revenue_1.png" />
@@ -44,7 +44,7 @@
             <Insets left="10.0" />
         </VBox.margin>
     </ImageView>
-    <HBox prefHeight="50.0" prefWidth="200.0" />
+    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
         <image>
             <Image url="@../img/storehouse_1.png" />
@@ -53,7 +53,7 @@
             <Insets left="10.0" />
         </VBox.margin>
     </ImageView>
-    <HBox prefHeight="50.0" prefWidth="200.0" />
+    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
         <image>
             <Image url="@../img/ingredient_1.png" />
@@ -62,7 +62,7 @@
             <Insets left="10.0" />
         </VBox.margin>
     </ImageView>
-    <HBox prefHeight="50.0" prefWidth="200.0" />
+    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
         <image>
             <Image url="@../img/food_1.png" />
@@ -71,6 +71,6 @@
             <Insets left="10.0" />
         </VBox.margin>
     </ImageView>
-    <HBox prefHeight="497.0" prefWidth="70.0" VBox.vgrow="ALWAYS" />
+    <HBox prefHeight="300.0" prefWidth="70.0" />
 
 </VBox>

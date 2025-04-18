@@ -11,11 +11,11 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="810.0" prefWidth="1315.0" styleClass="container" stylesheets="@../values/manager_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerDashboardController">
    <children>
-      <BorderPane stylesheets="@../values/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane fx:id="sidebarContainer" onMouseEntered="#onMouseEnterSidebar" onMouseExited="#onMouseExitSidebar">
-               <fx:include fx:id="sidebarContent" source="item_smallSideBar.fxml" />
-            </AnchorPane>
+            <VBox fx:id="sidebarContainer" prefWidth="60.0" stylesheets="@../values/sidebar.css"> <!-- THÊM dòng này -->
+               <!-- Sidebar sẽ load vào đây -->
+            </VBox>
          </left>
          <top>
             <VBox prefHeight="49.0" prefWidth="1315.0" styleClass="manager-dashboard" stylesheets="@../values/manager_style.css" BorderPane.alignment="CENTER">
@@ -23,58 +23,60 @@
                   <HBox prefHeight="50.0" prefWidth="1315.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0">
-                           <children>
-                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                                 <image>
-                                    <Image url="@../img/back.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
+                           <children>
+                              <ImageView fx:id="logoAvatar" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onLogoClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                                 <image>
+                                    <Image url="@../img/logo_1.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="50.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                                 <image>
+                                    <Image url="@../img/darkmode_1.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
                         </HBox>
                         <HBox prefHeight="50.0" prefWidth="1155.0" HBox.hgrow="ALWAYS" />
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                           <image>
-                              <Image url="@../img/hide_1.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets bottom="5.0" right="10.0" top="5.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <ImageView fx:id="exitButton" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                           <image>
-                              <Image url="@../img/exit.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets bottom="5.0" right="10.0" top="5.0" />
-                           </HBox.margin>
-                        </ImageView>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                                 <image>
+                                    <Image url="@../img/hide_1.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" right="10.0" top="5.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fx:id="exitButton" fitHeight="40.0" fitWidth="30.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                                 <image>
+                                    <Image url="@../img/exit.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" right="10.0" top="5.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
                </children>
-               
+
             </VBox>
          </top>
-         <right>
-            <VBox prefHeight="200.0" prefWidth="80.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox prefHeight="20.0" prefWidth="200.0" />
-                  <ImageView fx:id="logoAvatar" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#onLogoClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                     <image>
-                        <Image url="@../img/logo_1.png" />
-                     </image>
-                  </ImageView>
-                  <HBox prefHeight="20.0" prefWidth="20.0" />
-                  <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                     <image>
-                        <Image url="@../img/darkmode_1.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-         </right>
          <center>
             <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="1165.0" BorderPane.alignment="CENTER" />
          </center>

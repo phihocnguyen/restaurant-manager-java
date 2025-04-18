@@ -1,106 +1,95 @@
-* {
-    -fx-text-color1: #5c5c5c;
-    -fx-text-color2: #9f9f9f;
-    -fx-text-color3: #c4c4c4;
-    -fx-background-color-1: #ededed ;
-    -fx-background-and-text: #fffffe ;
-    -fx-primary-color1: #50c950;
-    -fx-primary-color2: #7beb7b;
-    -fx-primary-color3: #a0f9a0;
+/* ========= GENERAL LAYOUT ========= */
 
+.container {
+    -fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);
 }
 
-.padding-all-10{
-    -fx-padding: 0;
+
+.manager-dashboard {
+    -fx-background-color: #2C3E50;
 }
 
-.container{
-    -fx-background-color: linear-gradient(to bottom right, -fx-background-and-text ,#E3F2FD);
-}
-.task{
-    -fx-background-color: #34495E;
-    -fx-background-radius: 0;
-}
+/* ========= ICON & LOGO ========= */
 
-.icon {
-    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
+.icon, .logo {
+    -fx-opacity: 1;
     -fx-transition: all 0.3s ease-in-out;
 }
 
-.icon:hover {
-    -fx-opacity: 0.7; /* Khi hover, làm icon mờ nhẹ */
+.icon:hover, .logo:hover {
+    -fx-opacity: 0.7;
     -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+}
+
+.icon:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+.icon.active {
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.7), 10, 0.5, 0, 0);
+}
+.icon.selected {
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.9), 10, 0.4, 0, 0);
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
 }
 
-.logo{
-    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
-    -fx-transition: all 0.3s ease-in-out;
-}
-
-.logo:hover{
-    -fx-opacity: 0.7; /* Khi hover, làm icon mờ nhẹ */
-    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+.logo:hover {
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
 }
 
+/* ========= BUTTONS ========= */
+
 .button {
     -fx-border-color: white;
     -fx-border-width: 2px;
-    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
+    -fx-opacity: 1;
     -fx-transition: all 0.3s ease-in-out;
     -fx-border-radius: 100;
     -fx-pref-width: 145px;
     -fx-pref-height: 40px;
 }
 
-.button-bound{
-    -fx-opacity: 1; /* Mặc định icon có độ rõ 100% */
+.button-bound {
+    -fx-opacity: 1;
     -fx-transition: all 0.3s ease-in-out;
 }
 
-.button-bound:hover{
-    -fx-opacity: 0.7; /* Khi hover, làm icon mờ nhẹ */
+.button-bound:hover {
+    -fx-opacity: 0.7;
     -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }
-/*
-.menu-item {
-    -fx-background-color: #2C3E50;
-    -fx-alignment: center-left;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
+.button-bound.selected {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
 
 
-.menu-item:hover {
-    -fx-background-color: #9fd7f9;
-    -fx-transition: background-color 0.3s ease-in-out;
-}
-*/
-
-.context-menu {
-    -fx-background-color: #ffffff; /* Nền trắng */
-    -fx-background-radius: 8px; /* Bo góc mềm mại */
-    -fx-border-color: #d1d1d1; /* Viền xám nhạt */
-    -fx-border-radius: 8px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 8, 0, 0, 4); /* Đổ bóng nhẹ */
+.button-bound.selected .button {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
 
-.menu-item {
-    -fx-padding: 10px 20px; /* Tăng padding để dễ bấm */
-    -fx-font-size: 14px;
-    -fx-text-fill: #2d3e50; /* Màu chữ xanh đậm */
+/* ========= SIDEBAR ========= */
+
+
+
+.transparent {
+    -fx-background-color: rgba(0,0,0,0);
 }
 
-.menu-item:hover {
-    -fx-background-color: #f0f7ff; /* Màu xanh nhạt nhẹ hơn */
-    -fx-text-fill: #007acc; /* Chữ xanh sáng */
-    -fx-background-radius: 6px;
+.task {
+    -fx-background-color: #34495E;
+    -fx-background-radius: 0;
 }
 
-
-
+.padding-all-10 {
+    -fx-padding: 0;
+}

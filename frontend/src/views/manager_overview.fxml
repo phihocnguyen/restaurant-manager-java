@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="1165.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="386.0" layoutY="100.0" prefHeight="424.0" prefWidth="1165.0" AnchorPane.bottomAnchor="-222.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <HBox prefHeight="418.0" prefWidth="1165.0">
+               <children>
+                  <VBox prefHeight="418.0" prefWidth="1165.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="163.0" prefWidth="1165.0" styleClass="card-box" stylesheets="@../values/overview.css">
+                           <children>
+                              <Label text="KẾT QUẢ BÁN HÀNG HÔM NAY">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="438.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="93.0" prefWidth="250.0">
+                                       <children>
+                                          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/money_red.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="93.0" prefWidth="170.0">
+                                             <children>
+                                                <Label styleClass="card-title" stylesheets="@../values/overview.css" text="4 đơn đã xong" textFill="#a4a4a4">
+                                                   <font>
+                                                      <Font name="Segoe UI" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label styleClass="card-value1" stylesheets="@../values/overview.css" text="437000" />
+                                                <Label styleClass="card-sub" stylesheets="@../values/overview.css" text="Hôm qua n đơn" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                     <Region prefWidth="1" style="-fx-background-color: #DDDDDD;" />
+
+                                     <HBox alignment="CENTER" prefHeight="93.0" prefWidth="250.0">
+                                       <children>
+                                          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/note_green.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="93.0" prefWidth="184.0">
+                                             <children>
+                                                <Label prefHeight="27.0" prefWidth="179.0" styleClass="card-title" stylesheets="@../values/overview.css" text="1 đơn đang phục vụ" textFill="#a4a4a4" />
+                                                <Label styleClass="card-value2" stylesheets="@../values/overview.css" text="437000" />
+                                                <Label styleClass="card-sub" stylesheets="@../values/overview.css" text="Hôm qua n đơn" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <Region prefWidth="1" style="-fx-background-color: #DDDDDD;" />
+                                    <HBox alignment="CENTER" prefHeight="67.0" prefWidth="250.0">
+                                       <children>
+                                          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/customer_red.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                             <children>
+                                                <Label styleClass="card-title" stylesheets="@../values/overview.css" text="Khách hàng" />
+                                                <Label styleClass="card-value1" stylesheets="@../values/overview.css" text="5" />
+                                                <Label styleClass="card-sub" stylesheets="@../values/overview.css" text="Hôm qua 6" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets left="10.0" right="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="163.0" prefWidth="1165.0" styleClass="card-box" stylesheets="@../values/overview.css">
+                           <children>
+                              <Label text="DOANH THU HÔM NAY">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
