@@ -1,11 +1,20 @@
 .background-table{
     -fx-background-radius: 20;
     -fx-background-color: white;
+    -fx-border-color: #009688;
+    -fx-border-width: 3;
+    -fx-border-radius: 20;
+    -fx-padding: 8 16 8 16;
 }
-.background-table:hover {
+.background-table:hover .button-number{
     -fx-background-radius: 20;
     -fx-background-color: #009688;
-    -fx-border-color: #00ffe7;
-    -fx-border-width: 2;
+    -fx-border-color: white;
+    -fx-border-width: 3;
     -fx-border-radius: 20;
+    -fx-text-fill: white;
+}
+.button-number{
+    -fx-text-fill: #2e2e2e;
+    -fx-alignment: center;
 }
