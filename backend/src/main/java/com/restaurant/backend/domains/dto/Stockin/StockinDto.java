@@ -1,7 +1,5 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.Stockin;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

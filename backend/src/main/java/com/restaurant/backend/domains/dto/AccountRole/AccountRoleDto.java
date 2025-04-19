@@ -1,6 +1,5 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.AccountRole;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

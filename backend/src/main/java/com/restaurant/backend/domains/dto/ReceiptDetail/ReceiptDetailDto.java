@@ -1,5 +1,7 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.ReceiptDetail;
 
+import com.restaurant.backend.domains.dto.MenuItem.MenuItemDto;
+import com.restaurant.backend.domains.dto.Receipt.ReceiptDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

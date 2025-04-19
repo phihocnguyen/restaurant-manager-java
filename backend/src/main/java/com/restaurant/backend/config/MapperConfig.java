@@ -1,9 +1,9 @@
 package com.restaurant.backend.config;
 
-import com.restaurant.backend.domains.dto.ReceiptDetailDto;
-import com.restaurant.backend.domains.dto.RecipeDto;
-import com.restaurant.backend.domains.dto.StockinDetailsDrinkOtherDto;
-import com.restaurant.backend.domains.dto.StockinDetailsIngreDto;
+import com.restaurant.backend.domains.dto.ReceiptDetail.ReceiptDetailDto;
+import com.restaurant.backend.domains.dto.Recipe.RecipeDto;
+import com.restaurant.backend.domains.dto.StockinDetailsDrinkOther.StockinDetailsDrinkOtherDto;
+import com.restaurant.backend.domains.dto.StockinDetailsIngre.StockinDetailsIngreDto;
 import com.restaurant.backend.domains.entities.ReceiptDetail;
 import com.restaurant.backend.domains.entities.Recipe;
 import com.restaurant.backend.domains.entities.StockinDetailsDrinkOther;
