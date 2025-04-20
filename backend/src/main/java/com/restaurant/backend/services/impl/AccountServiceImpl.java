@@ -77,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
     public String sendVerificationCode(String email) {
         Optional<Account> foundAccount = this.accountRepository.findOneByAccEmail(email);
         Random random = new Random();
-        String code = String.valueOf(random.nextInt(999999));
+        String code = 100000 + String.valueOf(random.nextInt(899999));
         if(foundAccount.isPresent()) {
             emailService.sendVerificationCode(email, code);
             verificationCodes.put(email, code);

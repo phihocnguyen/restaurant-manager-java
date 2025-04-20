@@ -47,3 +47,5 @@ dist/
 *.DS_Store
 *.env
 
+# Application properties
+src/main/resources/application.properties
