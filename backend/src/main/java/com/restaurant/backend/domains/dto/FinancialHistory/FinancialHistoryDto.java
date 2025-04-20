@@ -1,5 +1,6 @@
 package com.restaurant.backend.domains.dto.FinancialHistory;
 
+import com.restaurant.backend.domains.dto.FinancialHistory.interfaces.FHType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class FinancialHistoryDto {
 
     private String description;
 
-    private String type;
+    private FHType type;
 
     private BigDecimal amount;
 

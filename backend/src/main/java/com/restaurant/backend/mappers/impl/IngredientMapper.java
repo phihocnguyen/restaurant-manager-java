@@ -1,6 +1,7 @@
 package com.restaurant.backend.mappers.impl;
 
 import com.restaurant.backend.domains.dto.Ingredient.IngredientDto;
+import com.restaurant.backend.domains.dto.Ingredient.dto.CreateIngreDto;
 import com.restaurant.backend.domains.entities.Ingredient;
 import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;
@@ -22,4 +23,6 @@ public class IngredientMapper implements Mapper<Ingredient, IngredientDto> {
     public Ingredient mapTo(IngredientDto ingredientDto) {
         return modelMapper.map(ingredientDto, Ingredient.class);
     }
+
+    public Ingredient mapTo(CreateIngreDto createIngreDto) {return modelMapper.map(createIngreDto, Ingredient.class);}
 }

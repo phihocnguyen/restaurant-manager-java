@@ -1,4 +1,4 @@
-package com.restaurant.backend.domains.dto.MenuItem;
+package com.restaurant.backend.domains.dto.MenuItem.dto;
 
 import com.restaurant.backend.domains.dto.MenuItem.interfaces.ItemType;
 import jakarta.validation.constraints.NotNull;
@@ -11,13 +11,12 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class MenuItemDto {
-    private Integer id;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CreateMenuItemDto {
     @NotNull
     private ItemType itemType;
 
