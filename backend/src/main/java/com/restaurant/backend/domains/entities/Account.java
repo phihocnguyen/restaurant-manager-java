@@ -29,7 +29,7 @@ public class Account {
     private String accPassword;
 
     @Size(max = 100)
-    @Column(name = "acc_email", length = 100)
+    @Column(name = "acc_email", length = 100, nullable = false)
     private String accEmail;
 
     @Size(max = 100)
