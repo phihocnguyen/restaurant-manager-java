@@ -1,6 +1,5 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.Account.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountRoleDto {
-    private Integer id;
-
-    private String roleName;
+public class LoginDto {
+    private String accUsername;
+    private String accPassword;
 }

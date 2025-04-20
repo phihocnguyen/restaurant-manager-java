@@ -1,5 +1,7 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.StockinDetailsIngre;
 
+import com.restaurant.backend.domains.dto.Ingredient.IngredientDto;
+import com.restaurant.backend.domains.dto.Stockin.StockinDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

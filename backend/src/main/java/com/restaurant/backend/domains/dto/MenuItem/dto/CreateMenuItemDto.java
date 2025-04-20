@@ -1,25 +1,27 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.MenuItem.dto;
 
-import jakarta.persistence.Column;
+import com.restaurant.backend.domains.dto.MenuItem.interfaces.ItemType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
+
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class MenuItemDto {
-    private Integer id;
+public class CreateMenuItemDto {
+    @NotNull
+    private ItemType itemType;
 
-    private String itemType;
-
+    @Size(max = 100)
+    @NotNull
     private String itemName;
 
     private String itemImg;

@@ -1,6 +1,6 @@
 package com.restaurant.backend.mappers.impl;
 import com.restaurant.backend.mappers.Mapper;
-import com.restaurant.backend.domains.dto.StockinDetailsIngreDto;
+import com.restaurant.backend.domains.dto.StockinDetailsIngre.StockinDetailsIngreDto;
 import com.restaurant.backend.domains.entities.StockinDetailsIngre;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

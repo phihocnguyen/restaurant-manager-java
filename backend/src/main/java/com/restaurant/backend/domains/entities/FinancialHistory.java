@@ -9,6 +9,12 @@ import org.hibernate.annotations.ColumnDefault;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+enum FHType {
+    INCOME,
+    EXPENSE,
+    PROFIT,
+}
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -32,7 +38,7 @@ public class FinancialHistory {
 
     @Size(max = 10)
     @Column(name = "type", length = 10)
-    private String type;
+    private FHType type;
 
     @NotNull
     @ColumnDefault("0")

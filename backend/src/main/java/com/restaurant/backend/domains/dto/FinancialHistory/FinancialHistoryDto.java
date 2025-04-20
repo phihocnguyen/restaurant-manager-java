@@ -1,13 +1,10 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.FinancialHistory;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.restaurant.backend.domains.dto.FinancialHistory.interfaces.FHType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -23,7 +20,7 @@ public class FinancialHistoryDto {
 
     private String description;
 
-    private String type;
+    private FHType type;
 
     private BigDecimal amount;
 

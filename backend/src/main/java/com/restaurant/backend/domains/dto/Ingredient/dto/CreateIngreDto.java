@@ -1,13 +1,10 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.Ingredient.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
@@ -15,11 +12,10 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class IngredientDto {
-    private Integer id;
-
+public class CreateIngreDto {
     private String ingreName;
 
+    @NotNull
     private Double instockKg;
 
     private BigDecimal ingrePrice;

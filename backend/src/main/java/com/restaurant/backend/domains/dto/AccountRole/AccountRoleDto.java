@@ -1,4 +1,4 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.AccountRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeDto {
-    private MenuItemDto item;
+public class AccountRoleDto {
+    private Integer id;
 
-    private IngredientDto ingre;
-
-    private Double ingreQuantityKg;
+    private String roleName;
 }

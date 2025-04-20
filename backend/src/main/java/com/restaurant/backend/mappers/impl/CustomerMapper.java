@@ -1,6 +1,6 @@
 package com.restaurant.backend.mappers.impl;
 
-import com.restaurant.backend.domains.dto.CustomerDto;
+import com.restaurant.backend.domains.dto.Customer.CustomerDto;
 import com.restaurant.backend.domains.entities.Customer;
 import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;

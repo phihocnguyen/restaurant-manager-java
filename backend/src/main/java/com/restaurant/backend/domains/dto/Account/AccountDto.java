@@ -1,5 +1,6 @@
-package com.restaurant.backend.domains.dto;
+package com.restaurant.backend.domains.dto.Account;
 
+import com.restaurant.backend.domains.dto.AccountRole.AccountRoleDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
