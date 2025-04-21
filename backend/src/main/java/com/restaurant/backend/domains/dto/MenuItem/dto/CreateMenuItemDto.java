@@ -28,6 +28,8 @@ public class CreateMenuItemDto {
 
     private BigDecimal itemCprice;
 
+    private BigDecimal itemSprice;
+
     private Double instock;
 
     private Boolean isdeleted = false;

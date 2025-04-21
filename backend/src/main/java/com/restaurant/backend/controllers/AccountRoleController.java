@@ -7,9 +7,9 @@ import com.restaurant.backend.mappers.impl.AccountRoleMapper;
 import com.restaurant.backend.services.AccountRoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 public class AccountRoleController {
@@ -23,5 +23,14 @@ public class AccountRoleController {
     public ResponseEntity<AccountRoleDto> create(@RequestBody CreateAccountRoleDto createAccountRoleDto) {
         AccountRole accountRole = this.accountRoleMapper.mapTo(createAccountRoleDto);
         return new ResponseEntity<>(this.accountRoleMapper.mapFrom(this.accountRoleService.save(accountRole)), HttpStatus.OK);
+    }
+    @GetMapping(path="/account-role/{id}")
+    public ResponseEntity<Optional<AccountRoleDto>> getAccountRole(@PathVariable int id){
+        Optional<AccountRole> accountRole= this.accountRoleService.findById(id);
+        if (accountRole.isPresent()) {
+            AccountRoleDto accountRoleDto = accountRoleMapper.mapFrom(accountRole.get());
+            return new ResponseEntity<>(Optional.of(accountRoleDto), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

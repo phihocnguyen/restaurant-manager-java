@@ -6,6 +6,7 @@ import com.restaurant.backend.services.IngredientService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,8 +18,8 @@ public class IngredientServiceImpl implements IngredientService {
     public Ingredient save(Ingredient ingredient) {
         return ingredientRepository.save(ingredient);
     }
-    public Ingredient findById(int id) {
-        return this.ingredientRepository.findById(id).orElse(null);
+    public Optional<Ingredient> findById(int id) {
+        return this.ingredientRepository.findById(id);
     }
     public List<Ingredient> findAll() {
         return this.ingredientRepository.findAll()

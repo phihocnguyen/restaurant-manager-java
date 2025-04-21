@@ -8,12 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
-enum ItemType {
-    FOOD,
-    DRINK,
-    OTHER
-}
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -28,7 +22,6 @@ public class MenuItem {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Size(max = 10)
     @NotNull
     @Column(name = "item_type", nullable = false, length = 10)
     private ItemType itemType;

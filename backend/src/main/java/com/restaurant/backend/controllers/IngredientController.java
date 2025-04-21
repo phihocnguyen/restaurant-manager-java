@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,20 +25,20 @@ public class IngredientController {
     public ResponseEntity<IngredientDto> addIngredient(@RequestBody CreateIngreDto createIngreDto) {
         Ingredient ingredient = ingredientMapper.mapTo(createIngreDto);
         Ingredient savedIngredient = ingredientService.save(ingredient);
-        return new ResponseEntity<>(this.ingredientMapper.mapFrom(ingredient), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.ingredientMapper.mapFrom(savedIngredient), HttpStatus.CREATED);
     }
     @GetMapping("/ingredients/{id}")
     public ResponseEntity<IngredientDto> getIngredient(@PathVariable int id) {
-        Ingredient foundIngre = this.ingredientService.findById(id);
-        if (foundIngre == null) {
+        Optional<Ingredient> foundIngre = this.ingredientService.findById(id);
+        if (!foundIngre.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(this.ingredientMapper.mapFrom(foundIngre), HttpStatus.OK);
+        return new ResponseEntity<>(this.ingredientMapper.mapFrom(foundIngre.get()), HttpStatus.OK);
     }
     @PutMapping(path="/ingredients/{id}")
     public ResponseEntity<IngredientDto> updateIngredient(@PathVariable int id, @RequestBody CreateIngreDto createIngreDto) {
-        Ingredient dbIngredient = this.ingredientService.findById(id);
-        if (dbIngredient == null) {
+        Optional<Ingredient> dbIngredient = this.ingredientService.findById(id);
+        if (!dbIngredient.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         // update everything + set its id
@@ -47,36 +48,36 @@ public class IngredientController {
         return new ResponseEntity<>(this.ingredientMapper.mapFrom(savedIngredient), HttpStatus.OK);
     }
     @PatchMapping(path="/ingredients/{id}")
-    public ResponseEntity<IngredientDto> partialUpdateIngredient(@PathVariable int id, @RequestBody IngredientDto ingredientDto) {
-        Ingredient dbIngredient = this.ingredientService.findById(id);
-        if (dbIngredient == null) {
+    public ResponseEntity<IngredientDto> partialUpdateIngredient(@PathVariable int id, @RequestBody CreateIngreDto createIngreDto) {
+        Optional<Ingredient> dbIngredient = this.ingredientService.findById(id);
+        if (!dbIngredient.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         // set it partially
-        if(ingredientDto.getIngreName() != null) {
-            dbIngredient.setIngreName(ingredientDto.getIngreName());
+        if(createIngreDto.getIngreName() != null) {
+            dbIngredient.get().setIngreName(createIngreDto.getIngreName());
         }
-        if(ingredientDto.getIngrePrice() != null) {
-            dbIngredient.setIngrePrice(ingredientDto.getIngrePrice());
+        if(createIngreDto.getIngrePrice() != null) {
+            dbIngredient.get().setIngrePrice(createIngreDto.getIngrePrice());
         }
-        if(ingredientDto.getInstockKg() != null) {
-            dbIngredient.setInstockKg(ingredientDto.getInstockKg());
+        if(createIngreDto.getInstockKg() != null) {
+            dbIngredient.get().setInstockKg(createIngreDto.getInstockKg());
         }
-        if(ingredientDto.getIsdeleted() != null) {
-            dbIngredient.setIsdeleted(ingredientDto.getIsdeleted());
+        if(createIngreDto.getIsdeleted() != null) {
+            dbIngredient.get().setIsdeleted(createIngreDto.getIsdeleted());
         }
-        Ingredient savedIngredient = ingredientService.save(dbIngredient);
+        Ingredient savedIngredient = ingredientService.save(dbIngredient.get());
         return new ResponseEntity<>(this.ingredientMapper.mapFrom(savedIngredient), HttpStatus.OK);
     }
     @DeleteMapping(path = "/ingredients/{id}")
-    public ResponseEntity<String> deleteIngredient(@PathVariable int id) {
-        Ingredient dbIngredient = this.ingredientService.findById(id);
-        if (dbIngredient == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Boolean> deleteIngredient(@PathVariable int id) {
+        Optional<Ingredient> dbIngredient = this.ingredientService.findById(id);
+        if (!dbIngredient.isPresent()) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
-        dbIngredient.setIsdeleted(true);
-        Ingredient savedIngredient = ingredientService.save(dbIngredient);
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+        dbIngredient.get().setIsdeleted(true);
+        Ingredient savedIngredient = ingredientService.save(dbIngredient.get());
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
     @GetMapping(path="/ingredients")
     public ResponseEntity<List<IngredientDto>> getAllIngredients() {
