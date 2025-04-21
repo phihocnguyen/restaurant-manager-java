@@ -22,6 +22,7 @@ public class DiningTable {
     private Short tabNum;
 
     @NotNull
+    @ColumnDefault("false")
     @Column(name = "tab_status", nullable = false)
     private Boolean tabStatus = false;
 
