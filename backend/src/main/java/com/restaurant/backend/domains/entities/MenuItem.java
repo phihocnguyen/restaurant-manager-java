@@ -8,7 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
-enum ItemType {
+public enum ItemType {
     FOOD,
     DRINK,
     OTHER

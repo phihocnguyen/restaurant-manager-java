@@ -73,7 +73,7 @@ public class IngredientController {
     public ResponseEntity<Boolean> deleteIngredient(@PathVariable int id) {
         Optional<Ingredient> dbIngredient = this.ingredientService.findById(id);
         if (!dbIngredient.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
         dbIngredient.get().setIsdeleted(true);
         Ingredient savedIngredient = ingredientService.save(dbIngredient.get());

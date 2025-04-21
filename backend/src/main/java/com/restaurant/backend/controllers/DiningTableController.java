@@ -80,7 +80,7 @@ public class DiningTableController {
     public ResponseEntity<Boolean> deleteTable(@PathVariable int id){
         Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
         if(!dbDiningTable.isPresent()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
         dbDiningTable.get().setIsdeleted(true);
         this.diningTableService.save(dbDiningTable.get());

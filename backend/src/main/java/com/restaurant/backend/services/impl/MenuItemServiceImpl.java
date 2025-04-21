@@ -5,7 +5,9 @@ import com.restaurant.backend.repositories.MenuItemRepository;
 import com.restaurant.backend.services.MenuItemService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
@@ -18,7 +20,11 @@ public class MenuItemServiceImpl implements MenuItemService {
         return this.menuItemRepository.save(menuItem);
     }
 
-    public Optional<MenuItem> findOneById(int id) {
+    public Optional<MenuItem> findById(int id) {
         return this.menuItemRepository.findById(id);
+    }
+
+    public List<MenuItem> findAll(){
+        return this.menuItemRepository.findAll().stream().filter(item -> !item.getIsdeleted()).collect(Collectors.toList());
     }
 }
