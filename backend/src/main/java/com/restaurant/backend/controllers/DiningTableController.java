@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,11 +31,12 @@ public class DiningTableController {
 
     @GetMapping(path="/tables/{id}")
     public ResponseEntity<DiningTableDto> getTable(@PathVariable int id){
-        DiningTable dbDiningTable = this.diningTableService.findOneById(id);
-        if(dbDiningTable == null){
+//        DiningTable dbDiningTable = this.diningTableService.findOneById(id);
+        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
+        if(!dbDiningTable.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(this.diningTableMapper.mapFrom(dbDiningTable), HttpStatus.OK);
+        return new ResponseEntity<>(this.diningTableMapper.mapFrom(dbDiningTable.get()), HttpStatus.OK);
     }
 
     @GetMapping(path="/tables")
@@ -45,8 +47,8 @@ public class DiningTableController {
 
     @PutMapping(path="/tables/{id}")
     public ResponseEntity<DiningTableDto> updateTable(@PathVariable int id, @RequestBody CreateDiningTableDto createDiningTableDto) {
-        DiningTable dbDiningTable = this.diningTableService.findOneById(id);
-        if(dbDiningTable == null){
+        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
+        if(!dbDiningTable.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         DiningTable updatedDiningTable = this.diningTableMapper.mapTo(createDiningTableDto);
@@ -57,31 +59,31 @@ public class DiningTableController {
 
     @PatchMapping(path="/tables/{id}")
     public ResponseEntity<DiningTableDto> partialUpdateTable(@PathVariable int id, @RequestBody CreateDiningTableDto createDiningTableDto) {
-        DiningTable dbDiningTable = this.diningTableService.findOneById(id);
-        if (dbDiningTable == null) {
+        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
+        if (!dbDiningTable.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         //dbDiningTable.setId(id);
         if(createDiningTableDto.getTabNum() != null) {
-            dbDiningTable.setTabNum(createDiningTableDto.getTabNum());
+            dbDiningTable.get().setTabNum(createDiningTableDto.getTabNum());
         }
         if(createDiningTableDto.getTabStatus() != null) {
-            dbDiningTable.setTabStatus(createDiningTableDto.getTabStatus());
+            dbDiningTable.get().setTabStatus(createDiningTableDto.getTabStatus());
         }
         if(createDiningTableDto.getIsdeleted() != null){
-            dbDiningTable.setIsdeleted(createDiningTableDto.getIsdeleted());
+            dbDiningTable.get().setIsdeleted(createDiningTableDto.getIsdeleted());
         }
-        DiningTable savedDiningTable = this.diningTableService.save(dbDiningTable);
+        DiningTable savedDiningTable = this.diningTableService.save(dbDiningTable.get());
         return new ResponseEntity<>(this.diningTableMapper.mapFrom(savedDiningTable), HttpStatus.OK);
     }
     @DeleteMapping(path="/tables/{id}")
     public ResponseEntity<Boolean> deleteTable(@PathVariable int id){
-        DiningTable dbDiningTable = this.diningTableService.findOneById(id);
-        if(dbDiningTable == null){
+        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
+        if(!dbDiningTable.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        dbDiningTable.setIsdeleted(true);
-        this.diningTableService.save(dbDiningTable);
+        dbDiningTable.get().setIsdeleted(true);
+        this.diningTableService.save(dbDiningTable.get());
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

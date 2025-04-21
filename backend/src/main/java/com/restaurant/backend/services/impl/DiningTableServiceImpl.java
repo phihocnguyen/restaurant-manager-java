@@ -6,6 +6,7 @@ import com.restaurant.backend.services.DiningTableService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,8 +20,8 @@ public class DiningTableServiceImpl implements DiningTableService {
         return this.diningTableRepository.save(diningTable);
     }
 
-    public DiningTable findOneById(int id) {
-        return this.diningTableRepository.findOneById(id);
+    public Optional<DiningTable> findById(int id) {
+        return this.diningTableRepository.findById(id);
     }
 
     public List<DiningTable> findAll(){
