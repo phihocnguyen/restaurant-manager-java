@@ -14,4 +14,4 @@
 **Bảng phân công công việc**: [Task Assignment Excel](https://sg.docs.wps.com/l/sILuE3M7dAavehsAG?fbclid=IwY2xjawJujpNleHRuA2FlbQIxMAABHtE7e26cICxsO9vdGyeiiU5Mm_eRIei_N0rvzFAJy07WXKU8wE6L1KDmT4Vd_aem_yF9qLXNLk2UDTUiRqUdoVw&v=v2)
 
 ## 📬 Postman for testing API
-**Restaurant Manager Endpoints:** [Postman Collection](https://.postman.co/workspace/My-Workspace~5336cca5-9718-4688-8209-4396756adc97/collection/43140896-803c14ff-a9eb-4203-935c-2a89143ffdaf?action=share&creator=43140896)
+**Restaurant Manager Endpoints:** [Postman Collection](https://api.postman.com/collections/43140896-803c14ff-a9eb-4203-935c-2a89143ffdaf?access_key=PMAT-01JSEDD2VM635BAKKF89VJ8HYP)
