@@ -37,6 +37,36 @@ public class ReceiptController {
     @PostMapping(path="/receipts")
     public ResponseEntity<ReceiptDto> addReceipt(@RequestBody CreateReceiptDto createReceiptDto) {
         Receipt receipt = this.receiptMapper.mapTo(createReceiptDto);
+        if(createReceiptDto.getEmpId() != null){
+            Optional<Employee> foundEmp = this.employeeService.findById(createReceiptDto.getEmpId());
+            if(!foundEmp.isPresent()){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            receipt.setEmp(foundEmp.get());
+        }
+        if(createReceiptDto.getIsdeleted() != null){
+            receipt.setIsdeleted(createReceiptDto.getIsdeleted());
+        }
+        if(createReceiptDto.getCusId() != null){
+            Optional<Customer> foundCus = this.customerService.findById(createReceiptDto.getCusId());
+            if(!foundCus.isPresent()){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            receipt.setCus(foundCus.get());
+        }
+        if(createReceiptDto.getTabId() != null){
+            Optional<DiningTable> foundTab = this.diningTableService.findById(createReceiptDto.getTabId());
+            if(!foundTab.isPresent()){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            receipt.setTab(foundTab.get());
+        }
+        if(createReceiptDto.getRecPay() != null){
+            receipt.setRecPay(createReceiptDto.getRecPay());
+        }
+        if(createReceiptDto.getRecTime() != null){
+            receipt.setRecTime(createReceiptDto.getRecTime());
+        }
         Receipt savedReceipt = this.receiptService.save(receipt);
         return new ResponseEntity<>(this.receiptMapper.mapFrom(savedReceipt), HttpStatus.CREATED);
     }
@@ -59,7 +89,7 @@ public class ReceiptController {
     @PutMapping(path="/receipts/{recId}")
     public ResponseEntity<ReceiptDto> updateReceipt(@PathVariable int recId, @RequestBody CreateReceiptDto createReceiptDto) {
         Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
-        if(!dbReceipt.isPresent() || !dbReceipt.get().getIsdeleted()) {
+        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Receipt receipt = this.receiptMapper.mapTo(createReceiptDto);
@@ -68,10 +98,10 @@ public class ReceiptController {
         return new ResponseEntity<>(this.receiptMapper.mapFrom(savedReceipt), HttpStatus.OK);
     }
 
-    @PatchMapping(path="/receipts/{redId}")
-    public ResponseEntity<ReceiptDto> partialUpdateReceipt(@PathVariable int redId, @RequestBody CreateReceiptDto createReceiptDto) {
-        Optional<Receipt> dbReceipt = this.receiptService.findById(redId);
-        if(!dbReceipt.isPresent() || !dbReceipt.get().getIsdeleted()) {
+    @PatchMapping(path="/receipts/{recId}")
+    public ResponseEntity<ReceiptDto> partialUpdateReceipt(@PathVariable int recId, @RequestBody CreateReceiptDto createReceiptDto) {
+        Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
+        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if(createReceiptDto.getEmpId() != null){
@@ -111,7 +141,7 @@ public class ReceiptController {
     @DeleteMapping(path="/receipts/{recId}")
     public ResponseEntity<Boolean> deleteReceipt(@PathVariable Integer recId){
         Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
-        if(!dbReceipt.isPresent() || !dbReceipt.get().getIsdeleted()) {
+        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         dbReceipt.get().setIsdeleted(true);

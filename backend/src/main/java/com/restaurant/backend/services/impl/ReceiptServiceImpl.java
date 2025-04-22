@@ -21,7 +21,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     public List<Receipt> findAll() {
-        return receiptRepository.findAll();
+        return receiptRepository.findAll().stream().filter(receipt -> receipt.getIsdeleted()).toList();
     }
 
     public Optional<Receipt> findById(int id) {
