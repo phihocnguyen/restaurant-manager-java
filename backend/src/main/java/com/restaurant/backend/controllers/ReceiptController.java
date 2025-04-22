@@ -2,19 +2,14 @@ package com.restaurant.backend.controllers;
 
 import com.restaurant.backend.domains.dto.Receipt.ReceiptDto;
 import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
-import com.restaurant.backend.domains.entities.Customer;
-import com.restaurant.backend.domains.entities.DiningTable;
-import com.restaurant.backend.domains.entities.Employee;
-import com.restaurant.backend.domains.entities.Receipt;
+import com.restaurant.backend.domains.entities.*;
 import com.restaurant.backend.mappers.impl.ReceiptMapper;
-import com.restaurant.backend.services.CustomerService;
-import com.restaurant.backend.services.DiningTableService;
-import com.restaurant.backend.services.EmployeeService;
-import com.restaurant.backend.services.ReceiptService;
+import com.restaurant.backend.services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,13 +21,18 @@ public class ReceiptController {
     private final EmployeeService employeeService;
     private final CustomerService customerService;
     private final DiningTableService diningTableService;
-    public ReceiptController(ReceiptService receiptService, ReceiptMapper receiptMapper, EmployeeService employeeService, CustomerService customerService, DiningTableService diningTableService) {
+    private final ReceiptDetailService receiptDetailService;
+    public ReceiptController(ReceiptService receiptService, ReceiptDetailService receiptDetailService,
+                             ReceiptMapper receiptMapper, EmployeeService employeeService, CustomerService customerService, DiningTableService diningTableService) {
         this.receiptService = receiptService;
         this.receiptMapper = receiptMapper;
         this.employeeService = employeeService;
         this.customerService = customerService;
         this.diningTableService = diningTableService;
+        this.receiptDetailService = receiptDetailService;
     }
+
+
 
     @PostMapping(path="/receipts")
     public ResponseEntity<ReceiptDto> addReceipt(@RequestBody CreateReceiptDto createReceiptDto) {
@@ -61,9 +61,6 @@ public class ReceiptController {
             }
             receipt.setTab(foundTab.get());
         }
-        if(createReceiptDto.getRecPay() != null){
-            receipt.setRecPay(createReceiptDto.getRecPay());
-        }
         if(createReceiptDto.getRecTime() != null){
             receipt.setRecTime(createReceiptDto.getRecTime());
         }
@@ -79,7 +76,7 @@ public class ReceiptController {
     @GetMapping(path="/receipts/{recId}")
     public ResponseEntity<ReceiptDto> getReceipt(@PathVariable int recId) {
         Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
-        if(!dbReceipt.isPresent() || !dbReceipt.get().getIsdeleted()) {
+        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Receipt receipt = dbReceipt.get();
@@ -93,6 +90,18 @@ public class ReceiptController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Receipt receipt = this.receiptMapper.mapTo(createReceiptDto);
+        // havent set emp or anything yet
+        // find emp
+        Optional<Employee> foundEmp = this.employeeService.findById(createReceiptDto.getEmpId());
+        receipt.setEmp(foundEmp.get());
+
+        // find cus
+        Optional<Customer> foundCus = this.customerService.findById(createReceiptDto.getCusId());
+        receipt.setCus(foundCus.get());
+        // find tab
+        Optional<DiningTable> foundTab = this.diningTableService.findById(createReceiptDto.getTabId());
+        receipt.setTab(foundTab.get());
+
         receipt.setId(recId);
         Receipt savedReceipt = this.receiptService.save(receipt);
         return new ResponseEntity<>(this.receiptMapper.mapFrom(savedReceipt), HttpStatus.OK);
@@ -127,9 +136,6 @@ public class ReceiptController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             dbReceipt.get().setTab(foundTab.get());
-        }
-        if(createReceiptDto.getRecPay() != null){
-            dbReceipt.get().setRecPay(createReceiptDto.getRecPay());
         }
         if(createReceiptDto.getRecTime() != null){
             dbReceipt.get().setRecTime(createReceiptDto.getRecTime());

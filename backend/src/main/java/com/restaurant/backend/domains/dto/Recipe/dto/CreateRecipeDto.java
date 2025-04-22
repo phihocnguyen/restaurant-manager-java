@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateRecipeDto {
-    private int ingreId;
+    private Integer ingreId;
     private Double ingreQuantityKg;
 }

@@ -17,6 +17,5 @@ public class CreateReceiptDto {
     private Integer cusId;
     private Integer tabId;
     private Instant recTime;
-    private BigDecimal recPay;
     private Boolean isdeleted;
 }

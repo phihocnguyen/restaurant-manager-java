@@ -1,16 +1,16 @@
 package com.restaurant.backend.domains.dto.Recipe.dto;
 
-import com.restaurant.backend.domains.dto.MenuItem.dto.CreateMenuItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateMenuItemWithManyRecipesDto {
-    private CreateMenuItemDto menuItem;
-    private CreateManyRecipesDto recipes;
+@Builder
+public class CreateManyRecipesDto {
+    List<CreateRecipeDto> ingredients;
 }

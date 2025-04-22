@@ -41,6 +41,7 @@ public class Receipt {
     private Instant recTime;
 
     @NotNull
+    @ColumnDefault("0.00")
     @Column(name = "rec_pay", nullable = false, precision = 18, scale = 2)
     private BigDecimal recPay;
 

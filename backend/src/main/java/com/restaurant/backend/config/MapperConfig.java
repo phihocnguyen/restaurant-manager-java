@@ -1,14 +1,12 @@
 package com.restaurant.backend.config;
 
+import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
 import com.restaurant.backend.domains.dto.ReceiptDetail.ReceiptDetailDto;
 import com.restaurant.backend.domains.dto.Recipe.RecipeDto;
 import com.restaurant.backend.domains.dto.Recipe.dto.CreateRecipeDto;
 import com.restaurant.backend.domains.dto.StockinDetailsDrinkOther.StockinDetailsDrinkOtherDto;
 import com.restaurant.backend.domains.dto.StockinDetailsIngre.StockinDetailsIngreDto;
-import com.restaurant.backend.domains.entities.ReceiptDetail;
-import com.restaurant.backend.domains.entities.Recipe;
-import com.restaurant.backend.domains.entities.StockinDetailsDrinkOther;
-import com.restaurant.backend.domains.entities.StockinDetailsIngre;
+import com.restaurant.backend.domains.entities.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +48,6 @@ public class MapperConfig {
             mapper.map(src->src.getTotalCprice(), StockinDetailsIngreDto::setTotalCprice);
             mapper.map(src->src.getQuantityKg(), StockinDetailsIngreDto::setQuantityKg);
         });
-
         return modelMapper;
     }
 }

@@ -2,7 +2,7 @@ package com.restaurant.backend.controllers;
 
 import com.restaurant.backend.domains.dto.MenuItem.dto.CreateMenuItemDto;
 import com.restaurant.backend.domains.dto.Recipe.RecipeDto;
-import com.restaurant.backend.domains.dto.Recipe.dto.CreateManyRecipeDto;
+import com.restaurant.backend.domains.dto.Recipe.dto.CreateManyRecipesDto;
 import com.restaurant.backend.domains.dto.Recipe.dto.CreateMenuItemWithManyRecipesDto;
 import com.restaurant.backend.domains.dto.Recipe.dto.CreateMenuItemWithOneRecipeDto;
 import com.restaurant.backend.domains.dto.Recipe.dto.CreateRecipeDto;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -85,7 +84,7 @@ public class RecipeController {
     @PostMapping(path="/recipes/many")
     public ResponseEntity<List<RecipeDto>> addManyRecipes(@RequestBody CreateMenuItemWithManyRecipesDto body) {
         CreateMenuItemDto createMenuItemDto = body.getMenuItem();
-        CreateManyRecipeDto createManyRecipeDto = body.getRecipes();
+        CreateManyRecipesDto createManyRecipesDto = body.getRecipes();
 
         if (!"FOOD".equals(createMenuItemDto.getItemType().name())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -96,7 +95,7 @@ public class RecipeController {
         MenuItem savedMenuItem = this.menuItemService.save(newMenuItem);
 
         // add many recipes
-        List<Recipe> recipes = createManyRecipeDto.getIngredients().stream().map(ingreDto -> {
+        List<Recipe> recipes = createManyRecipesDto.getIngredients().stream().map(ingreDto -> {
             Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreDto.getIngreId());
 
             if(!validateIngredient(existedIngre)) {
@@ -152,12 +151,12 @@ public class RecipeController {
     }
 
     @PostMapping(path="/recipes/many/{menuItemId}")
-    public ResponseEntity<List<RecipeDto>> addManyRecipesToMenuItem(@RequestBody CreateManyRecipeDto createManyRecipeDto, @PathVariable int menuItemId){
+    public ResponseEntity<List<RecipeDto>> addManyRecipesToMenuItem(@RequestBody CreateManyRecipesDto createManyRecipesDto, @PathVariable int menuItemId){
         Optional<MenuItem> existedMenuItem = this.menuItemService.findById(menuItemId);
         if(!validateMenuItem(existedMenuItem)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<Recipe> addedRecipes = createManyRecipeDto.getIngredients().stream()
+        List<Recipe> addedRecipes = createManyRecipesDto.getIngredients().stream()
                 .map(ingreDto -> {
                     Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreDto.getIngreId());
                     if(!validateIngredient(existedIngre)) {
@@ -195,7 +194,7 @@ public class RecipeController {
     }
 
     @PutMapping(path="/recipes/{menuItemId}")
-    public ResponseEntity<List<RecipeDto>> updateAllRecipes(@PathVariable int menuItemId,@RequestBody CreateManyRecipeDto createManyRecipeDto) {
+    public ResponseEntity<List<RecipeDto>> updateAllRecipes(@PathVariable int menuItemId,@RequestBody CreateManyRecipesDto createManyRecipesDto) {
         Optional<MenuItem> existedMenuItem = this.menuItemService.findById(menuItemId);
         if(!validateMenuItem(existedMenuItem)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -204,7 +203,7 @@ public class RecipeController {
         List<Recipe> oldRecipes = this.recipeService.findAllByItemId(menuItemId);
         this.recipeService.deleteAll(oldRecipes);
 
-        List<Recipe> recipes = createManyRecipeDto.getIngredients().stream().map(ingreDto -> {
+        List<Recipe> recipes = createManyRecipesDto.getIngredients().stream().map(ingreDto -> {
             Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreDto.getIngreId());
             if(!validateIngredient(existedIngre)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
