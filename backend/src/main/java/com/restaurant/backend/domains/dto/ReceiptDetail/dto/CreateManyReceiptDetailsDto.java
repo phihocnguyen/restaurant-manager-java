@@ -1,4 +1,4 @@
-package com.restaurant.backend.domains.dto.Recipe.dto;
+package com.restaurant.backend.domains.dto.ReceiptDetail.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CreateManyRecipeDto {
-    List<CreateRecipeDto> ingredients;
+public class CreateManyReceiptDetailsDto {
+    private List<CreateReceiptDetailDto> details;
 }
