@@ -62,24 +62,18 @@ public class AccountServiceImpl implements AccountService {
     }
     public Account getAccountByUsername(String username){
         Optional<Account> foundAccount = this.accountRepository.findOneByAccUsername(username);
-        if (foundAccount.isPresent()) {
-            return foundAccount.get();
-        }
-        return null;
+        return foundAccount.orElse(null);
     }
 
     public Account getAccountByEmail(String email){
         Optional<Account> foundAccount = this.accountRepository.findOneByAccEmail(email);
-        if (foundAccount.isPresent()) {
-            return foundAccount.get();
-        }
-        return null;
+        return foundAccount.orElse(null);
     }
 
     public String sendVerificationCode(String email) {
         Optional<Account> foundAccount = this.accountRepository.findOneByAccEmail(email);
         Random random = new Random();
-        String code = 100000 + String.valueOf(random.nextInt(899999));
+        String code = String.valueOf(100000 + random.nextInt(899999));
         if(foundAccount.isPresent()) {
             emailService.sendVerificationCode(email, code);
             verificationCodes.put(email, code);
