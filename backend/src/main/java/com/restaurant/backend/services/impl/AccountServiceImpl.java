@@ -46,17 +46,19 @@ public class AccountServiceImpl implements AccountService {
         account.setAccPassword(hashedPassword);
         return accountRepository.save(account);
     }
-    public boolean checkLogin(LoginDto loginDto) {
+    public Account checkLogin(LoginDto loginDto) {
         Optional<Account> foundAccount = this.accountRepository.findOneByAccUsername(loginDto.getAccUsername());
         String hashedPassword = passwordEncoder.encode(loginDto.getAccPassword());
         System.out.println(foundAccount);
         if (foundAccount.isPresent()) {
-            return passwordEncoder.matches(
+            if (passwordEncoder.matches(
                     loginDto.getAccPassword(),
                     foundAccount.get().getAccPassword()
-            );
+            )){
+                return foundAccount.get();
+            }
         }
-        return false;
+        return null;
     }
     public Account getAccountByUsername(String username){
         Optional<Account> foundAccount = this.accountRepository.findOneByAccUsername(username);

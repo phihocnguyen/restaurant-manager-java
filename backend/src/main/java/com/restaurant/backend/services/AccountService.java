@@ -5,7 +5,7 @@ import com.restaurant.backend.domains.dto.Account.dto.LoginDto;
 
 public interface AccountService {
     public Account save(Account account);
-    public boolean checkLogin(LoginDto loginDto);
+    public Account checkLogin(LoginDto loginDto);
     public Account getAccountByUsername(String username);
     public Account getAccountByEmail(String email);
     public String sendVerificationCode(String email);
