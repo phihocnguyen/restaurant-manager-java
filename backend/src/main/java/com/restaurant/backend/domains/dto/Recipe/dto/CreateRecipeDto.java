@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateRecipeDto {
     private Integer ingreId;
-    private Double ingreQuantityKg;
+    private Double ingreQuantityKg = 0.1;
 }

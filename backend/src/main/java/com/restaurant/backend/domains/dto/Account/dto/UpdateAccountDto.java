@@ -17,13 +17,13 @@ public class UpdateAccountDto {
 
     private String accEmail;
 
-    private String accDisplayname;
+    private String accDisplayname = "User";
 
-    private String accGender;
+    private String accGender = "unknown";
 
-    private LocalDate accBday;
+    private LocalDate accBday = LocalDate.now();
 
-    private String accAddress;
+    private String accAddress = "";
 
     private String accPhone;
 

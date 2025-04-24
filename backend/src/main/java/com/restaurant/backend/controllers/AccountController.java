@@ -64,4 +64,37 @@ public class AccountController {
         return new ResponseEntity<>(accountMapper.mapFrom(savedAccount), HttpStatus.OK);
     }
 
+    @PatchMapping(path="/update-account/{username}")
+    public ResponseEntity<AccountDto> partialUpdateAccount(@RequestBody UpdateAccountDto updateAccountDto, @PathVariable String username) {
+        Account account = accountMapper.mapTo(updateAccountDto);
+        Account dbAccount = this.accountService.getAccountByUsername(username);
+
+        if (account.getAccEmail() != null) {
+            dbAccount.setAccEmail(account.getAccEmail());
+        }
+        if (account.getAccPhone() != null) {
+            dbAccount.setAccPhone(account.getAccPhone());
+        }
+        if (account.getAccGender() != null) {
+            dbAccount.setAccGender(account.getAccGender());
+        }
+        if (account.getAccBday() != null) {
+            dbAccount.setAccBday(account.getAccBday());
+        }
+        if (account.getAccAddress() != null) {
+            dbAccount.setAccAddress(account.getAccAddress());
+        }
+        if (account.getAccPassword() != null) {
+            dbAccount.setAccPassword(account.getAccPassword());
+        }
+        if (account.getRole() != null) {
+            dbAccount.setRole(account.getRole());
+        }
+        if(account.getAccDisplayname() != null) {
+            dbAccount.setAccDisplayname(account.getAccDisplayname());
+        }
+
+        Account savedAccount = this.accountService.save(dbAccount);
+        return new ResponseEntity<>(accountMapper.mapFrom(savedAccount), HttpStatus.OK);
+    }
 }

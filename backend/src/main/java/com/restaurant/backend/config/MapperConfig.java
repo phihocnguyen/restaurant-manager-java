@@ -1,5 +1,6 @@
 package com.restaurant.backend.config;
 
+import com.restaurant.backend.domains.dto.Account.dto.UpdateAccountDto;
 import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
 import com.restaurant.backend.domains.dto.ReceiptDetail.ReceiptDetailDto;
 import com.restaurant.backend.domains.dto.Recipe.RecipeDto;
@@ -17,6 +18,9 @@ public class MapperConfig {
     @Bean
     ModelMapper modelMapper(){
         ModelMapper modelMapper = new ModelMapper();
+
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
         // add this so you can add nested objects
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
@@ -48,6 +52,12 @@ public class MapperConfig {
             mapper.map(src->src.getTotalCprice(), StockinDetailsIngreDto::setTotalCprice);
             mapper.map(src->src.getQuantityKg(), StockinDetailsIngreDto::setQuantityKg);
         });
+
+        modelMapper.typeMap(UpdateAccountDto.class, Account.class)
+                .addMappings(mapper -> {
+                    mapper.skip(Account::setAccUsername);
+                });
+
         return modelMapper;
     }
 }

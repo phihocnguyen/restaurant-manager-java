@@ -16,9 +16,9 @@ public class IngredientDto {
 
     private String ingreName;
 
-    private Double instockKg;
+    private Double instockKg = 0.0;
 
-    private BigDecimal ingrePrice;
+    private BigDecimal ingrePrice = BigDecimal.ZERO;
 
     private Boolean isdeleted = false;
 }
