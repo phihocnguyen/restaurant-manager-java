@@ -26,11 +26,11 @@ public class CreateMenuItemDto {
 
     private String itemImg;
 
-    private BigDecimal itemCprice;
+    private BigDecimal itemCprice = BigDecimal.ZERO;
 
-    private BigDecimal itemSprice;
+    private BigDecimal itemSprice = BigDecimal.ZERO;
 
-    private Double instock;
+    private Double instock = 0.0;
 
     private Boolean isdeleted = false;
 }

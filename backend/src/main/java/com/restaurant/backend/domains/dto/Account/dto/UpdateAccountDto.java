@@ -1,4 +1,4 @@
-package com.restaurant.backend.domains.dto.Account;
+package com.restaurant.backend.domains.dto.Account.dto;
 
 import com.restaurant.backend.domains.dto.AccountRole.AccountRoleDto;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class AccountDto {
-    private String accUsername;
-
+public class UpdateAccountDto {
     private String accPassword;
 
     private String accEmail;
@@ -30,6 +28,4 @@ public class AccountDto {
     private String accPhone;
 
     private AccountRoleDto role;
-
-    private Boolean isdeleted = false;
 }

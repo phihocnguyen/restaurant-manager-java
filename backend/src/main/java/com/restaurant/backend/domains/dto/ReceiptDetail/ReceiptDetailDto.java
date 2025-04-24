@@ -20,5 +20,5 @@ public class ReceiptDetailDto {
 
     private Integer quantity;
 
-    private BigDecimal price;
+    private BigDecimal price = BigDecimal.ZERO;
 }

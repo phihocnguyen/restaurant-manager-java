@@ -5,6 +5,7 @@ import com.restaurant.backend.domains.entities.Recipe;
 import com.restaurant.backend.domains.entities.RecipeId;
 import com.restaurant.backend.repositories.RecipeRepository;
 import com.restaurant.backend.services.RecipeService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.save(recipe);
     }
 
+    @Transactional
     public List<Recipe> saveAll(List<Recipe> recipes) {
         return recipeRepository.saveAll(recipes);
     }
@@ -39,6 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.findById(recipeId);
     }
 
+    @Transactional
     public void deleteAll(List<Recipe> oldRecipes) {
         recipeRepository.deleteAll(oldRecipes);
     }

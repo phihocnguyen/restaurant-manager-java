@@ -1,6 +1,7 @@
 package com.restaurant.backend.mappers.impl;
 
 import com.restaurant.backend.domains.dto.Account.AccountDto;
+import com.restaurant.backend.domains.dto.Account.dto.UpdateAccountDto;
 import com.restaurant.backend.domains.entities.Account;
 import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;
@@ -21,5 +22,9 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
     @Override
     public Account mapTo(AccountDto accountDto) {
         return modelMapper.map(accountDto, Account.class);
+    }
+
+    public Account mapTo(UpdateAccountDto updateAccountDto) {
+        return modelMapper.map(updateAccountDto, Account.class);
     }
 }

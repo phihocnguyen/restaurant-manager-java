@@ -17,5 +17,5 @@ public class CreateReceiptDto {
     private Integer cusId;
     private Integer tabId;
     private Instant recTime;
-    private Boolean isdeleted;
+    private Boolean isdeleted = Boolean.FALSE;
 }

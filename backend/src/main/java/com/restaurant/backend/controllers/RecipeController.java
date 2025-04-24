@@ -15,11 +15,13 @@ import com.restaurant.backend.mappers.impl.RecipeMapper;
 import com.restaurant.backend.services.IngredientService;
 import com.restaurant.backend.services.MenuItemService;
 import com.restaurant.backend.services.RecipeService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,15 +60,21 @@ public class RecipeController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        // create new menu item
+        // 1. create new menu item
         MenuItem newMenuItem = this.menuItemMapper.mapTo(createMenuItemDto);
-        MenuItem savedMenuItem = this.menuItemService.save(newMenuItem);
 
-        // add one recipe
+
+        // 2. add one recipe
         Optional<Ingredient> existedIngre = this.ingredientService.findById(createRecipeDto.getIngreId());
         if(!validateIngredient(existedIngre)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+
+        // 3. & update cprice menu item
+        newMenuItem.setItemCprice(existedIngre.get().getIngrePrice().multiply(BigDecimal.valueOf(createRecipeDto.getIngreQuantityKg())));
+        // 4. save menu item
+        MenuItem savedMenuItem = this.menuItemService.save(newMenuItem);
+
         Recipe recipe = Recipe.builder()
                 .id(new RecipeId(savedMenuItem.getId(), existedIngre.get().getId()))
                 .item(savedMenuItem)
@@ -74,8 +82,10 @@ public class RecipeController {
                 .ingreQuantityKg(createRecipeDto.getIngreQuantityKg())
                 .build();
 
-        // save recipe
+        // 5. save recipe
         Recipe savedRecipe = this.recipeService.save(recipe);
+
+
 
         return new ResponseEntity<>(this.recipeMapper.mapFrom(savedRecipe), HttpStatus.CREATED);
     }
@@ -94,6 +104,9 @@ public class RecipeController {
         MenuItem newMenuItem = this.menuItemMapper.mapTo(createMenuItemDto);
         MenuItem savedMenuItem = this.menuItemService.save(newMenuItem);
 
+        // ini cprice for menu
+        final BigDecimal[] cpriceItem = {BigDecimal.ZERO};
+
         // add many recipes
         List<Recipe> recipes = createManyRecipesDto.getIngredients().stream().map(ingreDto -> {
             Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreDto.getIngreId());
@@ -101,6 +114,8 @@ public class RecipeController {
             if(!validateIngredient(existedIngre)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
+
+            cpriceItem[0] = cpriceItem[0].add(existedIngre.get().getIngrePrice().multiply(BigDecimal.valueOf(ingreDto.getIngreQuantityKg())));
 
             return Recipe.builder()
                     .id(new RecipeId(savedMenuItem.getId(), ingreDto.getIngreId()))
@@ -111,6 +126,10 @@ public class RecipeController {
 
 
         }).toList();
+
+        // save menu again
+        savedMenuItem.setItemCprice(cpriceItem[0]);
+        this.menuItemService.save(savedMenuItem);
 
         // save many recipes
         List<Recipe> savedRecipes = this.recipeService.saveAll(recipes);
@@ -147,6 +166,18 @@ public class RecipeController {
                 .ingreQuantityKg(createRecipeDto.getIngreQuantityKg())
                 .build();
         Recipe savedRecipe = this.recipeService.save(addedRecipe);
+
+        // save cprice to menu
+        BigDecimal cpriceItem = BigDecimal.ZERO;
+
+        List<Recipe> allRecipes = this.recipeService.findAllByItemId(existedMenuItem.get().getId());
+        for(Recipe recipe : allRecipes){
+            cpriceItem = cpriceItem.add(recipe.getIngre().getIngrePrice().multiply(BigDecimal.valueOf(recipe.getIngreQuantityKg())));
+        }
+        // save
+        existedMenuItem.get().setItemCprice(cpriceItem);
+        this.menuItemService.save(existedMenuItem.get());
+
         return new ResponseEntity<>(this.recipeMapper.mapFrom(savedRecipe), HttpStatus.CREATED);
     }
 
@@ -179,6 +210,18 @@ public class RecipeController {
                             .build();
                 }).toList();
         List<Recipe> savedRecipes = this.recipeService.saveAll(addedRecipes);
+
+        // save cprice to menu
+        BigDecimal cpriceItem = BigDecimal.ZERO;
+
+        List<Recipe> allRecipes = this.recipeService.findAllByItemId(existedMenuItem.get().getId());
+        for(Recipe recipe : allRecipes){
+            cpriceItem = cpriceItem.add(recipe.getIngre().getIngrePrice().multiply(BigDecimal.valueOf(recipe.getIngreQuantityKg())));
+        }
+        // save
+        existedMenuItem.get().setItemCprice(cpriceItem);
+        this.menuItemService.save(existedMenuItem.get());
+
         return new ResponseEntity<>(savedRecipes.stream().map(recipeMapper::mapFrom).collect(Collectors.toList()), HttpStatus.OK);
     }
 
@@ -217,6 +260,18 @@ public class RecipeController {
         }).toList();
         // save all
         List<Recipe> savedRecipes = this.recipeService.saveAll(recipes);
+
+        // save cprice to menu
+        BigDecimal cpriceItem = BigDecimal.ZERO;
+
+        List<Recipe> allRecipes = this.recipeService.findAllByItemId(existedMenuItem.get().getId());
+        for(Recipe recipe : allRecipes){
+            cpriceItem = cpriceItem.add(recipe.getIngre().getIngrePrice().multiply(BigDecimal.valueOf(recipe.getIngreQuantityKg())));
+        }
+        // save
+        existedMenuItem.get().setItemCprice(cpriceItem);
+        this.menuItemService.save(existedMenuItem.get());
+
         return new ResponseEntity<>(savedRecipes.stream().map(recipeMapper::mapFrom).collect(Collectors.toList()), HttpStatus.OK);
     }
 
@@ -236,6 +291,17 @@ public class RecipeController {
         }
         if(createRecipeDto.getIngreQuantityKg()!=null){
             dbRecipe.get().setIngreQuantityKg(createRecipeDto.getIngreQuantityKg());
+            // if not null: gotta update menu cprice
+            // save cprice to menu
+            BigDecimal cpriceItem = BigDecimal.ZERO;
+
+            List<Recipe> allRecipes = this.recipeService.findAllByItemId(existedMenuItem.get().getId());
+            for(Recipe recipe : allRecipes){
+                cpriceItem = cpriceItem.add(recipe.getIngre().getIngrePrice().multiply(BigDecimal.valueOf(recipe.getIngreQuantityKg())));
+            }
+            // save
+            existedMenuItem.get().setItemCprice(cpriceItem);
+            this.menuItemService.save(existedMenuItem.get());
         }
         Recipe savedRecipe = this.recipeService.save(dbRecipe.get());
         return new ResponseEntity<>(this.recipeMapper.mapFrom(savedRecipe), HttpStatus.OK);
@@ -256,6 +322,18 @@ public class RecipeController {
             return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
         }
         this.recipeService.deleteById(dbRecipe.get().getId());
+
+        // save cprice to menu
+        BigDecimal cpriceItem = BigDecimal.ZERO;
+
+        List<Recipe> allRecipes = this.recipeService.findAllByItemId(existedMenuItem.get().getId());
+        for(Recipe recipe : allRecipes){
+            cpriceItem = cpriceItem.add(recipe.getIngre().getIngrePrice().multiply(BigDecimal.valueOf(recipe.getIngreQuantityKg())));
+        }
+        // save
+        existedMenuItem.get().setItemCprice(cpriceItem);
+        this.menuItemService.save(existedMenuItem.get());
+
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
     @DeleteMapping(path="/recipes/{menuItemId}")
@@ -266,6 +344,9 @@ public class RecipeController {
         }
         List<Recipe> oldRecipes = this.recipeService.findAllByItemId(menuItemId);
         this.recipeService.deleteAll(oldRecipes);
+        // change cprice to zero then save
+        existedMenuItem.get().setItemCprice(BigDecimal.ZERO);
+        this.menuItemService.save(existedMenuItem.get());
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

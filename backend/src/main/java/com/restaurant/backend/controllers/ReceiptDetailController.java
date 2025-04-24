@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -118,7 +119,12 @@ public class ReceiptDetailController {
         // update rec pay
         savedReceipt.setRecPay(getRecPay(savedReceipt.getId()));
         this.receiptService.save(savedReceipt);
-        return new ResponseEntity<>(this.receiptDetailMapper.mapFrom(receiptDetail), HttpStatus.CREATED);
+
+        // if food returns ReceiptDetailDto for chefs
+        if(receiptDetail.getItem().getItemType() == ItemType.FOOD){
+            return new ResponseEntity<>(this.receiptDetailMapper.mapFrom(receiptDetail), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping(path="/receipt-details/many")
@@ -158,6 +164,8 @@ public class ReceiptDetailController {
         }
         Receipt savedReceipt = this.receiptService.save(newReceipt);
 
+        List<ReceiptDetail> sendToChefList = new ArrayList<>();
+
         List<ReceiptDetail> receiptDetails = details.getDetails().stream().map(detailDto -> {
             Optional<MenuItem> dbMenuItem = this.menuItemService.findById(detailDto.getItemId());
             if(!dbMenuItem.isPresent() || dbMenuItem.get().getIsdeleted()){
@@ -170,13 +178,20 @@ public class ReceiptDetailController {
             // minus instock for menu
             dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - detailDto.getQuantity());
             this.menuItemService.save(dbMenuItem.get());
-            return ReceiptDetail.builder()
+             ReceiptDetail returnReceiptDetail = ReceiptDetail.builder()
                     .rec(savedReceipt)
                     .item(dbMenuItem.get())
                     .price(dbMenuItem.get().getItemSprice().multiply(BigDecimal.valueOf(detailDto.getQuantity())))
                     .quantity(detailDto.getQuantity())
                     .id(new ReceiptDetailId(savedReceipt.getId(), detailDto.getItemId()))
                     .build();
+
+             // add to notify chefs list
+            if(dbMenuItem.get().getItemType() == ItemType.FOOD){
+                sendToChefList.add(returnReceiptDetail);
+            }
+
+            return returnReceiptDetail;
         }).toList();
 
         List<ReceiptDetail> savedReceiptDetails = this.receiptDetailService.saveAll(receiptDetails);
@@ -184,8 +199,10 @@ public class ReceiptDetailController {
         savedReceipt.setRecPay(getRecPay(savedReceipt.getId()));
         this.receiptService.save(savedReceipt);
 
-        return new ResponseEntity<>(savedReceiptDetails.stream().map(this.receiptDetailMapper::mapFrom).collect(Collectors.toList()), HttpStatus.CREATED);
-
+        if (sendToChefList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(sendToChefList.stream().map(this.receiptDetailMapper::mapFrom).collect(Collectors.toList()), HttpStatus.CREATED);
     }
 
     @PostMapping(path="/receipt-details/one/{recId}")
@@ -208,6 +225,9 @@ public class ReceiptDetailController {
         dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - createReceiptDetailDto.getQuantity());
         this.menuItemService.save(dbMenuItem.get());
 
+
+
+        // temp receipt detail
         ReceiptDetail receiptDetail = null;
         // if existed plus in
         if(dbReceiptDetail.isPresent()){
@@ -232,6 +252,11 @@ public class ReceiptDetailController {
         dbReceipt.get().setRecPay(getRecPay(dbReceipt.get().getId()));
         this.receiptService.save(dbReceipt.get());
 
+        // check if add one is food?
+        if (savedReceiptDetail.getItem().getItemType() == ItemType.FOOD) {
+            savedReceiptDetail.setQuantity(createReceiptDetailDto.getQuantity());
+        }
+
         return new ResponseEntity<>(this.receiptDetailMapper.mapFrom(savedReceiptDetail), HttpStatus.CREATED);
     }
 
@@ -241,6 +266,9 @@ public class ReceiptDetailController {
         if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        List<ReceiptDetail> sendToChefList = new ArrayList<>();
+
         List<ReceiptDetail> receiptDetails = createReceiptDetailDtos.getDetails().stream().map(detailDto -> {
             Optional<MenuItem> dbMenuItem = this.menuItemService.findById(detailDto.getItemId());
             if(!dbMenuItem.isPresent() || dbMenuItem.get().getIsdeleted()){
@@ -256,9 +284,11 @@ public class ReceiptDetailController {
             this.menuItemService.save(dbMenuItem.get());
 
             Optional<ReceiptDetail> dbReceiptDetail = this.receiptDetailService.findById(new ReceiptDetailId(dbReceipt.get().getId(), dbMenuItem.get().getId()));
+
+            ReceiptDetail returnedReceiptDetail = null;
             // if existed plus in
             if(dbReceiptDetail.isPresent()){
-                return ReceiptDetail.builder()
+                returnedReceiptDetail = ReceiptDetail.builder()
                         .item(dbMenuItem.get())
                         .rec(dbReceipt.get())
                         .id(new ReceiptDetailId(dbReceipt.get().getId(), dbMenuItem.get().getId()))
@@ -266,7 +296,7 @@ public class ReceiptDetailController {
                         .quantity(detailDto.getQuantity() + dbReceiptDetail.get().getQuantity())
                         .build();
             }
-            return ReceiptDetail.builder()
+            else returnedReceiptDetail = ReceiptDetail.builder()
                     .item(dbMenuItem.get())
                     .rec(dbReceipt.get())
                     .id(new ReceiptDetailId(dbReceipt.get().getId(), dbMenuItem.get().getId()))
@@ -274,6 +304,11 @@ public class ReceiptDetailController {
                     .quantity(detailDto.getQuantity())
                     .build();
 
+            if(returnedReceiptDetail.getItem().getItemType() == ItemType.FOOD){
+                sendToChefList.add(returnedReceiptDetail);
+            }
+
+            return returnedReceiptDetail;
         }).toList();
         List<ReceiptDetail> savedReceiptDetails = this.receiptDetailService.saveAll(receiptDetails);
 
@@ -281,7 +316,11 @@ public class ReceiptDetailController {
         dbReceipt.get().setRecPay(getRecPay(dbReceipt.get().getId()));
         this.receiptService.save(dbReceipt.get());
 
-        return new ResponseEntity<>(savedReceiptDetails.stream().map(receiptDetailMapper::mapFrom).collect(Collectors.toList()), HttpStatus.CREATED);
+        if(sendToChefList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(sendToChefList.stream().map(receiptDetailMapper::mapFrom).collect(Collectors.toList()), HttpStatus.CREATED);
     }
 
     @GetMapping(path="/receipt-details/{recId}")
@@ -304,10 +343,15 @@ public class ReceiptDetailController {
         List<ReceiptDetail> oldReceiptDetails = this.receiptDetailService.findAllByRecId(recId);
         for(ReceiptDetail oldReceiptDetail : oldReceiptDetails){
             Optional<MenuItem> oldMenuItem = this.menuItemService.findById(oldReceiptDetail.getItem().getId());
+            if(!oldMenuItem.isPresent() || oldMenuItem.get().getIsdeleted()){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             oldMenuItem.get().setInstock(oldMenuItem.get().getInstock() + oldReceiptDetail.getQuantity());
             this.menuItemService.save(oldMenuItem.get());
         }
         this.receiptDetailService.deleteAll(oldReceiptDetails);
+
+        List<ReceiptDetail> sendToChefList = new ArrayList<>();
 
         List<ReceiptDetail> receiptDetails = createReceiptDetailDtos.getDetails().stream().map(detailDto -> {
             Optional<MenuItem> dbMenuItem = this.menuItemService.findById(detailDto.getItemId());
@@ -321,14 +365,20 @@ public class ReceiptDetailController {
             // minus instock for menu
             dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - detailDto.getQuantity());
             this.menuItemService.save(dbMenuItem.get());
-
-            return ReceiptDetail.builder()
+            ReceiptDetail returnedReceiptDetail = ReceiptDetail.builder()
                     .rec(dbReceipt.get())
                     .item(dbMenuItem.get())
                     .price(dbMenuItem.get().getItemSprice().multiply(BigDecimal.valueOf(detailDto.getQuantity())))
                     .quantity(detailDto.getQuantity())
                     .id(new ReceiptDetailId(dbReceipt.get().getId(), detailDto.getItemId()))
                     .build();
+
+            // add to send to chef
+            if(returnedReceiptDetail.getItem().getItemType() == ItemType.FOOD){
+                sendToChefList.add(returnedReceiptDetail);
+            }
+
+            return returnedReceiptDetail;
         }).toList();
 
         List<ReceiptDetail> savedReceiptDetails = this.receiptDetailService.saveAll(receiptDetails);
@@ -337,7 +387,10 @@ public class ReceiptDetailController {
         dbReceipt.get().setRecPay(getRecPay(dbReceipt.get().getId()));
         this.receiptService.save(dbReceipt.get());
 
-        return new ResponseEntity<>(savedReceiptDetails.stream().map(this.receiptDetailMapper::mapFrom).collect(Collectors.toList()), HttpStatus.CREATED);
+        if(sendToChefList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(sendToChefList.stream().map(this.receiptDetailMapper::mapFrom).collect(Collectors.toList()), HttpStatus.CREATED);
     }
 
     @PatchMapping(path="receipt-details/{recId}/{itemId}")
@@ -365,8 +418,10 @@ public class ReceiptDetailController {
         }
 
         if(createReceiptDetailDtos.getQuantity()!=null){
+            // update receipt details
             dbReceiptDetail.get().setQuantity(createReceiptDetailDtos.getQuantity());
             dbReceiptDetail.get().setPrice(dbMenuItem.get().getItemSprice().multiply(BigDecimal.valueOf(createReceiptDetailDtos.getQuantity())));
+
         }
         ReceiptDetail savedReceiptDetail = this.receiptDetailService.save(dbReceiptDetail.get());
         // update rec pay
@@ -376,22 +431,27 @@ public class ReceiptDetailController {
         dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - createReceiptDetailDtos.getQuantity());
         this.menuItemService.save(dbMenuItem.get());
 
+        // if food? notify chef
+        if(savedReceiptDetail.getItem().getItemType() == ItemType.FOOD){
+            savedReceiptDetail.setQuantity(createReceiptDetailDtos.getQuantity());
+        }
+
         return new ResponseEntity<>(this.receiptDetailMapper.mapFrom(savedReceiptDetail), HttpStatus.OK);
     }
 
     @DeleteMapping(path="receipt-details/{recId}/{itemId}")
-    public ResponseEntity<Boolean> deleteOneReceiptDetail(@PathVariable Integer recId, @PathVariable Integer itemId){
+    public ResponseEntity<ReceiptDetailDto> deleteOneReceiptDetail(@PathVariable Integer recId, @PathVariable Integer itemId){
         Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
         if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()){
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Optional<MenuItem> dbMenuItem = this.menuItemService.findById(itemId);
         if(!dbMenuItem.isPresent() || dbMenuItem.get().getIsdeleted()){
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Optional<ReceiptDetail> foundReceiptDetail = this.receiptDetailService.findById(new ReceiptDetailId(dbReceipt.get().getId(), dbMenuItem.get().getId()));
         if (!foundReceiptDetail.isPresent()) {
-            return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.receiptDetailService.deleteById(foundReceiptDetail.get().getId());
         // plus back
@@ -401,21 +461,34 @@ public class ReceiptDetailController {
         // update rec pay
         dbReceipt.get().setRecPay(getRecPay(dbReceipt.get().getId()));
         this.receiptService.save(dbReceipt.get());
-
-        return new ResponseEntity<>(true ,HttpStatus.OK);
+        if (foundReceiptDetail.get().getItem().getItemType() == ItemType.FOOD) {
+            return new ResponseEntity<>(receiptDetailMapper.mapFrom(foundReceiptDetail.get()) ,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(path="receipt-details/{recId}")
-    public ResponseEntity<Boolean> deleteManyReceiptDetails(@PathVariable Integer recId){
+    public ResponseEntity<List<ReceiptDetailDto>> deleteManyReceiptDetails(@PathVariable Integer recId){
         Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
         if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()){
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        List<ReceiptDetail> sendToChefList = new ArrayList<>();
+
         List<ReceiptDetail> allReceiptDetails = this.receiptDetailService.findAllByRecId(recId);
         for(ReceiptDetail receiptDetail : allReceiptDetails){
             Optional<MenuItem> dbMenuItem = this.menuItemService.findById(receiptDetail.getItem().getId());
+            MenuItem item = dbMenuItem.orElse(null);
+            if(item == null|| Boolean.TRUE.equals(item.getIsdeleted())){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() + receiptDetail.getQuantity());
             this.menuItemService.save(dbMenuItem.get());
+
+            if(receiptDetail.getItem().getItemType() == ItemType.FOOD){
+                sendToChefList.add(receiptDetail);
+            }
         }
         this.receiptDetailService.deleteAll(allReceiptDetails);
 
@@ -424,7 +497,10 @@ public class ReceiptDetailController {
         dbReceipt.get().setRecPay(getRecPay(dbReceipt.get().getId()));
         this.receiptService.save(dbReceipt.get());
 
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        if(sendToChefList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(sendToChefList.stream().map(this.receiptDetailMapper::mapFrom).collect(Collectors.toList()), HttpStatus.OK);
     }
 }
 

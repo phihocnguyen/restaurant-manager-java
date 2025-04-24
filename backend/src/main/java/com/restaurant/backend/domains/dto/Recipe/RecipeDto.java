@@ -17,5 +17,5 @@ public class RecipeDto {
 
     private IngredientDto ingre;
 
-    private Double ingreQuantityKg;
+    private Double ingreQuantityKg = 0.1;
 }

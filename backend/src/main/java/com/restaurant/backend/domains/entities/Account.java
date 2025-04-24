@@ -39,7 +39,7 @@ public class Account {
 
     @Size(max = 5)
     @NotNull
-    @Column(name = "acc_gender", nullable = false, length = 5)
+    @Column(name = "acc_gender", nullable = false, length = 7)
     private String accGender;
 
     @NotNull

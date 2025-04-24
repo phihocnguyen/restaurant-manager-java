@@ -15,10 +15,9 @@ import java.math.BigDecimal;
 public class CreateIngreDto {
     private String ingreName;
 
-    @NotNull
-    private Double instockKg;
+    private Double instockKg = 0.0;
 
-    private BigDecimal ingrePrice;
+    private BigDecimal ingrePrice = BigDecimal.ZERO;
 
     private Boolean isdeleted = false;
 }
