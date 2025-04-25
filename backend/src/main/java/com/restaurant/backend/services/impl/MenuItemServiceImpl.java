@@ -41,7 +41,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
 
-    public MenuItemDto updateMenuItem(int id, UpdateMenuItemDto dto) {
+    public MenuItemDto updateMenuItem(int id, CreateMenuItemDto dto) {
         Optional<MenuItem> found = menuItemRepository.findById(id);
         if (!found.isPresent()) return null;
 
