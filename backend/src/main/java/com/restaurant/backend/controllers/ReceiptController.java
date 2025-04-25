@@ -2,156 +2,55 @@ package com.restaurant.backend.controllers;
 
 import com.restaurant.backend.domains.dto.Receipt.ReceiptDto;
 import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
-import com.restaurant.backend.domains.entities.*;
-import com.restaurant.backend.mappers.impl.ReceiptMapper;
-import com.restaurant.backend.services.*;
+import com.restaurant.backend.services.ReceiptService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class ReceiptController {
     private final ReceiptService receiptService;
-    private final ReceiptMapper receiptMapper;
-    private final EmployeeService employeeService;
-    private final CustomerService customerService;
-    private final DiningTableService diningTableService;
-    private final ReceiptDetailService receiptDetailService;
-    public ReceiptController(ReceiptService receiptService, ReceiptDetailService receiptDetailService,
-                             ReceiptMapper receiptMapper, EmployeeService employeeService, CustomerService customerService, DiningTableService diningTableService) {
+
+    public ReceiptController(ReceiptService receiptService) {
         this.receiptService = receiptService;
-        this.receiptMapper = receiptMapper;
-        this.employeeService = employeeService;
-        this.customerService = customerService;
-        this.diningTableService = diningTableService;
-        this.receiptDetailService = receiptDetailService;
     }
 
-
-
-    @PostMapping(path="/receipts")
-    public ResponseEntity<ReceiptDto> addReceipt(@RequestBody CreateReceiptDto createReceiptDto) {
-        Receipt receipt = this.receiptMapper.mapTo(createReceiptDto);
-        if(createReceiptDto.getEmpId() != null){
-            Optional<Employee> foundEmp = this.employeeService.findById(createReceiptDto.getEmpId());
-            if(!foundEmp.isPresent()){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            receipt.setEmp(foundEmp.get());
-        }
-        if(createReceiptDto.getIsdeleted() != null){
-            receipt.setIsdeleted(createReceiptDto.getIsdeleted());
-        }
-        if(createReceiptDto.getCusId() != null){
-            Optional<Customer> foundCus = this.customerService.findById(createReceiptDto.getCusId());
-            if(!foundCus.isPresent()){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            receipt.setCus(foundCus.get());
-        }
-        if(createReceiptDto.getTabId() != null){
-            Optional<DiningTable> foundTab = this.diningTableService.findById(createReceiptDto.getTabId());
-            if(!foundTab.isPresent()){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            receipt.setTab(foundTab.get());
-        }
-        if(createReceiptDto.getRecTime() != null){
-            receipt.setRecTime(createReceiptDto.getRecTime());
-        }
-        Receipt savedReceipt = this.receiptService.save(receipt);
-        return new ResponseEntity<>(this.receiptMapper.mapFrom(savedReceipt), HttpStatus.CREATED);
+    @PostMapping("/receipts")
+    public ResponseEntity<ReceiptDto> addReceipt(@RequestBody CreateReceiptDto dto) {
+        ReceiptDto created = receiptService.create(dto);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @GetMapping(path="/receipts")
+    @GetMapping("/receipts")
     public ResponseEntity<List<ReceiptDto>> getAllReceipts() {
-        return new ResponseEntity<>(this.receiptService.findAll().stream().map(this.receiptMapper::mapFrom).collect(Collectors.toList()), HttpStatus.OK);
+        List<ReceiptDto> receipts = receiptService.getAllReceipts();
+        return new ResponseEntity<>(receipts, HttpStatus.OK);
     }
 
-    @GetMapping(path="/receipts/{recId}")
+    @GetMapping("/receipts/{recId}")
     public ResponseEntity<ReceiptDto> getReceipt(@PathVariable int recId) {
-        Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
-        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
+        var receipt = receiptService.getReceiptById(recId);
+        if (receipt == null || Boolean.TRUE.equals(receipt.getIsdeleted())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Receipt receipt = dbReceipt.get();
-        return new ResponseEntity<>(this.receiptMapper.mapFrom(receipt), HttpStatus.OK);
+        return new ResponseEntity<>(receipt, HttpStatus.OK);
     }
 
-    @PutMapping(path="/receipts/{recId}")
-    public ResponseEntity<ReceiptDto> updateReceipt(@PathVariable int recId, @RequestBody CreateReceiptDto createReceiptDto) {
-        Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
-        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Receipt receipt = this.receiptMapper.mapTo(createReceiptDto);
-        // havent set emp or anything yet
-        // find emp
-        Optional<Employee> foundEmp = this.employeeService.findById(createReceiptDto.getEmpId());
-        receipt.setEmp(foundEmp.get());
-
-        // find cus
-        Optional<Customer> foundCus = this.customerService.findById(createReceiptDto.getCusId());
-        receipt.setCus(foundCus.get());
-        // find tab
-        Optional<DiningTable> foundTab = this.diningTableService.findById(createReceiptDto.getTabId());
-        receipt.setTab(foundTab.get());
-
-        receipt.setId(recId);
-        Receipt savedReceipt = this.receiptService.save(receipt);
-        return new ResponseEntity<>(this.receiptMapper.mapFrom(savedReceipt), HttpStatus.OK);
+    @PutMapping("/receipts/{recId}")
+    public ResponseEntity<ReceiptDto> updateReceipt(@PathVariable int recId, @RequestBody CreateReceiptDto dto) {
+        return new ResponseEntity<>(receiptService.update(recId, dto), HttpStatus.OK);
     }
 
-    @PatchMapping(path="/receipts/{recId}")
-    public ResponseEntity<ReceiptDto> partialUpdateReceipt(@PathVariable int recId, @RequestBody CreateReceiptDto createReceiptDto) {
-        Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
-        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        if(createReceiptDto.getEmpId() != null){
-            Optional<Employee> foundEmp = this.employeeService.findById(createReceiptDto.getEmpId());
-            if(!foundEmp.isPresent()){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            dbReceipt.get().setEmp(foundEmp.get());
-        }
-        if(createReceiptDto.getIsdeleted() != null){
-            dbReceipt.get().setIsdeleted(createReceiptDto.getIsdeleted());
-        }
-        if(createReceiptDto.getCusId() != null){
-            Optional<Customer> foundCus = this.customerService.findById(createReceiptDto.getCusId());
-            if(!foundCus.isPresent()){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            dbReceipt.get().setCus(foundCus.get());
-        }
-        if(createReceiptDto.getTabId() != null){
-            Optional<DiningTable> foundTab = this.diningTableService.findById(createReceiptDto.getTabId());
-            if(!foundTab.isPresent()){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            dbReceipt.get().setTab(foundTab.get());
-        }
-        if(createReceiptDto.getRecTime() != null){
-            dbReceipt.get().setRecTime(createReceiptDto.getRecTime());
-        }
-        Receipt savedReceipt = this.receiptService.save(dbReceipt.get());
-        return new ResponseEntity<>(this.receiptMapper.mapFrom(savedReceipt), HttpStatus.OK);
+    @PatchMapping("/receipts/{recId}")
+    public ResponseEntity<ReceiptDto> partialUpdateReceipt(@PathVariable int recId, @RequestBody CreateReceiptDto dto) {
+        return new ResponseEntity<>(receiptService.partialUpdate(recId, dto), HttpStatus.OK);
     }
 
-    @DeleteMapping(path="/receipts/{recId}")
-    public ResponseEntity<Boolean> deleteReceipt(@PathVariable Integer recId){
-        Optional<Receipt> dbReceipt = this.receiptService.findById(recId);
-        if(!dbReceipt.isPresent() || dbReceipt.get().getIsdeleted()) {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-        }
-        dbReceipt.get().setIsdeleted(true);
-        Receipt savedReceipt = this.receiptService.save(dbReceipt.get());
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    @DeleteMapping("/receipts/{recId}")
+    public ResponseEntity<Boolean> deleteReceipt(@PathVariable int recId) {
+        boolean deleted = receiptService.softDelete(recId);
+        return new ResponseEntity<>(deleted, deleted ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }

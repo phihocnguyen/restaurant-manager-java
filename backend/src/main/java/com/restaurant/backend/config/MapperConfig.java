@@ -1,6 +1,7 @@
 package com.restaurant.backend.config;
 
 import com.restaurant.backend.domains.dto.Account.dto.UpdateAccountDto;
+import com.restaurant.backend.domains.dto.MenuItem.dto.UpdateMenuItemDto;
 import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
 import com.restaurant.backend.domains.dto.ReceiptDetail.ReceiptDetailDto;
 import com.restaurant.backend.domains.dto.Recipe.RecipeDto;
@@ -57,6 +58,11 @@ public class MapperConfig {
                 .addMappings(mapper -> {
                     mapper.skip(Account::setAccUsername);
                 });
+
+        modelMapper.typeMap(UpdateMenuItemDto.class, MenuItem.class)
+                .addMappings((mapper -> {
+                    mapper.skip(MenuItem::setItemType);
+                }));
 
         return modelMapper;
     }

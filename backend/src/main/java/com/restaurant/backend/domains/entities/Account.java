@@ -29,6 +29,7 @@ public class Account {
     private String accPassword;
 
     @Size(max = 100)
+    @NotNull
     @Column(name = "acc_email", length = 100, nullable = false)
     private String accEmail;
 

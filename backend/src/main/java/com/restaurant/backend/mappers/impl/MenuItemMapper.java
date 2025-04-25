@@ -2,6 +2,7 @@ package com.restaurant.backend.mappers.impl;
 
 import com.restaurant.backend.domains.dto.MenuItem.MenuItemDto;
 import com.restaurant.backend.domains.dto.MenuItem.dto.CreateMenuItemDto;
+import com.restaurant.backend.domains.dto.MenuItem.dto.UpdateMenuItemDto;
 import com.restaurant.backend.domains.entities.MenuItem;
 import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;
@@ -24,4 +25,5 @@ public class MenuItemMapper implements Mapper<MenuItem, MenuItemDto> {
     }
 
     public MenuItem mapTo(CreateMenuItemDto createMenuItemDto) {return modelMapper.map(createMenuItemDto, MenuItem.class);}
+    public MenuItem mapTo(UpdateMenuItemDto updateMenuItemDto) {return modelMapper.map(updateMenuItemDto, MenuItem.class);}
 }

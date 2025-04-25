@@ -2,88 +2,53 @@ package com.restaurant.backend.controllers;
 
 import com.restaurant.backend.domains.dto.DiningTable.DiningTableDto;
 import com.restaurant.backend.domains.dto.DiningTable.dto.CreateDiningTableDto;
-import com.restaurant.backend.domains.entities.DiningTable;
-import com.restaurant.backend.mappers.impl.DiningTableMapper;
 import com.restaurant.backend.services.DiningTableService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class DiningTableController {
     private final DiningTableService diningTableService;
-    private final DiningTableMapper diningTableMapper;
-    public DiningTableController(DiningTableService diningTableService, DiningTableMapper diningTableMapper) {
+
+    public DiningTableController(DiningTableService diningTableService) {
         this.diningTableService = diningTableService;
-        this.diningTableMapper = diningTableMapper;
     }
 
     @PostMapping(path="/tables")
     public ResponseEntity<DiningTableDto> addTable (@RequestBody CreateDiningTableDto createDiningTableDto) {
-        DiningTable diningTable = this.diningTableMapper.mapTo(createDiningTableDto);
-        DiningTable savedDiningTable = this.diningTableService.save(diningTable);
-        return new ResponseEntity<>(this.diningTableMapper.mapFrom(savedDiningTable), HttpStatus.CREATED);
-    } // might not ever use it
+        DiningTableDto saved = this.diningTableService.createTable(createDiningTableDto);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
 
     @GetMapping(path="/tables/{id}")
     public ResponseEntity<DiningTableDto> getTable(@PathVariable int id){
-//        DiningTable dbDiningTable = this.diningTableService.findOneById(id);
-        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
-        if(!dbDiningTable.isPresent()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(this.diningTableMapper.mapFrom(dbDiningTable.get()), HttpStatus.OK);
+        DiningTableDto table = this.diningTableService.getTableById(id);
+        return table != null ? new ResponseEntity<>(table, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(path="/tables")
     public ResponseEntity<List<DiningTableDto>> getAllTables(){
-        //List<DiningTable> allTables = this.diningTableService.findAll();
-        return new ResponseEntity<>(this.diningTableService.findAll().stream().map(this.diningTableMapper::mapFrom).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(this.diningTableService.getAllTables(), HttpStatus.OK);
     }
 
     @PutMapping(path="/tables/{id}")
     public ResponseEntity<DiningTableDto> updateTable(@PathVariable int id, @RequestBody CreateDiningTableDto createDiningTableDto) {
-        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
-        if(!dbDiningTable.isPresent()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        DiningTable updatedDiningTable = this.diningTableMapper.mapTo(createDiningTableDto);
-        updatedDiningTable.setId(id);
-        DiningTable savedDiningTable = this.diningTableService.save(updatedDiningTable);
-        return new ResponseEntity<>(this.diningTableMapper.mapFrom(savedDiningTable), HttpStatus.OK);
+        DiningTableDto updated = this.diningTableService.updateTable(id, createDiningTableDto);
+        return updated != null ? new ResponseEntity<>(updated, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping(path="/tables/{id}")
     public ResponseEntity<DiningTableDto> partialUpdateTable(@PathVariable int id, @RequestBody CreateDiningTableDto createDiningTableDto) {
-        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
-        if (!dbDiningTable.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        //dbDiningTable.setId(id);
-        if(createDiningTableDto.getTabNum() != null) {
-            dbDiningTable.get().setTabNum(createDiningTableDto.getTabNum());
-        }
-        if(createDiningTableDto.getTabStatus() != null) {
-            dbDiningTable.get().setTabStatus(createDiningTableDto.getTabStatus());
-        }
-        if(createDiningTableDto.getIsdeleted() != null){
-            dbDiningTable.get().setIsdeleted(createDiningTableDto.getIsdeleted());
-        }
-        DiningTable savedDiningTable = this.diningTableService.save(dbDiningTable.get());
-        return new ResponseEntity<>(this.diningTableMapper.mapFrom(savedDiningTable), HttpStatus.OK);
+        DiningTableDto updated = this.diningTableService.partialUpdateTable(id, createDiningTableDto);
+        return updated != null ? new ResponseEntity<>(updated, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @DeleteMapping(path="/tables/{id}")
     public ResponseEntity<Boolean> deleteTable(@PathVariable int id){
-        Optional<DiningTable> dbDiningTable = this.diningTableService.findById(id);
-        if(!dbDiningTable.isPresent()){
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        }
-        dbDiningTable.get().setIsdeleted(true);
-        this.diningTableService.save(dbDiningTable.get());
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        boolean deleted = this.diningTableService.softDeleteTable(id);
+        return new ResponseEntity<>(deleted, deleted ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 }
