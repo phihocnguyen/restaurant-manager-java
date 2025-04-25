@@ -7,6 +7,7 @@ import com.restaurant.backend.domains.dto.ReceiptDetail.dto.CreateReceiptDetailD
 import com.restaurant.backend.domains.dto.ReceiptDetail.dto.CreateReceiptWithManyReceiptDetailsDto;
 import com.restaurant.backend.domains.dto.ReceiptDetail.dto.CreateReceiptWithOneReceiptDetail;
 import com.restaurant.backend.domains.entities.*;
+import com.restaurant.backend.mappers.impl.DiningTableMapper;
 import com.restaurant.backend.mappers.impl.ReceiptDetailMapper;
 import com.restaurant.backend.mappers.impl.ReceiptMapper;
 import com.restaurant.backend.services.*;
@@ -31,9 +32,11 @@ public class ReceiptDetailController {
     private final EmployeeService employeeService;
     private final DiningTableService diningTableService;
     private final MenuItemService menuItemService;
+    private final DiningTableMapper diningTableMapper;
     public ReceiptDetailController(ReceiptDetailService receiptDetailService, ReceiptMapper receiptMapper,
                                    ReceiptDetailMapper receiptDetailMapper, ReceiptService receiptService,
                                    CustomerService customerService, EmployeeService employeeService,
+                                   DiningTableMapper diningTableMapper,
                                    DiningTableService diningTableService, MenuItemService menuItemService) {
         this.receiptDetailService = receiptDetailService;
         this.receiptDetailMapper = receiptDetailMapper;
@@ -43,6 +46,7 @@ public class ReceiptDetailController {
         this.employeeService = employeeService;
         this.diningTableService = diningTableService;
         this.menuItemService = menuItemService;
+        this.diningTableMapper = diningTableMapper;
     }
 
     private BigDecimal getRecPay(Integer recId){
@@ -85,7 +89,7 @@ public class ReceiptDetailController {
             newReceipt.setCus(foundCus.get());
         }
         if(receipt.getTabId() != null){
-            Optional<DiningTable> foundTab = this.diningTableService.findById(receipt.getTabId());
+            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.findById(receipt.getTabId())));
             if(!foundTab.isPresent()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -153,7 +157,8 @@ public class ReceiptDetailController {
             newReceipt.setCus(foundCus.get());
         }
         if(receipt.getTabId() != null){
-            Optional<DiningTable> foundTab = this.diningTableService.findById(receipt.getTabId());
+            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.findById(receipt.getTabId())));
+
             if(!foundTab.isPresent()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
