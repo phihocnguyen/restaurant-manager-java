@@ -14,4 +14,5 @@ public interface DiningTableService {
     public DiningTableDto updateTable(int id, CreateDiningTableDto dto);
     public DiningTableDto partialUpdateTable(int id, CreateDiningTableDto dto);
     public boolean softDeleteTable(int id);
+    public DiningTable findById(int id);
 }

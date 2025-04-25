@@ -69,5 +69,10 @@ public class DiningTableServiceImpl implements DiningTableService {
         diningTableRepository.save(entity);
         return true;
     }
+
+    public DiningTable findById(int id) {
+        Optional<DiningTable> found = diningTableRepository.findById(id);
+        return found.orElse(null);
+    }
 }
 
