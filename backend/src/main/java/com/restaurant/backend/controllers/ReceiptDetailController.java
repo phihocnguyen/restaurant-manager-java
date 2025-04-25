@@ -107,7 +107,7 @@ public class ReceiptDetailController {
 
         // minus instock for menu
         dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - detail.getQuantity());
-        this.menuItemService.save(dbMenuItem.get());
+        this.menuItemService.saveEntity(dbMenuItem.get());
 
 
         ReceiptDetail receiptDetail = ReceiptDetail.builder()
@@ -182,7 +182,7 @@ public class ReceiptDetailController {
 
             // minus instock for menu
             dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - detailDto.getQuantity());
-            this.menuItemService.save(dbMenuItem.get());
+            this.menuItemService.saveEntity(dbMenuItem.get());
              ReceiptDetail returnReceiptDetail = ReceiptDetail.builder()
                     .rec(savedReceipt)
                     .item(dbMenuItem.get())
@@ -228,7 +228,7 @@ public class ReceiptDetailController {
 
         // minus instock for menu
         dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - createReceiptDetailDto.getQuantity());
-        this.menuItemService.save(dbMenuItem.get());
+        this.menuItemService.saveEntity(dbMenuItem.get());
 
 
 
@@ -286,7 +286,7 @@ public class ReceiptDetailController {
 
             // minus instock for menu
             dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - detailDto.getQuantity());
-            this.menuItemService.save(dbMenuItem.get());
+            this.menuItemService.saveEntity(dbMenuItem.get());
 
             Optional<ReceiptDetail> dbReceiptDetail = this.receiptDetailService.findById(new ReceiptDetailId(dbReceipt.get().getId(), dbMenuItem.get().getId()));
 
@@ -352,7 +352,7 @@ public class ReceiptDetailController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             oldMenuItem.get().setInstock(oldMenuItem.get().getInstock() + oldReceiptDetail.getQuantity());
-            this.menuItemService.save(oldMenuItem.get());
+            this.menuItemService.saveEntity(oldMenuItem.get());
         }
         this.receiptDetailService.deleteAll(oldReceiptDetails);
 
@@ -369,7 +369,7 @@ public class ReceiptDetailController {
 
             // minus instock for menu
             dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - detailDto.getQuantity());
-            this.menuItemService.save(dbMenuItem.get());
+            this.menuItemService.saveEntity(dbMenuItem.get());
             ReceiptDetail returnedReceiptDetail = ReceiptDetail.builder()
                     .rec(dbReceipt.get())
                     .item(dbMenuItem.get())
@@ -434,7 +434,7 @@ public class ReceiptDetailController {
         this.receiptService.save(dbReceipt.get());
         // update menu item (minus)
         dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() - createReceiptDetailDtos.getQuantity());
-        this.menuItemService.save(dbMenuItem.get());
+        this.menuItemService.saveEntity(dbMenuItem.get());
 
         // if food? notify chef
         if(savedReceiptDetail.getItem().getItemType() == ItemType.FOOD){
@@ -461,7 +461,7 @@ public class ReceiptDetailController {
         this.receiptDetailService.deleteById(foundReceiptDetail.get().getId());
         // plus back
         dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() + foundReceiptDetail.get().getQuantity());
-        this.menuItemService.save(dbMenuItem.get());
+        this.menuItemService.saveEntity(dbMenuItem.get());
 
         // update rec pay
         dbReceipt.get().setRecPay(getRecPay(dbReceipt.get().getId()));
@@ -489,7 +489,7 @@ public class ReceiptDetailController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             dbMenuItem.get().setInstock(dbMenuItem.get().getInstock() + receiptDetail.getQuantity());
-            this.menuItemService.save(dbMenuItem.get());
+            this.menuItemService.saveEntity(dbMenuItem.get());
 
             if(receiptDetail.getItem().getItemType() == ItemType.FOOD){
                 sendToChefList.add(receiptDetail);

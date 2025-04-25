@@ -14,4 +14,6 @@ public interface IngredientService {
     public IngredientDto updateIngredient(int id, CreateIngreDto dto);
     public IngredientDto partialUpdateIngredient(int id, CreateIngreDto dto);
     public boolean softDeleteIngredient(int id);
+    Optional<Ingredient> findById(int id);
+
 }

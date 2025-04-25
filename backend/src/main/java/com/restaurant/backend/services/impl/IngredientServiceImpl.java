@@ -70,5 +70,10 @@ public class IngredientServiceImpl implements IngredientService {
         ingredientRepository.save(ingre);
         return true;
     }
+
+    public Optional<Ingredient> findById(int id) {
+        return ingredientRepository.findById(id);
+    }
+
 }
 
