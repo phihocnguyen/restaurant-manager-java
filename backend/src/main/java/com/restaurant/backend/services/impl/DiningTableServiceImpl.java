@@ -69,11 +69,5 @@ public class DiningTableServiceImpl implements DiningTableService {
         diningTableRepository.save(entity);
         return true;
     }
-
-    @Override
-    public DiningTableDto findById(int id) {
-        Optional<DiningTable> found = diningTableRepository.findById(id);
-        return found.map(diningTableMapper::mapFrom).orElse(null);
-    }
 }
 

@@ -56,7 +56,7 @@ public class ReceiptController {
             receipt.setCus(foundCus.get());
         }
         if(createReceiptDto.getTabId() != null){
-            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.findById(createReceiptDto.getTabId())));
+            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.getTableById(createReceiptDto.getTabId())));
             if(!foundTab.isPresent()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -100,7 +100,7 @@ public class ReceiptController {
         Optional<Customer> foundCus = this.customerService.findById(createReceiptDto.getCusId());
         receipt.setCus(foundCus.get());
         // find tab
-        Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.findById(createReceiptDto.getTabId())));
+        Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.getTableById(createReceiptDto.getTabId())));
         receipt.setTab(foundTab.get());
 
         receipt.setId(recId);
@@ -132,7 +132,7 @@ public class ReceiptController {
             dbReceipt.get().setCus(foundCus.get());
         }
         if(createReceiptDto.getTabId() != null){
-            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.findById(createReceiptDto.getTabId())));
+            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.getTableById(createReceiptDto.getTabId())));
             if(!foundTab.isPresent()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }

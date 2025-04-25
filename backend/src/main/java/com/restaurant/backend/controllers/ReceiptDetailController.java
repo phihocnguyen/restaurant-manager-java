@@ -89,7 +89,7 @@ public class ReceiptDetailController {
             newReceipt.setCus(foundCus.get());
         }
         if(receipt.getTabId() != null){
-            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.findById(receipt.getTabId())));
+            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.getTableById(receipt.getTabId())));
             if(!foundTab.isPresent()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -157,7 +157,7 @@ public class ReceiptDetailController {
             newReceipt.setCus(foundCus.get());
         }
         if(receipt.getTabId() != null){
-            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.findById(receipt.getTabId())));
+            Optional<DiningTable> foundTab = Optional.of(this.diningTableMapper.mapTo(this.diningTableService.getTableById(receipt.getTabId())));
 
             if(!foundTab.isPresent()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

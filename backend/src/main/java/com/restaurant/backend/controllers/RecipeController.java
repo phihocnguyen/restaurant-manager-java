@@ -10,6 +10,7 @@ import com.restaurant.backend.domains.entities.Ingredient;
 import com.restaurant.backend.domains.entities.MenuItem;
 import com.restaurant.backend.domains.entities.Recipe;
 import com.restaurant.backend.domains.entities.RecipeId;
+import com.restaurant.backend.mappers.impl.IngredientMapper;
 import com.restaurant.backend.mappers.impl.MenuItemMapper;
 import com.restaurant.backend.mappers.impl.RecipeMapper;
 import com.restaurant.backend.services.IngredientService;
@@ -34,13 +35,15 @@ public class RecipeController {
     private final MenuItemService menuItemService;
     private final IngredientService ingredientService;
     private final MenuItemMapper menuItemMapper;
+    private final IngredientMapper ingredientMapper;
     public RecipeController(RecipeService recipeService, RecipeMapper recipeMapper, MenuItemService menuItemService,
-                            MenuItemMapper menuItemMapper ,IngredientService ingredientService) {
+                            MenuItemMapper menuItemMapper ,IngredientService ingredientService, IngredientMapper ingredientMapper) {
         this.recipeService = recipeService;
         this.recipeMapper = recipeMapper;
         this.menuItemService = menuItemService;
         this.ingredientService = ingredientService;
         this.menuItemMapper = menuItemMapper;
+        this.ingredientMapper = ingredientMapper;
     }
 
     private boolean validateMenuItem(Optional<MenuItem> menuItem) {
@@ -65,7 +68,7 @@ public class RecipeController {
 
 
         // 2. add one recipe
-        Optional<Ingredient> existedIngre = this.ingredientService.findById(createRecipeDto.getIngreId());
+        Optional<Ingredient> existedIngre = Optional.of(this.ingredientMapper.mapTo(this.ingredientService.getIngredientById(createRecipeDto.getIngreId())));
         if(!validateIngredient(existedIngre)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -109,7 +112,7 @@ public class RecipeController {
 
         // add many recipes
         List<Recipe> recipes = createManyRecipesDto.getIngredients().stream().map(ingreDto -> {
-            Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreDto.getIngreId());
+            Optional<Ingredient> existedIngre = Optional.of(this.ingredientMapper.mapTo(this.ingredientService.getIngredientById(ingreDto.getIngreId())));
 
             if(!validateIngredient(existedIngre)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -143,7 +146,8 @@ public class RecipeController {
         if(!validateMenuItem(existedMenuItem)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Optional<Ingredient> existedIngre = this.ingredientService.findById(createRecipeDto.getIngreId());
+        Optional<Ingredient> existedIngre = Optional.of(this.ingredientMapper.mapTo(this.ingredientService.getIngredientById(createRecipeDto.getIngreId())));
+
         if(!validateIngredient(existedIngre)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -189,7 +193,8 @@ public class RecipeController {
         }
         List<Recipe> addedRecipes = createManyRecipesDto.getIngredients().stream()
                 .map(ingreDto -> {
-                    Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreDto.getIngreId());
+                    Optional<Ingredient> existedIngre = Optional.of(this.ingredientMapper.mapTo(this.ingredientService.getIngredientById(ingreDto.getIngreId())));
+
                     if(!validateIngredient(existedIngre)) {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                     }
@@ -247,7 +252,7 @@ public class RecipeController {
         this.recipeService.deleteAll(oldRecipes);
 
         List<Recipe> recipes = createManyRecipesDto.getIngredients().stream().map(ingreDto -> {
-            Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreDto.getIngreId());
+            Optional<Ingredient> existedIngre = Optional.of(this.ingredientMapper.mapTo(this.ingredientService.getIngredientById(ingreDto.getIngreId())));
             if(!validateIngredient(existedIngre)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
@@ -281,7 +286,7 @@ public class RecipeController {
         if(!validateMenuItem(existedMenuItem)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Optional<Ingredient> existedIngre = this.ingredientService.findById(ingreId);
+        Optional<Ingredient> existedIngre = Optional.of(this.ingredientMapper.mapTo(this.ingredientService.getIngredientById(createRecipeDto.getIngreId())));
         if(!validateIngredient(existedIngre)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
