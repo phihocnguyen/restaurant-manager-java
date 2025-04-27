@@ -1,14 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controller.ManagerBills"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane fx:id="anchorpane" prefHeight="679.0" prefWidth="942.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerBills">
+    <children>
+        <BorderPane prefHeight="679.0" prefWidth="942.0" styleClass="left-bar" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <VBox prefHeight="726.0" prefWidth="875.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox fx:id="headerContainer" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="550.0">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="557.0">
+                                    <children>
+                                        <HBox alignment="BOTTOM_LEFT" prefHeight="35.0" prefWidth="235.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="202.0" styleClass="table-right" stylesheets="@../values/menu_style.css">
+                                       <children>
+                                          <ImageView fitHeight="20.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/note_green.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label alignment="CENTER" text="Tất cả đơn" textAlignment="CENTER" textFill="GREY">
+                                             <font>
+                                                <Font name="Cambria Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="5.0" />
+                                 </HBox.margin>
+                                        </HBox>
+                              <HBox alignment="BOTTOM_LEFT" prefHeight="40.0" prefWidth="0.0">
+                                 <children>
+                                    <ImageView fitHeight="35.0" fitWidth="410.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../imgfood/svg.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets top="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets right="350.0" />
+                                 </HBox.margin>
+                              </HBox>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="1018.0">
+                           <children>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="530.0">
+                                 <children>
+                                    <ImageView fitHeight="36.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/logo_1.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="exitButtonMenu" fitHeight="27.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/menu_1.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="exitButtonMenu1" fitHeight="25.0" fitWidth="27.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/exit.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <VBox prefHeight="847.0" prefWidth="860.0" styleClass="fruit-background-left" stylesheets="@../values/menu_style.css">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="10.0" right="5.0" />
+                            </VBox.margin>
+                            <children>
+                                <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="860.0" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </center>
+        </BorderPane>
+    </children>
 
 </AnchorPane>
