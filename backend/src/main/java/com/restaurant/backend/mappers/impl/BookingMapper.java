@@ -8,18 +8,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookingMapper implements Mapper<Booking, BookingDto> {
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
+
     public BookingMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public BookingDto mapFrom(Booking booking) {
-        return modelMapper.map(booking, BookingDto.class);
+    public BookingDto mapFrom(Booking entity) {
+        return modelMapper.map(entity, BookingDto.class);
     }
 
     @Override
-    public Booking mapTo(BookingDto bookingDto) {
-        return modelMapper.map(bookingDto, Booking.class);
+    public Booking mapTo(BookingDto dto) {
+        return modelMapper.map(dto, Booking.class);
     }
 }
