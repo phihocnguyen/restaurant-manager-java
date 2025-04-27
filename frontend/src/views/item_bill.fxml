@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ItemBill">
+   <children>
+      <VBox prefHeight="400.0" prefWidth="600.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="600.0" styleClass="item_bill">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="112.0">
+                     <children>
+                        <Label text="1. " />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Cơm chiên hải sản" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="290.0">
+                     <children>
+                        <Label text="1" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" styleClass="item_bill">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Thành tiền" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="100000" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Giá thường">
+                           <font>
+                              <Font name="System Italic" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="100000">
+                           <font>
+                              <Font name="System Italic" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="52.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="104.0" styleClass="button-notify" text="-" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="45.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField prefHeight="38.0" prefWidth="187.0" styleClass="search-box-cus" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="54.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="189.0" styleClass="button-notify" text="+" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="79.0" styleClass="button-notify" text="XÓA" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+         <styleClass>
+            <String fx:value="fruit-background" />
+            <String fx:value="shadow" />
+         </styleClass>
+      </VBox>
+   </children>
+</AnchorPane>

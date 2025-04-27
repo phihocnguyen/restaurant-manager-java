@@ -163,3 +163,22 @@
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
 }
+.search-box-cus{
+    -fx-background-color: rgb(123, 250, 201);
+    -fx-background-radius: 100;
+}
+.button-search-cus{
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 100;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+.item_bill{
+    -fx-text-fill: #00c7fd;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+.bill{
+    -fx-border-color: #ffffff;
+    -fx-border-width: 3;
+}

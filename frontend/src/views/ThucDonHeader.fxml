@@ -18,7 +18,7 @@
                <children>
                   <HBox alignment="BOTTOM_LEFT" prefHeight="41.0" prefWidth="127.0">
                      <children>
-                        <Button fx:id="btnPhongBan" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.3" prefWidth="113.0" stylesheets="@../values/menu_style.css" text="Phòng bàn" textFill="WHITE">
+                        <Button fx:id="btnPhongBan" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.3" prefWidth="113.0" stylesheets="@../values/menu_style.css" text="Chọn bàn" textFill="WHITE">
                            <font>
                               <Font name="Cambria Bold" size="14.0" />
                            </font>

@@ -20,7 +20,7 @@
                      <children>
                         <HBox alignment="BOTTOM_RIGHT" prefHeight="42.0" prefWidth="325.0">
                            <children>
-                              <Button fx:id="btnPhongBan" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="98.0" styleClass="header-menu-right" stylesheets="@../values/header.css" text="Phòng bàn" textFill="WHITE">
+                              <Button fx:id="btnPhongBan" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="98.0" styleClass="header-menu-right" stylesheets="@../values/header.css" text="Chọn bàn" textFill="WHITE">
                                  <font>
                                     <Font name="Cambria Bold" size="14.0" />
                                  </font>
