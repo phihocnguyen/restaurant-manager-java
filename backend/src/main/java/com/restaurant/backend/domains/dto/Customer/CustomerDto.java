@@ -1,28 +1,19 @@
 package com.restaurant.backend.domains.dto.Customer;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class CustomerDto {
     private Integer id;
-
-    private String cusName;
-
-    private String cusAddr;
-
-    private String cusPhone;
-
-    private String cusCccd;
-
-    private String cusEmail;
-
-    private Boolean isvip = false;
-
-    private Boolean isdeleted = false;
+    private String name;
+    private String address;
+    private String phone;
+    private String cccd;
+    private String email;
+    private Boolean isvip;
+    private Boolean isdeleted;
 }
