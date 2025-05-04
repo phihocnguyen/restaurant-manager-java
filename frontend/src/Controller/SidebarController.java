@@ -14,6 +14,10 @@ public class SidebarController {
     @FXML private HBox boxReceipt;
     @FXML private HBox boxCus;
     @FXML private HBox boxStaff;
+    @FXML private HBox boxIngre;
+    @FXML private HBox boxRecipe;
+
+
     @FXML
     public void initialize() {
         // Mặc định chọn Tổng quan lúc đầu
@@ -61,5 +65,15 @@ public class SidebarController {
     public void handleStaffClick(MouseEvent mouseEvent) {
         setSelected(boxStaff);
         loadViewToContentArea("/views/manager_staff.fxml");
+    }
+    @FXML
+    public void handleIngreClick(MouseEvent mouseEvent) {
+        setSelected(boxIngre);
+        loadViewToContentArea("/views/manager_ingredient.fxml");
+    }
+    @FXML
+    public void handleRecipeClick(MouseEvent mouseEvent) {
+        setSelected(boxRecipe);
+        loadViewToContentArea("/views/manager_recipe.fxml");
     }
 }

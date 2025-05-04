@@ -108,15 +108,15 @@
       </VBox.margin>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxIngre" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView onMouseClicked="#handleIngreClick" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/ingredient_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nguyên liệu" textFill="WHITE">
+         <Button onMouseClicked="#handleIngreClick" mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nguyên liệu" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
@@ -127,15 +127,15 @@
       </VBox.margin>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxRecipe" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView onMouseClicked="#handleRecipeClick" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/food_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Món ăn" textFill="WHITE">
+         <Button onMouseClicked="#handleRecipeClick"  mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Món ăn" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
