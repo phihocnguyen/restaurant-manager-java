@@ -16,4 +16,3 @@ public class CreateDiningTableDto {
 
     private Boolean isdeleted = false;
 }
-
