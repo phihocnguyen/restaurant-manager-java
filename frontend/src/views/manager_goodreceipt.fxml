@@ -19,7 +19,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label prefHeight="102.0" prefWidth="187.0" styleClass="menu-lblPrice" text="Phiếu nhập hàng:">
+                        <Label prefHeight="100.0" prefWidth="210.0" styleClass="menu-lblPrice" text="Phiếu nhập hàng:">
                            <font>
                               <Font name="Cambria Bold" size="24.0" />
                            </font>

@@ -12,6 +12,7 @@ import java.io.IOException;
 public class SidebarController {
     @FXML private HBox boxOverview;
     @FXML private HBox boxReceipt;
+    @FXML private HBox boxCus;
 
     @FXML
     public void initialize() {
@@ -51,5 +52,9 @@ public class SidebarController {
         loadViewToContentArea("/views/manager_goodreceipt.fxml");
     }
 
-
+    @FXML
+    public void handleCusClick(MouseEvent mouseEvent) {
+        setSelected(boxCus);
+        loadViewToContentArea("/views/manager_customer.fxml");
+    }
 }
