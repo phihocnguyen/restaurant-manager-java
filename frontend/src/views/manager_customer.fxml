@@ -21,10 +21,10 @@
                      <children>
                         <Label prefHeight="102.0" prefWidth="187.0" styleClass="menu-lblPrice" text="Khách hàng:">
                            <font>
-                              <Font name="Cambria Bold" size="24.0" />
+                              <Font name="Cambria Bold" size="30.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                      </children>
@@ -46,6 +46,9 @@
                      <children>
                         <Button mnemonicParsing="false" styleClass="button-notify" text="Xoá" />
                      </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                   </HBox>
                </children>
                <VBox.margin>
