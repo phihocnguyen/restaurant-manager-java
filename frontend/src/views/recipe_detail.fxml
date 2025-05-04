@@ -21,7 +21,7 @@
                     <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="566.0">
                             <children>
-                                <Label text="Thêm sản phẩm vào menu" textFill="#009688">
+                                <Label styleClass="shadow" text="Thêm sản phẩm vào menu" textFill="#009688">
                                     <font>
                                         <Font name="Cambria Bold" size="24.0" />
                                     </font>
