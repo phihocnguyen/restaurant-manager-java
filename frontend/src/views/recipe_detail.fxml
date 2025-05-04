@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -11,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="509.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReceiptDetail">
+<AnchorPane prefHeight="572.0" prefWidth="707.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReceiptDetail">
     <children>
-        <VBox prefHeight="413.0" prefWidth="600.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox prefHeight="572.0" prefWidth="707.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="600.0">
+                <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="702.0">
                     <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="566.0">
                             <children>
@@ -31,11 +33,11 @@
                         </HBox>
                     </children>
                 </HBox>
-                <HBox prefHeight="52.0" prefWidth="600.0">
+                <HBox prefHeight="42.0" prefWidth="701.0">
                     <children>
                         <HBox alignment="TOP_CENTER" prefHeight="86.0" prefWidth="655.0">
                             <children>
-                                <ComboBox prefHeight="36.0" prefWidth="410.0">
+                                <ComboBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="466.0">
                                     <HBox.margin>
                                         <Insets left="10.0" />
                                     </HBox.margin>
@@ -44,7 +46,7 @@
                         </HBox>
                         <HBox alignment="TOP_RIGHT" prefHeight="86.0" prefWidth="407.0">
                             <children>
-                                <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="144.0" text="Thêm/Lưu món ăn">
+                                <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="144.0" text="Thêm/Lưu món ăn">
                                     <styleClass>
                                         <String fx:value="button-search-cus" />
                                         <String fx:value="shadow" />
@@ -57,16 +59,16 @@
                         </HBox>
                     </children>
                 </HBox>
-                <HBox prefHeight="335.0" prefWidth="600.0">
+                <HBox alignment="BOTTOM_CENTER" prefHeight="517.0" prefWidth="701.0">
                     <children>
-                        <VBox alignment="CENTER" prefHeight="358.0" prefWidth="294.0">
+                        <VBox prefHeight="358.0" prefWidth="294.0">
                             <children>
-                                <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="294.0" stylesheets="@../values/table_style.css">
+                                <HBox alignment="BOTTOM_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="141.0" prefWidth="294.0" stylesheets="@../values/table_style.css">
                                     <children>
                                         <ComboBox prefHeight="28.0" prefWidth="220.0" styleClass="button-search-cus" />
                                     </children>
                                 </HBox>
-                                <HBox prefHeight="104.0" prefWidth="294.0">
+                                <HBox prefHeight="140.0" prefWidth="294.0">
                                     <children>
                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="81.0">
                                             <children>
@@ -125,21 +127,20 @@
                                 </HBox>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" prefHeight="353.0" prefWidth="298.0" styleClass="bill">
+                        <VBox alignment="CENTER" prefHeight="353.0" prefWidth="298.0" styleClass="bill">
                             <children>
-                                <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1475.0" stylesheets="@../values/menu_style.css">
+                                <HBox alignment="BOTTOM_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="400.0" stylesheets="@../values/menu_style.css">
                                     <children>
-                                        <TableView fx:id="receiptView" prefHeight="301.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
+                                        <TableView fx:id="receiptView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                             <columns>
-                                                <TableColumn prefWidth="166.40002822875977" text="Mã nhập kho" />
-                                                <TableColumn prefWidth="146.3999481201172" text="Thời gian nhập" />
-                                                <TableColumn prefWidth="188.800048828125" text="Giá nhập kho" />
+                                                <TableColumn prefWidth="188.80002975463867" text="Tên nguyên liệu" />
+                                                <TableColumn prefWidth="292.00001525878906" text="Số lượng" />
                                             </columns>
                                             <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                             </columnResizePolicy>
                                             <HBox.margin>
-                                                <Insets />
+                                                <Insets top="10.0" />
                                             </HBox.margin>
                                         </TableView>
                                     </children>
@@ -148,6 +149,9 @@
                                     </padding>
                                 </HBox>
                             </children>
+                     <HBox.margin>
+                        <Insets top="15.0" />
+                     </HBox.margin>
                         </VBox>
                     </children>
                 </HBox>
