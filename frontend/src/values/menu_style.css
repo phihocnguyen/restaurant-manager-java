@@ -202,6 +202,6 @@
 
 .table-view .column-header .label {
     -fx-font-weight: bold;
-    -fx-text-fill: #008bfd;
+    -fx-text-fill: #009688;
     -fx-font-size: 16px;
 }

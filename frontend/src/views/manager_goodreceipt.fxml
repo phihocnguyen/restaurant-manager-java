@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,15 +12,15 @@
 
 <AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerGoodreceipt">
    <children>
-      <VBox layoutX="104.0" layoutY="14.0" prefHeight="200.0" prefWidth="100.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="104.0" layoutY="14.0" prefHeight="200.0" prefWidth="100.0" styleClass="shadow" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" styleClass="menu-lblPrice">
+            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label prefHeight="100.0" prefWidth="210.0" styleClass="menu-lblPrice" text="Phiếu nhập hàng:">
+                        <Label prefHeight="100.0" prefWidth="246.0" text="Phiếu nhập hàng:">
                            <font>
-                              <Font name="Cambria Bold" size="24.0" />
+                              <Font name="Cambria Bold" size="30.0" />
                            </font>
                            <HBox.margin>
                               <Insets left="10.0" />
@@ -77,10 +76,6 @@
                </padding>
             </HBox>
          </children>
-         <styleClass>
-            <String fx:value="shadow" />
-            <String fx:value="menu-lblPrice" />
-         </styleClass>
       </VBox>
    </children>
 </AnchorPane>
