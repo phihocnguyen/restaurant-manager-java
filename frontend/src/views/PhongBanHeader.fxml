@@ -64,7 +64,7 @@
                               <Image url="@../img/banhang.png" />
                            </image>
                         </ImageView>
-                        <TextField prefHeight="28.0" prefWidth="676.0" promptText="Tìm món tại đây (F3)" styleClass="search-box" stylesheets="@../values/menu_style.css">
+                        <TextField prefHeight="28.0" prefWidth="676.0" promptText="Tìm món ăn tại đây " styleClass="search-box" stylesheets="@../values/menu_style.css">
                            <font>
                               <Font name="Cambria" size="14.0" />
                            </font>
