@@ -11,7 +11,9 @@ import java.io.IOException;
 
 public class SidebarController {
     @FXML private HBox boxOverview;
-
+    @FXML private HBox boxReceipt;
+    @FXML private HBox boxCus;
+    @FXML private HBox boxStaff;
     @FXML
     public void initialize() {
         // Mặc định chọn Tổng quan lúc đầu
@@ -44,5 +46,20 @@ public class SidebarController {
         currentSelected = selectedBox;
     }
 
+    @FXML
+    public void handleReceiptClick(MouseEvent mouseEvent) {
+        setSelected(boxReceipt);
+        loadViewToContentArea("/views/manager_goodreceipt.fxml");
+    }
 
+    @FXML
+    public void handleCusClick(MouseEvent mouseEvent) {
+        setSelected(boxCus);
+        loadViewToContentArea("/views/manager_customer.fxml");
+    }
+    @FXML
+    public void handleStaffClick(MouseEvent mouseEvent) {
+        setSelected(boxStaff);
+        loadViewToContentArea("/views/manager_staff.fxml");
+    }
 }

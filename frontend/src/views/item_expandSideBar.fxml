@@ -32,15 +32,15 @@
       </padding>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxStaff" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView onMouseClicked="#handleStaffClick" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/employee_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nhân viên" textFill="WHITE">
+         <Button onMouseClicked="#handleStaffClick" mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nhân viên" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
@@ -51,15 +51,15 @@
       </VBox.margin>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxCus" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView onMouseClicked="#handleCusClick" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/customer_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="100.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Khách hàng" textFill="WHITE">
+         <Button onMouseClicked="#handleCusClick" mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Khách hàng" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
@@ -89,15 +89,15 @@
       </VBox.margin>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxReceipt" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView onMouseClicked="#handleReceiptClick" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/storehouse_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Kho" textFill="WHITE">
+         <Button onMouseClicked="#handleReceiptClick" mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Kho" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
