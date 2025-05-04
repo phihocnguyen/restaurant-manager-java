@@ -12,7 +12,7 @@ public class Main extends Application {
     public static final String CURRENCY = "$";
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../views/manager_bills.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../views/manager_bookings.fxml"));
 
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
