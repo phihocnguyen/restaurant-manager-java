@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="511.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerOptions">
+<AnchorPane fx:id="anchorpane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="511.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerOptions">
    <children>
       <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="300.0" styleClass="shadow" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -39,7 +38,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="290.0">
                      <children>
-                        <ImageView fitHeight="30.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="exitButtonOption" fitHeight="30.0" fitWidth="32.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/exit_2.png" />
                            </image>
