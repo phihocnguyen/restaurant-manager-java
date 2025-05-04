@@ -11,13 +11,13 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="528.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.StaffAdd">
+<AnchorPane prefHeight="585.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.StaffAdd">
    <children>
       <VBox prefHeight="493.0" prefWidth="600.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="67.0" prefWidth="566.0">
                <children>
-                  <Label text="Thêm thông tin khách hàng">
+                  <Label text="Thêm thông tin nhân viên">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
@@ -26,9 +26,9 @@
             </HBox>
             <VBox prefHeight="60.0" prefWidth="600.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" styleClass="shadow">
                      <children>
-                        <Label text="Họ tên khách hàng">
+                        <Label text="Họ tên nhân viên">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -38,7 +38,12 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0" styleClass="fruit-background" />
+                        <TextField prefHeight="26.0" prefWidth="557.0">
+                           <styleClass>
+                              <String fx:value="fruit-background" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
                      </children>
                   </HBox>
                </children>
@@ -57,7 +62,12 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0" styleClass="fruit-background" />
+                        <TextField prefHeight="26.0" prefWidth="557.0">
+                           <styleClass>
+                              <String fx:value="fruit-background" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
                      </children>
                   </HBox>
                </children>
@@ -75,7 +85,12 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0" styleClass="fruit-background" />
+                        <TextField prefHeight="26.0" prefWidth="557.0">
+                           <styleClass>
+                              <String fx:value="fruit-background" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
                      </children>
                   </HBox>
                </children>
@@ -93,7 +108,12 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0" styleClass="fruit-background" />
+                        <TextField prefHeight="26.0" prefWidth="557.0">
+                           <styleClass>
+                              <String fx:value="fruit-background" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
                      </children>
                   </HBox>
                </children>
@@ -102,7 +122,7 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="Email">
+                        <Label text="Vị trí nhân viên">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -111,21 +131,59 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0" styleClass="fruit-background" />
+                        <TextField prefHeight="26.0" prefWidth="557.0">
+                           <styleClass>
+                              <String fx:value="fruit-background" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <HBox prefHeight="130.0" prefWidth="600.0">
+            <VBox prefHeight="60.0" prefWidth="600.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Lương nhân viên">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField prefHeight="26.0" prefWidth="557.0">
+                           <styleClass>
+                              <String fx:value="fruit-background" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox prefHeight="132.0" prefWidth="566.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="406.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="230.0" styleClass="button-notify" text="Hủy thông tin" />
+                        <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="230.0" text="Hủy thông tin">
+                           <styleClass>
+                              <String fx:value="button-notify" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </Button>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="406.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="230.0" styleClass="button-notify" text="Thêm thông tin" />
+                        <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="230.0" text="Thêm thông tin">
+                           <styleClass>
+                              <String fx:value="button-notify" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </Button>
                      </children>
                   </HBox>
                </children>
