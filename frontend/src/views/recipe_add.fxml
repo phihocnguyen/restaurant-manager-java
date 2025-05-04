@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="413.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.RecipeAdd">
    <children>
       <VBox prefHeight="413.0" prefWidth="600.0" stylesheets="@../values/menu_style.css">
@@ -21,7 +20,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="566.0">
                      <children>
-                        <Label text="Xác nhận tên công thức món ăn" textFill="#009688">
+                        <Label styleClass="shadow" text="Xác nhận tên công thức món ăn" textFill="#009688">
                            <font>
                               <Font name="Cambria Bold" size="24.0" />
                            </font>

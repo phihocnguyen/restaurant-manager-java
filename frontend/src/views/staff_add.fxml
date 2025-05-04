@@ -10,14 +10,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="585.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.StaffAdd">
    <children>
       <VBox prefHeight="493.0" prefWidth="600.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="67.0" prefWidth="566.0">
                <children>
-                  <Label text="Thêm thông tin nhân viên">
+                  <Label styleClass="shadow" text="Thêm thông tin nhân viên">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
