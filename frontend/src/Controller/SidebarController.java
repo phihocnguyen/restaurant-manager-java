@@ -11,6 +11,7 @@ import java.io.IOException;
 
 public class SidebarController {
     @FXML private HBox boxOverview;
+    @FXML private HBox boxReceipt;
 
     @FXML
     public void initialize() {
@@ -42,6 +43,12 @@ public class SidebarController {
         }
         selectedBox.getStyleClass().add("selected");
         currentSelected = selectedBox;
+    }
+
+    @FXML
+    public void handleReceiptClick(MouseEvent mouseEvent) {
+        setSelected(boxReceipt);
+        loadViewToContentArea("/views/manager_goodreceipt.fxml");
     }
 
 
