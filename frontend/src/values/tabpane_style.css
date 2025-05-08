@@ -1,0 +1,52 @@
+.tab-pane {
+    -fx-padding: 0;
+    -fx-tab-min-width: 160px;
+    -fx-tab-max-width: 200px;
+    -fx-tab-min-height: 45px;
+    -fx-tab-max-height: 45px;
+    -fx-border-color: #2C3E50;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: #2C3E50;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #34495E; /* Nền tối nhẹ hơn header */
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 8 15 8 15;
+    -fx-transition: all 0.3s ease; /* nếu có hỗ trợ */
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #BDC3C7; /* Xám nhẹ tinh tế */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: #3E5A73; /* Hover nền sáng hơn tí */
+}
+
+.tab-pane .tab:hover .tab-label {
+    -fx-text-fill: #FFFFFF; /* Hover chữ trắng sáng */
+}
+
+.tab-pane .tab:selected {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: #FFFFFF; /* Tab chọn nền sáng nổi bật */
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #2C3E50; /* Chữ màu xanh đậm */
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}

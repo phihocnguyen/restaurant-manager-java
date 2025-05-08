@@ -10,15 +10,15 @@
 
 <VBox fx:id="expandSidebar" alignment="CENTER" layoutX="0" layoutY="0" prefWidth="200.0" styleClass="task" stylesheets="@../values/manager_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SidebarController">
    <HBox prefHeight="20.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox fx:id="boxOverview"  alignment="CENTER"  prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxOverview" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView onMouseClicked="#handleOverviewClick" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#handleOverviewClick" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/home_icon.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button onMouseClicked="#handleOverviewClick" pickOnBounds="true" mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Tổng quan" textFill="WHITE">
+         <Button mnemonicParsing="false" onMouseClicked="#handleOverviewClick" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/style.css" text="Tổng quan" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
@@ -70,15 +70,15 @@
       </VBox.margin>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxDoanhThu" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#handleDoanhThuClick" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/revenue_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Doanh thu" textFill="WHITE">
+         <Button mnemonicParsing="false" onMouseClicked="#handleDoanhThuClick" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/style.css" text="Doanh thu" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
@@ -108,15 +108,15 @@
       </VBox.margin>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxIngredient" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#handleIngredientClick" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/ingredient_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Nguyên liệu" textFill="WHITE">
+         <Button mnemonicParsing="false" onMouseClicked="#handleIngredientClick" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/style.css" text="Nguyên liệu" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>
@@ -127,15 +127,15 @@
       </VBox.margin>
    </HBox>
    <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
+   <HBox fx:id="boxQL_ThucDon" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="button-bound" stylesheets="@../values/manager_style.css">
       <children>
-         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#handleQL_ThucDonClick" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../img/food_1.png" />
             </image>
          </ImageView>
          <HBox prefHeight="50.0" prefWidth="20.0" />
-         <Button mnemonicParsing="false" styleClass="transparent" stylesheets="@../values/style.css" text="Món ăn" textFill="WHITE">
+         <Button mnemonicParsing="false" onMouseClicked="#handleQL_ThucDonClick" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/style.css" text="Thực đơn" textFill="WHITE">
             <font>
                <Font name="Segoe UI Bold" size="14.0" />
             </font>

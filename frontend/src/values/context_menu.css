@@ -1,0 +1,31 @@
+/* Toàn bộ menu popup */
+.context-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.2, 0, 3);
+    -fx-padding: 6;
+}
+
+/* Item trong menu */
+.custom-menu-item {
+    -fx-padding: 8 20;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2C3E50;
+    -fx-background-color: transparent;
+}
+
+/* Hover */
+.custom-menu-item:hover {
+    -fx-background-color: #0288D1;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+}
+
+/* Đăng xuất riêng */
+.logout-item {
+    -fx-text-fill: red;
+}
+.logout-item:hover {
+    -fx-background-color: #FFCDD2;
+    -fx-text-fill: darkred;
+}

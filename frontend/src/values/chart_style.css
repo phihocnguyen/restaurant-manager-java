@@ -1,0 +1,48 @@
+.chart {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.chart-plot-background {
+    -fx-background-color: #F9FAFB; /* nền nhạt */
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: transparent; /* bỏ lưới dọc nếu muốn */
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #E0E0E0; /* màu lưới ngang */
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.axis-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6E6E6E;
+}
+
+.axis-tick-mark {
+    -fx-stroke: transparent;
+}
+
+.axis {
+    -fx-tick-label-fill: #6E6E6E;
+    -fx-tick-label-font-size: 12px;
+}
+
+/* Cột trong bar chart */
+.default-color0.chart-bar {
+    -fx-bar-fill: #42A5F5; /* màu cột */
+    -fx-background-radius: 4px;
+}
+
+/* Hover cho cột */
+.default-color0.chart-bar:hover {
+    -fx-bar-fill: #1E88E5; /* màu khi hover */
+    -fx-cursor: hand;
+}

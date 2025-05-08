@@ -60,6 +60,7 @@ public class ManagerDashboardController {
             loadSidebar("/views/item_smallSideBar.fxml", 60);
 
             contextMenu = new ContextMenu();
+
             MenuItem information = new MenuItem("Hồ sơ");
             MenuItem logout = new MenuItem("Đăng xuất");
 
@@ -67,7 +68,10 @@ public class ManagerDashboardController {
             logout.setOnAction(event -> logoutAndShowLogin());
 
             contextMenu.getItems().addAll(information, logout);
-            contextMenu.getStyleClass().add("context-menu");
+            information.getStyleClass().add("custom-menu-item");
+            logout.getStyleClass().addAll("custom-menu-item", "logout-item");
+
+
 
             sidebarContainer.setOnMouseEntered(e -> expandSidebar());
             sidebarContainer.setOnMouseExited(e -> collapseSidebar());
@@ -113,8 +117,8 @@ public class ManagerDashboardController {
     private void onLogoClick(MouseEvent event) {
         double logoX = logoAvatar.localToScreen(0, 0).getX();
         double logoY = logoAvatar.localToScreen(0, 0).getY();
-        double menuWidth = 80;
-        contextMenu.show(logoAvatar, logoX - menuWidth, logoY);
+        double menuWidth = 60;
+        contextMenu.show(logoAvatar, logoX + menuWidth, logoY);
     }
 
     private void logoutAndShowLogin() {

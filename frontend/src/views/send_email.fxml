@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SendEmailController">
+    <children>
+        <VBox alignment="TOP_CENTER" stylesheets="@../values/forget_password.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <VBox alignment="CENTER" spacing="20">
+                <HBox alignment="TOP_CENTER" prefHeight="400" prefWidth="800" spacing="20" style="-fx-padding: 20px;">
+
+                    <!-- Khung trái: Form thêm nguyên liệu -->
+                    <VBox alignment="TOP_CENTER" prefHeight="318.0" prefWidth="659.0" spacing="20.0" style="-fx-background-color: #f9f9f9; -fx-border-color: #E0E0E0; -fx-border-radius: 8px; -fx-padding: 50px;">
+                  <Label styleClass="label_text" stylesheets="@../values/forget_password.css" text="Tìm kiếm tài khoản " />
+                  <Label styleClass="sub-label" stylesheets="@../values/forget_password.css" text="Nhập email để tìm kiếm tài khoản của bạn" />
+                  <StackPane alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="618.0" styleClass="input-stack" stylesheets="@../values/forget_password.css">
+                     <children>
+                        <TextField prefHeight="42.0" prefWidth="554.0" promptText="Nhập email ..." styleClass="text-field-with-icon" stylesheets="@../values/forget_password.css">
+                           <font>
+                              <Font name="Segoe UI" size="12.0" />
+                           </font>
+                        </TextField>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="input-icon">
+                           <image>
+                              <Image url="@../img/email_icon.png" />
+                           </image>
+                           <StackPane.margin>
+                              <Insets right="12.0" />
+                           </StackPane.margin>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+
+                        <Button fx:id="btnSendEmail" mnemonicParsing="false" onMouseClicked="#handleSendEmail" pickOnBounds="true" prefWidth="618.4" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" text="Gửi email" />
+                    </VBox>
+
+                    
+
+                </HBox>
+            </VBox>
+        </VBox>
+    </children>
+</AnchorPane>

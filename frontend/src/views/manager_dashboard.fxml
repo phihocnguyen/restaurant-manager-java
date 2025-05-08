@@ -61,7 +61,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0">
                            <children>
-                              <ImageView fx:id="exitButton" fitHeight="40.0" fitWidth="30.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                              <ImageView fx:id="exitButton" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" fitHeight="40.0" fitWidth="30.0"  styleClass="icon">
                                  <image>
                                     <Image url="@../img/exit.png" />
                                  </image>

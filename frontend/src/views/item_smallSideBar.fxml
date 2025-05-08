@@ -1,76 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="smallSidebar" layoutX="0" layoutY="0" prefWidth="70.0" styleClass="task" stylesheets="@../values/manager_style.css" BorderPane.alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+<VBox fx:id="smallSidebar" layoutX="0" layoutY="0" prefWidth="70.0" styleClass="task" stylesheets="@../values/manager_style.css" BorderPane.alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SidebarController">
     <HBox prefHeight="20.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-    <ImageView fx:id="boxOverviewSmall"  fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-        <image>
-            <Image url="@../img/home_1.png" />
-        </image>
-        <VBox.margin>
-            <Insets left="10.0" />
-        </VBox.margin>
-    </ImageView>
+   <HBox fx:id="boxOverview" alignment="CENTER" onMouseClicked="#handleOverviewClick" pickOnBounds="true" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+      <children>
+          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+              <image>
+                  <Image url="@../img/home_1.png" />
+              </image>
+          </ImageView>
+      </children>
+   </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-        <image>
-            <Image url="@../img/employee_1.png" />
-        </image>
-        <VBox.margin>
-            <Insets left="10.0" />
-        </VBox.margin>
-    </ImageView>
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+      <children>
+          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+              <image>
+                  <Image url="@../img/employee_1.png" />
+              </image>
+          </ImageView>
+      </children>
+   </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-        <image>
-            <Image url="@../img/customer_1.png" />
-        </image>
-        <VBox.margin>
-            <Insets left="10.0" />
-        </VBox.margin>
-    </ImageView>
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+      <children>
+          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+              <image>
+                  <Image url="@../img/customer_1.png" />
+              </image>
+          </ImageView>
+      </children>
+   </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-        <image>
-            <Image url="@../img/revenue_1.png" />
-        </image>
-        <VBox.margin>
-            <Insets left="10.0" />
-        </VBox.margin>
-    </ImageView>
+   <HBox fx:id="boxDoanhThu" onMouseClicked="#handleDoanhThuClick" pickOnBounds="true" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+      <children>
+          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+              <image>
+                  <Image url="@../img/revenue_1.png" />
+              </image>
+          </ImageView>
+      </children>
+   </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-        <image>
-            <Image url="@../img/storehouse_1.png" />
-        </image>
-        <VBox.margin>
-            <Insets left="10.0" />
-        </VBox.margin>
-    </ImageView>
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+      <children>
+          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+              <image>
+                  <Image url="@../img/storehouse_1.png" />
+              </image>
+          </ImageView>
+      </children>
+   </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-        <image>
-            <Image url="@../img/ingredient_1.png" />
-        </image>
-        <VBox.margin>
-            <Insets left="10.0" />
-        </VBox.margin>
-    </ImageView>
+   <HBox fx:id="boxIngredient" onMouseClicked="#handleIngredientClick" pickOnBounds="true" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+      <children>
+          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+              <image>
+                  <Image url="@../img/ingredient_1.png" />
+              </image>
+          </ImageView>
+      </children>
+   </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-        <image>
-            <Image url="@../img/food_1.png" />
-        </image>
-        <VBox.margin>
-            <Insets left="10.0" />
-        </VBox.margin>
-    </ImageView>
+   <HBox fx:id="boxQL_ThucDon" onMouseClicked="#handleQL_ThucDonClick" pickOnBounds="true" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+      <children>
+          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+              <image>
+                  <Image url="@../img/food_1.png" />
+              </image>
+          </ImageView>
+      </children>
+   </HBox>
     <HBox prefHeight="300.0" prefWidth="70.0" />
 
 </VBox>

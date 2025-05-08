@@ -1,0 +1,39 @@
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
+/* Tab header (nền phía sau các tab) */
+.tab-header-area {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+/* Tab chưa được chọn */
+.tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6E6E6E;
+    -fx-font-size: 14px;
+    -fx-padding: 0 10 5 10;
+}
+
+/* Tab đang được chọn */
+.tab:selected {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-color: transparent transparent #3F51B5 transparent;
+    -fx-border-width: 0 0 3 0;
+    -fx-text-fill: #3F51B5;
+}
+
+/* Hover tab */
+.tab:hover {
+    -fx-background-color: #f5f5f5;
+    -fx-cursor: hand;
+}
+.tab:focused {
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}

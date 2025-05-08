@@ -11,15 +11,19 @@ public class Main extends Application {
 
     public static final String CURRENCY = "$";
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../views/manager_menu.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("../views/manager_dashboard.fxml"));
+        Scene scene = new Scene(root);
+
+        // Load CSS cho context menu
+        scene.getStylesheets().add(getClass().getResource("/values/context_menu.css").toExternalForm());
 
         primaryStage.initStyle(StageStyle.UNDECORATED);
-
         primaryStage.setTitle("Restaurant Manager");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 
 
     public static void main(String[] args) {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);" styleClass="background" stylesheets="@../values/add_to_menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddToMenuController">
+   <top>
+      <VBox prefHeight="86.0" prefWidth="800.0" styleClass="background" stylesheets="@../values/add_to_menu.css" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="800.0" styleClass="add-header" stylesheets="@../values/add_to_menu.css">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/add_icon.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label text="Thêm món mới vào thực đơn" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <HBox prefHeight="50.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <ImageView fx:id="exitButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@../img/exit.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox prefHeight="10.0" prefWidth="10.0" />
+            <HBox prefHeight="46.0" prefWidth="800.0">
+               <children>
+                     <ComboBox fx:id="cbLoaiMon" prefWidth="220" promptText="Chọn loại món" style="-fx-font-size: 15px; -fx-pref-height: 40px;">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </ComboBox>
+
+                     <Button fx:id="btnLuuMon" mnemonicParsing="false" onMouseClicked="#handleLuuMon" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Thêm / Lưu món ăn">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+
+      </VBox>
+
+   </top>
+   <center>
+      <AnchorPane fx:id="contentArea" prefHeight="407.0" prefWidth="800.0" styleClass="background" stylesheets="@../values/add_to_menu.css" BorderPane.alignment="CENTER" />
+   </center>
+
+</BorderPane>

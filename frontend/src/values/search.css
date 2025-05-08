@@ -1,0 +1,12 @@
+.search-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+.search-input {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-padding: 5 10 5 10;
+}

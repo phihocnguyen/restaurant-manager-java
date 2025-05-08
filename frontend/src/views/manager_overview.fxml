@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,15 +16,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="1165.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="2216.0" prefWidth="1165.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="386.0" layoutY="100.0" prefHeight="424.0" prefWidth="1165.0" AnchorPane.bottomAnchor="-222.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="386.0" layoutY="100.0" prefHeight="810.0" prefWidth="1165.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <HBox prefHeight="418.0" prefWidth="1165.0">
+            <HBox prefHeight="2048.0" prefWidth="1164.0">
                <children>
-                  <VBox prefHeight="418.0" prefWidth="1165.0">
+                  <VBox>
                      <children>
-                        <VBox alignment="CENTER_LEFT" prefHeight="163.0" prefWidth="1165.0" styleClass="card-box" stylesheets="@../values/overview.css">
+                        <VBox alignment="CENTER_LEFT" prefHeight="194.0" prefWidth="847.0" styleClass="card-box" stylesheets="@../values/overview.css">
                            <children>
                               <Label text="KẾT QUẢ BÁN HÀNG HÔM NAY">
                                  <font>
@@ -32,7 +37,7 @@
                                     <Insets left="15.0" />
                                  </padding>
                               </Label>
-                              <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="438.0">
+                              <HBox alignment="CENTER" prefHeight="93.0" prefWidth="891.0">
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="93.0" prefWidth="250.0">
                                        <children>
@@ -57,9 +62,9 @@
                                           </VBox>
                                        </children>
                                     </HBox>
-                                     <Region prefWidth="1" style="-fx-background-color: #DDDDDD;" />
-
-                                     <HBox alignment="CENTER" prefHeight="93.0" prefWidth="250.0">
+                                     <Region prefWidth="2.0" style="-fx-background-color: #DDDDDD;" />
+      
+                                     <HBox alignment="CENTER" prefHeight="93.0" prefWidth="300.0">
                                        <children>
                                           <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -78,7 +83,7 @@
                                           </VBox>
                                        </children>
                                     </HBox>
-                                    <Region prefWidth="1" style="-fx-background-color: #DDDDDD;" />
+                                    <Region prefWidth="2.0" style="-fx-background-color: #DDDDDD;" />
                                     <HBox alignment="CENTER" prefHeight="67.0" prefWidth="250.0">
                                        <children>
                                           <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
@@ -108,7 +113,7 @@
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" prefHeight="163.0" prefWidth="1165.0" styleClass="card-box" stylesheets="@../values/overview.css">
+                        <VBox alignment="CENTER_LEFT" prefHeight="570.0" prefWidth="890.0" styleClass="card-box" stylesheets="@../values/overview.css">
                            <children>
                               <Label text="DOANH THU HÔM NAY">
                                  <font>
@@ -121,8 +126,114 @@
                                     <Insets left="15.0" />
                                  </padding>
                               </Label>
+                              <TabPane prefHeight="546.0" prefWidth="782.0" stylesheets="@../values/tab_style.css" tabClosingPolicy="UNAVAILABLE">
+                                <tabs>
+                                  <Tab text="Theo giờ">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <BarChart layoutX="3.0" layoutY="9.0" prefHeight="482.0" prefWidth="849.0" stylesheets="@../values/chart_style.css">
+                                                  <xAxis>
+                                                    <CategoryAxis label="Giờ" side="BOTTOM" fx:id="xAxis" />
+                                                  </xAxis>
+                                                  <yAxis>
+                                                    <NumberAxis side="LEFT" />
+                                                  </yAxis>
+                                                </BarChart>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="15.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="570.0" prefWidth="890.0" styleClass="card-box" stylesheets="@../values/overview.css">
+                           <children>
+                              <Label text="SỐ LƯỢNG KHÁCH HÔM NAY">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
+                              </Label>
+                              <TabPane prefHeight="546.0" prefWidth="782.0" stylesheets="@../values/tab_style.css" tabClosingPolicy="UNAVAILABLE">
+                                 <tabs>
+                                    <Tab text="Theo giờ">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <BarChart layoutX="3.0" layoutY="9.0" prefHeight="482.0" prefWidth="849.0" stylesheets="@../values/chart_style.css">
+                                                   <xAxis>
+                                                      <CategoryAxis label="Giờ" side="BOTTOM" fx:id="xAxis1" />
+                                                   </xAxis>
+                                                   <yAxis>
+                                                      <NumberAxis side="LEFT" />
+                                                   </yAxis>
+                                                </BarChart>
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                 </tabs>
+                              </TabPane>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="15.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="570.0" prefWidth="890.0" styleClass="card-box" stylesheets="@../values/overview.css">
+                           <children>
+                              <Label text="TOP 10 MÓN BÁN CHẠY 7 NGÀY QUA">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
+                              </Label>
+                              <BarChart prefHeight="482.0" prefWidth="849.0" stylesheets="@../values/chart_style.css">
+                                 <xAxis>
+                                    <NumberAxis label="Doanh thu (VNĐ)" fx:id="xAxis3" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <CategoryAxis fx:id="yAxis3" label="Tên hàng hóa" />
+                                 </yAxis>
+                              </BarChart>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="15.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <HBox prefHeight="20.0" prefWidth="200.0" />
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="100.0" prefWidth="10.0" />
+                  <VBox prefHeight="834.0" prefWidth="308.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox prefHeight="0.0" prefWidth="270.0" styleClass="card-box" stylesheets="@../values/overview.css" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets right="10.0" top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="CÁC HOẠT ĐỘNG GẦN ĐÂY">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
