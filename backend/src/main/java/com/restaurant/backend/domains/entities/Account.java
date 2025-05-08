@@ -29,7 +29,8 @@ public class Account {
     private String accPassword;
 
     @Size(max = 100)
-    @Column(name = "acc_email", length = 100)
+    @NotNull
+    @Column(name = "acc_email", length = 100, nullable = false)
     private String accEmail;
 
     @Size(max = 100)
@@ -39,7 +40,7 @@ public class Account {
 
     @Size(max = 5)
     @NotNull
-    @Column(name = "acc_gender", nullable = false, length = 5)
+    @Column(name = "acc_gender", nullable = false, length = 7)
     private String accGender;
 
     @NotNull

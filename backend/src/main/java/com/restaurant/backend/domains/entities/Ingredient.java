@@ -26,7 +26,7 @@ public class Ingredient {
     @Column(name = "ingre_name", nullable = false, length = 30)
     private String ingreName;
 
-    @NotNull
+    @ColumnDefault("0")
     @Column(name = "instock_kg", nullable = false)
     private Double instockKg;
 

@@ -1,105 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="760.8" prefWidth="1255.2" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerIngredientController">
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerIngredient">
    <children>
-      <TabPane layoutX="90.0" layoutY="64.0" prefHeight="400.0" prefWidth="1255.0" stylesheets="@../values/tabpane_style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <tabs>
-            <Tab text="Quản lý thực đơn">
-               <content>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+      <VBox prefHeight="200.0" prefWidth="100.0" styleClass="shadow" stylesheets="@../values/menu_style.css">
+         <children>
+            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <VBox prefHeight="691.0" prefWidth="386.0">
-                           <children>
-                              <VBox alignment="CENTER_LEFT" prefHeight="135.0" prefWidth="376.0" styleClass="search-input" stylesheets="@../values/search.css">
-                                 <children>
-                                    <Label styleClass="search-title" stylesheets="@../values/search.css" text="Tìm kiếm">
-                                       <VBox.margin>
-                                          <Insets bottom="10.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <TextField prefHeight="50.0" prefWidth="354.0" promptText="Theo mã, tên hàng" styleClass="search-input" stylesheets="@../values/search.css">
-                                       <VBox.margin>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" />
-                                       </VBox.margin>
-                                    </TextField>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets left="10.0" top="10.0" />
-                                 </VBox.margin>
-                              </VBox>
-                              <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="373.0" styleClass="filter-card" stylesheets="@../values/menutab_style.css">
-                                 <children>
-                                    <HBox prefHeight="32.0" prefWidth="342.0">
-                                       <children>
-                                          <Label styleClass="filter-title" stylesheets="@../values/menutab_style.css" text="Loại thực đơn" />
-                                       </children>
-                                    </HBox>
-                                    <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Đồ ăn" />
-                                    <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Đồ uống" />
-                                    <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Khác" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets left="10.0" top="20.0" />
-                                 </VBox.margin>
-                              </VBox>
-                              <VBox alignment="CENTER_LEFT" prefHeight="264.0" prefWidth="373.0" styleClass="filter-card" stylesheets="@../values/menutab_style.css">
-                                 <children>
-                                    <HBox prefHeight="32.0" prefWidth="342.0">
-                                       <children>
-                                          <Label styleClass="filter-title" stylesheets="@../values/menutab_style.css" text="Loại hàng" />
-                                       </children>
-                                    </HBox>
-                                    <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Hàng hóa thường" />
-                                    <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Chế biến" />
-                                    <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Dịch vụ" />
-                                    <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" text="Khác" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets left="10.0" top="20.0" />
-                                 </VBox.margin>
-                              </VBox>
-                              <HBox prefHeight="54.0" prefWidth="383.0" VBox.vgrow="ALWAYS" />
-                           </children>
-                        </VBox>
-                        <HBox prefHeight="100.0" prefWidth="20.0" />
-                        <VBox prefHeight="691.0" prefWidth="873.0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <TableView prefHeight="692.0" prefWidth="813.0" VBox.vgrow="ALWAYS">
-                                 <columns>
-                                    <TableColumn prefWidth="75.0" text="C1" />
-                                    <TableColumn prefWidth="75.0" text="C2" />
-                                 </columns>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </TableView>
-                           </children>
+                        <Label prefHeight="102.0" prefWidth="187.0" text="Nguyên liệu:">
+                           <font>
+                              <Font name="Cambria Bold" size="30.0" />
+                           </font>
                            <HBox.margin>
-                              <Insets right="10.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
-                        </VBox>
+                        </Label>
                      </children>
                   </HBox>
-               </content>
-            </Tab>
-            <Tab text="Chỉnh sửa thực đơn">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-               </content>
-            </Tab>
-         </tabs>
-      </TabPane>
+                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" stylesheets="@../values/menu_style.css" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button mnemonicParsing="false" prefWidth="67.0" styleClass="button-notify" text="Thêm " />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" styleClass="button-notify" text="Sửa" />
+                     </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" styleClass="button-notify" text="Xoá" />
+                     </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1475.0" stylesheets="@../values/menu_style.css" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="ingredientView" prefHeight="301.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
+                     <columns>
+                        <TableColumn prefWidth="146.39996337890625" text="Mã nguyên liệu" />
+                        <TableColumn prefWidth="332.00001525878906" text="Tên nguyên liệu" />
+                        <TableColumn prefWidth="317.5999755859375" text="Giá nhập " />
+                        <TableColumn prefWidth="585.5999755859375" text="Tồn kho (ĐVT)" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TableView>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

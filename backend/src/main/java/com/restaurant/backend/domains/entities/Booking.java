@@ -1,55 +1,44 @@
 package com.restaurant.backend.domains.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 @Entity
 @Table(name = "bookings")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookings_id_gen")
-    @SequenceGenerator(name = "bookings_id_gen", sequenceName = "bookings_bk_id_seq", allocationSize = 1)
-    @Column(name = "bk_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bk_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emp_id")
-    private Employee emp;
+    private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "cus_id")
-    private Customer cus;
+    private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tab_id")
-    private DiningTable tab;
+    private DiningTable table;
 
-    @NotNull
     @Column(name = "bk_stime", nullable = false)
-    private Instant bkStime;
+    private Instant startTime;
 
-    @NotNull
     @Column(name = "bk_otime", nullable = false)
-    private Instant bkOtime;
+    private Instant endTime;
 
-    @NotNull
     @Column(name = "bk_status", nullable = false)
-    private Short bkStatus;
+    private Short status; // 0: PENDING, 1: CONFIRMED, 2: CANCELLED
 
-    @NotNull
-    @ColumnDefault("false")
     @Column(name = "isdeleted", nullable = false)
     private Boolean isdeleted = false;
-
 }

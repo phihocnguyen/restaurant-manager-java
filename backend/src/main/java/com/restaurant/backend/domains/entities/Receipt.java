@@ -37,10 +37,11 @@ public class Receipt {
     private DiningTable tab;
 
     @NotNull
-    @Column(name = "rec_time", nullable = false)
+    @Column(name = "rec_time", nullable = true)
     private Instant recTime;
 
     @NotNull
+    @ColumnDefault("0.00")
     @Column(name = "rec_pay", nullable = false, precision = 18, scale = 2)
     private BigDecimal recPay;
 
@@ -48,5 +49,13 @@ public class Receipt {
     @ColumnDefault("false")
     @Column(name = "isdeleted", nullable = false)
     private Boolean isdeleted = false;
+
+    // run right before that instance added to the db
+    @PrePersist
+    public void prePersist(){
+        if(recTime == null){
+            recTime = Instant.now();
+        }
+    }
 
 }

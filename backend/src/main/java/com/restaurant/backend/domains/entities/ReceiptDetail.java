@@ -3,6 +3,7 @@ package com.restaurant.backend.domains.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -36,6 +37,7 @@ public class ReceiptDetail {
     private Integer quantity;
 
     @NotNull
+    @ColumnDefault("0.00")
     @Column(name = "price", nullable = false, precision = 18, scale = 2)
     private BigDecimal price;
 

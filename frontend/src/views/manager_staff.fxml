@@ -1,13 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controller.ManagerStaff"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerStaff">
    <children>
-      <Label layoutX="140.0" layoutY="57.0" text="Hello" />
+      <VBox prefHeight="200.0" prefWidth="100.0" styleClass="shadow" stylesheets="@../values/menu_style.css">
+         <children>
+            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label prefHeight="102.0" prefWidth="187.0" text="Nhân viên:">
+                           <font>
+                              <Font name="Cambria Bold" size="30.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" stylesheets="@../values/menu_style.css" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button mnemonicParsing="false" prefWidth="67.0" styleClass="button-notify" text="Thêm " />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" styleClass="button-notify" text="Sửa" />
+                     </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" styleClass="button-notify" text="Xoá" />
+                     </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1475.0" stylesheets="@../values/menu_style.css" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="staffView" prefHeight="301.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
+                     <columns>
+                        <TableColumn prefWidth="146.39996337890625" text="Mã nhân viên" />
+                        <TableColumn prefWidth="215.99993896484375" text="Tên nhân viên" />
+                        <TableColumn prefWidth="401.60003662109375" text="Địa chỉ" />
+                        <TableColumn prefWidth="150.39996337890625" text="SĐT" />
+                        <TableColumn prefWidth="159.2000732421875" text="Vị trí" />
+                        <TableColumn prefWidth="336.7998046875" text="Lương" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TableView>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

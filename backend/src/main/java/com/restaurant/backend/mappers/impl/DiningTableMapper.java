@@ -1,6 +1,7 @@
 package com.restaurant.backend.mappers.impl;
 
-import com.restaurant.backend.domains.dto.DiningTableDto;
+import com.restaurant.backend.domains.dto.DiningTable.DiningTableDto;
+import com.restaurant.backend.domains.dto.DiningTable.dto.CreateDiningTableDto;
 import com.restaurant.backend.domains.entities.DiningTable;
 import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;
@@ -21,5 +22,9 @@ public class DiningTableMapper implements Mapper<DiningTable, DiningTableDto> {
     @Override
     public DiningTable mapTo(DiningTableDto diningTableDto) {
         return modelMapper.map(diningTableDto, DiningTable.class);
+    }
+
+    public DiningTable mapTo(CreateDiningTableDto createDiningTableDto) {
+        return modelMapper.map(createDiningTableDto, DiningTable.class);
     }
 }

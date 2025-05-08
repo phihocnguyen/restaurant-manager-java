@@ -1,6 +1,6 @@
 package com.restaurant.backend.mappers.impl;
 
-import com.restaurant.backend.domains.dto.StockinDto;
+import com.restaurant.backend.domains.dto.Stockin.StockinDto;
 import com.restaurant.backend.domains.entities.Stockin;
 import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;

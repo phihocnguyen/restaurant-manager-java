@@ -2,61 +2,50 @@ package com.restaurant.backend.domains.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 @Entity
 @Table(name = "employees")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employees_id_gen")
-    @SequenceGenerator(name = "employees_id_gen", sequenceName = "employees_emp_id_seq", allocationSize = 1)
-    @Column(name = "emp_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "emp_id")
     private Integer id;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "emp_name", nullable = false, length = 50)
-    private String empName;
+    private String name;
 
-    @Size(max = 100)
     @Column(name = "emp_addr", length = 100)
-    private String empAddr;
+    private String address;
 
-    @Size(max = 20)
-    @NotNull
     @Column(name = "emp_phone", nullable = false, length = 20)
-    private String empPhone;
+    private String phone;
 
-    @Size(max = 12)
-    @Column(name = "emp_cccd", length = 12)
-    private String empCccd;
+    @Column(name = "emp_cccd", unique = true, length = 12)
+    private String cccd;
 
-    @Size(max = 50)
     @Column(name = "emp_role", length = 50)
-    private String empRole;
+    private String role;
 
     @Column(name = "emp_sdate")
-    private Instant empSdate;
+    private Instant startDate;
 
     @Column(name = "emp_worked_days")
-    private Integer empWorkedDays;
+    private Integer workedDays;
 
-    @NotNull
     @Column(name = "emp_salary", nullable = false, precision = 18, scale = 2)
-    private BigDecimal empSalary;
+    private BigDecimal salary;
 
-    @NotNull
-    @ColumnDefault("false")
     @Column(name = "isdeleted", nullable = false)
+    @ColumnDefault("false")
     private Boolean isdeleted = false;
-
 }

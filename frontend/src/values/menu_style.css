@@ -107,7 +107,7 @@
 }
 .menu-lblPrice {
     -fx-background-color: rgba(215, 253, 237, 0.62);
-    -fx-text-fill: #008bfd; /* màu xanh đẹp */
+    -fx-text-fill: #008bfd;
     -fx-background-radius: 10;
     -fx-alignment: CENTER;
 }
@@ -162,4 +162,46 @@
     -fx-padding: 20;
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
+}
+.search-box-cus{
+    -fx-background-color: rgb(123, 250, 201);
+    -fx-background-radius: 100;
+}
+.button-search-cus{
+    -fx-background-color: #00A98F;
+    -fx-background-radius: 100;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+.item-bill{
+    -fx-text-fill: #00c7fd;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+.bill{
+    -fx-border-color: #ffffff;
+    -fx-border-width: 3;
+}
+.table-view {
+    -fx-background-color: #F2F2F2;
+    -fx-text-fill: #009688;
+    -fx-border-color: #009688;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 16px;
+    -fx-alignment: CENTER;
+    -fx-graphic-text-gap: 8;
+}
+.table-view .column-header {
+    -fx-background-color: #F2F2F2;
+    -fx-border-color: #00aa88;
+    -fx-border-width: 0 0 1 0; /* viền dưới */
+}
+
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #009688;
+    -fx-font-size: 16px;
 }

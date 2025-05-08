@@ -21,10 +21,10 @@ public class MenuItem {
     @Column(name = "item_id", nullable = false)
     private Integer id;
 
-    @Size(max = 10)
+    @Enumerated(EnumType.STRING)
     @NotNull
     @Column(name = "item_type", nullable = false, length = 10)
-    private String itemType;
+    private ItemType itemType;
 
     @Size(max = 50)
     @NotNull
