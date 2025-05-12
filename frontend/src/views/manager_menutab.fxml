@@ -37,35 +37,19 @@
                         <Insets left="10.0" top="10.0" />
                      </VBox.margin>
                   </VBox>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="373.0" styleClass="filter-card" stylesheets="@../values/menutab_style.css">
+                  <VBox prefHeight="486.0" prefWidth="376.0" styleClass="filter-card" stylesheets="@../values/menutab_style.css" VBox.vgrow="ALWAYS">
                      <children>
                         <HBox prefHeight="32.0" prefWidth="342.0">
                            <children>
                               <Label styleClass="filter-title" stylesheets="@../values/menutab_style.css" text="Loại thực đơn" />
                            </children>
                         </HBox>
-                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Đồ ăn" />
-                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Đồ uống" />
-                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" stylesheets="@../values/menutab_style.css" text="Khác" />
+                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="325.0" stylesheets="@../values/menutab_style.css" text="Đồ ăn" />
+                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="325.0" stylesheets="@../values/menutab_style.css" text="Đồ uống" />
+                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="325.0" stylesheets="@../values/menutab_style.css" text="Khác" />
                      </children>
                      <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
-                     </VBox.margin>
-                  </VBox>
-                  <VBox alignment="CENTER_LEFT" prefHeight="264.0" prefWidth="373.0" styleClass="filter-card" stylesheets="@../values/menutab_style.css">
-                     <children>
-                        <HBox prefHeight="32.0" prefWidth="342.0">
-                           <children>
-                              <Label styleClass="filter-title" stylesheets="@../values/menutab_style.css" text="Loại hàng" />
-                           </children>
-                        </HBox>
-                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" text="Hàng hóa thường" />
-                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" text="Chế biến" />
-                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" text="Dịch vụ" />
-                        <CheckBox mnemonicParsing="false" prefHeight="50.0" prefWidth="218.0" text="Khác" />
-                     </children>
-                     <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" top="10.0" />
                      </VBox.margin>
                   </VBox>
                </children>
@@ -78,17 +62,17 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="849.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="130.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="200.0">
                            <children>
-                              <Label text="Menu" textFill="#2c3e50">
+                              <Label prefHeight="48.0" prefWidth="188.0" text="Thực đơn" textFill="#2c3e50">
                                  <font>
                                     <Font name="Segoe UI Bold" size="40.0" />
                                  </font>
                               </Label>
                            </children>
                         </HBox>
-                        <HBox prefHeight="81.0" prefWidth="325.0" HBox.hgrow="ALWAYS" />
-                        <HBox fx:id="boxThemSanPham" alignment="CENTER" prefHeight="0.0" prefWidth="210.0" styleClass="button-bound" stylesheets="@../values/menutab_style.css">
+                        <HBox prefHeight="81.0" prefWidth="232.0" HBox.hgrow="ALWAYS" />
+                        <HBox fx:id="boxThemSanPham" alignment="CENTER" prefHeight="60.0" prefWidth="210.0" styleClass="button-bound" stylesheets="@../values/menutab_style.css">
                            <children>
                               <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#handleThemSanPham" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -108,11 +92,11 @@
                               </Button>
                            </children>
                            <HBox.margin>
-                              <Insets bottom="10.0" right="15.0" top="10.0" />
+                              <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="10.0" />
-                        <HBox fx:id="boxXoaSanPham" alignment="CENTER" prefHeight="0.0" prefWidth="210.0" styleClass="button-bound" stylesheets="@../values/menutab_style.css">
+                        <HBox prefHeight="100.0" prefWidth="20.0" />
+                        <HBox fx:id="boxXoaSanPham" alignment="CENTER" prefHeight="60.0" prefWidth="210.0" styleClass="button-bound" stylesheets="@../values/menutab_style.css">
                            <children>
                               <ImageView fitHeight="40.0" fitWidth="35.0" onMouseClicked="#handleXoaSanPham" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -132,13 +116,16 @@
                               </Button>
                            </children>
                            <HBox.margin>
-                              <Insets bottom="10.0" right="15.0" top="10.0" />
+                              <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="10.0" />
+                        <HBox prefHeight="100.0" prefWidth="10.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin></HBox>
                      </children>
                   </HBox>
-                  <TableView fx:id="tableView" prefHeight="671.0" prefWidth="849.0" stylesheets="@../values/menutab_style.css" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tableView" prefHeight="671.0" prefWidth="849.0" styleClass="table-right" stylesheets="@../values/menutab_style.css" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="colMaSP" prefWidth="100" text="Mã sản phẩm" />
                         <TableColumn fx:id="colTenSP" prefWidth="200" text="Tên sản phẩm" />

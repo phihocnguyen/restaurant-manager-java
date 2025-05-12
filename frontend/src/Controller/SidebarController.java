@@ -14,6 +14,7 @@ public class SidebarController {
     @FXML private HBox boxQL_ThucDon;
     @FXML private HBox boxIngredient;
     @FXML private HBox boxDoanhThu;
+    @FXML private HBox boxStoreHouse;
 
 
     private HBox currentSelected = null;
@@ -37,6 +38,9 @@ public class SidebarController {
                     break;
                 case "boxDoanhThu":
                     loadViewToContentArea("/views/manager_doanhthu.fxml");
+                    break;
+                case "boxStoreHouse":
+                    loadViewToContentArea("/views/manager_goodreceipt.fxml");
                     break;
                 // Thêm case khác nếu bạn có thêm tab
             }
@@ -75,6 +79,8 @@ public class SidebarController {
                 return boxIngredient;
             case "boxDoanhThu":
                 return boxDoanhThu;
+            case "boxStoreHouse":
+                return boxStoreHouse;
             // Thêm case cho những nút khác nếu có
             default:
                 return boxOverview;
@@ -103,6 +109,12 @@ public class SidebarController {
     private void handleDoanhThuClick(MouseEvent e) {
         setSelected(boxDoanhThu);
         loadViewToContentArea("/views/manager_doanhthu.fxml");
+    }
+
+    @FXML
+    private void handleStoreHouseClick(MouseEvent e) {
+        setSelected(boxStoreHouse);
+        loadViewToContentArea("/views/manager_goodreceipt.fxml");
     }
 
 

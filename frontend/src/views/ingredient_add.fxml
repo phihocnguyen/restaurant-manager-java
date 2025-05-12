@@ -1,128 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="383.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IngredientAdd">
-   <children>
-      <VBox layoutY="80.0" prefHeight="458.0" prefWidth="600.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);" styleClass="background" stylesheets="@../values/add_to_ingredient.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IngredientAdd">
+   <top>
+      <VBox prefHeight="70.0" prefWidth="800.0" styleClass="background" stylesheets="@../values/add_to_ingredient.css" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="67.0" prefWidth="566.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="800.0" styleClass="add-header" stylesheets="@../values/add_to_ingredient.css">
                <children>
-                  <Label styleClass="shadow" text="Chi tiết nguyên liệu">
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/add_icon.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label text="Thông tin chi tiết nguyên liệu" textFill="WHITE">
                      <font>
-                        <Font name="Cambria Bold" size="24.0" />
+                        <Font name="Arial Bold" size="14.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
                   </Label>
+                  <HBox prefHeight="50.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <ImageView fx:id="exitButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@../img/exit.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
                </children>
             </HBox>
-            <VBox prefHeight="60.0" prefWidth="600.0">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" styleClass="shadow">
-                     <children>
-                        <Label text="Tên nguyên liệu">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Label text="*" textFill="RED" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0">
-                           <styleClass>
-                              <String fx:value="fruit-background" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox prefHeight="60.0" prefWidth="600.0">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Giá bán trên đơn vị">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Label text="*" textFill="RED" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0">
-                           <styleClass>
-                              <String fx:value="fruit-background" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox prefHeight="60.0" prefWidth="600.0">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Tồn kho (ĐVT)">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <TextField prefHeight="26.0" prefWidth="557.0">
-                           <styleClass>
-                              <String fx:value="fruit-background" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <HBox prefHeight="132.0" prefWidth="566.0">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="406.0">
-                     <children>
-                        <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="230.0" text="Hủy thông tin">
-                           <styleClass>
-                              <String fx:value="button-notify" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="406.0">
-                     <children>
-                        <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="230.0" text="Thêm thông tin">
-                           <styleClass>
-                              <String fx:value="button-notify" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </Button>
-                     </children>
-                  </HBox>
-               </children>
-            </HBox>
+            <HBox prefHeight="10.0" prefWidth="10.0" />
+            <HBox prefHeight="30.0" prefWidth="800.0" />
          </children>
-         <styleClass>
-            <String fx:value="table-view" />
-            <String fx:value="shadow" />
-         </styleClass>
+
       </VBox>
-   </children>
-</AnchorPane>
+
+   </top>
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" styleClass="background" stylesheets="@../values/add_to_ingredient.css" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" prefWidth="300" spacing="20" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 0); -fx-padding: 20px;">
+               <children>
+                  <ImageView fx:id="imgPreview" fitHeight="180" fitWidth="180" style="-fx-background-radius: 8px; -fx-border-color: #E0E0E0; -fx-border-radius: 8px; -fx-border-width: 1px;">
+                     <image>
+                        <Image url="@../img/ingredient_icon_blue.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="btnEditThongTin" mnemonicParsing="false" onMouseClicked="#handleEditThongTin" pickOnBounds="true" prefWidth="200" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Thêm/ Cập nhật thông tin" />
+                  <Button fx:id="btnHuyThongTin" mnemonicParsing="false" onMouseClicked="#handleHuyThongTin" pickOnBounds="true" prefWidth="200" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Hủy thông tin" />
+               </children>
+               <HBox.margin>
+                  <Insets bottom="50.0" />
+               </HBox.margin>
+            </VBox>
+            <HBox prefHeight="100.0" prefWidth="30.0" />
+            <VBox alignment="CENTER_LEFT" prefWidth="400" spacing="15" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 0); -fx-padding: 30px;">
+               <children>
+                  <Label style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Tên nguyên liệu" />
+                  <TextField fx:id="txtTenNL" prefWidth="300" promptText="Nhập tên nguyên liệu" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
+                  <Label style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Giá bán trên đơn vị" />
+                  <TextField fx:id="txtGiaBan" prefWidth="300" promptText="Nhập giá bán" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
+                  <Label style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Tồn kho (ĐVT)" />
+                  <TextField fx:id="txtSLT" prefWidth="300" promptText="Nhập số lượng tồn kho" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
+               </children>
+               <HBox.margin>
+                  <Insets bottom="50.0" />
+               </HBox.margin>
+            </VBox>
+            <HBox prefHeight="100.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </center>
+
+</BorderPane>

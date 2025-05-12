@@ -35,9 +35,9 @@
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0" />
       
-                              <Button fx:id="btnVerify" mnemonicParsing="false" onMouseClicked="#handleVerifyCode" pickOnBounds="true" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" text="Nhập email" />
+                              <Button fx:id="btnReturnEnterEmail" mnemonicParsing="false" onMouseClicked="#handleReturnEnterEmail" pickOnBounds="true" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" stylesheets="@../values/forget_password.css" text="Nhập lại email" />
                         <HBox prefHeight="100.0" prefWidth="200.0" />
-                        <Button fx:id="btnVerify1" mnemonicParsing="false" onMouseClicked="#handleVerifyCode" pickOnBounds="true" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" text="Xác nhận" />
+                        <Button fx:id="btnVerify" mnemonicParsing="false" onMouseClicked="#handleVerifyCode" pickOnBounds="true" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" stylesheets="@../values/forget_password.css" text="Xác nhận" />
                         <HBox prefHeight="100.0" prefWidth="200.0" />
                      </children>
                   </HBox>

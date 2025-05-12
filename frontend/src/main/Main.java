@@ -12,7 +12,7 @@ public class Main extends Application {
     public static final String CURRENCY = "$";
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("../views/manager_dashboard.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../views/login.fxml"));
         Scene scene = new Scene(root);
 
         // Load CSS cho context menu
