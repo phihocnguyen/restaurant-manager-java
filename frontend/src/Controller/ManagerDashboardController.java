@@ -47,6 +47,9 @@ public class ManagerDashboardController {
     @FXML
     private ImageView exitButton;
 
+    @FXML
+    private ImageView minimizeIcon;
+
     private boolean isExpanded = false;
     private String currentSidebar = "";
 
@@ -163,5 +166,11 @@ public class ManagerDashboardController {
         }
     }
 
+    @FXML
+    private void minimizeApp() {
+        // Lấy cửa sổ hiện tại và thu nhỏ ứng dụng
+        Stage stage = (Stage) minimizeIcon.getScene().getWindow();
+        stage.setIconified(true);
+    }
 
 }

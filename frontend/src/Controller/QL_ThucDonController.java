@@ -186,6 +186,8 @@ public class QL_ThucDonController {
 
             // Sau khi user đóng AddToMenu -> remove trạng thái selected
             boxThemSanPham.getStyleClass().remove("selected"); // <-- thêm dòng này
+            boxThemSanPham.setScaleX(1.0);
+            boxThemSanPham.setScaleY(1.0);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -219,6 +221,8 @@ public class QL_ThucDonController {
 
             // Sau khi user đóng AddToMenu -> remove trạng thái selected
             boxXoaSanPham.getStyleClass().remove("selected"); // <-- thêm dòng này
+            boxXoaSanPham.setScaleX(1.0);
+            boxXoaSanPham.setScaleY(1.0);
         } catch (IOException e) {
             e.printStackTrace();
         }

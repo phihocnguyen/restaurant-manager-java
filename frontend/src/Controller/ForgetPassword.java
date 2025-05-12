@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class ForgetPassword {
@@ -19,7 +20,7 @@ public class ForgetPassword {
 
     @FXML
     public void initialize() {
-        loadSendEmailView(); // Tự động load view con khi khởi tạo
+        loadSendEmailView();
     }
 
     @FXML
@@ -33,10 +34,10 @@ public class ForgetPassword {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/send_email.fxml"));
             Parent view = loader.load();
 
-            // Hiển thị vào contentArea
-            contentArea.getChildren().setAll(view);
+            SendEmailController controller = loader.getController();
+            controller.setContentArea(contentArea);
 
-            // Bắt buộc set anchor để view không bị co lại
+            contentArea.getChildren().setAll(view);
             AnchorPane.setTopAnchor(view, 0.0);
             AnchorPane.setBottomAnchor(view, 0.0);
             AnchorPane.setLeftAnchor(view, 0.0);

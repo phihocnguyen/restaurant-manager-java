@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="background" stylesheets="@../values/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="background" stylesheets="@../values/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginController">
    <children>
       <BorderPane layoutX="-6.0" prefHeight="200.0" prefWidth="200.0" styleClass="login-background" stylesheets="@../values/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -101,7 +95,7 @@
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" stylesheets="@../values/style.css" text="Quên mật khẩu?" textFill="#002d62">
+                              <Button fx:id="btnForgetPassword" mnemonicParsing="false" onAction="#handleForgetPassword" prefHeight="30.0" prefWidth="112.0" stylesheets="@../values/style.css" text="Quên mật khẩu?" textFill="#002d62">
                                  <font>
                                     <Font name="Cambria" size="12.0" />
                                  </font>
@@ -119,7 +113,7 @@
                               <Insets bottom="10.0" left="30.0" right="30.0" />
                            </VBox.margin>
                            <children>
-                              <HBox alignment="CENTER" prefHeight="51.0" prefWidth="200.0" stylesheets="@../values/style.css">
+                              <HBox fx:id="boxQuanLy" alignment="CENTER" onMouseClicked="#handleOpenManagerDashboard" prefHeight="51.0" prefWidth="200.0" stylesheets="@../values/style.css">
                                  <children>
                                     <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -141,7 +135,7 @@
                                  </styleClass>
                               </HBox>
                               <HBox prefHeight="50.0" prefWidth="50.0" />
-                              <HBox alignment="CENTER" prefHeight="51.0" prefWidth="200.0" stylesheets="@../values/style.css">
+                              <HBox fx:id="boxBanHang" alignment="CENTER" onMouseClicked="#handleOpenManagerMenu" prefHeight="51.0" prefWidth="200.0" stylesheets="@../values/style.css">
                                  <children>
                                     <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -170,10 +164,10 @@
             </VBox>
          </center>
          <top>
-            <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="900.0" styleClass="taskbar-login" stylesheets="@../values/style.css" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="900.0" styleClass="taskbar-login" stylesheets="@../values/style.css" BorderPane.alignment="CENTER">
                <children>
-                  <HBox prefHeight="50.0" prefWidth="870.0" />
-                  <ImageView fx:id="minimizeIcon" onMouseClicked="#minimizeApp" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="button1">
+                  <HBox prefHeight="30.0" prefWidth="798.0" />
+                  <ImageView fx:id="minimizeIcon" fitHeight="30.0" fitWidth="25.0" onMouseClicked="#minimizeApp" pickOnBounds="true" preserveRatio="true" styleClass="button1">
                      <image>
                         <Image url="@../img/hide_1.png" />
                      </image>
@@ -181,7 +175,7 @@
                         <Insets bottom="5.0" right="10.0" top="5.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView fx:id="closeIcon" onMouseClicked="#closeApp" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="button1">
+                  <ImageView fx:id="closeIcon" fitHeight="30.0" fitWidth="25.0" onMouseClicked="#closeApp" pickOnBounds="true" preserveRatio="true" styleClass="button1">
                      <image>
                         <Image url="@../img/exit.png" />
                      </image>
