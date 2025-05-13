@@ -4,11 +4,15 @@ import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -19,13 +23,16 @@ public class ManagerGoodreceipt {
     private StackPane contentArea;
 
     @FXML
-    private HBox boxThemSanPham;
+    private HBox boxThemThongTin;
 
     @FXML
-    private HBox boxXoaSanPham;
+    private HBox boxXoaThongTin;
 
     @FXML
     private TableView<?> tableStoreHouse;
+
+    @FXML
+    private AnchorPane creatPhieuNhap;
 
     @FXML
     public void initialize() {
@@ -53,9 +60,9 @@ public class ManagerGoodreceipt {
     }
 
     @FXML
-    private void handleThemSanPham() {
+    private void handleThemThongTin() {
         // Animation click nhẹ
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), boxThemSanPham);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), boxThemThongTin);
         scaleTransition.setToX(0.95);
         scaleTransition.setToY(0.95);
         scaleTransition.setAutoReverse(true);
@@ -63,13 +70,37 @@ public class ManagerGoodreceipt {
         scaleTransition.play();
 
         scaleTransition.setOnFinished(event -> {
-            boxThemSanPham.getStyleClass().add("selected");
+            boxThemThongTin.getStyleClass().add("selected");
         });
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/receipt_add.fxml"));
+            Parent form = loader.load();
+
+            ReceiptAdd controller = loader.getController();
+            controller.init(this, boxThemThongTin); // truyền controller cha + nút cần reset
+
+            creatPhieuNhap.getChildren().setAll(form);
+            creatPhieuNhap.setPrefHeight(180);
+
+
+
+            // Anchor full nếu cần
+            AnchorPane.setTopAnchor(form, 0.0);
+            AnchorPane.setBottomAnchor(form, 0.0);
+            AnchorPane.setLeftAnchor(form, 0.0);
+            AnchorPane.setRightAnchor(form, 0.0);
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi load add_receipt.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
+
+
     @FXML
-    private void handleXoaSanPham() {
+    private void handleXoaThongTin() {
 
     }
 }

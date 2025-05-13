@@ -16,7 +16,7 @@
    <children>
       <VBox layoutX="10.0" layoutY="10.0" prefHeight="761.0" prefWidth="637.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="849.0">
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="82.0" prefWidth="849.0" VBox.vgrow="NEVER">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="346.0">
                      <children>
@@ -28,9 +28,9 @@
                      </children>
                   </HBox>
                   <HBox prefHeight="81.0" prefWidth="227.0" HBox.hgrow="ALWAYS" />
-                  <HBox fx:id="boxThemSanPham" alignment="CENTER" prefHeight="60.0" prefWidth="220.0" styleClass="button-bound" stylesheets="@../values/good_receipt.css">
+                  <HBox fx:id="boxThemThongTin" alignment="CENTER" prefHeight="60.0" prefWidth="220.0" styleClass="button1-bound" stylesheets="@../values/good_receipt.css">
                      <children>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#handleThemSanPham" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#handleThemThongTin" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/add_icon.png" />
                            </image>
@@ -38,7 +38,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Button mnemonicParsing="false" onMouseClicked="#handleThemSanPham" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/menutab_style.css" text="Thêm thông tin" textFill="WHITE">
+                        <Button mnemonicParsing="false" onMouseClicked="#handleThemThongTin" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/menutab_style.css" text="Thêm thông tin" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>
@@ -52,9 +52,9 @@
                      </HBox.margin>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="10.0" />
-                  <HBox fx:id="boxXoaSanPham" alignment="CENTER" prefHeight="60.0" prefWidth="220.0" styleClass="button-bound" stylesheets="@../values/good_receipt.css">
+                  <HBox fx:id="boxXoaSanPham" alignment="CENTER" prefHeight="60.0" prefWidth="220.0" styleClass="button1-bound" stylesheets="@../values/good_receipt.css">
                      <children>
-                        <ImageView fitHeight="40.0" fitWidth="35.0" onMouseClicked="#handleXoaSanPham" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="35.0" onMouseClicked="#handleXoaThongTin" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/trashbin_icon.png" />
                            </image>
@@ -62,7 +62,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Button mnemonicParsing="false" onMouseClicked="#handleXoaSanPham" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/menutab_style.css" text="Xóa thông tin" textFill="WHITE">
+                        <Button mnemonicParsing="false" onMouseClicked="#handleXoaThongTin" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/menutab_style.css" text="Xóa thông tin" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>
@@ -82,6 +82,10 @@
                   </HBox>
                </children>
             </HBox>
+            <AnchorPane fx:id="creatPhieuNhap" prefHeight="0.0" prefWidth="1245.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" right="10.0" />
+               </VBox.margin></AnchorPane>
             <TableView fx:id="tableStoreHouse" prefHeight="671.0" prefWidth="849.0" stylesheets="@../values/good_receipt.css" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn fx:id="colMaNK" text="Mã nhập kho" />
