@@ -25,7 +25,7 @@
     -fx-text-fill: #333333;
 }
 
-.button {
+.button1 {
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-opacity: 1;
@@ -35,20 +35,20 @@
     -fx-pref-height: 40px;
 }
 
-.button-bound {
+.button1-bound {
     -fx-background-color:  #2C3E50;
     -fx-background-radius: 8px;
     -fx-opacity: 1;
     -fx-transition: all 0.3s ease-in-out;
 }
 
-.button-bound:hover {
+.button1-bound:hover {
     -fx-opacity: 0.7;
     -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }
-.button-bound.selected {
+.button1-bound.selected {
     -fx-opacity: 0.7;
     -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
     -fx-scale-x: 1.05;
@@ -56,7 +56,7 @@
 }
 
 
-.button-bound.selected .button {
+.button1-bound.selected .button {
     -fx-opacity: 0.7;
     -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
     -fx-scale-x: 1.05;
@@ -102,5 +102,128 @@
 }
 
 
+
+
+
+
+
+.root {
+    -fx-background-color: #F9FAFC;
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.2, 0, 2);
+}
+
+/* Tiêu đề section */
+.label-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Dấu * bắt buộc */
+.label-required {
+    -fx-text-fill: #D32F2F;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.input-field {
+    -fx-background-color: white;
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2C3E50;
+    -fx-pref-height: 40px;
+}
+
+.date-picker {
+    -fx-background-color: white, #2C3E50;
+    -fx-background-insets: 0, 0 0 0 0; /* lớp nền ngoài là "viền" */
+    -fx-background-radius: 6;
+    -fx-padding: 1;
+}
+
+
+
+
+
+
+.button-confirm {
+    -fx-background-color:  #2C3E50;
+    -fx-background-radius: 8px;
+    -fx-opacity: 1;
+    -fx-transition: all 0.3s ease-in-out;
+
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+
+}
+
+.button-confirm:hover {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+.button-confirm.selected {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+
+.button-confirm.selected .button {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button-cancel {
+    -fx-background-color:   #6E6E6E;
+    -fx-background-radius: 8px;
+    -fx-opacity: 1;
+    -fx-transition: all 0.3s ease-in-out;
+
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+
+}
+
+.button-cancel:hover {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+.button-cancel.selected {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+
+.button-cancel.selected .button {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
 
 

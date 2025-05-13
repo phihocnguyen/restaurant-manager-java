@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -12,162 +11,94 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="278.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReceiptAdd">
+<AnchorPane prefHeight="229.0" prefWidth="1234.0" styleClass="root" stylesheets="@../values/good_receipt.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReceiptAdd">
    <children>
-      <VBox layoutY="-11.0" prefHeight="278.0" prefWidth="707.0" stylesheets="@../values/menu_style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="262.0" prefWidth="1234.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="707.0">
+            <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="707.0">
                <children>
-                  <Label styleClass="shadow" text="Thêm thông tin nhập kho" textFill="#009688">
+                  <HBox prefHeight="100.0" prefWidth="5.0" />
+                  <ImageView fitHeight="30.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/storehouse_blue.png" />
+                     </image>
+                  </ImageView>
+                  <HBox prefHeight="100.0" prefWidth="5.0" />
+                  <Label stylesheets="@../values/good_receipt.css" text="Thêm thông tin nhập kho" textFill="#2c3e50">
                      <font>
-                        <Font name="Cambria Bold" size="24.0" />
+                        <Font name="Segoe UI Bold" size="20.0" />
                      </font>
                      <HBox.margin>
-                        <Insets left="20.0" />
+                        <Insets />
                      </HBox.margin>
                   </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <HBox prefHeight="570.0" prefWidth="566.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="134.0" prefWidth="1230.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" prefHeight="348.0" prefWidth="609.0">
+                  <VBox alignment="CENTER_LEFT" prefHeight="182.0" prefWidth="344.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox prefHeight="134.0" prefWidth="707.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0">
                            <children>
-                              <VBox alignment="CENTER" prefHeight="60.0" prefWidth="343.0">
-                                 <children>
-                                    <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="343.0" styleClass="shadow">
-                                       <children>
-                                          <Label text="Mã nhập kho">
-                                             <HBox.margin>
-                                                <Insets left="10.0" />
-                                             </HBox.margin>
-                                             <font>
-                                                <Font name="Cambria Bold" size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="*" textFill="RED">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets left="10.0" />
-                                       </VBox.margin>
-                                    </HBox>
-                                    <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="38.0" prefWidth="334.0">
-                                       <children>
-                                          <TextField prefHeight="26.0" prefWidth="557.0">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                             <styleClass>
-                                                <String fx:value="shadow" />
-                                                <String fx:value="transparent" />
-                                             </styleClass>
-                                          </TextField>
-                                       </children>
-                                       <styleClass>
-                                          <String fx:value="button-notify" />
-                                          <String fx:value="shadow" />
-                                       </styleClass>
-                                       <VBox.margin>
-                                          <Insets left="10.0" right="10.0" />
-                                       </VBox.margin>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" prefHeight="60.0" prefWidth="343.0">
-                                 <children>
-                                    <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="343.0" styleClass="shadow">
-                                       <children>
-                                          <Label text="Ngày nhập kho">
-                                             <HBox.margin>
-                                                <Insets left="10.0" />
-                                             </HBox.margin>
-                                             <font>
-                                                <Font name="Cambria Bold" size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="*" textFill="RED">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets left="10.0" />
-                                       </VBox.margin>
-                                    </HBox>
-                                    <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="38.0" prefWidth="334.0">
-                                       <children>
-                                          <TextField prefHeight="26.0" prefWidth="557.0">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                             <styleClass>
-                                                <String fx:value="shadow" />
-                                                <String fx:value="transparent" />
-                                             </styleClass>
-                                          </TextField>
-                                          <ImageView fitHeight="27.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/calendar.png" />
-                                             </image>
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                          </ImageView>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets left="10.0" right="10.0" />
-                                       </VBox.margin>
-                                       <styleClass>
-                                          <String fx:value="button-notify" />
-                                          <String fx:value="shadow" />
-                                       </styleClass>
-                                    </HBox>
-                                 </children>
-                              </VBox>
+                              <Label styleClass="label-title" stylesheets="@../values/good_receipt.css" text="Mã nhập kho" />
+                              <Label styleClass="label-required" stylesheets="@../values/good_receipt.css" text="*">
+                                 <HBox.margin>
+                                    <Insets right="27.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="txtMaNK" styleClass="input-field" stylesheets="@../values/good_receipt.css" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="686.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                            <children>
-                              <HBox alignment="CENTER" prefHeight="89.0" prefWidth="190.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="144.0" text="Hủy bỏ">
-                                       <styleClass>
-                                          <String fx:value="button-search-cus" />
-                                          <String fx:value="shadow" />
-                                       </styleClass>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="89.0" prefWidth="174.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="144.0" text="Xác nhận">
-                                       <styleClass>
-                                          <String fx:value="button-search-cus" />
-                                          <String fx:value="shadow" />
-                                       </styleClass>
-                                       <HBox.margin>
-                                          <Insets right="10.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <Label styleClass="label-title" stylesheets="@../values/good_receipt.css" text="Ngày nhập kho" />
+                              <Label styleClass="label-required" stylesheets="@../values/good_receipt.css" text="*">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <DatePicker fx:id="dpkNgayNK" prefHeight="40.0" prefWidth="850.0" />
                            </children>
                         </HBox>
                      </children>
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="10.0" right="10.0" />
+                     </HBox.margin>
                   </VBox>
-               </children>
-            </HBox>
+                  <VBox alignment="CENTER" prefHeight="182.0" prefWidth="302.0">
+                     <children>
+                        <HBox fx:id="btnXacNhan" alignment="CENTER" prefHeight="40.0" prefWidth="200.0" styleClass="button-confirm" stylesheets="@../values/good_receipt.css">
+                           <children>
+                              <Label text="Xác nhận" textFill="WHITE">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="btnHuyBo" alignment="CENTER" prefHeight="40.0" prefWidth="200.0" styleClass="button-cancel" stylesheets="@../values/good_receipt.css">
+                           <children>
+                              <Label text="Hủy bỏ" textFill="WHITE">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="20.0" right="10.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children></HBox>
          </children>
-         <styleClass>
-            <String fx:value="fruit-background" />
-            <String fx:value="shadow" />
-         </styleClass>
       </VBox>
    </children>
 </AnchorPane>
