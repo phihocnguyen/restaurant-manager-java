@@ -47,6 +47,8 @@ public class ReceiptAdd {
         btnXacNhan.setOnMouseClicked(this::handleXacNhan);
     }
 
+
+
     private void handleHuyBo(MouseEvent event) {
         // Tìm AnchorPane cha (creatPhieuNhap)
         AnchorPane currentPane = (AnchorPane) ((Node) event.getSource()).getScene().lookup("#creatPhieuNhap");

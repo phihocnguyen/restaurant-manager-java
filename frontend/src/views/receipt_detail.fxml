@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -52,7 +54,14 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="389.0">
                      <children>
-                        <ComboBox prefHeight="40.0" prefWidth="382.0" />
+                        <ComboBox fx:id="comboLoaiNhap" prefHeight="40.0" prefWidth="382.0" styleClass="input-field" stylesheets="@../values/receipt_detail.css">
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="Nhập nguyên liệu" />
+                                 <String fx:value="Nhập các vật phẩm khác" />
+                              </FXCollections>
+                           </items>
+                        </ComboBox>
                      </children>
                      <HBox.margin>
                         <Insets left="10.0" />
@@ -60,19 +69,19 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="54.0" prefWidth="316.0">
                      <children>
-                        <DatePicker prefHeight="40.0" prefWidth="371.0">
+                        <DatePicker fx:id="dpkNgayNK" prefHeight="40.0" prefWidth="371.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </DatePicker>
                      </children>
                   </HBox>
-                  <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" styleClass="button-add" stylesheets="@../values/receipt_detail.css" text="Thêm ">
+                  <Button fx:id="btnThem" mnemonicParsing="false" onMouseClicked="#onThemButtonClick" pickOnBounds="true" prefHeight="38.0" prefWidth="114.0" styleClass="button-add" stylesheets="@../values/receipt_detail.css" text="Thêm ">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" styleClass="button-delete" stylesheets="@../values/receipt_detail.css" text="Xóa">
+                  <Button fx:id="btnXoa" mnemonicParsing="false" onMouseClicked="#onXoaButtonClick" pickOnBounds="true" prefHeight="38.0" prefWidth="114.0" styleClass="button-delete" stylesheets="@../values/receipt_detail.css" text="Xóa">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -86,7 +95,7 @@
    <center>
       <HBox prefHeight="624.0" prefWidth="1000.0" styleClass="background" stylesheets="@../values/receipt_detail.css" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="receiptView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="714.0" prefWidth="706.0" HBox.hgrow="ALWAYS">
+            <TableView fx:id="receiptdetailView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="714.0" prefWidth="706.0" HBox.hgrow="ALWAYS">
                <columns>
                   <TableColumn prefWidth="130.39995956420898" text="Mã nhập kho" />
                   <TableColumn prefWidth="166.4000701904297" text="Tên nguyên liệu" />
@@ -119,7 +128,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="358.0">
                      <children>
-                        <ComboBox prefHeight="40.0" prefWidth="358.0" />
+                        <ComboBox fx:id="cbTenNL" prefHeight="40.0" prefWidth="358.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="358.0">
@@ -132,7 +141,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="223.0">
                      <children>
-                        <TextField fx:id="txtTaiKhoan" prefHeight="43.0" prefWidth="223.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
+                        <TextField fx:id="txtSLNhap" prefHeight="43.0" prefWidth="223.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="358.0">
@@ -147,7 +156,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <TextField fx:id="txtTaiKhoan1" prefHeight="31.0" prefWidth="260.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
+                  <TextField fx:id="txtDonGia" prefHeight="31.0" prefWidth="260.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" />

@@ -105,3 +105,24 @@
 .button-delete:hover {
     -fx-background-color: linear-gradient(to bottom, #E57373, #EF5350);
 }
+
+.input-field {
+    -fx-background-color: white;
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 0 0;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2C3E50;
+    -fx-pref-height: 40px;
+}
+
+.date-picker {
+    -fx-background-color: white, #2C3E50;
+    -fx-background-insets: 0, 0 0 0 0; /* lớp nền ngoài là "viền" */
+    -fx-background-radius: 6;
+    -fx-padding: 1;
+    -fx-pref-height: 40px;
+
+}
