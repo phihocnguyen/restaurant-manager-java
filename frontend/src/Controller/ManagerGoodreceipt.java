@@ -101,6 +101,38 @@ public class ManagerGoodreceipt {
 
     @FXML
     private void handleXoaThongTin() {
+        // Animation click nhẹ
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), boxXoaThongTin);
+        scaleTransition.setToX(0.95);
+        scaleTransition.setToY(0.95);
+        scaleTransition.setAutoReverse(true);
+        scaleTransition.setCycleCount(2);
+        scaleTransition.play();
+
+        scaleTransition.setOnFinished(event -> {
+            boxXoaThongTin.getStyleClass().add("selected");
+        });
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/confirm_deleted.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.centerOnScreen();
+
+            stage.showAndWait(); // block luồng tại đây -> chờ user đóng
+
+            // Sau khi user đóng AddToMenu -> remove trạng thái selected
+            boxXoaThongTin.getStyleClass().remove("selected"); // <-- thêm dòng này
+            boxXoaThongTin.setScaleX(1.0);
+            boxXoaThongTin.setScaleY(1.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

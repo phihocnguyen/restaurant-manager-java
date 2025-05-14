@@ -1,0 +1,169 @@
+.transparent {
+    -fx-background-color: rgba(0,0,0,0);
+}
+.padding-all-10 {
+    -fx-padding: 0;
+}
+.container {
+    -fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);
+}
+.filter-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 0);
+}
+
+.filter-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.check-box {
+    -fx-font-size: 18px;
+    -fx-text-fill: #333333;
+}
+
+.button1 {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-opacity: 1;
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-border-radius: 100;
+    -fx-pref-width: 145px;
+    -fx-pref-height: 40px;
+}
+
+.button1-bound {
+    -fx-background-color:  #2C3E50;
+    -fx-background-radius: 8px;
+    -fx-opacity: 1;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.button1-bound:hover {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+.button1-bound.selected {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+
+.button1-bound.selected .button {
+    -fx-opacity: 0.7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.table-view {
+    -fx-background-color: #F2F2F2;
+    -fx-text-fill: #2C3E50;
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 16px;
+    -fx-alignment: CENTER;
+    -fx-graphic-text-gap: 8;
+}
+.table-view .column-header {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 0 0 1 0; /* viền dưới */
+}
+
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-font-size: 16px;
+}
+
+
+.table-view .button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-opacity: 0.8;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.table-view .button:hover {
+    -fx-opacity: 1;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* Tiêu đề section */
+.label-title-main {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Tiêu đề section */
+.label-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Dấu * bắt buộc */
+.label-required {
+    -fx-text-fill: #D32F2F;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.input-field {
+    -fx-background-color: white;
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2C3E50;
+    -fx-pref-height: 40px;
+}
+/* Nút Thêm - Xanh hiện đại */
+.button-add {
+    -fx-background-color: linear-gradient(to bottom, #42A5F5, #1E88E5);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #1976D2;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-padding: 6 16;
+}
+
+.button-add:hover {
+    -fx-background-color: linear-gradient(to bottom, #64B5F6, #2196F3);
+}
+
+/* Nút Xóa - Đỏ cảnh báo */
+.button-delete {
+    -fx-background-color: linear-gradient(to bottom, #EF5350, #E53935);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #C62828;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-padding: 6 16;
+}
+
+.button-delete:hover {
+    -fx-background-color: linear-gradient(to bottom, #E57373, #EF5350);
+}
+

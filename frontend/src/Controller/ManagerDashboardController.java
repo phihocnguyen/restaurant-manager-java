@@ -31,7 +31,6 @@ public class ManagerDashboardController {
     private ImageView logoAvatar;
 
 
-
     private ContextMenu contextMenu;
 
     @FXML

@@ -16,9 +16,7 @@ public class ConfirmDeletedController {
 
     @FXML
     private void handleHuy() {
-
             Stage stage = (Stage) btnHuy.getScene().getWindow();
             stage.close();
-
     }
 }

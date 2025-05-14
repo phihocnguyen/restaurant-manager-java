@@ -52,7 +52,7 @@
                      </HBox.margin>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="10.0" />
-                  <HBox fx:id="boxXoaSanPham" alignment="CENTER" prefHeight="60.0" prefWidth="220.0" styleClass="button1-bound" stylesheets="@../values/good_receipt.css">
+                  <HBox fx:id="boxXoaThongTin" alignment="CENTER" prefHeight="60.0" prefWidth="220.0" styleClass="button1-bound" stylesheets="@../values/good_receipt.css">
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="35.0" onMouseClicked="#handleXoaThongTin" pickOnBounds="true" preserveRatio="true">
                            <image>

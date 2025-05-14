@@ -47,7 +47,10 @@
                                     <Insets right="27.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMaNK" styleClass="input-field" stylesheets="@../values/good_receipt.css" HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="txtMaNK" styleClass="input-field" stylesheets="@../values/good_receipt.css" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin></TextField>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0">
@@ -61,7 +64,10 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Label>
-                              <DatePicker fx:id="dpkNgayNK" prefHeight="40.0" prefWidth="850.0" />
+                              <DatePicker fx:id="dpkNgayNK" prefHeight="40.0">
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin></DatePicker>
                            </children>
                         </HBox>
                      </children>

@@ -18,7 +18,7 @@
       </children>
    </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+   <HBox fx:id="boxStaff" alignment="CENTER" onMouseClicked="#handleStaffClick" pickOnBounds="true" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
       <children>
           <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
               <image>
@@ -28,7 +28,7 @@
       </children>
    </HBox>
     <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
+   <HBox fx:id="boxCustomer" alignment="CENTER" onMouseClicked="#handleCustomerClick" pickOnBounds="true" prefHeight="50.0" prefWidth="50.0" styleClass="button-bound" stylesheets="@../values/sidebar.css">
       <children>
           <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
               <image>
