@@ -62,7 +62,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Button mnemonicParsing="false" onMouseClicked="#handleSuaThongTin" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/menutab_style.css" text="Thêm thông tin" textFill="WHITE">
+                        <Button mnemonicParsing="false" onMouseClicked="#handleSuaThongTin" pickOnBounds="true" styleClass="transparent" stylesheets="@../values/menutab_style.css" text="Sửa thông tin" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>

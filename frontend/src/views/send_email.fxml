@@ -14,37 +14,36 @@
 
 <AnchorPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SendEmailController">
     <children>
-        <VBox alignment="TOP_CENTER" stylesheets="@../values/forget_password.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-            <VBox alignment="CENTER" spacing="20">
-                <HBox alignment="TOP_CENTER" prefHeight="400" prefWidth="800" spacing="20" style="-fx-padding: 20px;">
+        <VBox fx:id="rootVBox" alignment="TOP_CENTER" style="-fx-background-color: transparent; -fx-padding: 50px;" stylesheets="@../values/forget_password.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <VBox alignment="CENTER" spacing="20" VBox.vgrow="ALWAYS">
+                <HBox fx:id="formContainer" alignment="TOP_CENTER" prefHeight="400" prefWidth="800" spacing="20" style="-fx-background-color: transparent; -fx-padding: 20px;">
+                    <!-- Form Card -->
+                    <VBox fx:id="formCard" alignment="TOP_CENTER" prefHeight="318.0" prefWidth="659.0" spacing="20.0" style="-fx-background-color: #f9f9f9; -fx-border-radius: 12px; -fx-background-radius: 12px; -fx-padding: 50px;">
+                        <Label fx:id="lblTitle" styleClass="label_text" text="Tìm kiếm tài khoản" />
+                        <Label fx:id="lblSubtitle" styleClass="sub-label" text="Nhập email để tìm kiếm tài khoản của bạn" />
 
-                    <!-- Khung trái: Form thêm nguyên liệu -->
-                    <VBox alignment="TOP_CENTER" prefHeight="318.0" prefWidth="659.0" spacing="20.0" style="-fx-background-color: #f9f9f9; -fx-border-color: #E0E0E0; -fx-border-radius: 8px; -fx-padding: 50px;">
-                  <Label styleClass="label_text" stylesheets="@../values/forget_password.css" text="Tìm kiếm tài khoản " />
-                  <Label styleClass="sub-label" stylesheets="@../values/forget_password.css" text="Nhập email để tìm kiếm tài khoản của bạn" />
-                  <StackPane alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="618.0" styleClass="input-stack" stylesheets="@../values/forget_password.css">
-                     <children>
-                        <TextField fx:id="emailField" prefHeight="42.0" prefWidth="554.0" promptText="Nhập email ..." styleClass="text-field-with-icon" stylesheets="@../values/forget_password.css">
-                           <font>
-                              <Font name="Segoe UI" size="12.0" />
-                           </font>
-                        </TextField>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="input-icon">
-                           <image>
-                              <Image url="@../img/email_icon.png" />
-                           </image>
-                           <StackPane.margin>
-                              <Insets right="12.0" />
-                           </StackPane.margin>
-                        </ImageView>
-                     </children>
-                  </StackPane>
+                        <!-- Email input -->
+                        <StackPane fx:id="stackEmail" alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="618.0" styleClass="input-stack">
+                            <children>
+                                <TextField fx:id="emailField" prefHeight="42.0" prefWidth="554.0" promptText="Nhập email ..." styleClass="text-field-with-icon">
+                                    <font>
+                                        <Font name="Segoe UI" size="12.0" />
+                                    </font>
+                                </TextField>
+                                <ImageView fx:id="emailIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="input-icon">
+                                    <image>
+                                        <Image url="@../img/email_icon.png" />
+                                    </image>
+                                    <StackPane.margin>
+                                        <Insets right="12.0" />
+                                    </StackPane.margin>
+                                </ImageView>
+                            </children>
+                        </StackPane>
 
-                        <Button fx:id="btnSendEmail" mnemonicParsing="false" onMouseClicked="#handleSendEmail" pickOnBounds="true" prefWidth="618.4" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" stylesheets="@../values/forget_password.css" text="Gửi email" />
+                        <!-- Gửi email button -->
+                        <Button fx:id="btnSendEmail" onAction="#handleSendEmail" prefWidth="618.4" style="-fx-background-color: #4E342E; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" text="Gửi email" />
                     </VBox>
-
-                    
-
                 </HBox>
             </VBox>
         </VBox>
