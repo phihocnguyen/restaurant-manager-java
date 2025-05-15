@@ -23,10 +23,8 @@
                             <Image url="@../img/logo_1.png" />
                         </image>
                     </ImageView>
-
-                    <Button fx:id="btnThayDoiThongTin" onMouseClicked="#handleThayDoiThongTin" prefWidth="200" styleClass="action-button" text="Thay đổi thông tin" />
-
-                    <Button fx:id="btnLuu" onMouseClicked="#handleLuu" prefWidth="200" styleClass="action-button" text="Lưu" />
+               <Button fx:id="btnThayDoiThongTin" onAction="#handleThayDoiThongTin" prefWidth="618.4" style="-fx-background-color: #8D6E63; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" text="Thay đổi thông tin" />
+               <Button fx:id="btnLuu" onAction="#handleLuu" prefWidth="618.4" style="-fx-background-color: #4E342E; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" text="Lưu" />
                 </VBox>
 
                 <VBox fx:id="formCard" alignment="TOP_CENTER" prefHeight="481.0" prefWidth="450.0" spacing="20.0" styleClass="form-card" stylesheets="@../values/account.css">
