@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
+<!-- Account.fxml -->
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -11,72 +11,55 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="480.0" prefWidth="800.0" styleClass="background" stylesheets="@../values/add_to_menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Account">
+<AnchorPane prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Account">
     <children>
-        <VBox spacing="10" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <VBox alignment="CENTER" spacing="10" styleClass="background" stylesheets="@../values/forget_password.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
-            <HBox alignment="CENTER" prefHeight="350.0" prefWidth="760.0" spacing="30">
+            <HBox alignment="CENTER" prefHeight="400.0" prefWidth="800.0" spacing="30">
 
-                <!-- Khung trái: Button -->
-                <VBox alignment="CENTER" prefWidth="300" spacing="20" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 0); -fx-padding: 20px;">
+                <VBox fx:id="infoCard" alignment="CENTER" prefWidth="300.0" spacing="20" styleClass="form-card" stylesheets="@../values/account.css">
+                    <ImageView fx:id="imgPreview" fitHeight="150" fitWidth="150" styleClass="avatar-preview">
+                        <image>
+                            <Image url="@../img/logo_1.png" />
+                        </image>
+                    </ImageView>
 
-                    <ImageView fx:id="imgPreview" fitHeight="180" fitWidth="180" style="-fx-background-radius: 8px; -fx-border-color: #E0E0E0; -fx-border-radius: 8px; -fx-border-width: 1px;">
-                  <image>
-                     <Image url="@../img/logo_1.png" />
-                  </image></ImageView>
+                    <Button fx:id="btnThayDoiThongTin" onMouseClicked="#handleThayDoiThongTin" prefWidth="200" styleClass="action-button" text="Thay đổi thông tin" />
 
-                    <Button fx:id="btnThayDoiThongTin" mnemonicParsing="false" onMouseClicked="#handleThayDoiThongTin" pickOnBounds="true" prefWidth="200" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" stylesheets="@../values/forget_password.css" text="Thay đổi thông tin" />
-               <Button fx:id="btnLuu" mnemonicParsing="false" onMouseClicked="#handleLuu" pickOnBounds="true" prefWidth="200" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px; -fx-font-weight: bold;" styleClass="button1" stylesheets="@../values/forget_password.css" text="Lưu" />
+                    <Button fx:id="btnLuu" onMouseClicked="#handleLuu" prefWidth="200" styleClass="action-button" text="Lưu" />
                 </VBox>
 
-                <!-- Khung phải: Form điền thông tin -->
-                <VBox alignment="TOP_LEFT" prefWidth="400" spacing="15" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 0); -fx-padding: 20px;">
-               <HBox alignment="CENTER" prefHeight="30.0" prefWidth="339.0">
-                  <children>
-                     <Label style="-fx-text-fill: #2C3E50; -fx-font-size: 18px; -fx-font-weight: bold;" text="THÔNG TIN TÀI KHOẢN" />
-                  </children>
-               </HBox>
-               <HBox alignment="CENTER" prefHeight="31.0" prefWidth="358.0">
-                  <children>
-                     <Label prefHeight="20.0" prefWidth="96.0" style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Họ tên:" />
-                          <TextField fx:id="txtHoTen" prefHeight="31.0" prefWidth="260.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
-                  </children>
-               </HBox>
-               <HBox alignment="CENTER" prefHeight="31.0" prefWidth="358.0">
-                  <children>
-                     <Label prefHeight="20.0" prefWidth="96.0" style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Email:" />
-                     <TextField fx:id="txtEmail" prefHeight="31.0" prefWidth="260.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
-                  </children>
-               </HBox>
-               <HBox alignment="CENTER" prefHeight="31.0" prefWidth="358.0">
-                  <children>
-                     <Label prefHeight="20.0" prefWidth="96.0" style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Điện thoại:" />
-                     <TextField fx:id="txtSoDienThoai" prefHeight="31.0" prefWidth="260.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
-                  </children>
-               </HBox>
-               <HBox alignment="CENTER" prefHeight="31.0" prefWidth="358.0">
-                  <children>
-                     <Label prefHeight="20.0" prefWidth="96.0" style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Tài khoản:" />
-                     <TextField fx:id="txtTaiKhoan" prefHeight="31.0" prefWidth="260.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
-                  </children>
-               </HBox>
-               <HBox alignment="CENTER" prefHeight="31.0" prefWidth="358.0">
-                  <children>
-                     <Label prefHeight="20.0" prefWidth="96.0" style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Mật khẩu:" />
-                     <TextField fx:id="txtMatKhau" prefHeight="31.0" prefWidth="260.0" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
-                  </children>
-               </HBox>
-                </VBox>
-                <padding>
-                    <Insets top="20.0" />
-                </padding>
+                <VBox fx:id="formCard" alignment="TOP_CENTER" prefHeight="481.0" prefWidth="450.0" spacing="20.0" styleClass="form-card" stylesheets="@../values/account.css">
+                    <HBox alignment="CENTER">
+                        <Label styleClass="form-title" text="THÔNG TIN TÀI KHOẢN" />
+                    </HBox>
 
+                    <HBox alignment="CENTER">
+                        <Label styleClass="form-label" text="Họ tên:" />
+                        <TextField fx:id="txtHoTen" styleClass="form-input" />
+                    </HBox>
+
+                    <HBox alignment="CENTER">
+                        <Label styleClass="form-label" text="Email:" />
+                        <TextField fx:id="txtEmail" styleClass="form-input" />
+                    </HBox>
+
+                    <HBox alignment="CENTER">
+                        <Label styleClass="form-label" text="Điện thoại:" />
+                        <TextField fx:id="txtSoDienThoai" styleClass="form-input" />
+                    </HBox>
+
+                    <HBox alignment="CENTER">
+                        <Label styleClass="form-label" text="Tài khoản:" />
+                        <TextField fx:id="txtTaiKhoan" styleClass="form-input" />
+                    </HBox>
+
+                    <HBox alignment="CENTER">
+                        <Label styleClass="form-label" text="Mật khẩu:" />
+                        <TextField fx:id="txtMatKhau" styleClass="form-input" />
+                    </HBox>
+                </VBox>
             </HBox>
-            <styleClass>
-                <String fx:value="add-header" />
-                <String fx:value="background" />
-            </styleClass>
-
         </VBox>
     </children>
 </AnchorPane>

@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,6 +22,18 @@ public class LoginController {
 
     @FXML
     private ImageView minimizeIcon; // Hình ảnh '_'
+
+    @FXML private HBox boxQuanLy;
+    @FXML private Button boxQuanLyButton;
+    @FXML private ImageView boxQuanLyImage;
+
+    @FXML
+    private void initialize() {
+        boxQuanLy.setOnMouseClicked(e -> handleOpenManagerDashboard());
+        boxQuanLyButton.setOnMouseClicked(e -> handleOpenManagerDashboard());
+        boxQuanLyImage.setOnMouseClicked(e -> handleOpenManagerDashboard());
+    }
+
 
     @FXML
     private void closeApp() {
