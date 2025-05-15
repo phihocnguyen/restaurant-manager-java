@@ -1,0 +1,16 @@
+.search-box{
+    -fx-background-color: white;
+    -fx-border-color: #BDBDBD;
+    -fx-border-radius: 100px;
+
+}
+
+.transparent{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.search-button{
+    -fx-background-color: #2C3E50;
+    -fx-background-radius: 30;
+}
+
