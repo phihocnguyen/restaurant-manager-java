@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.ProgressIndicator?>
 <AnchorPane prefHeight="760.8" prefWidth="1255.2" styleClass="fruit-background-left" stylesheets="@../values/menu_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.QL_ThucDonController">
    <children>
       <HBox layoutX="178.0" layoutY="116.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -139,21 +141,24 @@
                            </HBox.margin></HBox>
                      </children>
                   </HBox>
-                  <TableView fx:id="tableView" prefHeight="671.0" prefWidth="849.0" styleClass="table-right" stylesheets="@../values/menutab_style.css" VBox.vgrow="ALWAYS">
-                     <columns>
-                        <TableColumn fx:id="colMaSP" prefWidth="100" text="Mã sản phẩm" />
-                        <TableColumn fx:id="colTenSP" prefWidth="200" text="Tên sản phẩm" />
-                        <TableColumn fx:id="colLoaiSP" prefWidth="124.79998779296875" text="Loại sản phẩm" />
-                        <TableColumn fx:id="colGiaVon" prefWidth="75.20001220703125" text="Giá vốn" />
-                        <TableColumn fx:id="colGiaBan" prefWidth="100" text="Giá bán" />
-                        <TableColumn fx:id="colSoLuong" prefWidth="120" text="Số lượng còn lại" />
-                        <TableColumn fx:id="colXem" prefWidth="50" text="" />
-                        <TableColumn fx:id="colChinhSua" prefWidth="50" text="" />
-                     </columns>
-                     <VBox.margin>
-                        <Insets bottom="10.0" right="10.0" />
-                     </VBox.margin>
-                  </TableView>
+                  <StackPane>
+                     <TableView fx:id="tableView" prefHeight="671.0" prefWidth="849.0" styleClass="table-right" stylesheets="@../values/menutab_style.css" VBox.vgrow="ALWAYS">
+                        <columns>
+                           <TableColumn fx:id="colMaSP" prefWidth="100" text="Mã sản phẩm" />
+                           <TableColumn fx:id="colTenSP" prefWidth="200" text="Tên sản phẩm" />
+                           <TableColumn fx:id="colLoaiSP" prefWidth="124.79998779296875" text="Loại sản phẩm" />
+                           <TableColumn fx:id="colGiaVon" prefWidth="75.20001220703125" text="Giá vốn" />
+                           <TableColumn fx:id="colGiaBan" prefWidth="100" text="Giá bán" />
+                           <TableColumn fx:id="colSoLuong" prefWidth="120" text="Số lượng còn lại" />
+                           <TableColumn fx:id="colXem" prefWidth="50" text="" />
+                           <TableColumn fx:id="colChinhSua" prefWidth="50" text="" />
+                        </columns>
+                        <VBox.margin>
+                           <Insets bottom="10.0" right="10.0" />
+                        </VBox.margin>
+                     </TableView>
+                     <ProgressIndicator fx:id="spinner" visible="false" maxWidth="50" maxHeight="50" />
+                  </StackPane>
                </children>
             </VBox>
          </children>

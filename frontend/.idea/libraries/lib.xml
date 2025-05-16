@@ -2,11 +2,18 @@
   <library name="lib">
     <CLASSES>
       <root url="file://$USER_HOME$/Downloads/openjfx-23.0.2_windows-x64_bin-sdk/javafx-sdk-23.0.2/lib" />
-      <root url="file://C:/javafx-sdk-23.0.2/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../../javafx-sdk-23.0.2/lib" />
+      <root url="file://$USER_HOME$/Downloads/openjfx-24.0.1_windows-x64_bin-sdk/javafx-sdk-24.0.1/lib" />
+      <root url="jar://$USER_HOME$/Downloads/okhttp-4.12.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/kotlin-stdlib-1.6.20.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/okio-3.11.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/okio-jvm-3.11.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/json-20140107.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="file://C:/javafx-sdk-23.0.2/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../../../javafx-sdk-23.0.2/lib" recursive="false" />
     <jarDirectory url="file://$USER_HOME$/Downloads/openjfx-23.0.2_windows-x64_bin-sdk/javafx-sdk-23.0.2/lib" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Downloads/openjfx-24.0.1_windows-x64_bin-sdk/javafx-sdk-24.0.1/lib" recursive="false" />
   </library>
 </component>

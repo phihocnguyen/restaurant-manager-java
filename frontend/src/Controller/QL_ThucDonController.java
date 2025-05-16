@@ -1,15 +1,11 @@
 package Controller;
 
-
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,19 +17,27 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import Class.SanPham;
-
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QL_ThucDonController {
     @FXML
     private StackPane contentArea;
+
+    @FXML
+    private ProgressIndicator spinner;
+
     @FXML
     private HBox boxThemSanPham;
-
     @FXML
     private HBox boxXoaSanPham;
-
     @FXML
     private TableView<SanPham> tableView;
     @FXML
@@ -53,7 +57,14 @@ public class QL_ThucDonController {
     @FXML
     private TableColumn<SanPham, Void> colChinhSua;
 
+    private final OkHttpClient client = new OkHttpClient();
+
     public void initialize() {
+        setupTableView();
+        loadItemsFromAPI();
+    }
+
+    private void setupTableView() {
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         colMaSP.setCellValueFactory(new PropertyValueFactory<>("maSP"));
@@ -65,17 +76,75 @@ public class QL_ThucDonController {
 
         addButtonXem();
         addButtonChinhSua();
-
-        // Thêm dữ liệu mẫu
-        tableView.getItems().addAll(
-                new SanPham("MN01", "Khoai tây chiên", "FOOD", 30039, 49000, 0),
-                new SanPham("MN02", "Coca cola", "DRINK", 5000, 12000, 0),
-               new SanPham("MN03", "Khăn ướt", "OTHER", 5000, 14000, 0),
-                new SanPham("MN04", "Mirinda xá xị", "DRINK", 5000, 12000, 0)
-        );
     }
 
+    private void loadItemsFromAPI() {
+        javafx.application.Platform.runLater(() -> {
+            spinner.setVisible(true);
+            tableView.setDisable(true);
+        });
+        new Thread(() -> {
+            try {
+                Request request = new Request.Builder()
+                        .url("http://localhost:8080/items")
+                        .build();
 
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code " + response);
+                    }
+
+                    String responseData = response.body().string();
+                    List<SanPham> items = parseApiResponse(responseData);
+
+                    javafx.application.Platform.runLater(() -> {
+                        tableView.getItems().setAll(items);
+                        spinner.setVisible(false);
+                        tableView.setDisable(false);
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Handle error
+                javafx.application.Platform.runLater(() -> {
+                    // Show error or fallback data
+                    tableView.getItems().addAll(
+                            new SanPham("ERR", "Failed to load data", "ERROR", 0, 0, 0)
+                    );
+                });
+            }
+        }).start();
+    }
+
+    private List<SanPham> parseApiResponse(String jsonResponse) {
+        List<SanPham> items = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                // Skip deleted items
+                if (item.optBoolean("isdeleted", false)) {
+                    continue;
+                }
+
+                SanPham sanPham = new SanPham(
+                        String.valueOf(item.getInt("id")),
+                        item.getString("itemName"),
+                        item.getString("itemType"),
+                        item.getDouble("itemCprice"),
+                        item.getDouble("itemSprice"),
+                        (int) item.getDouble("instock")
+                );
+                items.add(sanPham);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    // Rest of your existing methods remain exactly the same
     public void showOverview() {
         try {
             Parent fxml = FXMLLoader.load(getClass().getResource("../views/manager_menutab.fxml"));
@@ -117,10 +186,7 @@ public class QL_ThucDonController {
                 return cell;
             }
         };
-
         colXem.setCellFactory(cellFactory);
-
-
     }
 
     private void addButtonChinhSua() {
@@ -155,11 +221,10 @@ public class QL_ThucDonController {
             }
         };
         colChinhSua.setCellFactory(cellFactory);
-
     }
+
     @FXML
     private void handleThemSanPham() {
-        // Animation click nhẹ
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), boxThemSanPham);
         scaleTransition.setToX(0.95);
         scaleTransition.setToY(0.95);
@@ -182,19 +247,18 @@ public class QL_ThucDonController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.centerOnScreen();
 
-            stage.showAndWait(); // block luồng tại đây -> chờ user đóng
+            stage.showAndWait();
 
-            // Sau khi user đóng AddToMenu -> remove trạng thái selected
-            boxThemSanPham.getStyleClass().remove("selected"); // <-- thêm dòng này
+            boxThemSanPham.getStyleClass().remove("selected");
             boxThemSanPham.setScaleX(1.0);
             boxThemSanPham.setScaleY(1.0);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleXoaSanPham() {
-        // Animation click nhẹ
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), boxXoaSanPham);
         scaleTransition.setToX(0.95);
         scaleTransition.setToY(0.95);
@@ -217,22 +281,13 @@ public class QL_ThucDonController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.centerOnScreen();
 
-            stage.showAndWait(); // block luồng tại đây -> chờ user đóng
+            stage.showAndWait();
 
-            // Sau khi user đóng AddToMenu -> remove trạng thái selected
-            boxXoaSanPham.getStyleClass().remove("selected"); // <-- thêm dòng này
+            boxXoaSanPham.getStyleClass().remove("selected");
             boxXoaSanPham.setScaleX(1.0);
             boxXoaSanPham.setScaleY(1.0);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
-
-
-
-
 }
-
-
