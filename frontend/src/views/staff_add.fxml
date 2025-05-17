@@ -53,7 +53,7 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="background" stylesheets="@../values/customer_style.css" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="button-add" stylesheets="@../values/customer_style.css" text="Xác nhận" />
+            <Button onAction="#onConfirmButtonClick" mnemonicParsing="false" prefWidth="200.0" styleClass="button-add" stylesheets="@../values/customer_style.css" text="Xác nhận" />
             <HBox prefHeight="100.0" prefWidth="50.0" />
             <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" styleClass="button-delete" stylesheets="@../values/customer_style.css" text="Hủy thông tin" />
             <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -80,7 +80,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="name" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -98,7 +98,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="phone" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -115,7 +115,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="address" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -132,7 +132,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="cccd" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -149,7 +149,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="role" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -166,7 +166,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="salary" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
