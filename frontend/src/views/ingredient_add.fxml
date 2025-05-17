@@ -62,7 +62,7 @@
                         <Image url="@../img/ingredient_icon_blue.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="btnEditThongTin" mnemonicParsing="false" onMouseClicked="#handleEditThongTin" pickOnBounds="true" prefWidth="200" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Thêm/ Cập nhật thông tin" />
+                  <Button fx:id="btnEditThongTin" mnemonicParsing="false" onMouseClicked="#handleSubmit" pickOnBounds="true" prefWidth="200" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Thêm/ Cập nhật thông tin" />
                   <Button fx:id="btnHuyThongTin" mnemonicParsing="false" onMouseClicked="#handleHuyThongTin" pickOnBounds="true" prefWidth="200" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Hủy thông tin" />
                </children>
                <HBox.margin>

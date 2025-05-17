@@ -30,13 +30,15 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/one/{menuItemId}")
-    public ResponseEntity<RecipeDto> addOneRecipeToMenuItem(@PathVariable int menuItemId, @RequestBody CreateRecipeDto dto) {
+    public ResponseEntity<RecipeDto> addOneRecipeToMenuItem(@PathVariable int menuItemId,
+            @RequestBody CreateRecipeDto dto) {
         RecipeDto saved = recipeService.addOneToExisting(menuItemId, dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @PostMapping("/recipes/many/{menuItemId}")
-    public ResponseEntity<List<RecipeDto>> addManyRecipesToMenuItem(@PathVariable int menuItemId, @RequestBody CreateManyRecipesDto dto) {
+    public ResponseEntity<List<RecipeDto>> addManyRecipesToMenuItem(@PathVariable int menuItemId,
+            @RequestBody CreateManyRecipesDto dto) {
         List<RecipeDto> saved = recipeService.addManyToExisting(menuItemId, dto);
         return new ResponseEntity<>(saved, HttpStatus.OK);
     }
@@ -48,13 +50,15 @@ public class RecipeController {
     }
 
     @PutMapping("/recipes/{menuItemId}")
-    public ResponseEntity<List<RecipeDto>> updateAllRecipes(@PathVariable int menuItemId, @RequestBody CreateManyRecipesDto dto) {
+    public ResponseEntity<List<RecipeDto>> updateAllRecipes(@PathVariable int menuItemId,
+            @RequestBody CreateManyRecipesDto dto) {
         List<RecipeDto> updated = recipeService.updateAll(menuItemId, dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @PatchMapping("/recipes/{menuItemId}/{ingreId}")
-    public ResponseEntity<RecipeDto> updateOneRecipe(@PathVariable int menuItemId, @PathVariable int ingreId, @RequestBody CreateRecipeDto dto) {
+    public ResponseEntity<RecipeDto> updateOneRecipe(@PathVariable int menuItemId, @PathVariable int ingreId,
+            @RequestBody CreateRecipeDto dto) {
         RecipeDto updated = recipeService.updateOne(menuItemId, ingreId, dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }

@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ProgressIndicator?>
 <AnchorPane prefHeight="760.8" prefWidth="1255.2" styleClass="fruit-background-left" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ManagerIngredient">
    <children>
       <VBox layoutX="10.0" layoutY="10.0" prefHeight="761.0" prefWidth="637.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -136,6 +137,7 @@
                   <Insets bottom="10.0" right="10.0" />
                </VBox.margin>
             </TableView>
+            <ProgressIndicator fx:id="spinner" visible="false" maxWidth="50" maxHeight="50" />
          </children>
       </VBox>
    </children>
