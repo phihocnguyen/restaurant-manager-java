@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);" styleClass="background" stylesheets="@../values/add_to_menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddToMenuController">
+<BorderPane prefHeight="600" prefWidth="900" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);" styleClass="background" stylesheets="@../values/add_to_menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddToMenuController">
    <top>
       <VBox prefHeight="86.0" prefWidth="800.0" styleClass="background" stylesheets="@../values/add_to_menu.css" BorderPane.alignment="CENTER">
          <children>

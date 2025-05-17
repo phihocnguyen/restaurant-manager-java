@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.DoubleStringConverter;
 import model.Ingredient;
@@ -19,8 +18,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class AddFoodController {
@@ -33,6 +34,8 @@ public class AddFoodController {
 
     @FXML
     private TableView<Ingredient> tableNguyenLieu;
+
+    private List<Object> copyList = new ArrayList<>();
 
     @FXML
     private TableColumn<Ingredient, String> colTenNguyenLieu;
@@ -87,7 +90,6 @@ public class AddFoodController {
                                 json,
                                 new TypeReference<List<Ingredient>>() {}
                         );
-
                         // Lọc các nguyên liệu chưa bị xoá
                         List<Ingredient> filtered = ingredients.stream()
                                 .filter(ingredient -> !ingredient.isIsdeleted())
@@ -112,6 +114,10 @@ public class AddFoodController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/add_other.fxml"));
             Parent newContent = loader.load();
+
+            AddOther addOtherController = loader.getController();
+            addOtherController.setType("FOOD");
+            addOtherController.setCopyList(copyList);
 
             contentArea.getChildren().clear(); // Chỉ clear vùng content thôi
             contentArea.getChildren().add(newContent); // Add giao diện mới vô
@@ -145,14 +151,13 @@ public class AddFoodController {
             System.out.println("Số lượng không hợp lệ, mặc định dùng 1.0");
         }
 
-        // Tìm nguyên liệu đã có trong bảng
         Ingredient existing = tableNguyenLieu.getItems().stream()
                 .filter(item -> item.getId() == selected.getId())
                 .findFirst()
                 .orElse(null);
 
         if (existing == null) {
-            // Thêm nguyên liệu mới với số lượng lấy từ TextField
+            // Thêm vào bảng TableView
             Ingredient clone = new Ingredient(
                     selected.getId(),
                     selected.getIngreName(),
@@ -161,15 +166,38 @@ public class AddFoodController {
                     selected.isIsdeleted()
             );
             tableNguyenLieu.getItems().add(clone);
+
+            // Thêm vào copyList
+            Map<String, Object> item = new HashMap<>();
+            item.put("id", selected.getId());
+            item.put("ingreKg", quantityToAdd);
+            copyList.add(item);
         } else {
-            // Tăng số lượng nguyên liệu đã có bằng số lượng lấy từ TextField
+            // Tăng số lượng trong TableView
             existing.setInstockKg(existing.getInstockKg() + quantityToAdd);
             tableNguyenLieu.refresh();
+
+            for (Object obj : copyList) {
+                if (obj instanceof Map) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> map = (Map<String, Object>) obj;
+
+                    Object id = map.get("id");
+                    if (id instanceof Integer) {
+                        Object kgObj = map.get("ingreKg");
+                        if (kgObj instanceof Number) {
+                            double oldKg = ((Number) kgObj).doubleValue();
+                            map.put("ingreKg", oldKg + quantityToAdd);
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
-        // Clear hoặc reset số lượng input nếu muốn
         txtSoLuong.clear();
     }
+
 
 
 
