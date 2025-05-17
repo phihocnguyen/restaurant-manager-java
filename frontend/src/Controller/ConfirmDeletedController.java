@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import model.Customer;
 import model.Employee;
 import model.Ingredient;
 import okhttp3.*;
@@ -19,6 +20,8 @@ public class ConfirmDeletedController {
     private Ingredient ingredientToDelete;
 
     private Employee employeeToDelete;
+
+    private Customer customerToDelete;
     private final OkHttpClient httpClient = new OkHttpClient();
 
     public void setIngredientToDelete(Ingredient ingredient) {
@@ -27,6 +30,10 @@ public class ConfirmDeletedController {
 
     public void setEmployeeToDelete(Employee employee) {
         this.employeeToDelete = employee;
+    }
+
+    public void setCustomerToDelete(Customer customer) {
+        this.customerToDelete = customer;
     }
 
     @FXML
@@ -45,8 +52,10 @@ public class ConfirmDeletedController {
         String url;
         if (ingredientToDelete != null) {
             url = "http://localhost:8080/ingredients/" + ingredientToDelete.getId();
-        } else {
+        } else if (employeeToDelete != null) {
             url = "http://localhost:8080/employees/" + employeeToDelete.getId();
+        } else {
+            url = "http://localhost:8080/customers/" + customerToDelete.getId();
         }
 
         Request request = new Request.Builder()
@@ -67,7 +76,7 @@ public class ConfirmDeletedController {
                 javafx.application.Platform.runLater(() -> {
                     if (response.isSuccessful()) {
                         showAlert(Alert.AlertType.INFORMATION, "Thành công",
-                                (ingredientToDelete != null ? "Xóa nguyên liệu" : "Xóa nhân viên") + " thành công");
+                                (ingredientToDelete != null ? "Xóa nguyên liệu" : employeeToDelete != null ? "Xóa nhân viên" : "Xóa khách hàng") + " thành công");
                         Stage stage = (Stage) btnXoa.getScene().getWindow();
                         stage.close();
                     } else {

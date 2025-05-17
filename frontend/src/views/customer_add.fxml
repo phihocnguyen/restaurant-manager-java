@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);" styleClass="background" stylesheets="@../values/add_to_ingredient.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IngredientAdd">
+<BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF ,#E3F2FD);" styleClass="background" stylesheets="@../values/add_to_ingredient.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerAdd">
    <top>
       <VBox prefHeight="46.0" prefWidth="800.0" styleClass="background" stylesheets="@../values/add_to_ingredient.css" BorderPane.alignment="CENTER">
          <children>
@@ -34,7 +34,7 @@
                      </HBox.margin>
                   </Label>
                   <HBox prefHeight="50.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <ImageView fx:id="exitButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onExitButtonClick" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                  <ImageView fx:id="exitButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#handleCancel" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
                         <Image url="@../img/exit.png" />
                      </image>
@@ -53,7 +53,7 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="background" stylesheets="@../values/customer_style.css" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="button-add" stylesheets="@../values/customer_style.css" text="Xác nhận" />
+            <Button onAction="#handleConfirm" mnemonicParsing="false" prefWidth="200.0" styleClass="button-add" stylesheets="@../values/customer_style.css" text="Xác nhận" />
             <HBox prefHeight="100.0" prefWidth="50.0" />
             <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" styleClass="button-delete" stylesheets="@../values/customer_style.css" text="Hủy thông tin" />
             <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -80,7 +80,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="name" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -98,7 +98,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="phone" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -115,7 +115,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="address" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -132,7 +132,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="cccd" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -149,7 +149,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="email" styleClass="input-field" stylesheets="@../values/customer_style.css" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
