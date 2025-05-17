@@ -57,8 +57,8 @@ public class AddToMenuController {
     @FXML
     private void onExitButtonClick() {
 
-            Stage stage = (Stage) exitButton.getScene().getWindow();
-            stage.close();
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
 
     }
 

@@ -36,15 +36,15 @@
                     <Label style="-fx-text-fill: #2C3E50; -fx-font-size: 16px; -fx-font-weight: bold;" text="Giá bán:" />
                     <TextField fx:id="txtGiaBan" prefWidth="300" promptText="Nhập giá bán" style="-fx-font-size: 15px; -fx-pref-height: 40px;" />
                 </VBox>
-            <padding>
-               <Insets top="20.0" />
-            </padding>
+                <padding>
+                    <Insets top="20.0" />
+                </padding>
 
             </HBox>
-         <styleClass>
-            <String fx:value="add-header" />
-            <String fx:value="background" />
-         </styleClass>
+            <styleClass>
+                <String fx:value="add-header" />
+                <String fx:value="background" />
+            </styleClass>
 
         </VBox>
     </children>

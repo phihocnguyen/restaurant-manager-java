@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Optional;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class LoginController {
@@ -32,6 +37,7 @@ public class LoginController {
         boxQuanLy.setOnMouseClicked(e -> handleOpenManagerDashboard());
         boxQuanLyButton.setOnMouseClicked(e -> handleOpenManagerDashboard());
         boxQuanLyImage.setOnMouseClicked(e -> handleOpenManagerDashboard());
+        test();
     }
 
 
@@ -114,6 +120,18 @@ public class LoginController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void test(){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url("https://jsonplaceholder.typicode.com/todos/1").build();
+
+        try(Response response = client.newCall(request).execute()){
+            String body = response.body().string();
+            System.out.println(body);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

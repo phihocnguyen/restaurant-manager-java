@@ -48,13 +48,13 @@
             <HBox prefHeight="10.0" prefWidth="10.0" />
             <HBox prefHeight="46.0" prefWidth="800.0">
                <children>
-                     <ComboBox fx:id="cbLoaiMon" prefWidth="220" promptText="Chọn loại món" style="-fx-font-size: 15px; -fx-pref-height: 40px;">
+                  <ComboBox fx:id="cbLoaiMon" prefWidth="220" promptText="Chọn loại món" style="-fx-font-size: 15px; -fx-pref-height: 40px;">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
                   </ComboBox>
 
-                     <Button fx:id="btnLuuMon" mnemonicParsing="false" onMouseClicked="#handleLuuMon" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Thêm / Lưu món ăn">
+                  <Button fx:id="btnLuuMon" mnemonicParsing="false" onMouseClicked="#handleLuuMon" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-pref-height: 40px;" text="Thêm / Lưu món ăn">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

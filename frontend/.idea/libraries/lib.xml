@@ -9,6 +9,9 @@
       <root url="jar://$USER_HOME$/Downloads/okio-3.11.0.jar!/" />
       <root url="jar://$USER_HOME$/Downloads/okio-jvm-3.11.0.jar!/" />
       <root url="jar://$USER_HOME$/Downloads/json-20140107.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jackson-databind-2.19.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jackson-core-2.19.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jackson-annotations-2.19.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
