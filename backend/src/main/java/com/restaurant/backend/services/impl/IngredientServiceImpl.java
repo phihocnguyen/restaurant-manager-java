@@ -41,7 +41,8 @@ public class IngredientServiceImpl implements IngredientService {
 
     public IngredientDto updateIngredient(int id, CreateIngreDto dto) {
         Optional<Ingredient> found = ingredientRepository.findById(id);
-        if (!found.isPresent()) return null;
+        if (!found.isPresent())
+            return null;
 
         Ingredient updated = ingredientMapper.mapTo(dto);
         updated.setId(id);
@@ -50,20 +51,26 @@ public class IngredientServiceImpl implements IngredientService {
 
     public IngredientDto partialUpdateIngredient(int id, CreateIngreDto dto) {
         Optional<Ingredient> found = ingredientRepository.findById(id);
-        if (!found.isPresent()) return null;
+        if (!found.isPresent())
+            return null;
 
         Ingredient ingre = found.get();
-        if (dto.getIngreName() != null) ingre.setIngreName(dto.getIngreName());
-        if (dto.getIngrePrice() != null) ingre.setIngrePrice(dto.getIngrePrice());
-        if (dto.getInstockKg() != null) ingre.setInstockKg(dto.getInstockKg());
-        if (dto.getIsdeleted() != null) ingre.setIsdeleted(dto.getIsdeleted());
+        if (dto.getIngreName() != null)
+            ingre.setIngreName(dto.getIngreName());
+        if (dto.getIngrePrice() != null)
+            ingre.setIngrePrice(dto.getIngrePrice());
+        if (dto.getInstockKg() != null)
+            ingre.setInstockKg(dto.getInstockKg());
+        if (dto.getIsdeleted() != null)
+            ingre.setIsdeleted(dto.getIsdeleted());
 
         return ingredientMapper.mapFrom(ingredientRepository.save(ingre));
     }
 
     public boolean softDeleteIngredient(int id) {
         Optional<Ingredient> found = ingredientRepository.findById(id);
-        if (!found.isPresent()) return false;
+        if (!found.isPresent())
+            return false;
 
         Ingredient ingre = found.get();
         ingre.setIsdeleted(true);
@@ -76,4 +83,3 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
 }
-

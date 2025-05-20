@@ -1,47 +1,37 @@
 package com.restaurant.backend.domains.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.math.BigDecimal;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 @Entity
 @Table(name = "stockin_details_ingre")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StockinDetailsIngre {
-    @SequenceGenerator(name = "stockin_details_ingre_id_gen", sequenceName = "stockin_sto_id_seq", allocationSize = 1)
     @EmbeddedId
     private StockinDetailsIngreId id;
 
+    @ManyToOne
     @MapsId("stoId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "sto_id", nullable = false)
-    private Stockin sto;
+    @JoinColumn(name = "sto_id")
+    private Stockin stockin;
 
+    @ManyToOne
     @MapsId("ingreId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "ingre_id", nullable = false)
-    private Ingredient ingre;
+    @JoinColumn(name = "ingre_id")
+    private Ingredient ingredient;
 
-    @NotNull
     @Column(name = "quantity_kg", nullable = false)
     private Double quantityKg;
 
-    @ColumnDefault("0")
-    @Column(name = "total_cprice", precision = 18, scale = 2)
-    private BigDecimal totalCprice;
+    @Column(name = "cprice", nullable = false, columnDefinition = "NUMERIC(18,2)")
+    private Double cPrice;
 
-    @NotNull
-    @Column(name = "cprice", nullable = false, precision = 18, scale = 2)
-    private BigDecimal cprice;
-
+    @Column(name = "total_cprice", columnDefinition = "NUMERIC(18,2)")
+    private Double totalCPrice;
 }

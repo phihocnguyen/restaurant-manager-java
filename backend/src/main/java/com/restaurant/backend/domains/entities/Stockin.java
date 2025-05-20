@@ -1,31 +1,35 @@
 package com.restaurant.backend.domains.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 @Entity
 @Table(name = "stockin")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Stockin {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stockin_id_gen")
-    @SequenceGenerator(name = "stockin_id_gen", sequenceName = "stockin_sto_id_seq", allocationSize = 1)
-    @Column(name = "sto_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "sto_id")
     private Integer id;
 
-    @NotNull
-    @Column(name = "sto_date", nullable = false)
-    private Instant stoDate;
+    @Column(name = "sto_date")
+    private Instant date;
 
-    @NotNull
-    @Column(name = "sto_price", nullable = false, precision = 18, scale = 2)
-    private BigDecimal stoPrice;
+    @Column(name = "sto_price", nullable = false)
+    private Double price;
 
+    @OneToMany(mappedBy = "stockin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StockinDetailsIngre> stockinDetailsIngres;
+
+    @OneToMany(mappedBy = "stockin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StockinDetailsDrinkOther> stockinDetailsDrinkOthers;
 }

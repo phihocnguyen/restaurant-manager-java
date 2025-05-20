@@ -36,8 +36,8 @@ public class MenuItemController {
     }
 
     @PutMapping(path="/items/{id}")
-    public ResponseEntity<MenuItemDto> updateMenuItem(@RequestBody CreateMenuItemDto createMenuItemDto, @PathVariable int id) {
-        MenuItemDto updated = this.menuItemService.updateMenuItem(id, createMenuItemDto);
+    public ResponseEntity<MenuItemDto> updateMenuItem(@RequestBody UpdateMenuItemDto updateMenuItemDto, @PathVariable int id) {
+        MenuItemDto updated = this.menuItemService.updateMenuItem(id, updateMenuItemDto);
         return updated != null ? new ResponseEntity<>(updated, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
