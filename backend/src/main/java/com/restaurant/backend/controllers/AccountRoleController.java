@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,5 +33,10 @@ public class AccountRoleController {
             return new ResponseEntity<>(Optional.of(accountRoleDto), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    @GetMapping(path="/account-role")
+    public ResponseEntity<List<AccountRoleDto>> getAccountRoles() {
+        List<AccountRoleDto> accountRoleDtos = this.accountRoleService.findAll();
+        return new ResponseEntity<>(accountRoleDtos, HttpStatus.OK);
     }
 }
