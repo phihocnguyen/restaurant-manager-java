@@ -7,7 +7,7 @@
 **Canva Seminar**: [Seminar Canva](https://www.canva.com/design/DAGk8VQ4u58/rpEZ9t3Q2prsLA3pA32Edg/edit?fbclid=IwY2xjawJuixVleHRuA2FlbQIxMAABHtE7e26cICxsO9vdGyeiiU5Mm_eRIei_N0rvzFAJy07WXKU8wE6L1KDmT4Vd_aem_yF9qLXNLk2UDTUiRqUdoVw)
 
 ### Report
-**Report:** coming soon
+**Report:** [Report Doc](https://uithcm-my.sharepoint.com/:w:/g/personal/23520427_ms_uit_edu_vn/Ec9cx326v_RBnkau-L_4ecgBSkIkHmf5Pz4EtRPUGTe3aw?e=tmOj1F)
 
 **Bảng Mô Tả**: [Project Description Excel](https://docs.google.com/spreadsheets/d/1ukPD_1PHJN-LYYO5pez278NvOpRXy46hrdf_Nv1-tdo/edit?gid=0#gid=0)
 
