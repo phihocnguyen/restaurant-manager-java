@@ -19,7 +19,7 @@ public class UpdateAccountDto {
 
     private String accDisplayname = "User";
 
-    private String accGender = "unknown";
+    private Boolean accGender = false;
 
     private LocalDate accBday = LocalDate.now();
 

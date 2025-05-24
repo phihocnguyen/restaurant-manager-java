@@ -38,10 +38,11 @@ public class Account {
     @Column(name = "acc_displayname", nullable = false, length = 100)
     private String accDisplayname;
 
-    @Size(max = 5)
+
     @NotNull
-    @Column(name = "acc_gender", nullable = false, length = 7)
-    private String accGender;
+    @ColumnDefault("false")
+    @Column(name = "acc_gender", nullable = false)
+    private Boolean accGender;
 
     @NotNull
     @Column(name = "acc_bday", nullable = false)
