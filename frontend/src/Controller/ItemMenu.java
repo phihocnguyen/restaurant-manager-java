@@ -19,4 +19,5 @@ public class ItemMenu {
     public void setData(Menu mon) {
         name.setText(mon.getName());
     }
+
 }

@@ -1,37 +1,48 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Table {
     private int id;
-    private String name;
-    private String state;
 
-    public Table(int id, String name, String state) {
+    @JsonProperty("tabNum")
+    private int tabNum;
+
+    @JsonProperty("tabStatus")
+    private boolean tabStatus;
+
+    @JsonProperty("isdeleted")
+    private boolean isDeleted;
+
+    public Table() {} // Required for Jackson
+
+    public Table(int id, int tabNum, boolean tabStatus, boolean isDeleted) {
         this.id = id;
-        this.name = name;
-        this.state = state;
+        this.tabNum = tabNum;
+        this.tabStatus = tabStatus;
+        this.isDeleted = isDeleted;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getTabNum() {
+        return tabNum;
     }
 
-    public String getName() {
-        return name;
+    public boolean isTabStatus() {
+        return tabStatus;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+    public boolean isActive() {
+        return tabStatus; // nếu active = tabStatus
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
+    public boolean isBooked() {
+        return false; // hoặc ánh xạ thêm nếu có field riêng
     }
 }

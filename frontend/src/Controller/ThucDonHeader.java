@@ -12,11 +12,8 @@ public class ThucDonHeader {
     private Button btnThucDon;
 
     public void setMainController(ManagerMenu controller) {
-        this.managerMenu = controller;
-    }
 
-    @FXML
-    public void initialize() {
+        this.managerMenu = controller;
         btnThucDon.setOnAction(e -> {
             managerMenu.switchToThucDon();
         });
@@ -24,5 +21,10 @@ public class ThucDonHeader {
         btnPhongBan.setOnAction(e -> {
             managerMenu.switchToPhongBan();
         });
+    }
+
+    @FXML
+    public void initialize() {
+
     }
 }
