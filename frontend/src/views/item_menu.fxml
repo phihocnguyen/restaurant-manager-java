@@ -10,7 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="208.0" prefWidth="231.0" stylesheets="@../values/menu_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ItemMenu">
+<AnchorPane prefHeight="208.0" prefWidth="231.0" stylesheets="@../values/menu_style.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.ItemMenu">
    <children>
       <VBox prefHeight="219.0" prefWidth="231.0" styleClass="fruit-background">
          <children>
@@ -18,15 +20,12 @@
                <children>
                   <StackPane alignment="BOTTOM_CENTER" prefHeight="142.0" prefWidth="199.0">
                      <children>
-                        <ImageView fx:id="img" fitHeight="165.0" fitWidth="199.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="itemImage" fitHeight="165.0" fitWidth="199.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imgfood/bunBoHue.png" />
                            </image>
-                           <StackPane.margin>
-                              <Insets />
-                           </StackPane.margin>
                         </ImageView>
-                        <Label fx:id="price" styleClass="menu-lblPrice" stylesheets="@../values/menu_style.css" text="30,0000">
+                        <Label fx:id="itemPriceLabel" styleClass="menu-lblPrice" stylesheets="@../values/menu_style.css" text="30,0000">
                            <font>
                               <Font name="Cambria" size="28.0" />
                            </font>
@@ -43,7 +42,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="51.0" prefWidth="231.0" styleClass="menu-lblName" stylesheets="@../values/menu_style.css">
                <children>
-                  <Label fx:id="name" text="Bún bò Huế">
+                  <Label fx:id="itemNameLabel" text="Bún bò Huế">
                      <font>
                         <Font name="Cambria Bold" size="28.0" />
                      </font>

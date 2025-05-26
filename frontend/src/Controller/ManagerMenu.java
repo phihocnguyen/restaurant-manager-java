@@ -8,15 +8,14 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.beans.value.ChangeListener;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ManagerMenu {
 
@@ -49,7 +48,12 @@ public class ManagerMenu {
 
     private Map<Tab, TableListController> tabControllers = new HashMap<>();
     private Map<Tab, Node> tabViews = new HashMap<>();
+
+    private Map<Tab, MenuListController> menuTabControllers = new HashMap<>();
+    private Map<Tab, Node> menuTabViews = new HashMap<>();
+
     private ChangeListener<Tab> phongBanTabChangeListener;
+
 
     @FXML
     public void initialize() {
@@ -95,21 +99,48 @@ public class ManagerMenu {
         loadHeader("views/ThucDonHeader.fxml", true);
         updateButtonStyles(true);
 
+        // Remove phongBanTabChangeListener nếu còn
         if (phongBanTabChangeListener != null) {
             menuTabPane.getSelectionModel().selectedItemProperty().removeListener(phongBanTabChangeListener);
             phongBanTabChangeListener = null;
         }
 
+        // Xóa các tab cũ đi
         menuTabPane.getTabs().clear();
-        menuTabPane.getTabs().addAll(
-                new Tab("Tất cả"),
-                new Tab("Món ăn"),
-                new Tab("Nước uống"),
-                new Tab("Khác")
-        );
+        menuTabControllers.clear();
+        menuTabViews.clear();
 
-        menuTabPane.getSelectionModel().selectFirst();
+        // Tạo các tab thực đơn
+        Tab tabAll = new Tab("Tất cả");
+        Tab tabFood = new Tab("Món ăn");
+        Tab tabDrink = new Tab("Nước uống");
+        Tab tabOther = new Tab("Khác");
+
+        try {
+            menuTabViews.put(tabAll, loadMenuListView(tabAll, "all"));
+            menuTabViews.put(tabFood, loadMenuListView(tabFood, "food"));
+            menuTabViews.put(tabDrink, loadMenuListView(tabDrink, "drink"));
+            menuTabViews.put(tabOther, loadMenuListView(tabOther, "other"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        tabAll.setContent(menuTabViews.get(tabAll));
+        tabFood.setContent(menuTabViews.get(tabFood));
+        tabDrink.setContent(menuTabViews.get(tabDrink));
+        tabOther.setContent(menuTabViews.get(tabOther));
+
+        menuTabPane.getTabs().addAll(tabAll, tabFood, tabDrink, tabOther);
+        menuTabPane.getSelectionModel().select(tabAll);
+
+        menuTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab != null && menuTabControllers.containsKey(newTab)) {
+                MenuListController controller = menuTabControllers.get(newTab);
+                controller.refreshMenuItems();
+            }
+        });
     }
+
 
     public void switchToPhongBan() {
         loadHeader("views/PhongBanHeader.fxml", false);
@@ -165,6 +196,17 @@ public class ManagerMenu {
         return view;
     }
 
+    private Node loadMenuListView(Tab tab, String filter) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/menu_list.fxml")); // giả sử view này bạn đã có
+        Node view = loader.load();
+        MenuListController controller = loader.getController();
+        controller.setFilter(filter);
+        controller.refreshMenuItems();
+        menuTabControllers.put(tab, controller);
+        return view;
+    }
+
+
     private void updateButtonStyles(boolean isThucDon) {
         btnThucDon.getStyleClass().removeAll("button_menu", "tab-right");
         btnPhongBan.getStyleClass().removeAll("button_menu", "tab-left");
@@ -207,4 +249,12 @@ public class ManagerMenu {
             tableListController.refreshTables();
         }
     }
+
+    public void refreshMenuList() {
+        Tab selectedTab = menuTabPane.getSelectionModel().getSelectedItem();
+        if (selectedTab != null && menuTabControllers.containsKey(selectedTab)) {
+            menuTabControllers.get(selectedTab).refreshMenuItems();
+        }
+    }
+
 }
