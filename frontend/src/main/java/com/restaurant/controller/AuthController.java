@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AuthController {
 
+    @GetMapping("/")
+    public String indexPage(Model model) {
+        model.addAttribute("title", "Trang chủ - Restaurant Manager");
+        return "index";
+    }
+
     @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("title", "Đăng nhập - Restaurant Manager");

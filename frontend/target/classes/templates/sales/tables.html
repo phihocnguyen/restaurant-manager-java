@@ -90,12 +90,9 @@
                         </a>
                     </div>
                     <div class="flex items-center w-full sm:w-auto">
-                        <div class="bg-amber-100 p-2 rounded-xl mr-3">
-                            <i class="fas fa-search text-amber-600"></i>
-                        </div>
                         <div class="relative flex-1 sm:w-96">
                             <input type="text" class="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all" placeholder="Tìm tên bàn tại đây...">
-                            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 gradient-bg text-white rounded-lg hover:opacity-90 transition-all">
+                            <button class="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 gradient-bg text-white rounded-lg hover:opacity-90 transition-all">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -123,11 +120,11 @@
                 <!-- Tables Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Active Table 1 -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="active">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="active">
                         <div class="h-48 table-active flex items-center justify-center">
                             <i class="fas fa-utensils text-white text-4xl"></i>
                         </div>
-                        <div class="p-5">
+                        <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-gray-900">Bàn 1</h3>
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
@@ -137,8 +134,7 @@
                             </div>
                             <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Khách: Nguyễn Văn A</p>
                             <p class="text-sm text-gray-500 mb-4">Thời gian: 14:30 • 3 món đã gọi</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-green-600">285.000đ</span>
+                            <div class="flex items-center justify-between mt-auto">
                                 <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
                                     <i class="fas fa-eye mr-1"></i>
                                     Xem chi tiết
@@ -148,11 +144,11 @@
                     </div>
 
                     <!-- Active Table 2 -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="active">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="active">
                         <div class="h-48 table-active flex items-center justify-center">
                             <i class="fas fa-utensils text-white text-4xl"></i>
                         </div>
-                        <div class="p-5">
+                        <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-gray-900">Bàn 3</h3>
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
@@ -162,8 +158,7 @@
                             </div>
                             <p class="text-sm text-gray-600 mb-2">6 chỗ ngồi • Khách: Trần Thị B</p>
                             <p class="text-sm text-gray-500 mb-4">Thời gian: 15:15 • 5 món đã gọi</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-green-600">450.000đ</span>
+                            <div class="flex items-center justify-between mt-auto">
                                 <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
                                     <i class="fas fa-eye mr-1"></i>
                                     Xem chi tiết
@@ -173,11 +168,14 @@
                     </div>
 
                     <!-- Empty Tables -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="empty">
-                        <div class="h-48 table-empty flex items-center justify-center">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="empty">
+                         <div class="relative h-48 table-empty flex items-center justify-center">
                             <i class="fas fa-chair text-white text-4xl"></i>
+                             <button class="absolute top-3 right-3 p-1 text-white hover:opacity-80 transition-all" onclick="changeTableStatus(this, 'active')" title="Chuyển sang Đang hoạt động">
+                                 <i class="fas fa-ellipsis-v text-lg"></i>
+                             </button>
                         </div>
-                        <div class="p-5">
+                        <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-gray-900">Bàn 2</h3>
                                 <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
@@ -187,22 +185,25 @@
                             </div>
                             <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Sẵn sàng phục vụ</p>
                             <p class="text-sm text-gray-500 mb-4">Lần cuối dọn: 13:45</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-gray-400">0đ</span>
-                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
-                                    <i class="fas fa-plus mr-1"></i>
-                                    Chọn bàn
+                            <div class="flex items-center justify-between gap-2 mt-auto">
+                                <button class="w-1/2 px-3 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-all shadow-md flex items-center justify-center" onclick="openBookingModal('Bàn 2')">
+                                    <i class="fas fa-calendar-plus mr-1.5"></i>
+                                    Đặt bàn
+                                </button>
+                                <button class="w-1/2 px-3 py-2.5 bg-green-500 text-white text-sm font-medium rounded-xl hover:bg-green-600 transition-all shadow-md flex items-center justify-center" onclick="startServing('Bàn 2')">
+                                    <i class="fas fa-utensils mr-1.5"></i>
+                                    Phục vụ
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Booking Table -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="booking">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="booking">
                         <div class="h-48 table-booking flex items-center justify-center">
                             <i class="fas fa-calendar-alt text-white text-4xl"></i>
                         </div>
-                        <div class="p-5">
+                        <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-gray-900">Bàn 4</h3>
                                 <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
@@ -212,8 +213,7 @@
                             </div>
                             <p class="text-sm text-gray-600 mb-2">6 chỗ ngồi • Khách: Lê Văn C</p>
                             <p class="text-sm text-gray-500 mb-4">Thời gian đặt: 18:00 • SĐT: 0912345678</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-orange-600">Đã đặt</span>
+                            <div class="flex items-center justify-between mt-auto">
                                 <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
                                     <i class="fas fa-check mr-1"></i>
                                     Xác nhận
@@ -223,11 +223,14 @@
                     </div>
 
                     <!-- More Empty Tables -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="empty">
-                        <div class="h-48 table-empty flex items-center justify-center">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="empty">
+                         <div class="relative h-48 table-empty flex items-center justify-center">
                             <i class="fas fa-chair text-white text-4xl"></i>
+                             <button class="absolute top-3 right-3 p-1 text-white hover:opacity-80 transition-all" onclick="changeTableStatus(this, 'active')" title="Chuyển sang Đang hoạt động">
+                                 <i class="fas fa-ellipsis-v text-lg"></i>
+                             </button>
                         </div>
-                        <div class="p-5">
+                        <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-gray-900">Bàn 5</h3>
                                 <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
@@ -237,21 +240,23 @@
                             </div>
                             <p class="text-sm text-gray-600 mb-2">8 chỗ ngồi • Sẵn sáng phục vụ</p>
                             <p class="text-sm text-gray-500 mb-4">Lần cuối dọn: 14:20</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-gray-400">0đ</span>
-                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
-                                    <i class="fas fa-plus mr-1"></i>
-                                    Chọn bàn
+                            <div class="flex items-center justify-between mt-auto">
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="openBookingModal('Bàn 5')">
+                                    <i class="fas fa-calendar-plus mr-1"></i>
+                                    Đặt bàn
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="empty">
-                        <div class="h-48 table-empty flex items-center justify-center">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="empty">
+                         <div class="relative h-48 table-empty flex items-center justify-center">
                             <i class="fas fa-chair text-white text-4xl"></i>
+                             <button class="absolute top-3 right-3 p-1 text-white hover:opacity-80 transition-all" onclick="changeTableStatus(this, 'active')" title="Chuyển sang Đang hoạt động">
+                                 <i class="fas fa-ellipsis-v text-lg"></i>
+                             </button>
                         </div>
-                        <div class="p-5">
+                        <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-gray-900">Bàn 6</h3>
                                 <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
@@ -261,11 +266,10 @@
                             </div>
                             <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Sẵn sáng phục vụ</p>
                             <p class="text-sm text-gray-500 mb-4">Lần cuối dọn: 12:30</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-gray-400">0đ</span>
-                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
-                                    <i class="fas fa-plus mr-1"></i>
-                                    Chọn bàn
+                            <div class="flex items-center justify-between mt-auto">
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="openBookingModal('Bàn 6')">
+                                    <i class="fas fa-calendar-plus mr-1"></i>
+                                    Đặt bàn
                                 </button>
                             </div>
                         </div>
@@ -296,13 +300,29 @@
                     </div>
 
                     <!-- Order Status -->
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 mb-6">
-                        <div class="text-center">
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 mb-6" id="orderStatus">
+                        <div class="text-center" id="noTableSelected">
                             <div class="bg-gradient-to-br from-orange-400 to-pink-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                 <i class="fas fa-table text-white text-2xl"></i>
                             </div>
                             <h3 class="text-lg font-bold text-gray-900 mb-2">Chưa chọn bàn nào</h3>
                             <p class="text-sm text-gray-600">Vui lòng chọn bàn để bắt đầu phục vụ</p>
+                        </div>
+                        <div class="hidden" id="tableDetails">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold text-gray-900" id="selectedTableTitle">Bàn 1</h3>
+                                <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                    <i class="fas fa-circle text-green-500 mr-1"></i>
+                                    <span id="selectedTableStatus">Đang phục vụ</span>
+                                </span>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600" id="customerInfo">Khách hàng: Chưa có thông tin</p>
+                                <p class="text-sm text-gray-500" id="bookingInfo">Thời gian: --:--</p>
+                            </div>
+                            <div class="space-y-3" id="orderItems">
+                                <!-- Order items will be dynamically inserted here -->
+                            </div>
                         </div>
                     </div>
 
@@ -376,94 +396,60 @@
         </div>
     </div>
 
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-900">Đặt bàn</h3>
+                <button onclick="closeBookingModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="bookingForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Bàn số</label>
+                    <input type="text" id="tableNumber" class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên khách hàng</label>
+                    <input type="text" class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
+                    <input type="tel" class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày đặt</label>
+                    <input type="date" class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Giờ đặt</label>
+                    <input type="time" class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số người</label>
+                    <input type="number" min="1" class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
+                    <textarea class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" rows="3"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeBookingModal()" class="px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all">
+                        Hủy
+                    </button>
+                    <button type="submit" class="px-4 py-2 gradient-bg text-white rounded-xl hover:opacity-90 transition-all">
+                        Xác nhận đặt bàn
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <script>
-        // Add interactive functionality
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                // Add click animation
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
-            });
-        });
-
-        // Tab switching functionality for table status
-        document.querySelectorAll('nav a[data-status]').forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const status = this.getAttribute('data-status');
-                
-                // Remove active state from all tabs
-                document.querySelectorAll('nav a[data-status]').forEach(t => {
-                    t.classList.remove('bg-gradient-to-r', 'from-indigo-500', 'to-purple-600', 'text-white', 'shadow-md');
-                    t.classList.add('text-gray-600', 'hover:bg-gray-50');
-                });
-                
-                // Add active state to clicked tab
-                this.classList.remove('text-gray-600', 'hover:bg-gray-50');
-                this.classList.add('bg-gradient-to-r', 'from-indigo-500', 'to-purple-600', 'text-white', 'shadow-md');
-                
-                // Filter tables based on status
-                document.querySelectorAll('.table-card').forEach(card => {
-                    const cardStatus = card.getAttribute('data-status');
-                    if (status === 'active' && cardStatus === 'active') {
-                        card.style.display = 'block';
-                    } else if (status === 'empty' && cardStatus === 'empty') {
-                        card.style.display = 'block';
-                    } else if (status === 'booking' && cardStatus === 'booking') {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = status === 'active' ? 'block' : 'none';
-                    }
-                });
-            });
-        });
-
-        // Search functionality
-        document.querySelector('input[placeholder*="Tìm tên bàn"]').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            document.querySelectorAll('.table-card').forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                if (title.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = searchTerm === '' ? 'block' : 'none';
-                }
-            });
-        });
-
-        // Table selection functionality
-        document.querySelectorAll('.table-card button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const tableCard = this.closest('.table-card');
-                const tableName = tableCard.querySelector('h3').textContent;
-                
-                // Update selected table in navigation
-                document.querySelector('nav span').textContent = tableName;
-                
-                // Add visual feedback
-                document.querySelectorAll('.table-card').forEach(card => {
-                    card.classList.remove('ring-2', 'ring-indigo-500');
-                });
-                tableCard.classList.add('ring-2', 'ring-indigo-500');
-                
-                // Show success message (you can customize this)
-                const originalText = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-check mr-1"></i>Đã chọn';
-                this.classList.add('bg-green-500');
-                
-                setTimeout(() => {
-                    this.innerHTML = originalText;
-                    this.classList.remove('bg-green-500');
-                }, 1500);
-            });
-        });
-    </script>
+    <!-- Custom JS -->
+    <script src="/js/tables.js"></script>
 </body>
 </html>
