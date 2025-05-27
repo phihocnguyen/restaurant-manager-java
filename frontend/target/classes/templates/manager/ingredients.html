@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Quản lý Nguyên liệu - Restaurant Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-[#1e293b] text-gray-100 font-sans">
+<div class="flex min-h-screen">
+    <!-- Sidebar (giữ nguyên nếu dùng layout chung) -->
+    <aside class="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
+        <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
+                    <i class="fas fa-utensils text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Tasty Kitchen</h1>
+                    <p class="text-xs text-slate-400 mt-1">Restaurant Manager</p>
+                </div>
+            </div>
+        </div>
+        <nav class="mt-8 flex-1 px-4">
+            <div class="space-y-2">
+                <a th:href="@{/manager/dashboard}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
+                        <i class="fas fa-chart-line text-blue-400"></i>
+                    </div>
+                    <span class="group-hover:text-white transition-colors">Dashboard</span>
+                </a>
+                <a th:href="@{/manager/menu}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <div class="bg-green-500/20 p-2 rounded-lg mr-4 group-hover:bg-green-500/30 transition-colors">
+                        <i class="fas fa-utensils text-green-400"></i>
+                    </div>
+                    <span class="group-hover:text-white transition-colors">Menu</span>
+                </a>
+                <a th:href="@{/manager/ingredients}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl group">
+                    <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
+                        <i class="fas fa-carrot text-yellow-400"></i>
+                    </div>
+                    <span class="text-white font-semibold">Nguyên liệu</span>
+                </a>
+                <a th:href="@{/manager/tables}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <div class="bg-orange-500/20 p-2 rounded-lg mr-4 group-hover:bg-orange-500/30 transition-colors">
+                        <i class="fas fa-table text-orange-400"></i>
+                    </div>
+                    <span class="group-hover:text-white transition-colors">Bàn</span>
+                </a>
+                <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
+                        <i class="fas fa-users text-purple-400"></i>
+                    </div>
+                    <span class="group-hover:text-white transition-colors">Khách hàng</span>
+                </a>
+                <a th:href="@{/manager/orders}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
+                        <i class="fas fa-receipt text-yellow-400"></i>
+                    </div>
+                    <span class="group-hover:text-white transition-colors">Đơn hàng</span>
+                </a>
+                <a th:href="@{/manager/settings}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <div class="bg-gray-500/20 p-2 rounded-lg mr-4 group-hover:bg-gray-500/30 transition-colors">
+                        <i class="fas fa-cog text-gray-400"></i>
+                    </div>
+                    <span class="group-hover:text-white transition-colors">Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+        <header class="flex items-center justify-between p-6 bg-[#1f2937] border-b border-gray-800">
+            <h1 class="text-2xl font-semibold text-gray-100">Quản lý Nguyên liệu</h1>
+        </header>
+        <main class="flex-1 p-6">
+            <div class="bg-[#1f2937] rounded-lg shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-carrot text-yellow-400"></i> Danh sách nguyên liệu
+                    </h2>
+                    <form th:action="@{/manager/ingredients/add}" method="get">
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded font-semibold hover:bg-green-700">
+                            <i class="fas fa-plus mr-2"></i>Thêm nguyên liệu
+                        </button>
+                    </form>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-[#334155]">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Tên nguyên liệu</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Giá nhập</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Tồn kho (kg)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700">
+                            <tr th:each="ing : ${ingredients}" class="hover:bg-[#334155]">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-100" th:text="${ing.ingreName}">Tên</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300" th:text="${#numbers.formatDecimal(ing.ingrePrice, 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300" th:text="${ing.instockKg}">0</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <form th:action="@{'/manager/ingredients/edit/' + ${ing.id}}" method="get" style="display:inline">
+                                        <button class="px-3 py-1.5 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-700" type="submit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </form>
+                                    <form th:action="@{'/manager/ingredients/delete/' + ${ing.id}}" method="post" style="display:inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nguyên liệu này?');">
+                                        <button class="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700" type="submit">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Phân trang -->
+                <nav class="mt-6">
+                    <ul class="flex justify-center space-x-2">
+                        <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a th:href="@{'/manager/ingredients?page=' + ${i}}"
+                               th:classappend="${i} == ${currentPage} ? 'bg-indigo-600 text-white' : 'bg-[#334155] text-gray-300'"
+                               class="px-3 py-1.5 rounded-md hover:bg-indigo-700">[[${i}]]</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Modal Thêm/Sửa nguyên liệu -->
+<div th:if="${showAddIngre} or ${showEditIngre}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4 text-gray-800" th:text="${showAddIngre} ? 'Thêm nguyên liệu' : 'Chỉnh sửa nguyên liệu'"></h2>
+        <form th:action="${showAddIngre} ? @{/manager/ingredients} : @{/manager/ingredients/edit/{id}(id=${editIngre.id})}" method="post">
+            <div class="mb-4">
+                <label class="block text-gray-700">Tên nguyên liệu</label>
+                <input name="ingreName" class="w-full border rounded px-3 py-2 text-black" th:value="${editIngre?.ingreName}" required />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Giá nhập</label>
+                <input name="ingrePrice" type="number" step="0.01" class="w-full border rounded px-3 py-2 text-black" th:value="${editIngre?.ingrePrice}" required />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Tồn kho (kg)</label>
+                <input name="instockKg" type="number" step="0.01" class="w-full border rounded px-3 py-2 text-black" th:value="${editIngre?.instockKg}" required />
+            </div>
+            <div class="flex justify-end gap-2 mt-4">
+                <a href="/manager/ingredients" class="px-4 py-2 bg-gray-300 rounded">Hủy</a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html> 
