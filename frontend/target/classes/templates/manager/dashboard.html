@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Dashboard - Restaurant Manager</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .logo-glow {
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+        .nav-item.active {
+             background: linear-gradient(to right, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5));
+             box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+        }
+         .nav-item.active span {
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-[#1e293b] text-gray-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
+            <!-- Logo Section -->
+            <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
+                <div class="flex items-center space-x-3">
+                    <!-- Custom Logo Icon -->
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl logo-glow">
+                        <i class="fas fa-utensils text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">Tasty Kitchen</h1>
+                        <p class="text-xs text-slate-400 mt-1">Restaurant Manager</p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Navigation -->
+            <nav class="mt-8 flex-1 px-4">
+                <div class="space-y-2">
+                    <!-- Dashboard -->
+                    <a th:href="@{/manager/dashboard}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl group">
+                        <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
+                            <i class="fas fa-chart-line text-blue-400"></i>
+                        </div>
+                        <span class="text-white font-semibold">Dashboard</span>
+                    </a>
+    
+                    <!-- Menu -->
+                    <a th:href="@{/manager/menu}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-green-500/20 p-2 rounded-lg mr-4 group-hover:bg-green-500/30 transition-colors">
+                            <i class="fas fa-utensils text-green-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Menu</span>
+                    </a>
+    
+                    <!-- Tables (Bàn) -->
+                    <a th:href="@{/manager/tables}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-orange-500/20 p-2 rounded-lg mr-4 group-hover:bg-orange-500/30 transition-colors">
+                            <i class="fas fa-table text-orange-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Bàn</span>
+                    </a>
+    
+                    <!-- Customers (Khách hàng) -->
+                    <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
+                            <i class="fas fa-users text-purple-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Khách hàng</span>
+                    </a>
+    
+                    <!-- Orders (Đơn hàng) -->
+                    <a th:href="@{/manager/orders}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
+                            <i class="fas fa-receipt text-yellow-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Đơn hàng</span>
+                    </a>
+    
+                    <!-- Settings -->
+                    <a th:href="@{/manager/settings}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-gray-500/20 p-2 rounded-lg mr-4 group-hover:bg-gray-500/30 transition-colors">
+                            <i class="fas fa-cog text-gray-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Settings</span>
+                    </a>
+                </div>
+            </nav>
+    
+            <!-- User Profile & Logout -->
+            <div class="p-6 border-t border-slate-700/50 mt-auto">
+                <!-- User Profile -->
+                <div class="flex items-center mb-4 p-3 rounded-xl bg-slate-800/50">
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium text-sm">Manager</p>
+                        <p class="text-slate-400 text-xs">admin@tastykitchen.com</p>
+                    </div>
+                </div>
+                
+                <!-- Logout -->
+                <a href="#" class="nav-item flex items-center py-3 px-4 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-xl group transition-all">
+                    <div class="bg-red-500/20 p-2 rounded-lg mr-3 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-sign-out-alt text-red-400"></i>
+                    </div>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Bar -->
+            <header class="flex items-center justify-between p-6 bg-[#1f2937] border-b border-gray-800">
+                <h1 class="text-2xl font-semibold text-gray-100">Dashboard</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search" class="bg-[#334155] text-gray-200 rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <i class="fas fa-bell text-gray-400 hover:text-gray-100 cursor-pointer"></i>
+                    <div class="flex items-center space-x-2">
+                         <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full">
+                        <div>
+                            <p class="text-sm font-medium text-gray-100">Jhon Morison</p>
+                            <p class="text-xs text-gray-400">Admin</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Specific Content -->
+            <main class="flex-1 p-6">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                        <h5 class="text-lg font-semibold text-gray-100 mb-2">Tổng doanh thu hôm nay</h5>
+                        <h2 class="text-2xl font-bold text-green-400 mb-1">5,000,000đ</h2>
+                        <p class="text-sm text-gray-400">Tăng 10% so với hôm qua</p>
+                    </div>
+                    <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                        <h5 class="text-lg font-semibold text-gray-100 mb-2">Đơn hàng hôm nay</h5>
+                        <h2 class="text-2xl font-bold text-blue-400 mb-1">25</h2>
+                        <p class="text-sm text-gray-400">Tăng 5% so với hôm qua</p>
+                    </div>
+                    <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                        <h5 class="text-lg font-semibold text-gray-100 mb-2">Bàn đang sử dụng</h5>
+                        <h2 class="text-2xl font-bold text-yellow-400 mb-1">8/12</h2>
+                        <p class="text-sm text-gray-400">66.7% tổng số bàn</p>
+                    </div>
+                    <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                        <h5 class="text-lg font-semibold text-gray-100 mb-2">Khách hàng mới</h5>
+                        <h2 class="text-2xl font-bold text-purple-400 mb-1">5</h2>
+                        <p class="text-sm text-gray-400">Tăng 15% so với hôm qua</p>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                        <h5 class="text-lg font-semibold text-gray-100 mb-4">Doanh thu theo giờ</h5>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                        <h5 class="text-lg font-semibold text-gray-100 mb-4">Top món ăn bán chạy</h5>
+                        <canvas id="topDishesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="bg-[#1f2937] rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-6">
+                        <h5 class="text-lg font-semibold text-gray-100 mb-4">Đơn hàng gần đây</h5>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-[#334155]">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Mã đơn</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Khách hàng</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Bàn</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Tổng tiền</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Trạng thái</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Thời gian</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-700">
+                                    <tr class="hover:bg-[#334155]">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">#ORD001</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Nguyễn Văn A</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bàn 1</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">500,000đ</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-600 text-white">Hoàn thành</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">10:30 AM</td>
+                                    </tr>
+                                    <tr class="hover:bg-[#334155]">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">#ORD002</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Trần Thị B</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bàn 3</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">750,000đ</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-600 text-white">Đang xử lý</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">11:15 AM</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script th:src="@{/js/main.js}"></script>
+    
+    <!-- Chart Initialization -->
+    <script>
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['8h', '9h', '10h', '11h', '12h', '13h', '14h'],
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: [500000, 750000, 1000000, 1500000, 1200000, 800000, 600000],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#d1d5db' },
+                        grid: { color: '#4b5563' }
+                    },
+                    x: {
+                        ticks: { color: '#d1d5db' },
+                        grid: { color: '#4b5563' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#d1d5db'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Top Dishes Chart
+        const dishesCtx = document.getElementById('topDishesChart').getContext('2d');
+        new Chart(dishesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Món 1', 'Món 2', 'Món 3', 'Món 4', 'Món 5'],
+                datasets: [{
+                    label: 'Số lượng bán',
+                    data: [15, 12, 10, 8, 6],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#d1d5db' },
+                        grid: { color: '#4b5563' }
+                    },
+                    x: {
+                        ticks: { color: '#d1d5db' },
+                        grid: { color: '#4b5563' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#d1d5db'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
