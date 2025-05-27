@@ -49,19 +49,22 @@ public class ManagerController {
 
     @GetMapping("/menu/add")
     public String addMenuForm(Model model) {
-        // Fetch menu items to display background list
+        // Lấy lại danh sách để hiển thị nền
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8080/items";
         ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
         List<Map<String, Object>> items = response.getBody();
         model.addAttribute("items", items);
-
         model.addAttribute("title", "Thêm món mới - Restaurant Manager");
         model.addAttribute("activeTab", "menu");
         model.addAttribute("showAdd", true);
         model.addAttribute("showEdit", false);
-        model.addAttribute("editItem", new MenuItemDto()); // Empty DTO for new item form
-
+        model.addAttribute("editItem", new MenuItemDto());
+        // Lấy danh sách nguyên liệu
+        String ingUrl = "http://localhost:8080/ingredients";
+        ResponseEntity<List> ingResponse = restTemplate.getForEntity(ingUrl, List.class);
+        List<Map<String, Object>> ingredientsList = ingResponse.getBody();
+        model.addAttribute("ingredientsList", ingredientsList);
         return "manager/menu";
     }
 
@@ -89,10 +92,46 @@ public class ManagerController {
     }
 
     @PostMapping("/menu")
-    public String addMenu(@ModelAttribute MenuItemDto item, RedirectAttributes redirectAttributes) {
+    public String addMenu(
+            @RequestParam String itemType,
+            @RequestParam String itemName,
+            @RequestParam String itemImg,
+            @RequestParam Double itemSprice,
+            @RequestParam(value = "ingredientIds") List<Integer> ingredientIds,
+            @RequestParam(value = "ingredientKgs") List<Double> ingredientKgs,
+            RedirectAttributes redirectAttributes) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080/items";
-        restTemplate.postForEntity(url, item, Void.class);
+        // Build menuItem
+        Map<String, Object> menuItem = new HashMap<>();
+        menuItem.put("itemType", itemType);
+        menuItem.put("itemName", itemName);
+        menuItem.put("itemImg", itemImg);
+        menuItem.put("itemSprice", itemSprice);
+        menuItem.put("isdeleted", false);
+        // Build body cho API
+        if (ingredientIds.size() == 1) {
+            Map<String, Object> body = new HashMap<>();
+            body.put("menuItem", menuItem);
+            Map<String, Object> recipe = new HashMap<>();
+            recipe.put("ingreId", ingredientIds.get(0));
+            recipe.put("ingreQuantityKg", ingredientKgs.get(0));
+            body.put("recipe", recipe);
+            restTemplate.postForEntity("http://localhost:8080/recipes/one", body, Void.class);
+        } else {
+            Map<String, Object> body = new HashMap<>();
+            body.put("menuItem", menuItem);
+            List<Map<String, Object>> ingredients = new java.util.ArrayList<>();
+            for (int i = 0; i < ingredientIds.size(); i++) {
+                Map<String, Object> ing = new HashMap<>();
+                ing.put("ingreId", ingredientIds.get(i));
+                ing.put("ingreQuantityKg", ingredientKgs.get(i));
+                ingredients.add(ing);
+            }
+            Map<String, Object> recipes = new HashMap<>();
+            recipes.put("ingredients", ingredients);
+            body.put("recipes", recipes);
+            restTemplate.postForEntity("http://localhost:8080/recipes/many", body, Void.class);
+        }
         redirectAttributes.addFlashAttribute("success", "Thêm món thành công!");
         return "redirect:/manager/menu";
     }

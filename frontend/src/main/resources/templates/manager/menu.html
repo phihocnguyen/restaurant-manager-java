@@ -152,59 +152,45 @@
                         <select class="form-select w-full sm:w-auto px-4 py-2 rounded-md border-gray-700 shadow-sm bg-[#334155] text-gray-200">
                             <option selected>Loại món</option>
                             <option>Món chính</option>
-                            <option>Món phụ</option>
                             <option>Đồ uống</option>
+                            <option>Khác</option>
                         </select>
-                         <button class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 w-full sm:w-auto flex items-center justify-center">
-                            <i class="fas fa-plus mr-2"></i>Thêm món mới
-                        </button>
+                        <form th:action="@{/manager/menu/add}" method="get">
+                            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded font-semibold hover:bg-green-700">
+                              <i class="fas fa-plus mr-2"></i>Thêm món mới
+                            </button>
+                        </form>
                     </div>
                 </div>
 
                 <!-- Menu Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Menu Item Card -->
-                    <div class="bg-[#1f2937] rounded-lg shadow-sm overflow-hidden hover:shadow-md">
-                        <div class="h-48">
-                            <img th:src="@{/img/food-placeholder.jpg}" class="w-full h-full object-cover" alt="Food">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-medium text-gray-100 mb-1">Tên món ăn</h3>
-                            <p class="text-sm text-gray-400 mb-3">Mô tả món ăn ngắn gọn...</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-lg font-bold text-indigo-400">50.000đ</span>
-                                <div class="flex space-x-2">
-                                    <button class="px-3 py-1.5 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-700">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                    <th:block th:each="item : ${items}">
+                        <div class="bg-[#1f2937] rounded-lg shadow-sm overflow-hidden hover:shadow-md">
+                            <div class="h-48 flex items-center justify-center bg-gray-100">
+                                <img th:src="${item.itemImg}" class="w-24 h-24 object-cover rounded-full" alt="Food">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-medium text-gray-100 mb-1" th:text="${item.itemName}">Tên món ăn</h3>
+                                <p class="text-sm text-gray-400 mb-3">Mô tả món ăn ngắn gọn...</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-indigo-400" th:text="${#numbers.formatDecimal(item.itemSprice, 0, 'COMMA', 0, 'POINT')} + 'đ'">50.000đ</span>
+                                    <div class="flex space-x-2">
+                                        <form th:action="@{'/manager/menu/edit/' + ${item.id}}" method="get" style="display:inline">
+                                            <button class="px-3 py-1.5 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-700" type="submit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </form>
+                                        <form th:action="@{'/manager/menu/delete/' + ${item.id}}" method="post" style="display:inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa món này?');">
+                                            <button class="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700" type="submit">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Repeat for other menu items -->
-                     <div class="bg-[#1f2937] rounded-lg shadow-sm overflow-hidden hover:shadow-md">
-                        <div class="h-48">
-                            <img th:src="@{/img/food-placeholder.jpg}" class="w-full h-full object-cover" alt="Food">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-medium text-gray-100 mb-1">Tên món ăn</h3>
-                            <p class="text-sm text-gray-400 mb-3">Mô tả món ăn ngắn gọn...</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-lg font-bold text-indigo-400">50.000đ</span>
-                                <div class="flex space-x-2">
-                                    <button class="px-3 py-1.5 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-700">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </th:block>
                 </div>
 
                 <!-- Pagination -->
@@ -230,5 +216,72 @@
     
     <!-- Custom JS -->
     <script th:src="@{/js/main.js}"></script>
+
+    <!-- Modal thêm/sửa món ăn -->
+    <div th:if="${showAdd} or ${showEdit}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4 text-gray-800" th:text="${showAdd} ? 'Thêm món mới' : 'Chỉnh sửa món ăn'"></h2>
+        <form th:action="${showAdd} ? @{/manager/menu} : @{/manager/menu/edit/{id}(id=${editItem.id})}" method="post">
+          <div class="flex justify-center mb-2">
+            <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editImgFile').click()">
+                <img id="previewImage"
+                    th:src="${editItem?.itemImg != null ? editItem.itemImg : '/img/default-preview.png'}"
+                    alt="Preview"
+                    class="object-cover w-full h-full" />
+            </div>
+            <input id="editImgFile" type="file" class="hidden" accept="image/*" onchange="previewImage(event)">
+          </div>
+          <div>
+            <label class="block text-gray-700">Tên món</label>
+            <input name="itemName" class="w-full border rounded px-3 py-2 text-black" th:value="${editItem?.itemName}" required />
+          </div>
+          <div>
+            <label class="block text-gray-700">Loại</label>
+            <select name="itemType" class="w-full border rounded px-3 py-2 text-black">
+              <option value="FOOD" th:selected="${editItem != null and editItem.itemType == 'FOOD'}">FOOD</option>
+              <option value="DRINK" th:selected="${editItem != null and editItem.itemType == 'DRINK'}">DRINK</option>
+              <option value="OTHER" th:selected="${editItem != null and editItem.itemType == 'OTHER'}">OTHER</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-gray-700">Giá bán</label>
+            <input name="itemSprice" type="number" class="w-full border rounded px-3 py-2 text-black" th:value="${editItem?.itemSprice}" required />
+          </div>
+          <div>
+            <label class="block text-gray-700">Ảnh (link)</label>
+            <input name="itemImg" class="w-full border rounded px-3 py-2 text-black" th:value="${editItem?.itemImg}" />
+          </div>
+          <div class="mb-4 mt-4">
+            <label class="block text-gray-700 font-semibold mb-2">Chọn nguyên liệu & số kg</label>
+            <div class="space-y-2 max-h-48 overflow-y-auto bg-gray-50 rounded p-2" th:inline="javascript">
+              <div th:each="ing,iter : ${ingredientsList}" class="flex items-center gap-2">
+                <input type="checkbox" th:id="'ingre_' + ${ing.id}" name="ingredientIds" th:value="${ing.id}" class="accent-blue-600" th:attr="onchange=|document.getElementById('kg_' + '${ing.id}').disabled = !this.checked|">
+                <label th:for="'ingre_' + ${ing.id}" class="text-gray-800 font-medium" th:text="${ing.ingreName}"></label>
+                <input type="number" step="0.01" min="0" th:id="'kg_' + ${ing.id}" name="ingredientKgs" placeholder="kg" class="w-20 border rounded px-2 py-1 text-black" disabled required>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 mt-4">
+            <a href="/manager/menu" class="px-4 py-2 bg-gray-300 rounded">Hủy</a>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Lưu</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const imgElement = document.getElementById("previewImage");
+                if (imgElement) {
+                    imgElement.src = reader.result;
+                }
+            };
+            if (event.target.files && event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+    </script>
 </body>
+
 </html> 
