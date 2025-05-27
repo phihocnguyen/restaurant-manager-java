@@ -3,167 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title}">Quản lý bàn - Restaurant Manager</title>
+    <title>Quản lý bàn - Restaurant Manager</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .table-active {
+            background: linear-gradient(45deg, #10b981, #059669);
+        }
+        .table-empty {
+            background: linear-gradient(45deg, #6b7280, #374151);
+        }
+        .table-booking {
+            background: linear-gradient(45deg, #f59e0b, #ef4444);
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen">
-        <!-- Top Navigation -->
-        <nav class="bg-white border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <div class="flex items-center mr-4">
-                            <img th:src="@{/img/ingredient.png}" alt="Table" class="h-5 w-5 mr-2">
-                            <span class="text-gray-600 font-semibold">Bàn 1</span>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <!-- Top Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex items-center mr-6 bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 rounded-full">
+                        <div class="bg-white/20 p-1.5 rounded-full mr-2">
+                            <i class="fas fa-utensils text-white text-sm"></i>
                         </div>
-                        <img th:src="@{/img/logo.png}" alt="Logo" class="h-10">
+                        <span class="text-white font-semibold">Bàn 1</span>
                     </div>
                     <div class="flex items-center">
-                        <img th:src="@{/img/logo_1.png}" alt="Logo" class="h-9 mr-3">
-                        <img th:src="@{/img/menu_1.png}" alt="Menu" class="h-7 mr-3">
-                        <img th:src="@{/img/exit.png}" alt="Exit" class="h-6 cursor-pointer hover:opacity-75">
+                        <div class="bg-gradient-to-br from-orange-400 to-pink-500 p-2 rounded-xl mr-3">
+                            <i class="fas fa-store text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Tasty Kitchen</h1>
+                            <p class="text-xs text-gray-500">Restaurant Manager</p>
+                        </div>
                     </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i class="fas fa-home text-lg"></i>
+                    </button>
+                    <button class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i class="fas fa-list text-lg"></i>
+                    </button>
+                    <button class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">
+                        <i class="fas fa-sign-out-alt text-lg"></i>
+                    </button>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="flex flex-col lg:flex-row gap-6">
-                <!-- Left Panel - Tables -->
-                <div class="lg:w-2/3">
-                    <!-- Header with Tabs -->
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                        <div class="flex space-x-2">
-                            <a th:href="@{/sales/tables}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                Phòng bàn
-                            </a>
-                            <a th:href="@{/sales/items}" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
-                                Thực đơn
-                            </a>
-                        </div>
-                        <div class="flex items-center w-full sm:w-auto">
-                            <img th:src="@{/img/banhang.png}" alt="Search" class="h-6 mr-2">
-                            <div class="relative flex-1 sm:w-96">
-                                <input type="text" class="w-full rounded-md border-gray-300 shadow-sm" placeholder="Tìm tên bàn...">
-                                <button class="absolute right-0 top-0 h-full px-3 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Panel - Tables -->
+            <div class="lg:w-2/3">
+                <!-- Header with Tabs -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                    <div class="flex space-x-2">
+                        <a th:href="@{/sales/tables}" class="px-6 py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
+                            <i class="fas fa-table mr-2"></i>
+                            Danh sách bàn
+                        </a>
+                        <a th:href="@{/sales/items}" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all font-medium">
+                            <i class="fas fa-utensils mr-2"></i>
+                            Thực đơn
+                        </a>
                     </div>
-
-                    <!-- Tables Tabs -->
-                    <div class="border-b border-gray-200 mb-6">
-                        <nav class="flex space-x-8">
-                            <a th:href="@{/sales/tables/active}" 
-                               th:class="${activeTab == 'active' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
-                               class="py-4 px-1 border-b-2 font-medium text-sm">
-                                Đang hoạt động
-                            </a>
-                            <a th:href="@{/sales/tables/inactive}"
-                               th:class="${activeTab == 'inactive' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
-                               class="py-4 px-1 border-b-2 font-medium text-sm">
-                                Trống
-                            </a>
-                            <a th:href="@{/sales/tables/booking}"
-                               th:class="${activeTab == 'booking' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
-                               class="py-4 px-1 border-b-2 font-medium text-sm">
-                                Đặt bàn
-                            </a>
-                        </nav>
-                    </div>
-
-                    <!-- Tables List -->
-                    <div class="bg-white shadow rounded-md">
-                        <ul class="divide-y divide-gray-200">
-                            <li class="px-6 py-4 hover:bg-gray-50">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-chair text-gray-400 text-xl"></i>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Bàn 1</div>
-                                            <div class="text-sm text-gray-500">4 chỗ ngồi</div>
-                                        </div>
-                                    </div>
-                                    <button class="px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-md hover:bg-indigo-700">
-                                        Chọn
-                                    </button>
-                                </div>
-                            </li>
-                            <li class="px-6 py-4 hover:bg-gray-50">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-chair text-gray-400 text-xl"></i>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Bàn 2</div>
-                                            <div class="text-sm text-gray-500">6 chỗ ngồi</div>
-                                        </div>
-                                    </div>
-                                    <button class="px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-md hover:bg-indigo-700">
-                                        Chọn
-                                    </button>
-                                </div>
-                            </li>
-                        </ul>
+                    <div class="flex items-center w-full sm:w-auto">
+                        <div class="bg-amber-100 p-2 rounded-xl mr-3">
+                            <i class="fas fa-search text-amber-600"></i>
+                        </div>
+                        <div class="relative flex-1 sm:w-96">
+                            <input type="text" class="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all" placeholder="Tìm tên bàn tại đây...">
+                            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 gradient-bg text-white rounded-lg hover:opacity-90 transition-all">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right Panel - Current Order -->
-                <div class="lg:w-1/3">
-                    <div class="bg-white shadow rounded-lg p-6">
-                        <!-- Customer Search -->
-                        <div class="mb-6">
-                            <div class="relative">
-                                <img th:src="@{/img/customer.png}" alt="Customer" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5">
-                                <input type="text" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" placeholder="Tìm tên khách hàng tại đây">
+                <!-- Table Status Tabs -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-2 mb-8">
+                    <nav class="flex space-x-2">
+                        <a href="#" class="flex-1 py-3 px-4 text-center font-medium text-sm rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md transition-all" data-status="active">
+                            <i class="fas fa-play mr-2"></i>
+                            Đang hoạt động
+                        </a>
+                        <a href="#" class="flex-1 py-3 px-4 text-center font-medium text-sm text-gray-600 hover:bg-gray-50 rounded-xl transition-all" data-status="empty">
+                            <i class="fas fa-circle mr-2"></i>
+                            Trống
+                        </a>
+                        <a href="#" class="flex-1 py-3 px-4 text-center font-medium text-sm text-gray-600 hover:bg-gray-50 rounded-xl transition-all" data-status="booking">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            Đặt bàn
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Tables Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Active Table 1 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="active">
+                        <div class="h-48 table-active flex items-center justify-center">
+                            <i class="fas fa-utensils text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Bàn 1</h3>
+                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-circle text-green-500 mr-1"></i>
+                                    Đang phục vụ
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Khách: Nguyễn Văn A</p>
+                            <p class="text-sm text-gray-500 mb-4">Thời gian: 14:30 • 3 món đã gọi</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-green-600">285.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    Xem chi tiết
+                                </button>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Empty Order Message -->
-                        <div class="text-center py-8">
-                            <img th:src="@{/img/food.png}" alt="Food" class="h-10 mx-auto mb-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Chưa có món nào trong đơn</h3>
-                            <p class="text-sm text-gray-500">Vui lòng chọn món trong thực đơn bên trái</p>
+                    <!-- Active Table 2 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="active">
+                        <div class="h-48 table-active flex items-center justify-center">
+                            <i class="fas fa-utensils text-white text-4xl"></i>
                         </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Bàn 3</h3>
+                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-circle text-green-500 mr-1"></i>
+                                    Đang phục vụ
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">6 chỗ ngồi • Khách: Trần Thị B</p>
+                            <p class="text-sm text-gray-500 mb-4">Thời gian: 15:15 • 5 món đã gọi</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-green-600">450.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                        <!-- Order Summary -->
-                        <div class="mt-6">
-                            <div class="flex items-center justify-between mb-6">
-                                <select class="w-48 pl-3 pr-10 py-2 border border-gray-300 rounded-md">
-                                    <option selected>Nhân viên</option>
-                                </select>
-                                <div class="flex items-center">
-                                    <span class="text-sm font-medium text-gray-900 mr-2">Tổng tiền</span>
-                                    <img th:src="@{/img/revenue.png}" alt="Revenue" class="h-6 mr-2">
-                                    <span class="text-lg font-bold text-gray-900">0.00</span>
+                    <!-- Empty Tables -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="empty">
+                        <div class="h-48 table-empty flex items-center justify-center">
+                            <i class="fas fa-chair text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Bàn 2</h3>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-circle text-gray-500 mr-1"></i>
+                                    Trống
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Sẵn sàng phục vụ</p>
+                            <p class="text-sm text-gray-500 mb-4">Lần cuối dọn: 13:45</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-gray-400">0đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Chọn bàn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Table -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="booking">
+                        <div class="h-48 table-booking flex items-center justify-center">
+                            <i class="fas fa-calendar-alt text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Bàn 4</h3>
+                                <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-circle text-orange-500 mr-1"></i>
+                                    Đã đặt
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">6 chỗ ngồi • Khách: Lê Văn C</p>
+                            <p class="text-sm text-gray-500 mb-4">Thời gian đặt: 18:00 • SĐT: 0912345678</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-orange-600">Đã đặt</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-check mr-1"></i>
+                                    Xác nhận
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More Empty Tables -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="empty">
+                        <div class="h-48 table-empty flex items-center justify-center">
+                            <i class="fas fa-chair text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Bàn 5</h3>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-circle text-gray-500 mr-1"></i>
+                                    Trống
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">8 chỗ ngồi • Sẵn sáng phục vụ</p>
+                            <p class="text-sm text-gray-500 mb-4">Lần cuối dọn: 14:20</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-gray-400">0đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Chọn bàn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card" data-status="empty">
+                        <div class="h-48 table-empty flex items-center justify-center">
+                            <i class="fas fa-chair text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Bàn 6</h3>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-circle text-gray-500 mr-1"></i>
+                                    Trống
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Sẵn sáng phục vụ</p>
+                            <p class="text-sm text-gray-500 mb-4">Lần cuối dọn: 12:30</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-gray-400">0đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Chọn bàn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-8">
+                    <button class="px-8 py-3 border-2 border-indigo-500 text-indigo-600 font-medium rounded-xl hover:bg-indigo-50 transition-all">
+                        <i class="fas fa-chevron-down mr-2"></i>
+                        Xem thêm bàn
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel - Current Order -->
+            <div class="lg:w-1/3">
+                <div class="bg-white shadow-xl rounded-2xl p-6 border border-gray-100 sticky top-24">
+                    <!-- Customer Search -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Thông tin khách hàng</label>
+                        <div class="relative">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 bg-blue-100 p-1.5 rounded-lg">
+                                <i class="fas fa-user text-blue-600 text-sm"></i>
+                            </div>
+                            <input type="text" class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all" placeholder="Tìm tên khách hàng...">
+                        </div>
+                    </div>
+
+                    <!-- Order Status -->
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 mb-6">
+                        <div class="text-center">
+                            <div class="bg-gradient-to-br from-orange-400 to-pink-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-table text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Chưa chọn bàn nào</h3>
+                            <p class="text-sm text-gray-600">Vui lòng chọn bàn để bắt đầu phục vụ</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="text-center bg-green-50 rounded-xl p-4">
+                            <div class="text-xs text-green-600 font-medium mb-1">Bàn đang hoạt động</div>
+                            <div class="text-2xl font-bold text-green-700">2</div>
+                        </div>
+                        <div class="text-center bg-gray-50 rounded-xl p-4">
+                            <div class="text-xs text-gray-600 font-medium mb-1">Bàn trống</div>
+                            <div class="text-2xl font-bold text-gray-700">3</div>
+                        </div>
+                        <div class="text-center bg-orange-50 rounded-xl p-4">
+                            <div class="text-xs text-orange-600 font-medium mb-1">Bàn đã đặt</div>
+                            <div class="text-2xl font-bold text-orange-700">1</div>
+                        </div>
+                        <div class="text-center bg-blue-50 rounded-xl p-4">
+                            <div class="text-xs text-blue-600 font-medium mb-1">Tổng doanh thu</div>
+                            <div class="text-lg font-bold text-blue-700">735K</div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="space-y-4 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="bg-green-100 p-2 rounded-lg mr-3">
+                                    <i class="fas fa-user-tie text-green-600"></i>
                                 </div>
+                                <select class="border-2 border-gray-200 rounded-xl px-4 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all">
+                                    <option>Nhân viên phục vụ</option>
+                                    <option>Nguyễn Văn A</option>
+                                    <option>Trần Thị B</option>
+                                </select>
                             </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-calculator text-white"></i>
+                                    </div>
+                                    <span class="text-lg font-bold text-gray-900">Tổng tiền</span>
+                                </div>
+                                <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">0.00 đ</span>
+                            </div>
+                        </div>
+                    </div>
 
-                            <!-- Action Buttons -->
-                            <div class="grid grid-cols-3 gap-3">
-                                <button class="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                    <i class="fas fa-bell mr-2"></i>
-                                    Thông báo
-                                </button>
-                                <button class="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                    <i class="fas fa-save mr-2"></i>
-                                    Lưu
-                                </button>
-                                <button class="flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                    <i class="fas fa-check mr-2"></i>
-                                    Thanh toán
-                                </button>
-                            </div>
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 gap-3">
+                        <button class="flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
+                            <i class="fas fa-plus mr-2"></i>
+                            Thêm bàn mới
+                        </button>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="flex justify-center items-center px-4 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl hover:opacity-90 transition-all font-medium">
+                                <i class="fas fa-sync mr-2"></i>
+                                Làm mới
+                            </button>
+                            <button class="flex justify-center items-center px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
+                                <i class="fas fa-chart-bar mr-2"></i>
+                                Báo cáo
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -174,7 +379,91 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <!-- Custom JS -->
-    <script th:src="@{/js/main.js}"></script>
+    <script>
+        // Add interactive functionality
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Add click animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        // Tab switching functionality for table status
+        document.querySelectorAll('nav a[data-status]').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const status = this.getAttribute('data-status');
+                
+                // Remove active state from all tabs
+                document.querySelectorAll('nav a[data-status]').forEach(t => {
+                    t.classList.remove('bg-gradient-to-r', 'from-indigo-500', 'to-purple-600', 'text-white', 'shadow-md');
+                    t.classList.add('text-gray-600', 'hover:bg-gray-50');
+                });
+                
+                // Add active state to clicked tab
+                this.classList.remove('text-gray-600', 'hover:bg-gray-50');
+                this.classList.add('bg-gradient-to-r', 'from-indigo-500', 'to-purple-600', 'text-white', 'shadow-md');
+                
+                // Filter tables based on status
+                document.querySelectorAll('.table-card').forEach(card => {
+                    const cardStatus = card.getAttribute('data-status');
+                    if (status === 'active' && cardStatus === 'active') {
+                        card.style.display = 'block';
+                    } else if (status === 'empty' && cardStatus === 'empty') {
+                        card.style.display = 'block';
+                    } else if (status === 'booking' && cardStatus === 'booking') {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = status === 'active' ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        document.querySelector('input[placeholder*="Tìm tên bàn"]').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.table-card').forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = searchTerm === '' ? 'block' : 'none';
+                }
+            });
+        });
+
+        // Table selection functionality
+        document.querySelectorAll('.table-card button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const tableCard = this.closest('.table-card');
+                const tableName = tableCard.querySelector('h3').textContent;
+                
+                // Update selected table in navigation
+                document.querySelector('nav span').textContent = tableName;
+                
+                // Add visual feedback
+                document.querySelectorAll('.table-card').forEach(card => {
+                    card.classList.remove('ring-2', 'ring-indigo-500');
+                });
+                tableCard.classList.add('ring-2', 'ring-indigo-500');
+                
+                // Show success message (you can customize this)
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check mr-1"></i>Đã chọn';
+                this.classList.add('bg-green-500');
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove('bg-green-500');
+                }, 1500);
+            });
+        });
+    </script>
 </body>
-</html> 
+</html>

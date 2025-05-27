@@ -3,168 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title}">Thực đơn - Restaurant Manager</title>
+    <title>Thực đơn - Restaurant Manager</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .food-image {
+            background: linear-gradient(45deg, #f59e0b, #ef4444);
+        }
+        .drink-image {
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+        }
+        .other-image {
+            background: linear-gradient(45deg, #10b981, #059669);
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen">
-        <!-- Top Navigation -->
-        <nav class="bg-white border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <div class="flex items-center mr-4">
-                            <img th:src="@{/img/ingredient.png}" alt="Table" class="h-5 w-5 mr-2">
-                            <span class="text-gray-600 font-semibold">Bàn 1</span>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <!-- Top Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex items-center mr-6 bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 rounded-full">
+                        <div class="bg-white/20 p-1.5 rounded-full mr-2">
+                            <i class="fas fa-utensils text-white text-sm"></i>
                         </div>
-                        <img th:src="@{/img/logo.png}" alt="Logo" class="h-10">
+                        <span class="text-white font-semibold">Bàn 1</span>
                     </div>
                     <div class="flex items-center">
-                        <img th:src="@{/img/logo_1.png}" alt="Logo" class="h-9 mr-3">
-                        <img th:src="@{/img/menu_1.png}" alt="Menu" class="h-7 mr-3">
-                        <img th:src="@{/img/exit.png}" alt="Exit" class="h-6 cursor-pointer hover:opacity-75">
+                        <div class="bg-gradient-to-br from-orange-400 to-pink-500 p-2 rounded-xl mr-3">
+                            <i class="fas fa-store text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Tasty Kitchen</h1>
+                            <p class="text-xs text-gray-500">Restaurant Manager</p>
+                        </div>
                     </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i class="fas fa-home text-lg"></i>
+                    </button>
+                    <button class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i class="fas fa-list text-lg"></i>
+                    </button>
+                    <button class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">
+                        <i class="fas fa-sign-out-alt text-lg"></i>
+                    </button>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="flex flex-col lg:flex-row gap-6">
-                <!-- Left Panel - Menu Items -->
-                <div class="lg:w-2/3">
-                    <!-- Header with Tabs -->
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                        <div class="flex space-x-2">
-                            <a th:href="@{/sales/tables}" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
-                                Phòng bàn
-                            </a>
-                            <a th:href="@{/sales/items}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                Thực đơn
-                            </a>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Panel - Menu Items -->
+            <div class="lg:w-2/3">
+                <!-- Header with Tabs -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                    <div class="flex space-x-2">
+                        <a th:href="@{/sales/tables}" class="px-6 py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
+                            <i class="fas fa-table mr-2"></i>
+                            Danh sách bàn
+                        </a>
+                        <a th:href="@{/sales/items}" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all font-medium">
+                            <i class="fas fa-utensils mr-2"></i>
+                            Thực đơn
+                        </a>
+                    </div>
+                    <div class="flex items-center w-full sm:w-auto">
+                        <div class="bg-amber-100 p-2 rounded-xl mr-3">
+                            <i class="fas fa-search text-amber-600"></i>
                         </div>
-                        <div class="flex items-center w-full sm:w-auto">
-                            <img th:src="@{/img/banhang.png}" alt="Search" class="h-6 mr-2">
-                            <div class="relative flex-1 sm:w-96">
-                                <input type="text" class="w-full rounded-md border-gray-300 shadow-sm" placeholder="Tìm tên món tại đây">
-                                <button class="absolute right-0 top-0 h-full px-3 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700">
-                                    <i class="fas fa-search"></i>
+                        <div class="relative flex-1 sm:w-96">
+                            <input type="text" class="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all" placeholder="Tìm tên món tại đây...">
+                            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 gradient-bg text-white rounded-lg hover:opacity-90 transition-all">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Items Tabs -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-2 mb-8">
+                    <nav class="flex space-x-2">
+                        <a href="#" class="flex-1 py-3 px-4 text-center font-medium text-sm rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md transition-all">
+                            <i class="fas fa-hamburger mr-2"></i>
+                            Món ăn
+                        </a>
+                        <a href="#" class="flex-1 py-3 px-4 text-center font-medium text-sm text-gray-600 hover:bg-gray-50 rounded-xl transition-all">
+                            <i class="fas fa-coffee mr-2"></i>
+                            Nước uống
+                        </a>
+                        <a href="#" class="flex-1 py-3 px-4 text-center font-medium text-sm text-gray-600 hover:bg-gray-50 rounded-xl transition-all">
+                            <i class="fas fa-ellipsis-h mr-2"></i>
+                            Khác
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Menu Items Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Food Item 1 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100">
+                        <div class="h-48 food-image flex items-center justify-center">
+                            <i class="fas fa-hamburger text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Burger Đặc Biệt</h3>
+                            <p class="text-sm text-gray-600 mb-4">Burger thịt bò tươi, phô mai, rau xanh tươi ngon</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-indigo-600">85.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Thêm
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Items Tabs -->
-                    <div class="border-b border-gray-200 mb-6">
-                        <nav class="flex space-x-8">
-                            <a th:href="@{/sales/items/food}" 
-                               th:class="${activeTab == 'food' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
-                               class="py-4 px-1 border-b-2 font-medium text-sm">
-                                Món ăn
-                            </a>
-                            <a th:href="@{/sales/items/drink}"
-                               th:class="${activeTab == 'drink' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
-                               class="py-4 px-1 border-b-2 font-medium text-sm">
-                                Nước uống
-                            </a>
-                            <a th:href="@{/sales/items/other}"
-                               th:class="${activeTab == 'other' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
-                               class="py-4 px-1 border-b-2 font-medium text-sm">
-                                Khác
-                            </a>
-                        </nav>
-                    </div>
-
-                    <!-- Menu Items Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Menu Item Card -->
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md">
-                            <div class="h-48">
-                                <img th:src="@{/img/food-placeholder.jpg}" class="w-full h-full object-cover" alt="Food">
-                            </div>
-                            <div class="p-4">
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">Tên món ăn</h3>
-                                <p class="text-sm text-gray-500 mb-3">Mô tả món ăn ngắn gọn...</p>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-indigo-600">50.000đ</span>
-                                    <button class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700">
-                                        <i class="fas fa-plus mr-1"></i>
-                                        Thêm
-                                    </button>
-                                </div>
+                    <!-- Food Item 2 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100">
+                        <div class="h-48 food-image flex items-center justify-center">
+                            <i class="fas fa-pizza-slice text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Pizza Hải Sản</h3>
+                            <p class="text-sm text-gray-600 mb-4">Pizza với tôm, mực, nghêu tươi ngon</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-indigo-600">120.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Thêm
+                                </button>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Repeat for other menu items -->
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md">
-                            <div class="h-48">
-                                <img th:src="@{/img/food-placeholder.jpg}" class="w-full h-full object-cover" alt="Food">
+                    <!-- Food Item 3 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100">
+                        <div class="h-48 food-image flex items-center justify-center">
+                            <i class="fas fa-drumstick-bite text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Gà Nướng Mật Ong</h3>
+                            <p class="text-sm text-gray-600 mb-4">Gà nướng thơm ngon với sốt mật ong đặc biệt</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-indigo-600">95.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Thêm
+                                </button>
                             </div>
-                            <div class="p-4">
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">Tên món ăn</h3>
-                                <p class="text-sm text-gray-500 mb-3">Mô tả món ăn ngắn gọn...</p>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-indigo-600">50.000đ</span>
-                                    <button class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700">
-                                        <i class="fas fa-plus mr-1"></i>
-                                        Thêm
-                                    </button>
-                                </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Item 4 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100">
+                        <div class="h-48 food-image flex items-center justify-center">
+                            <i class="fas fa-fish text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Cá Hồi Nướng</h3>
+                            <p class="text-sm text-gray-600 mb-4">Cá hồi nướng tươi với gia vị đặc biệt</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-indigo-600">150.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Thêm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Item 5 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100">
+                        <div class="h-48 food-image flex items-center justify-center">
+                            <i class="fas fa-seedling text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Salad Rau Củ</h3>
+                            <p class="text-sm text-gray-600 mb-4">Salad rau củ tươi ngon, bổ dưỡng</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-indigo-600">45.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Thêm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Item 6 -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100">
+                        <div class="h-48 food-image flex items-center justify-center">
+                            <i class="fas fa-cookie-bite text-white text-4xl"></i>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Bánh Tráng Nướng</h3>
+                            <p class="text-sm text-gray-600 mb-4">Bánh tráng nướng truyền thống Đà Lạt</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-indigo-600">25.000đ</span>
+                                <button class="px-4 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Thêm
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Panel - Current Order -->
-                <div class="lg:w-1/3">
-                    <div class="bg-white shadow rounded-lg p-6">
-                        <!-- Customer Search -->
-                        <div class="mb-6">
-                            <div class="relative">
-                                <img th:src="@{/img/customer.png}" alt="Customer" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5">
-                                <input type="text" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" placeholder="Tìm tên khách hàng tại đây">
+                <!-- Load More Button -->
+                <div class="text-center mt-8">
+                    <button class="px-8 py-3 border-2 border-indigo-500 text-indigo-600 font-medium rounded-xl hover:bg-indigo-50 transition-all">
+                        <i class="fas fa-chevron-down mr-2"></i>
+                        Xem thêm món
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel - Current Order -->
+            <div class="lg:w-1/3">
+                <div class="bg-white shadow-xl rounded-2xl p-6 border border-gray-100 sticky top-24">
+                    <!-- Customer Search -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Thông tin khách hàng</label>
+                        <div class="relative">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 bg-blue-100 p-1.5 rounded-lg">
+                                <i class="fas fa-user text-blue-600 text-sm"></i>
                             </div>
+                            <input type="text" class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all" placeholder="Tìm tên khách hàng...">
                         </div>
+                    </div>
 
-                        <!-- Empty Order Message -->
-                        <div class="text-center py-8">
-                            <img th:src="@{/img/food.png}" alt="Food" class="h-10 mx-auto mb-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Chưa có món nào trong đơn</h3>
-                            <p class="text-sm text-gray-500">Vui lòng chọn món trong thực đơn bên trái</p>
+                    <!-- Order Status -->
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 mb-6">
+                        <div class="text-center">
+                            <div class="bg-gradient-to-br from-orange-400 to-pink-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-utensils text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Chưa có món nào trong đơn</h3>
+                            <p class="text-sm text-gray-600">Vui lòng chọn món trong thực đơn bên trái</p>
                         </div>
+                    </div>
 
-                        <!-- Order Summary -->
-                        <div class="mt-6">
-                            <div class="flex items-center justify-between mb-6">
-                                <select class="w-48 pl-3 pr-10 py-2 border border-gray-300 rounded-md">
-                                    <option selected>Nhân viên</option>
-                                </select>
-                                <div class="flex items-center">
-                                    <span class="text-sm font-medium text-gray-900 mr-2">Tổng tiền</span>
-                                    <img th:src="@{/img/revenue.png}" alt="Revenue" class="h-6 mr-2">
-                                    <span class="text-lg font-bold text-gray-900">0.00</span>
+                    <!-- Order Summary -->
+                    <div class="space-y-4 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="bg-green-100 p-2 rounded-lg mr-3">
+                                    <i class="fas fa-user-tie text-green-600"></i>
                                 </div>
+                                <select class="border-2 border-gray-200 rounded-xl px-4 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all">
+                                    <option>Nhân viên phục vụ</option>
+                                    <option>Nguyễn Văn A</option>
+                                    <option>Trần Thị B</option>
+                                </select>
                             </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-calculator text-white"></i>
+                                    </div>
+                                    <span class="text-lg font-bold text-gray-900">Tổng tiền</span>
+                                </div>
+                                <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">0.00 đ</span>
+                            </div>
+                        </div>
+                    </div>
 
-                            <!-- Action Buttons -->
-                            <div class="grid grid-cols-3 gap-3">
-                                <button class="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                    <i class="fas fa-bell mr-2"></i>
-                                    Thông báo
-                                </button>
-                                <button class="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                    <i class="fas fa-save mr-2"></i>
-                                    Lưu
-                                </button>
-                                <button class="flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                    <i class="fas fa-check mr-2"></i>
-                                    Thanh toán
-                                </button>
-                            </div>
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 gap-3">
+                        <button class="flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
+                            <i class="fas fa-bell mr-2"></i>
+                            Gửi thông báo bếp
+                        </button>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="flex justify-center items-center px-4 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl hover:opacity-90 transition-all font-medium">
+                                <i class="fas fa-save mr-2"></i>
+                                Lưu đơn
+                            </button>
+                            <button class="flex justify-center items-center px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
+                                <i class="fas fa-credit-card mr-2"></i>
+                                Thanh toán
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="mt-6 grid grid-cols-3 gap-3">
+                        <div class="text-center bg-blue-50 rounded-xl p-3">
+                            <div class="text-xs text-blue-600 font-medium">Món đã chọn</div>
+                            <div class="text-lg font-bold text-blue-700">0</div>
+                        </div>
+                        <div class="text-center bg-green-50 rounded-xl p-3">
+                            <div class="text-xs text-green-600 font-medium">Đã thanh toán</div>
+                            <div class="text-lg font-bold text-green-700">0</div>
+                        </div>
+                        <div class="text-center bg-orange-50 rounded-xl p-3">
+                            <div class="text-xs text-orange-600 font-medium">Chờ xử lý</div>
+                            <div class="text-lg font-bold text-orange-700">0</div>
                         </div>
                     </div>
                 </div>
@@ -175,7 +334,47 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <!-- Custom JS -->
-    <script th:src="@{/js/main.js}"></script>
+    <script>
+        // Add interactive functionality
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Add click animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        // Tab switching functionality
+        document.querySelectorAll('nav a').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active state from all tabs
+                document.querySelectorAll('nav a').forEach(t => {
+                    t.classList.remove('bg-gradient-to-r', 'from-indigo-500', 'to-purple-600', 'text-white', 'shadow-md');
+                    t.classList.add('text-gray-600', 'hover:bg-gray-50');
+                });
+                
+                // Add active state to clicked tab
+                this.classList.remove('text-gray-600', 'hover:bg-gray-50');
+                this.classList.add('bg-gradient-to-r', 'from-indigo-500', 'to-purple-600', 'text-white', 'shadow-md');
+            });
+        });
+
+        // Search functionality
+        document.querySelector('input[placeholder*="Tìm tên món"]').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.card-hover').forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = searchTerm === '' ? 'block' : 'none';
+                }
+            });
+        });
+    </script>
 </body>
-</html> 
+</html>
