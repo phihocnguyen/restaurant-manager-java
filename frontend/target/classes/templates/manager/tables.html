@@ -29,13 +29,10 @@
 </head>
 <body class="bg-[#1e293b] text-gray-100 font-sans">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <aside class="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
-            <!-- Logo Section -->
             <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
                 <div class="flex items-center space-x-3">
-                    <!-- Custom Logo Icon -->
-                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl logo-glow">
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
                         <i class="fas fa-utensils text-white text-xl"></i>
                     </div>
                     <div>
@@ -44,51 +41,44 @@
                     </div>
                 </div>
             </div>
-    
-            <!-- Navigation -->
             <nav class="mt-8 flex-1 px-4">
                 <div class="space-y-2">
-                    <!-- Dashboard -->
                     <a th:href="@{/manager/dashboard}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
                             <i class="fas fa-chart-line text-blue-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Dashboard</span>
                     </a>
-    
-                    <!-- Menu -->
                     <a th:href="@{/manager/menu}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-green-500/20 p-2 rounded-lg mr-4 group-hover:bg-green-500/30 transition-colors">
                             <i class="fas fa-utensils text-green-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Menu</span>
                     </a>
-    
-                    <!-- Tables (Bàn) -->
-                    <a th:href="@{/manager/tables}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl group">
+                    <a th:href="@{/manager/ingredients}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl group">
+                        <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
+                            <i class="fas fa-carrot text-yellow-400"></i>
+                        </div>
+                        <span class="text-white font-semibold">Nguyên liệu</span>
+                    </a>
+                    <a th:href="@{/manager/tables}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-orange-500/20 p-2 rounded-lg mr-4 group-hover:bg-orange-500/30 transition-colors">
                             <i class="fas fa-table text-orange-400"></i>
                         </div>
-                        <span class="text-white font-semibold">Bàn</span>
+                        <span class="group-hover:text-white transition-colors">Bàn</span>
                     </a>
-    
-                    <!-- Customers (Khách hàng) -->
                     <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
                             <i class="fas fa-users text-purple-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Khách hàng</span>
                     </a>
-    
-                    <!-- Orders (Đơn hàng) -->
                     <a th:href="@{/manager/orders}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
                             <i class="fas fa-receipt text-yellow-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Đơn hàng</span>
                     </a>
-    
-                    <!-- Settings -->
                     <a th:href="@{/manager/settings}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-gray-500/20 p-2 rounded-lg mr-4 group-hover:bg-gray-500/30 transition-colors">
                             <i class="fas fa-cog text-gray-400"></i>
@@ -97,28 +87,6 @@
                     </a>
                 </div>
             </nav>
-    
-            <!-- User Profile & Logout -->
-            <div class="p-6 border-t border-slate-700/50 mt-auto">
-                <!-- User Profile -->
-                <div class="flex items-center mb-4 p-3 rounded-xl bg-slate-800/50">
-                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                        <i class="fas fa-user text-white text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="text-white font-medium text-sm">Manager</p>
-                        <p class="text-slate-400 text-xs">admin@tastykitchen.com</p>
-                    </div>
-                </div>
-                
-                <!-- Logout -->
-                <a href="#" class="nav-item flex items-center py-3 px-4 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-xl group transition-all">
-                    <div class="bg-red-500/20 p-2 rounded-lg mr-3 group-hover:bg-red-500/30 transition-colors">
-                        <i class="fas fa-sign-out-alt text-red-400"></i>
-                    </div>
-                    <span>Logout</span>
-                </a>
-            </div>
         </aside>
 
         <!-- Main Content Area -->

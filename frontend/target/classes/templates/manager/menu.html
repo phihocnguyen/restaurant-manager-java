@@ -29,13 +29,10 @@
 </head>
 <body class="bg-[#1e293b] text-gray-100 font-sans">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <aside class="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
-            <!-- Logo Section -->
             <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
                 <div class="flex items-center space-x-3">
-                    <!-- Custom Logo Icon -->
-                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl logo-glow">
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
                         <i class="fas fa-utensils text-white text-xl"></i>
                     </div>
                     <div>
@@ -44,51 +41,44 @@
                     </div>
                 </div>
             </div>
-    
-            <!-- Navigation -->
             <nav class="mt-8 flex-1 px-4">
                 <div class="space-y-2">
-                    <!-- Dashboard -->
                     <a th:href="@{/manager/dashboard}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
                             <i class="fas fa-chart-line text-blue-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Dashboard</span>
                     </a>
-    
-                    <!-- Menu -->
-                    <a th:href="@{/manager/menu}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl group">
+                    <a th:href="@{/manager/menu}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-green-500/20 p-2 rounded-lg mr-4 group-hover:bg-green-500/30 transition-colors">
                             <i class="fas fa-utensils text-green-400"></i>
                         </div>
-                        <span class="text-white font-semibold">Menu</span>
+                        <span class="group-hover:text-white transition-colors">Menu</span>
                     </a>
-    
-                    <!-- Tables (Bàn) -->
+                    <a th:href="@{/manager/ingredients}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl group">
+                        <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
+                            <i class="fas fa-carrot text-yellow-400"></i>
+                        </div>
+                        <span class="text-white font-semibold">Nguyên liệu</span>
+                    </a>
                     <a th:href="@{/manager/tables}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-orange-500/20 p-2 rounded-lg mr-4 group-hover:bg-orange-500/30 transition-colors">
                             <i class="fas fa-table text-orange-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Bàn</span>
                     </a>
-    
-                    <!-- Customers (Khách hàng) -->
                     <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
                             <i class="fas fa-users text-purple-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Khách hàng</span>
                     </a>
-    
-                    <!-- Orders (Đơn hàng) -->
                     <a th:href="@{/manager/orders}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
                             <i class="fas fa-receipt text-yellow-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Đơn hàng</span>
                     </a>
-    
-                    <!-- Settings -->
                     <a th:href="@{/manager/settings}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-gray-500/20 p-2 rounded-lg mr-4 group-hover:bg-gray-500/30 transition-colors">
                             <i class="fas fa-cog text-gray-400"></i>
@@ -97,28 +87,6 @@
                     </a>
                 </div>
             </nav>
-    
-            <!-- User Profile & Logout -->
-            <div class="p-6 border-t border-slate-700/50 mt-auto">
-                <!-- User Profile -->
-                <div class="flex items-center mb-4 p-3 rounded-xl bg-slate-800/50">
-                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                        <i class="fas fa-user text-white text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="text-white font-medium text-sm">Manager</p>
-                        <p class="text-slate-400 text-xs">admin@tastykitchen.com</p>
-                    </div>
-                </div>
-                
-                <!-- Logout -->
-                <a href="#" class="nav-item flex items-center py-3 px-4 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-xl group transition-all">
-                    <div class="bg-red-500/20 p-2 rounded-lg mr-3 group-hover:bg-red-500/30 transition-colors">
-                        <i class="fas fa-sign-out-alt text-red-400"></i>
-                    </div>
-                    <span>Logout</span>
-                </a>
-            </div>
         </aside>
 
         <!-- Main Content Area -->
@@ -219,7 +187,7 @@
 
     <!-- Modal thêm/sửa món ăn -->
     <div th:if="${showAdd} or ${showEdit}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 w-full max-w-md">
+      <div class="bg-white rounded-lg p-6 py-12 w-full max-w-md">
         <h2 class="text-xl font-bold mb-4 text-gray-800" th:text="${showAdd} ? 'Thêm món mới' : 'Chỉnh sửa món ăn'"></h2>
         <form th:action="${showAdd} ? @{/manager/menu} : @{/manager/menu/edit/{id}(id=${editItem.id})}" method="post">
           <div class="flex justify-center mb-2">
@@ -229,7 +197,7 @@
                     alt="Preview"
                     class="object-cover w-full h-full" />
             </div>
-            <input id="editImgFile" type="file" class="hidden" accept="image/*" onchange="previewImage(event)">
+            <input id="editImgFile" type="file" class="hidden" accept="image/*" onchange="handlePreviewImage(event)">
           </div>
           <div>
             <label class="block text-gray-700">Tên món</label>
@@ -247,23 +215,28 @@
             <label class="block text-gray-700">Giá bán</label>
             <input name="itemSprice" type="number" class="w-full border rounded px-3 py-2 text-black" th:value="${editItem?.itemSprice}" required />
           </div>
-          <div>
-            <label class="block text-gray-700">Ảnh (link)</label>
-            <input name="itemImg" class="w-full border rounded px-3 py-2 text-black" th:value="${editItem?.itemImg}" />
-          </div>
           <div class="mb-4 mt-4">
             <label class="block text-gray-700 font-semibold mb-2">Nguyên liệu & số kg</label>
             <div id="ingredients-list" class="space-y-2 bg-gray-50 rounded p-2 h-48 overflow-y-auto">
-              <div class="flex items-center justify-between gap-2 ingredient-row">
+              <div class="flex items-center justify-between gap-2 ingredient-row" th:each="ing,iter : ${ingredientsList}">
                 <select name="ingredientIds" class="form-select border rounded px-2 py-1 text-black" required>
                   <option value="">Chọn nguyên liệu</option>
-                  <option th:each="ing : ${ingredientsList}" th:value="${ing.id}" th:text="${ing.ingreName}"></option>
+                  <option th:each="ing2 : ${ingredientsList}" th:value="${ing2.id}" th:text="${ing2.ingreName}"></option>
                 </select>
                 <input name="ingredientKgs" type="number" step="0.01" min="0" placeholder="kg" class="w-20 border rounded px-2 py-1 text-black" required>
-                <button type="button" class="remove-ing-btn text-red-500 text-lg hidden" onclick="removeIngredientRow(this)"><i class="fas fa-times"></i></button>
+                <button type="button"
+                  class="remove-ing-btn text-lg px-2 py-1 rounded"
+                  th:classappend="${iter.index == 0} ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-red-100 text-red-500 hover:bg-red-200'"
+                  th:attr="disabled=${iter.index == 0} ? 'disabled' : null"
+                  onclick="removeIngredientRow(this)">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
             </div>
             <button type="button" class="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded font-semibold hover:bg-blue-200" onclick="addIngredientRow()">+ Thêm nguyên liệu</button>
+          </div>
+          <div class="text-xs text-red-500 mb-2">
+            <span>Lưu ý: Nếu chọn ảnh nhưng không thấy preview, có thể do trình duyệt chặn hoặc bạn chưa chọn đúng file ảnh. Hãy đảm bảo chọn file ảnh hợp lệ và kiểm tra lại mã JavaScript.</span>
           </div>
           <div class="flex justify-end gap-2 mt-4">
             <a href="/manager/menu" class="px-4 py-2 bg-gray-300 rounded">Hủy</a>
@@ -273,25 +246,47 @@
       </div>
     </div>
     <script>
-        function previewImage(event) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                const imgElement = document.getElementById("previewImage");
-                if (imgElement) {
-                    imgElement.src = reader.result;
-                }
-            };
-            if (event.target.files && event.target.files[0]) {
-                reader.readAsDataURL(event.target.files[0]);
+        function handlePreviewImage(event) {
+            console.log('Preview image function called');
+            const input = event.target;
+            
+            if (input.files && input.files[0]) {
+                console.log('File selected:', input.files[0]);
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    console.log('File reading completed');
+                    const preview = document.getElementById('previewImage');
+                    if (preview) {
+                        console.log('Preview element found');
+                        preview.src = e.target.result;
+                    } else {
+                        console.error('Preview element not found');
+                    }
+                };
+                
+                reader.onerror = function(error) {
+                    console.error('Error reading file:', error);
+                };
+                
+                reader.readAsDataURL(input.files[0]);
             }
         }
         function addIngredientRow() {
           const list = document.getElementById('ingredients-list');
           const firstRow = list.querySelector('.ingredient-row');
           const newRow = firstRow.cloneNode(true);
+          
+          // Reset select và input
           newRow.querySelector('select').selectedIndex = 0;
           newRow.querySelector('input').value = '';
-          newRow.querySelector('.remove-ing-btn').classList.remove('hidden');
+          
+          // Reset trạng thái nút xóa
+          const removeBtn = newRow.querySelector('.remove-ing-btn');
+          removeBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+          removeBtn.classList.add('bg-red-100', 'text-red-500', 'hover:bg-red-200');
+          removeBtn.removeAttribute('disabled');
+          
           list.appendChild(newRow);
         }
         function removeIngredientRow(btn) {
