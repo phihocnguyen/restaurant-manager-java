@@ -296,7 +296,7 @@
                     Home
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a href="#menu" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
                     Menu
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                 </a>
@@ -510,47 +510,55 @@
 </section>
 
 <!-- Reservation Section -->
-<section id="reservation" class="py-20 px-6">
+<section id="reservation" class="py-20 px-6 text-gray-800">
     <div class="max-w-4xl mx-auto text-center">
-        <div class="mb-16">
-            <h2 class="playfair text-5xl font-bold mb-6">
+        <div class="mb-8">
+            <h2 class="playfair text-5xl font-bold">
                 <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                    Reserve Your Table
+                    Chọn Ngày và Giờ Đặt Bàn
                 </span>
             </h2>
-            <p class="text-xl text-gray-300">
-                Secure your spot for an extraordinary dining experience
-            </p>
         </div>
 
-        <div class="glass p-8 rounded-3xl">
+        <div class="bg-white p-8 rounded-lg shadow-md">
             <form class="space-y-6" id="reservationForm">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="text" placeholder="Full Name" required
-                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
-                    <input type="email" placeholder="Email Address" required
-                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+                    <div>
+                        <label for="res-date" class="block text-sm font-medium text-gray-700">Ngày:</label>
+                        <input type="date" id="res-date" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label for="res-time" class="block text-sm font-medium text-gray-700">Giờ:</label>
+                        <input type="time" id="res-time" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label for="res-guests" class="block text-sm font-medium text-gray-700">Số người:</label>
+                         <input type="number" id="res-guests" required min="1" value="1"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <button type="button" class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors duration-300">Kiểm tra Tình trạng</button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <input type="date" required
-                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
-                    <input type="time" required
-                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
-                    <select required class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
-                        <option value="">Guests</option>
-                        <option value="1">1 Person</option>
-                        <option value="2">2 People</option>
-                        <option value="3">3 People</option>
-                        <option value="4">4 People</option>
-                        <option value="5">5+ People</option>
-                    </select>
+                <div id="availability-message" class="text-center text-gray-700 mt-4 hidden">
+                    Available tables for <span id="available-guests"></span> person(s) on <span id="available-date"></span> at <span id="available-time"></span>.
+                    click on an available table to book it
+                </div>
+
+                <div id="table-map-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6 hidden">
+                    <div th:each="table : ${tables}" class="bg-gray-200 rounded-md p-3 text-center flex flex-col items-center justify-center border border-gray-300 cursor-pointer hover:bg-gray-300" 
+                         th:data-table-id="${table.id}" th:data-tab-num="${table.tabNum}" th:data-status="${table.tabStatus ? 'occupied' : 'vacant'}" th:classappend="${table.tabStatus ? 'opacity-50 cursor-not-allowed hover:bg-gray-200' : ''}">
+                        <div class="w-10 h-10 bg-gray-400 rounded-md flex items-center justify-center text-white font-bold text-lg">[[${table.tabNum}]]</div>
+                        <p class="text-xs mt-1" 
+                           th:classappend="${table.tabStatus ? 'text-red-600' : 'text-green-600'}">[[${table.tabStatus ? 'Đã có khách' : 'Còn trống'}]]</p>
+                    </div>
                 </div>
 
                 <textarea placeholder="Special Requests" rows="4"
-                          class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"></textarea>
+                          class="w-full px-6 py-4 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-all duration-300 text-gray-800"></textarea>
 
-                <button type="submit" class="w-full premium-btn py-4 rounded-2xl text-black font-bold text-lg magnetic-btn">
+                <button type="submit" class="w-full premium-btn py-4 rounded-md text-black font-bold text-lg magnetic-btn">
                     Confirm Reservation
                 </button>
             </form>
@@ -639,7 +647,16 @@
     </div>
 </section>
 
+<!-- Global Modal Functions -->
 <script>
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileMenu = document.getElementById("mobileMenu");
@@ -698,6 +715,48 @@
     setTimeout(() => {
         if (loadingScreen) loadingScreen.classList.add("hidden");
     }, 1500);
+
+    // Reservation Table Map Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkAvailabilityBtn = document.querySelector('#reservationForm button[type="button"]');
+        const tableMapGrid = document.getElementById('table-map-grid');
+        const availabilityMessage = document.getElementById('availability-message');
+        const resDateInput = document.getElementById('res-date');
+        const resTimeInput = document.getElementById('res-time');
+        const resGuestsInput = document.getElementById('res-guests');
+        const availableGuestsSpan = document.getElementById('available-guests');
+        const availableDateSpan = document.getElementById('available-date');
+        const availableTimeSpan = document.getElementById('available-time');
+
+        if (checkAvailabilityBtn && tableMapGrid && availabilityMessage && resDateInput && resTimeInput && resGuestsInput) {
+            checkAvailabilityBtn.addEventListener('click', function() {
+                const selectedDate = resDateInput.value;
+                const selectedTime = resTimeInput.value;
+                const selectedGuests = resGuestsInput.value;
+
+                if (!selectedDate || !selectedTime || !selectedGuests) {
+                    alert('Vui lòng chọn ngày, giờ và số người.');
+                    return;
+                }
+
+                // TODO: Implement actual API call to backend to check table availability
+                // For now, just display the tables fetched by the controller and the message
+
+                // Update availability message
+                availableGuestsSpan.innerText = selectedGuests;
+                availableDateSpan.innerText = selectedDate;
+                availableTimeSpan.innerText = selectedTime;
+
+                // Show the message and table grid
+                availabilityMessage.classList.remove('hidden');
+                tableMapGrid.classList.remove('hidden');
+
+                // TODO: Filter/highlight available tables based on selected date, time, and guests
+                // This will require data from the backend API call result
+
+            });
+        }
+    });
 </script>
 </body>
 </html>

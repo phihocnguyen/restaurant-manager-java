@@ -1,6 +1,8 @@
 /mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/controller/TableController.java
 /mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/controller/AuthController.java
 /mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/dto/TableDto.java
+/mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/dto/MenuItem.java
+/mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/controller/ClientMenuController.java
 /mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/RestaurantManagerApplication.java
 /mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/controller/CustomerController.java
 /mnt/c/Users/ngphi/OneDrive/Desktop/restaurant-manager-java/frontend/src/main/java/com/restaurant/dto/CustomerDto.java

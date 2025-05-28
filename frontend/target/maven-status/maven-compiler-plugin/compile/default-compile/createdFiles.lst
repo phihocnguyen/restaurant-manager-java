@@ -1,7 +1,10 @@
 com/restaurant/controller/CustomerController.class
 com/restaurant/controller/SalesController.class
+com/restaurant/controller/ClientMenuController.class
 com/restaurant/dto/TableDto.class
 com/restaurant/RestaurantManagerApplication.class
+com/restaurant/controller/AuthController$1.class
+com/restaurant/dto/MenuItem.class
 com/restaurant/dto/MenuItemDto.class
 com/restaurant/controller/TableController$1.class
 com/restaurant/controller/TableController$2.class
