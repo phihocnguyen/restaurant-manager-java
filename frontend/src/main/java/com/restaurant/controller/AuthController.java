@@ -40,4 +40,10 @@ public class AuthController {
         // TODO: Implement forgot password logic
         return "redirect:/login";
     }
+
+    @GetMapping("/register")
+    public String registerPage(Model model) {
+        model.addAttribute("title", "Đăng ký - Restaurant Manager");
+        return "register";
+    }
 } 
