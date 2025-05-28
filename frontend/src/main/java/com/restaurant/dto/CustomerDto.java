@@ -5,5 +5,6 @@ public class CustomerDto {
     private String email;
     private String phone;
     private String address;
+    private Boolean isdeleted;
     private String createdAt; // hoặc LocalDate
 }

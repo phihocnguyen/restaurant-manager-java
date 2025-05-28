@@ -48,7 +48,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(null);
         }
-
+        // Đảm bảo luôn set isdeleted = false khi tạo mới (handled in service)
         CustomerDto createdCustomer = customerService.createCustomer(createCustomerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
     }
@@ -57,6 +57,13 @@ public class CustomerController {
     public ResponseEntity<CustomerDto> updateCustomer(
             @PathVariable Integer id,
             @Valid @RequestBody CustomerDto customerDto) {
+        // Kiểm tra customer có tồn tại không
+        CustomerDto existingCustomer = customerService.getCustomerById(id);
+        if (existingCustomer == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Giữ nguyên giá trị isdeleted cũ nếu không được truyền lên (handled in service)
         CustomerDto updatedCustomer = customerService.updateCustomer(id, customerDto);
         if (updatedCustomer != null) {
             return ResponseEntity.ok(updatedCustomer);
@@ -66,6 +73,7 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer id) {
+        // Soft delete: set isdeleted = true
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }

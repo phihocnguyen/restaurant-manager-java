@@ -109,63 +109,26 @@ public class ManagerController {
         menuItem.put("itemSprice", itemSprice);
         menuItem.put("isdeleted", false);
         // Build body cho API
-        if (ingredientIds.size() == 1) {
-            Map<String, Object> body = new HashMap<>();
-            body.put("menuItem", menuItem);
-            Map<String, Object> recipe = new HashMap<>();
-            recipe.put("ingreId", ingredientIds.get(0));
-            recipe.put("ingreQuantityKg", ingredientKgs.get(0));
-            body.put("recipe", recipe);
-            restTemplate.postForEntity("http://localhost:8080/recipes/one", body, Void.class);
-        } else {
-            Map<String, Object> body = new HashMap<>();
-            body.put("menuItem", menuItem);
-            List<Map<String, Object>> ingredients = new java.util.ArrayList<>();
-            for (int i = 0; i < ingredientIds.size(); i++) {
-                Map<String, Object> ing = new HashMap<>();
-                ing.put("ingreId", ingredientIds.get(i));
-                ing.put("ingreQuantityKg", ingredientKgs.get(i));
-                ingredients.add(ing);
-            }
-            Map<String, Object> recipes = new HashMap<>();
-            recipes.put("ingredients", ingredients);
-            body.put("recipes", recipes);
-            restTemplate.postForEntity("http://localhost:8080/recipes/many", body, Void.class);
-        }
-        redirectAttributes.addFlashAttribute("success", "Thêm món thành công!");
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("menuItem", menuItem);
+        requestBody.put("ingredientIds", ingredientIds);
+        requestBody.put("ingredientKgs", ingredientKgs);
+
+        // Call API
+        String url = "http://localhost:8080/items";
+        restTemplate.postForObject(url, requestBody, Object.class);
+
+        redirectAttributes.addFlashAttribute("success", "Đã thêm món mới!");
         return "redirect:/manager/menu";
     }
 
-    @PostMapping("/menu/edit/{id}")
-    public String editMenu(@PathVariable int id, @ModelAttribute MenuItemDto item, RedirectAttributes redirectAttributes) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080/items/" + id;
-        restTemplate.patchForObject(url, item, Void.class);
-        redirectAttributes.addFlashAttribute("success", "Cập nhật thành công!");
-        return "redirect:/manager/menu";
-    }
-
-    @PostMapping("/menu/delete/{id}")
+    @GetMapping("/menu/delete/{id}")
     public String deleteMenu(@PathVariable int id, RedirectAttributes redirectAttributes) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8080/items/" + id;
         restTemplate.delete(url);
         redirectAttributes.addFlashAttribute("success", "Đã xóa món!");
         return "redirect:/manager/menu";
-    }
-
-    @GetMapping("/tables")
-    public String tables(Model model) {
-        model.addAttribute("title", "Quản lý Bàn - Restaurant Manager");
-        model.addAttribute("activeTab", "tables");
-        return "manager/tables";
-    }
-
-    @GetMapping("/customers")
-    public String customers(Model model) {
-        model.addAttribute("title", "Quản lý Khách hàng - Restaurant Manager");
-        model.addAttribute("activeTab", "customers");
-        return "manager/customers";
     }
 
     @GetMapping("/reports")

@@ -30,4 +30,6 @@ public class CreateCustomerDto {
 
     @Size(max = 200, message = "Address must not exceed 200 characters")
     private String address;
+    
+    private Boolean isvip;
 }

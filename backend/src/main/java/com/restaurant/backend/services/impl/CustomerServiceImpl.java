@@ -47,6 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPhone(createCustomerDto.getPhone());
         customer.setAddress(createCustomerDto.getAddress());
         customer.setIsdeleted(false);
+        customer.setIsvip(createCustomerDto.getIsvip());
 
         Customer savedCustomer = customerRepository.save(customer);
         return convertToDto(savedCustomer);
@@ -62,6 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
                     existingCustomer.setPhone(customerDto.getPhone());
                     existingCustomer.setAddress(customerDto.getAddress());
                     existingCustomer.setIsdeleted(customerDto.getIsdeleted());
+                    existingCustomer.setIsvip(customerDto.getIsvip());
                     return convertToDto(customerRepository.save(existingCustomer));
                 })
                 .orElse(null);
@@ -99,6 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
         dto.setPhone(customer.getPhone());
         dto.setAddress(customer.getAddress());
         dto.setIsdeleted(customer.getIsdeleted());
+        dto.setIsvip(customer.getIsvip());
         return dto;
     }
 }

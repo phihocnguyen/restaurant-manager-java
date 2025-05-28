@@ -1,234 +1,703 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Breakfast Menu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .vertical-text {
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            letter-spacing: 0.2em;
-        }
-        .menu-lines span {
-            display: block;
-            width: 28px;
-            height: 3px;
-            background: #fff;
-            margin: 5px 0;
-            border-radius: 2px;
-        }
-        .fade {
-            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
-            opacity: 0;
-        }
-        .fade.show {
-            opacity: 1;
-        }
-        #content-wrapper {
-            position: relative;
-            z-index: 10;
-        }
-        @media (max-width: 768px) {
-            aside.w-20 { width: 64px; }
-            main.ml-20 { margin-left: 64px; }
-            .flex-row { flex-direction: column; }
-        }
-        html, body { height: 100%; }
-    </style>
+<title>Tasty Kitchen - Culinary Excellence</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-gold: #D4AF37;
+        --dark-bg: #0F0F0F;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --glass-bg: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+        background: var(--dark-bg);
+    }
+
+    .playfair {
+        font-family: 'Playfair Display', serif;
+    }
+
+    /* Glassmorphism */
+    .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-dark {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Animated Background */
+    .animated-bg {
+        background: linear-gradient(-45deg, #0F0F0F, #1a1a1a, #2d2d2d, #1a1a1a);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Pulse Glow */
+    .pulse-glow {
+        animation: pulseGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+        from { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+        to { box-shadow: 0 0 40px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.3); }
+    }
+
+    /* Magnetic Button Effect */
+    .magnetic-btn {
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .magnetic-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Image Hover Effects */
+    .image-hover {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.5s ease;
+    }
+
+    .image-hover::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+        transition: left 0.5s ease;
+        z-index: 1;
+    }
+
+    .image-hover:hover::before {
+        left: 100%;
+    }
+
+    /* Premium Button */
+    .premium-btn {
+        position: relative;
+        background: linear-gradient(45deg, var(--primary-gold), #B8860B);
+        overflow: hidden;
+    }
+
+    .premium-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .premium-btn:hover::before {
+        left: 100%;
+    }
+
+    /* Floating Particles */
+    .particle {
+        position: absolute;
+        background: rgba(212, 175, 55, 0.6);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+    }
+
+    ::-webkit-scrollbar-thumbChristiansen {
+        background: linear-gradient(45deg, var(--primary-gold), #B8860B);
+        border-radius: 4px;
+    }
+
+    /* Loading Screen */
+    .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0F0F0F;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+    }
+
+    .loading-screen.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .loading-logo {
+        font-size: 4rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, var(--primary-gold), #B8860B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        z-index: 999;
+        transition: right 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mobile-menu.active {
+        right: 0;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .hero-title { font-size: 3rem !important; }
+        .hero-section { padding: 1rem !important; }
+        .grid-responsive { grid-template-columns: 1fr !important; }
+    }
+
+    /* Social Icons */
+    .social-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .social-icon:hover {
+        background: var(--primary-gold);
+        color: black;
+        transform: translateY(-3px);
+    }
+
+    /* Newsletter */
+    .newsletter-input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        padding: 12px 20px;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .newsletter-input:focus {
+        outline: none;
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Scroll to Top */
+    .scroll-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: var(--primary-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+
+    .scroll-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .scroll-to-top:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+    }
+</style>
 </head>
-<body class="bg-[#232323] min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-20 bg-[#232323] flex flex-col items-center py-8 justify-between h-screen fixed left-0 top-0 z-20">
-        <div class="flex flex-col items-center gap-8">
-            <div class="mb-8">
-                <img src="https://png.pngtree.com/png-clipart/20220903/ourmid/pngtree-chef-restaurant-logo-png-image_6136204.png" alt="Logo" class="w-12 h-12 object-contain rounded-full bg-white p-1 shadow-lg" />
-            </div>
-            <div class="menu-lines cursor-pointer">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        <div class="flex flex-col items-center gap-8 mb-8">
-            <button id="nextBtn" class="text-white text-xs mb-2 opacity-70 hover:opacity-100 transition">Next</button>
-            <button id="prevBtn" class="text-white text-xs opacity-70 hover:opacity-100 transition">Prev</button>
-            <div class="text-white text-xs mt-8 tracking-widest"><span id="sliderIndex">01</span>/<span class="opacity-60">03</span></div>
-        </div>
-    </aside>
+<body class="animated-bg text-white min-h-screen">
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo playfair">Tasty Kitchen</div>
+</div>
 
-    <!-- Content Wrapper for Smooth Scrolling -->
-    <div id="content-wrapper" class="min-h-screen">
-        <!-- Main Content -->
-        <main class="flex-1 ml-20 flex flex-row min-h-screen max-w-[1400px] mx-auto" id="main-content">
-            <!-- Main Image -->
-            <section class="flex-1 flex items-center justify-center relative overflow-hidden">
-                <div class="relative w-[520px] h-[520px] max-w-full">
-                    <img id="mainImage" src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudCUyMGZvb2R8ZW58MHx8MHx8fDA%3D" alt="Breakfast" class="object-cover rounded-2xl shadow-2xl w-full h-full border-8 border-[#232323] fade show parallax-img" />
-                </div>
-            </section>
+<!-- Floating Particles -->
+<div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
 
-            <!-- Right Panel -->
-            <aside class="w-[540px] flex flex-col justify-between py-10 px-12 bg-[#232323] max-w-full">
-                <!-- Header -->
-                <header class="flex justify-between items-center mb-8">
-                    <nav class="flex gap-8 text-white text-sm font-medium opacity-80">
-                        <a href="#reservation" class="hover:opacity-100 opacity-80 transition">Reservation</a>
-                        <a href="#place" class="hover:opacity-100 opacity-80 transition">Place</a>
-                        <a href="#contact" class="hover:opacity-100 opacity-80 transition">Contact</a>
-                        <a href="#menu" class="hover:opacity-100 opacity-80 transition">Menu</a>
-                    </nav>
-                </header>
-                <!-- Title & CTA -->
-                <div class="flex-1 flex flex-col justify-center">
-                    <div class="flex items-center gap-4 mb-2">
-                        <span class="bg-[#FFD580] text-xs font-bold px-2 py-1 rounded uppercase tracking-widest text-[#232323]">Hot Stuff</span>
-                    </div>
-                    <h1 class="text-5xl font-extrabold text-white leading-tight mb-6">NEW<br>BREAKFAST<br>MENU</h1>
-                    <button class="bg-[#FFD580] text-[#232323] font-bold px-8 py-3 rounded-lg text-lg shadow-lg hover:bg-yellow-300 transition w-max mb-6 cta-btn">BOOK A TABLE</button>
-                    <p class="text-gray-300 text-lg mb-2 max-w-md">Enjoy our delicious new breakfast menu, crafted by top chefs for a perfect start to your day. Fresh, healthy, and full of flavor!</p>
-                </div>
-                <!-- Thumbnails -->
-                <div class="flex gap-4 mt-10">
-                    <img data-idx="0" src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudCUyMGZvb2R8ZW58MHx8MHx8fDA%3D" alt="thumb1" class="w-28 h-24 object-cover rounded-xl border-4 border-[#232323] shadow cursor-pointer thumb-img ring-2 ring-transparent" />
-                    <img data-idx="1" src="https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?cs=srgb&dl=pexels-chanwalrus-958545.jpg&fm=jpg" alt="thumb2" class="w-28 h-24 object-cover rounded-xl border-4 border-[#232323] shadow cursor-pointer thumb-img ring-2 ring-transparent" />
-                    <img data-idx="2" src="https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg" alt="thumb3" class="w-28 h-24 object-cover rounded-xl border-4 border-[#232323] shadow cursor-pointer thumb-img ring-2 ring-transparent" />
-                </div>
-            </aside>
-        </main>
-
-        <!-- About Section -->
-        <section id="about" class="relative z-10 bg-white py-16 px-4 sm:px-8 md:px-20 flex flex-col md:flex-row items-center gap-10 max-w-[1400px] mx-auto">
-            <div class="flex-1 flex flex-col items-start">
-                <h2 class="text-3xl font-bold text-[#232323] mb-4 flex items-center gap-2">Welcome to <span class="text-yellow-500">Tasty Kitchen</span> <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" class="w-8 h-8 inline-block"/></h2>
-                <p class="text-gray-600 mb-4 max-w-lg">Experience the best breakfast in town! Our chefs use only the freshest ingredients to create delicious, healthy, and beautiful dishes. Whether you're here for a quick bite or a family brunch, we promise a memorable meal in a cozy atmosphere.</p>
-                <ul class="flex gap-4 mt-2">
-                    <li class="flex items-center gap-1 text-sm text-gray-700"><span class="text-xl">🍳</span> Fresh Eggs</li>
-                    <li class="flex items-center gap-1 text-sm text-gray-700"><span class="text-xl">🥐</span> Baked Daily</li>
-                    <li class="flex items-center gap-1 text-sm text-gray-700"><span class="text-xl">☕</span> Premium Coffee</li>
-                </ul>
-            </div>
-            <div class="flex-1 flex justify-center">
-                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80" alt="about" class="rounded-2xl shadow-xl w-80 h-80 object-cover border-4 border-yellow-100" />
-            </div>
-        </section>
-
-        <!-- Featured Menu Section -->
-        <section id="menu" class="relative z-10 bg-[#f8fafc] py-16 px-4 sm:px-8 md:px-20 max-w-[1400px] mx-auto">
-            <h2 class="text-3xl font-bold text-[#232323] mb-10 text-center">Featured Menu</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div class="featured-card bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition">
-                    <img src="https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80" alt="Egg Salad" class="w-32 h-32 object-cover rounded-xl mb-4" />
-                    <h3 class="font-bold text-lg mb-2">Egg & Avocado Toast</h3>
-                    <p class="text-gray-500 text-sm mb-2">Crunchy toast, creamy avocado, soft-boiled eggs, herbs.</p>
-                    <span class="text-yellow-600 font-bold text-lg">$7.99</span>
-                </div>
-                <div class="featured-card bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition">
-                    <img src="https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&w=400&q=80" alt="Cinnamon Roll" class="w-32 h-32 object-cover rounded-xl mb-4" />
-                    <h3 class="font-bold text-lg mb-2">Cinnamon Roll</h3>
-                    <p class="text-gray-500 text-sm mb-2">Warm, gooey, and topped with sweet icing. Baked fresh daily.</p>
-                    <span class="text-yellow-600 font-bold text-lg">$3.50</span>
-                </div>
-                <div class="featured-card bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition">
-                    <img src="https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg" alt="Full Breakfast" class="w-32 h-32 object-cover rounded-xl mb-4" />
-                    <h3 class="font-bold text-lg mb-2">Full Breakfast Plate</h3>
-                    <p class="text-gray-500 text-sm mb-2">Eggs, sausage, salad, bread, and more. Perfect for sharing!</p>
-                    <span class="text-yellow-600 font-bold text-lg">$10.99</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Special Offers Section -->
-        <section class="relative z-10 bg-gradient-to-r from-yellow-100 via-pink-100 to-purple-100 py-12 px-4 sm:px-8 md:px-20 flex flex-col md:flex-row items-center justify-between gap-8 max-w-[1400px] mx-auto">
-            <div class="flex-1">
-                <h2 class="text-2xl font-bold text-[#232323] mb-2 flex items-center gap-2">Special Offer <span class="text-pink-500 text-2xl">🎉</span></h2>
-                <p class="text-gray-700 mb-2">Get <span class="font-bold text-yellow-600">10% OFF</span> your first breakfast order!<br>Use code: <span class="font-mono bg-yellow-200 px-2 py-1 rounded">MORNING10</span></p>
-                <p class="text-gray-500 text-sm">Valid for dine-in only. Ends this month.</p>
-            </div>
-            <div class="flex-1 flex justify-center">
-                <img src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=300&q=80" alt="offer" class="rounded-xl shadow-lg w-56 h-40 object-cover border-4 border-white" />
-            </div>
-        </section>
-
-        <!-- Quick Reservation Section -->
-        <section id="reservation" class="relative z-10 bg-white py-16 px-4 sm:px-8 md:px-20 flex flex-col items-center max-w-[1400px] mx-auto">
-            <h2 class="text-3xl font-bold text-[#232323] mb-6">Book a Table</h2>
-            <div class="w-full max-w-xl bg-[#f8fafc] rounded-2xl shadow-lg p-8 flex flex-col gap-4">
-                <div class="flex gap-4">
-                    <input type="text" placeholder="Your Name" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-yellow-200 outline-none" required />
-                    <input type="tel" placeholder="Phone" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-yellow-200 outline-none" required />
-                </div>
-                <div class="flex gap-4">
-                    <input type="date" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-yellow-200 outline-none" required />
-                    <input type="time" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-yellow-200 outline-none" required />
-                    <input type="number" min="1" placeholder="People" class="w-24 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-yellow-200 outline-none" required />
-                </div>
-                <button class="bg-yellow-400 hover:bg-yellow-500 text-[#232323] font-bold py-3 rounded-lg shadow-lg transition">Reserve Now</button>
-            </div>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section class="relative z-10 bg-[#f8fafc] py-16 px-4 sm:px-8 md:px-20 max-w-[1400px] mx-auto">
-            <h2 class="text-3xl font-bold text-[#232323] mb-10 text-center">What Our Customers Say</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="customer1" class="w-16 h-16 rounded-full mb-3 border-2 border-yellow-300" />
-                    <p class="text-gray-600 italic mb-2">"The best breakfast I've ever had! The staff is so friendly and the food is amazing."</p>
-                    <span class="font-bold text-[#232323]">Anna N.</span>
-                    <div class="flex gap-1 mt-1 text-yellow-400">★★★★★</div>
-                </div>
-                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="customer2" class="w-16 h-16 rounded-full mb-3 border-2 border-yellow-300" />
-                    <p class="text-gray-600 italic mb-2">"Great atmosphere and delicious food. Highly recommend the avocado toast!"</p>
-                    <span class="font-bold text-[#232323]">John D.</span>
-                    <div class="flex gap-1 mt-1 text-yellow-400">★★★★★</div>
-                </div>
-                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
-                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="customer3" class="w-16 h-16 rounded-full mb-3 border-2 border-yellow-300" />
-                    <p class="text-gray-600 italic mb-2">"I love the variety and freshness. The cinnamon rolls are a must-try!"</p>
-                    <span class="font-bold text-[#232323]">Emily R.</span>
-                    <div class="flex gap-1 mt-1 text-yellow-400">★★★★★</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact & Map Section -->
-        <section id="contact" class="relative z-10 bg-white py-16 px-4 sm:px-8 md:px-20 flex flex-col md:flex-row gap-10 items-center max-w-[1400px] mx-auto">
-            <div class="flex-1">
-                <h2 class="text-2xl font-bold text-[#232323] mb-4">Contact Us</h2>
-                <p class="text-gray-600 mb-2">123 Flavor Street, Food City</p>
-                <p class="text-gray-600 mb-2">Phone: (123) 456-7890</p>
-                <p class="text-gray-600 mb-2">Email: hello@tastykitchen.com</p>
-                <p class="text-gray-500 text-sm">Open: 7:00 AM - 2:00 PM (Mon-Sun)</p>
-                <div class="flex gap-4 mt-4">
-                    <a href="#" class="text-gray-400 hover:text-blue-500 text-2xl"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-pink-500 text-2xl"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-blue-400 text-2xl"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-            <div class="flex-1 flex justify-center">
-                <iframe class="rounded-2xl shadow-lg w-full h-64 border-4 border-yellow-100" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.005708505034!2d105.7803633154026!3d21.03065339315459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab3e5b1b1b1b%3A0x1e1e1e1e1e1e1e1e!2zVGFzdHkgS2l0Y2hlbg!5e0!3m2!1sen!2s!4v1680000000000!5m2!1sen!2s" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="relative z-10 bg-[#232323] text-white py-6 px-4 sm:px-8 md:px-20 flex flex-col md:flex-row items-center justify-between gap-4 max-w-[1400px] mx-auto">
-            <div class="flex items-center gap-2">
-                <img src="https://png.pngtree.com/png-clipart/20220903/ourmid/pngtree-chef-restaurant-logo-png-image_6136204.png" alt="Logo" class="w-8 h-8 object-contain rounded-full bg-white p-1" />
-                <span class="font-bold text-lg">Tasty Kitchen</span>
-            </div>
-            <div class="text-gray-400 text-sm">© 2024 Tasty Kitchen. All rights reserved.</div>
-            <div class="flex gap-4">
-                <a href="#" class="hover:text-yellow-400"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="hover:text-pink-400"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter"></i></a>
-            </div>
-        </footer>
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="absolute top-6 right-6 text-white text-3xl" id="closeMobileMenu">×</button>
+    <div class="space-y-8 text-center">
+        <a href="#home" class="block text-2xl hover:text-yellow-400 transition-colors">Home</a>
+        <a href="#menu" class="block text-2xl hover:text-yellow-400 transition-colors">Menu</a>
+        <a href="#about" class="block text-2xl hover:text-yellow-400 transition-colors">About</a>
+        <a href="#reservation" class="block premium-btn px-8 py-3 rounded-full text-black font-semibold">Reserve Table</a>
     </div>
+</div>
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 glass-dark transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
+                    <span class="text-black font-bold text-xl">T</span>
+                </div>
+                <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Tasty Kitchen</span>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    Home
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#menu" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    Menu
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    About
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#reservation" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
+                    Reserve Table
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden glass p-2 rounded-lg" id="mobile-menu-btn">
+                <div class="w-6 h-6 flex flex-col justify-center space-y-1">
+                    <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                    <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                    <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                </div>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="relative min-h-screen flex items-center justify-center hero-section px-6 py-20">
+    <div class="absolute inset-0 z-0">
+        <div class="w-full h-full bg-gradient-to-br from-black/50 to-black/30"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- Text Content -->
+        <div class="space-y-8 text-center lg:text-left">
+            <div class="inline-flex items-center space-x-2 glass px-4 py-2 rounded-full">
+                <span class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                <span class="text-sm font-medium">New Breakfast Menu Available</span>
+            </div>
+
+            <h1 class="playfair text-6xl lg:text-8xl font-black leading-tight hero-title">
+                <span class="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent" id="heroText1">
+                    Culinary
+                </span>
+                <br>
+                <span class="text-white" id="heroText2">Excellence</span>
+                <br>
+                <span class="text-yellow-400" id="heroText3">Awaits</span>
+            </h1>
+
+            <p class="text-xl text-gray-300 max-w-2xl leading-relaxed">
+                Experience a symphony of flavors crafted by world-class chefs. Every dish tells a story, every bite creates a memory.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <button class="premium-btn px-8 py-4 rounded-full text-black font-bold text-lg magnetic-btn" onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">
+                    Explore Menu
+                </button>
+                <button class="glass px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition-all duration-300">
+                    Watch Story
+                </button>
+            </div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="relative">
+            <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent rounded-3xl blur-3xl"></div>
+            <div class="relative image-hover rounded-3xl overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudCUyMGZvb2R8ZW58MHx8MHx8fDA%3D" 
+                     alt="Gourmet Breakfast" 
+                     class="w-full h-[600px] object-cover"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 glass p-4 rounded-xl">
+                    <p class="text-sm font-semibold">Chef's Special</p>
+                    <p class="text-xs text-gray-300">Artisan Breakfast Platter</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Menu Section -->
+<section id="menu" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="playfair text-5xl font-bold mb-6">
+                <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    Signature Creations
+                </span>
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                Each dish is a masterpiece, carefully crafted with the finest ingredients and presented with artistic flair.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 grid-responsive">
+            <!-- Menu Item 1 -->
+            <div class="glass p-6 rounded-3xl menu-card">
+                <div class="relative overflow-hidden rounded-2xl mb-6 image-hover">
+                    <img src="https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80" 
+                         alt="Avocado Toast" 
+                         class="w-full h-48 object-cover"/>
+                    <div class="absolute top-4 right-4 glass px-3 py-1 rounded-full">
+                        <span class="text-sm font-semibold text-yellow-400">Popular</span>
+                    </div>
+                </div>
+                <h3 class="playfair text-2xl font-bold mb-3">Truffle Avocado Toast</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    Artisan sourdough, premium avocado, truffle oil, poached egg, microgreens
+                </p>
+                <div class="flex items-center justify-between">
+                    <span class="text-2xl font-bold text-yellow-400 price-text">$12.99</span>
+                    <button class="glass px-4 py-2 rounded-full hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu Item 2 -->
+            <div class="glass p-6 rounded-3xl menu-card">
+                <div class="relative overflow-hidden rounded-2xl mb-6 image-hover">
+                    <img src="https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&w=400&q=80" 
+                         alt="Cinnamon Roll" 
+                         class="w-full h-48 object-cover"/>
+                    <div class="absolute top-4 right-4 glass px-3 py-1 rounded-full">
+                        <span class="text-sm font-semibold text-yellow-400">Chef's Choice</span>
+                    </div>
+                </div>
+                <h3 class="playfair text-2xl font-bold mb-3">Artisan Cinnamon Roll</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    House-made pastry, Madagascar vanilla glaze, toasted pecans, sea salt caramel
+                </p>
+                <div class="flex items-center justify-between">
+                    <span class="text-2xl font-bold text-yellow-400 price-text">$8.50</span>
+                    <button class="glass px-4 py-2 rounded-full hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu Item 3 -->
+            <div class="glass p-6 rounded-3xl menu-card">
+                <div class="relative overflow-hidden rounded-2xl mb-6 image-hover">
+                    <img src="https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg" 
+                         alt="Full Breakfast" 
+                         class="w-full h-48 object-cover"/>
+                    <div class="absolute top-4 right-4 glass px-3 py-1 rounded-full">
+                        <span class="text-sm font-semibold text-yellow-400">Signature</span>
+                    </div>
+                </div>
+                <h3 class="playfair text-2xl font-bold mb-3">The Grand Feast</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    Free-range eggs, artisan sausage, seasonal vegetables, heritage grains
+                </p>
+                <div class="flex items-center justify-between">
+                    <span class="text-2xl font-bold text-yellow-400 price-text">$18.99</span>
+                    <button class="glass px-4 py-2 rounded-full hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+            <div class="relative">
+                <div class="absolute -inset-4 bg-gradient-to-r from-yellow-400/20 to-transparent rounded-3xl blur-2xl"></div>
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80" 
+                     alt="Restaurant Interior" 
+                     class="relative w-full h-96 object-cover rounded-3xl image-hover"/>
+            </div>
+        </div>
+
+        <div class="space-y-8">
+            <h2 class="playfair text-5xl font-bold">
+                <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    Our Story
+                </span>
+            </h2>
+
+            <p class="text-xl text-gray-300 leading-relaxed">
+                Born from a passion for culinary excellence, Tasty Kitchen represents the perfect harmony between traditional techniques and modern innovation.
+            </p>
+
+            <p class="text-gray-300 leading-relaxed">
+                Our award-winning chefs source only the finest ingredients, transforming each meal into an unforgettable experience that celebrates the art of cooking.
+            </p>
+
+            <div class="grid grid-cols-3 gap-6 stats-container">
+                <div class="text-center glass p-4 rounded-2xl">
+                    <div class="text-3xl font-bold text-yellow-400 mb-2 counter" data-target="15">0</div>
+                    <div class="text-sm text-gray-300">Years Experience</div>
+                </div>
+                <div class="text-center glass p-4 rounded-2xl">
+                    <div class="text-3xl font-bold text-yellow-400 mb-2 counter" data-target="50000">0</div>
+                    <div class="text-sm text-gray-300">Happy Customers</div>
+                </div>
+                <div class="text-center glass p-4 rounded-2xl">
+                    <div class="text-3xl font-bold text-yellow-400 mb-2 counter" data-target="25">0</div>
+                    <div class="text-sm text-gray-300">Awards Won</div>
+                </div>
+            </div>
+
+            <button class="premium-btn px-8 py-4 rounded-full text-black font-bold magnetic-btn">
+                Learn More
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Reservation Section -->
+<section id="reservation" class="py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+        <div class="mb-16">
+            <h2 class="playfair text-5xl font-bold mb-6">
+                <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    Reserve Your Table
+                </span>
+            </h2>
+            <p class="text-xl text-gray-300">
+                Secure your spot for an extraordinary dining experience
+            </p>
+        </div>
+
+        <div class="glass p-8 rounded-3xl">
+            <form class="space-y-6" id="reservationForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="text" placeholder="Full Name" required
+                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
+                    <input type="email" placeholder="Email Address" required
+                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <input type="date" required
+                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
+                    <input type="time" required
+                           class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
+                    <select required class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300">
+                        <option value="">Guests</option>
+                        <option value="1">1 Person</option>
+                        <option value="2">2 People</option>
+                        <option value="3">3 People</option>
+                        <option value="4">4 People</option>
+                        <option value="5">5+ People</option>
+                    </select>
+                </div>
+
+                <textarea placeholder="Special Requests" rows="4"
+                          class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"></textarea>
+
+                <button type="submit" class="w-full premium-btn py-4 rounded-2xl text-black font-bold text-lg magnetic-btn">
+                    Confirm Reservation
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="playfair text-5xl font-bold mb-6">
+                <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    What Our Guests Say
+                </span>
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                Hear from our delighted guests about their unforgettable dining experiences at Tasty Kitchen.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 grid-responsive">
+            <!-- Testimonial 1 -->
+            <div class="glass p-6 rounded-3xl">
+                <div class="flex items-center mb-4">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" 
+                         alt="Customer 1" 
+                         class="w-16 h-16 rounded-full object-cover mr-4 image-hover"/>
+                    <div>
+                        <h3 class="playfair text-xl font-bold">Emily Carter</h3>
+                        <p class="text-sm text-gray-400">Food Blogger</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    "The Truffle Avocado Toast was a revelation! The flavors were perfectly balanced, and the ambiance was simply divine."
+                </p>
+                <div class="flex items-center">
+                    <div class="flex text-yellow-400">
+                        ★★★★★
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="glass p-6 rounded-3xl">
+                <div class="flex items-center mb-4">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" 
+                         alt="Customer 2" 
+                         class="w-16 h-16 rounded-full object-cover mr-4 image-hover"/>
+                    <div>
+                        <h3 class="playfair text-xl font-bold">Michael Lee</h3>
+                        <p class="text-sm text-gray-400">Regular Patron</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    "Every visit to Tasty Kitchen feels like a special occasion. The Grand Feast is my go-to for a hearty breakfast!"
+                </p>
+                <div class="flex items-center">
+                    <div class="flex text-yellow-400">
+                        ★★★★☆
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="glass p-6 rounded-3xl">
+                <div class="flex items-center mb-4">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" 
+                         alt="Customer 3" 
+                         class="w-16 h-16 rounded-full object-cover mr-4 image-hover"/>
+                    <div>
+                        <h3 class="playfair text-xl font-bold">Sarah Johnson</h3>
+                        <p class="text-sm text-gray-400">Culinary Critic</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    "Tasty Kitchen redefines fine dining with its innovative dishes and impeccable service. A must-visit!"
+                </p>
+                <div class="flex items-center">
+                    <div class="flex text-yellow-400">
+                        ★★★★★
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const closeMobileMenu = document.getElementById("closeMobileMenu");
+
+    if (mobileMenuBtn && mobileMenu && closeMobileMenu) {
+        mobileMenuBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("active");
+        });
+
+        closeMobileMenu.addEventListener("click", () => {
+            mobileMenu.classList.remove("active");
+        });
+    }
+
+    // Scroll to Top Button
+    const scrollToTopBtn = document.createElement("div");
+    scrollToTopBtn.className = "scroll-to-top";
+    scrollToTopBtn.innerHTML = "↑";
+    document.body.appendChild(scrollToTopBtn);
+
+    scrollToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Floating Particles (simple, no GSAP)
+    function createParticle() {
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        document.getElementById("particles-container").appendChild(particle);
+
+        // Simple animation
+        particle.animate([
+            { transform: "translateY(0)" },
+            { transform: "translateY(-100vh)" }
+        ], {
+            duration: Math.random() * 10000 + 10000,
+            iterations: 1,
+            easing: "linear"
+        }).onfinish = () => {
+            particle.remove();
+            createParticle();
+        };
+    }
+    for (let i = 0; i < 10; i++) {
+        setTimeout(createParticle, i * 1000);
+    }
+
+    // Loading Screen Fallback
+    const loadingScreen = document.getElementById("loadingScreen");
+    setTimeout(() => {
+        if (loadingScreen) loadingScreen.classList.add("hidden");
+    }, 1500);
+</script>
 </body>
 </html>
