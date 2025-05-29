@@ -3,7 +3,7 @@ package com.restaurant.backend.services.impl;
 import com.restaurant.backend.domains.dto.Voucher.VoucherDto;
 import com.restaurant.backend.domains.dto.Voucher.dto.CreateVoucherDto;
 import com.restaurant.backend.domains.entities.Voucher;
-import com.restaurant.backend.mappers.VoucherMapper;
+import com.restaurant.backend.mappers.impl.VoucherMapper;
 import com.restaurant.backend.repositories.VoucherRepository;
 import com.restaurant.backend.services.VoucherService;
 import org.springframework.stereotype.Service;

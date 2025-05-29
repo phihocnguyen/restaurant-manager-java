@@ -25,6 +25,14 @@
          .nav-item.active span {
             color: white;
         }
+        /* Spinner CSS */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-[#1e293b] text-gray-100 font-sans">
@@ -36,7 +44,7 @@
                         <i class="fas fa-utensils text-white text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white">Tasty Kitchen</h1>
+                        <h1 class="text-2xl font-bold text-white">G15 Kitchen</h1>
                         <p class="text-xs text-slate-400 mt-1">Restaurant Manager</p>
                     </div>
                 </div>
@@ -189,15 +197,15 @@
     <div th:if="${showAdd} or ${showEdit}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 py-12 w-full max-w-md">
         <h2 class="text-xl font-bold mb-4 text-gray-800" th:text="${showAdd} ? 'Thêm món mới' : 'Chỉnh sửa món ăn'"></h2>
-        <form th:action="${showAdd} ? @{/manager/menu} : @{/manager/menu/edit/{id}(id=${editItem.id})}" method="post">
+        <form th:action="${showAdd} ? @{/manager/menu} : @{/manager/menu/edit/{id}(id=${editItem.id})}" method="post" enctype="multipart/form-data">
           <div class="flex justify-center mb-2">
-            <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editImgFile').click()">
+            <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('image').click()">
                 <img id="previewImage"
                     th:src="${editItem?.itemImg != null ? editItem.itemImg : '/img/default-preview.png'}"
                     alt="Preview"
                     class="object-cover w-full h-full" />
             </div>
-            <input id="editImgFile" type="file" class="hidden" accept="image/*" onchange="handlePreviewImage(event)">
+            <input id="image" name="image" type="file" class="hidden" accept="image/*" onchange="handlePreviewImage(event)">
           </div>
           <div>
             <label class="block text-gray-700">Tên món</label>
@@ -205,7 +213,7 @@
           </div>
           <div>
             <label class="block text-gray-700">Loại</label>
-            <select name="itemType" class="w-full border rounded px-3 py-2 text-black">
+            <select name="itemType" id="itemType" class="w-full border rounded px-3 py-2 text-black" onchange="toggleIngredientFields()">
               <option value="FOOD" th:selected="${editItem != null and editItem.itemType == 'FOOD'}">FOOD</option>
               <option value="DRINK" th:selected="${editItem != null and editItem.itemType == 'DRINK'}">DRINK</option>
               <option value="OTHER" th:selected="${editItem != null and editItem.itemType == 'OTHER'}">OTHER</option>
@@ -215,19 +223,19 @@
             <label class="block text-gray-700">Giá bán</label>
             <input name="itemSprice" type="number" class="w-full border rounded px-3 py-2 text-black" th:value="${editItem?.itemSprice}" required />
           </div>
-          <div class="mb-4 mt-4">
+          <div id="ingredientFields" class="mb-4 mt-4">
             <label class="block text-gray-700 font-semibold mb-2">Nguyên liệu & số kg</label>
             <div id="ingredients-list" class="space-y-2 bg-gray-50 rounded p-2 h-48 overflow-y-auto">
-              <div class="flex items-center justify-between gap-2 ingredient-row" th:each="ing,iter : ${ingredientsList}">
-                <select name="ingredientIds" class="form-select border rounded px-2 py-1 text-black" required>
+              <div class="flex items-center justify-between gap-2 ingredient-row">
+                <select name="ingredientIds" class="form-select border rounded px-2 py-1 text-black">
                   <option value="">Chọn nguyên liệu</option>
                   <option th:each="ing2 : ${ingredientsList}" th:value="${ing2.id}" th:text="${ing2.ingreName}"></option>
                 </select>
-                <input name="ingredientKgs" type="number" step="0.01" min="0" placeholder="kg" class="w-20 border rounded px-2 py-1 text-black" required>
+                <input name="ingredientKgs" type="number" step="0.01" min="0" placeholder="kg" class="w-20 border rounded px-2 py-1 text-black">
                 <button type="button"
                   class="remove-ing-btn text-lg px-2 py-1 rounded"
-                  th:classappend="${iter.index == 0} ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-red-100 text-red-500 hover:bg-red-200'"
-                  th:attr="disabled=${iter.index == 0} ? 'disabled' : null"
+                  th:classappend="${ingredientsList != null and ingredientsList.size() > 0} ? 'bg-red-100 text-red-500 hover:bg-red-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed'"
+                  th:attr="disabled=${ingredientsList != null and ingredientsList.size() > 0} ? null : 'disabled'"
                   onclick="removeIngredientRow(this)">
                   <i class="fas fa-times"></i>
                 </button>
@@ -240,12 +248,22 @@
           </div>
           <div class="flex justify-end gap-2 mt-4">
             <a href="/manager/menu" class="px-4 py-2 bg-gray-300 rounded">Hủy</a>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Lưu</button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded" onclick="showSpinner(event)">
+              Lưu
+              <i id="spinner" class="fas fa-spinner spinner ml-2" style="display: none;"></i>
+            </button>
           </div>
         </form>
       </div>
     </div>
     <script>
+        // Call toggleIngredientFields on page load if in edit mode
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('ingredientFields') && document.getElementById('itemType')) {
+                 toggleIngredientFields();
+            }
+        });
+
         function handlePreviewImage(event) {
             console.log('Preview image function called');
             const input = event.target;
@@ -295,6 +313,28 @@
           if (list.querySelectorAll('.ingredient-row').length > 1) {
             row.remove();
           }
+        }
+        function toggleIngredientFields() {
+            const itemType = document.getElementById('itemType').value;
+            const ingredientFields = document.getElementById('ingredientFields');
+            if (itemType === 'FOOD') {
+                ingredientFields.style.display = 'block';
+            } else {
+                ingredientFields.style.display = 'none';
+            }
+        }
+        function showSpinner(event) {
+            // Prevent default form submission to show spinner first
+            event.preventDefault();
+
+            const spinner = document.getElementById('spinner');
+            if (spinner) {
+                spinner.style.display = 'inline-block';
+            }
+
+            setTimeout(() => {
+                event.target.form.submit();
+            }, 50);
         }
     </script>
 </body>

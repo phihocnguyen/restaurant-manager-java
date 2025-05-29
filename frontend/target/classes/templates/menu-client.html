@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu - Tasty Kitchen</title>
+    <title>Menu - G15 Kitchen</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,8 +188,9 @@
              padding: 0.75rem;
              margin-bottom: 0.5rem;
              display: flex;
-             align-items: center;
-             justify-content: space-between; /* Space out content and delete button */
+             align-items: flex-start; /* Align items to the top */
+             justify-content: space-between;
+             flex-wrap: wrap; /* Allow content to wrap if needed */
          }
 
           .meal-plan-item img {
@@ -198,85 +199,75 @@
              object-fit: cover;
              border-radius: 4px;
              margin-right: 0.75rem;
-             flex-shrink: 0; /* Prevent image from shrinking */
+             flex-shrink: 0;
           }
 
           .meal-plan-item-info {
-             flex-grow: 1; /* Allow info to take available space */
-             margin-right: 0.75rem; /* Space between info and delete button */
+             flex-grow: 1;
+             margin-right: 0.75rem;
+             /* Remove fixed width if any */
+             /* width: ...; */
           }
 
           .meal-plan-item-info h4 {
               font-size: 0.9rem;
               font-weight: 600;
               color: #fff;
-              white-space: nowrap; /* Prevent text wrapping */
-              overflow: hidden;
-              text-overflow: ellipsis; /* Add ellipsis if text overflows */
+              white-space: normal; /* Allow text wrapping for name */
+              overflow: visible;
+              text-overflow: clip;
           }
 
            .meal-plan-item-info p {
               font-size: 0.8rem;
               color: #ccc;
-              white-space: nowrap; /* Prevent text wrapping */
-              overflow: hidden;
-              text-overflow: ellipsis; /* Add ellipsis if text overflows */
+              white-space: normal; /* Allow text wrapping for price/details */
+              overflow: visible;
+              text-overflow: clip;
            }
 
-           .meal-plan-add-placeholder {
-              border: 2px dashed rgba(255, 255, 255, 0.3);
-              border-radius: 4px;
-              padding: 1rem;
-              text-align: center;
-              color: #999;
-              font-size: 0.9rem;
-              display: flex; /* Use flexbox */
-              flex-direction: column; /* Stack icon and text */
-              align-items: center; /* Center content horizontally */
-              justify-content: center; /* Center content vertically */
-              min-height: 100px; /* Give it some minimum height */
+           .item-controls {
+               display: flex; /* Container for quantity and delete */
+               align-items: center;
+               gap: 0.5rem; /* Space between quantity control and delete button */
+               margin-top: 0.5rem; /* Space below item info */
+               width: 100%; /* Take full width below info */
+               justify-content: flex-end; /* Align controls to the right */
            }
 
-            .meal-plan-add-placeholder i {
-                font-size: 2rem; /* Icon size */
-                margin-bottom: 0.5rem; /* Space between icon and text */
-                color: #666; /* Icon color */
+            .quantity-control {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: #fff;
+                /* margin-right: 0.75rem; */ /* Removed space */
             }
 
-             .save-pay-button {
-                 background-color: var(--primary-gold); /* Blue gradient similar to image */
-                 background: linear-gradient(to right, #D4AF37, #B8860B);
-                 color: #0F0F0F;
-                 padding: 1rem;
-                 border-radius: 8px;
-                 font-size: 1.1rem;
+            .quantity-control button {
+                background: none;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 4px;
+                color: #fff;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            }
+
+            .quantity-control button:hover {
+                 background-color: rgba(255, 255, 255, 0.1);
+                 border-color: var(--primary-gold);
+            }
+
+             .quantity-control .quantity {
+                 font-size: 0.9rem;
                  font-weight: 600;
-                 text-align: center;
-                 cursor: pointer;
-                 transition: opacity 0.2s ease-in-out;
-                 margin-top: 1.5rem;
              }
 
-             .save-pay-button:hover {
-                 opacity: 0.9;
-             }
-
-             .payment-info {
-                  margin-top: 1rem;
-                  padding-top: 1rem;
-                  border-top: 1px solid rgba(255, 255, 255, 0.1);
-                  display: flex;
-                  align-items: center;
-                  font-size: 0.9rem;
-                  color: #ccc;
-             }
-
-              .payment-info img {
-                  width: 30px;
-                  margin-right: 0.5rem;
-              }
-
-             .delete-item-button {
+             .delete-item-button { /* Keep delete button styles but move its container */
                  background: none;
                  border: none;
                  color: #ff6b6b; /* Red color for delete */
@@ -290,37 +281,96 @@
                  color: #ff4757; /* Darker red on hover */
              }
 
-             .quantity-control {
-                 display: flex;
-                 align-items: center;
-                 gap: 0.5rem;
-                 color: #fff;
-                 margin-right: 0.75rem; /* Space before delete button */
-             }
-
-             .quantity-control button {
-                 background: none;
-                 border: 1px solid rgba(255, 255, 255, 0.3);
-                 border-radius: 4px;
-                 color: #fff;
-                 width: 24px;
-                 height: 24px;
-                 display: flex;
-                 align-items: center;
-                 justify-content: center;
-                 cursor: pointer;
-                 transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-             }
-
-             .quantity-control button:hover {
-                  background-color: rgba(255, 255, 255, 0.1);
-                  border-color: var(--primary-gold);
-             }
-
-              .quantity-control .quantity {
+             .meal-plan-add-placeholder {
+                  border: 2px dashed rgba(255, 255, 255, 0.3);
+                  border-radius: 4px;
+                  padding: 1rem;
+                  text-align: center;
+                  color: #999;
                   font-size: 0.9rem;
-                  font-weight: 600;
-              }
+                  display: flex; /* Use flexbox */
+                  flex-direction: column; /* Stack icon and text */
+                  align-items: center; /* Center content horizontally */
+                  justify-content: center; /* Center content vertically */
+                  min-height: 100px; /* Give it some minimum height */
+               }
+
+                .meal-plan-add-placeholder i {
+                    font-size: 2rem; /* Icon size */
+                    margin-bottom: 0.5rem; /* Space between icon and text */
+                    color: #666; /* Icon color */
+                }
+
+                 .save-pay-button {
+                     background-color: var(--primary-gold); /* Blue gradient similar to image */
+                     background: linear-gradient(to right, #D4AF37, #B8860B);
+                     color: #0F0F0F;
+                     padding: 1rem;
+                     border-radius: 8px;
+                     font-size: 1.1rem;
+                     font-weight: 600;
+                     text-align: center;
+                     cursor: pointer;
+                     transition: opacity 0.2s ease-in-out;
+                     margin-top: 1.5rem;
+                 }
+
+                 .save-pay-button:hover {
+                     opacity: 0.9;
+                 }
+
+                 .payment-info {
+                      margin-top: 1rem;
+                      padding-top: 1rem;
+                      border-top: 1px solid rgba(255, 255, 255, 0.1);
+                      display: flex;
+                      align-items: center;
+                      font-size: 0.9rem;
+                      color: #ccc;
+                 }
+
+                  .payment-info img {
+                      width: 30px;
+                      margin-right: 0.5rem;
+                  }
+
+        /* Modal Styles */
+        #confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .premium-btn {
+            position: relative;
+            background: linear-gradient(45deg, var(--primary-gold), #B8860B);
+            overflow: hidden;
+        }
+
+        #confirmation-modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #confirmation-modal .bg-gray-800 {
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        #confirmation-modal.hidden .bg-gray-800 {
+            transform: translateY(-20px);
+        }
 
     </style>
 </head>
@@ -333,13 +383,13 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
-                        <span class="text-black font-bold text-xl">T</span>
+                        <span class="text-black font-bold text-xl">G</span>
                     </div>
-                    <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Tasty Kitchen</span>
+                    <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
                 </div>
-
+    
                 <div class="hidden md:flex items-center space-x-8">
-                    <a th:href="@{/}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    <a href="/" class="hover:text-yellow-400 transition-colors duration-300 relative group">
                         Home
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                     </a>
@@ -347,16 +397,15 @@
                         Menu
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <!-- Update other links as needed, maybe point to sections or remove -->
-                    <a href="#" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
                         About
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
-                        Reserve Table
+                    <a href="/login" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
+                        Login
                     </a>
                 </div>
-
+    
                 <!-- Mobile Menu Button -->
                 <button class="md:hidden glass p-2 rounded-lg" id="mobile-menu-btn">
                     <div class="w-6 h-6 flex flex-col justify-center space-y-1">
@@ -424,13 +473,13 @@
                 </div>
             </div>
 
-            <div class="save-pay-button bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white">
-                Save meals and pay <span id="total-price">$0.00</span> <!-- Set initial total to 0.00 -->
-            </div>
-
-            <div class="payment-info text-gray-300 border-t border-gray-700 pt-4">
-                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1280px-MasterCard_Logo.svg.png" alt="MasterCard" class="w-8">
-                Payment MasterCard*** 2054
+            <div class="flex flex-col gap-2">
+                <div class="text-yellow-400 text-xl font-bold text-right">
+                    Total: <span id="total-price">$0.00</span>
+                </div>
+                <button class="premium-btn px-8 py-4 rounded-full text-black font-bold text-lg magnetic-btn" id="save-pay-button">
+                    Pay now
+                </button>
             </div>
 
         </div>
@@ -440,28 +489,88 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 
     <script th:inline="javascript">
-        // Make menuItems available in JS
-        const menuItems = /*[[${menuItems}]]*/ [];
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make menuItems available in JS
+            const menuItems = /*[[${menuItems}]]*/ [];
 
-        // Function to update the total price
-        function updateTotalPrice() {
-            let total = 0;
-            const selectedItems = document.querySelectorAll('#selected-items-section .meal-plan-item');
-            selectedItems.forEach(itemElement => {
-                const itemId = itemElement.getAttribute('data-item-id');
-                const quantity = parseInt(itemElement.querySelector('.quantity').innerText);
-                const selectedItem = menuItems.find(item => item.id == itemId);
-                if (selectedItem) {
-                    total += selectedItem.price * quantity;
-                }
+            // Function to update the total price
+            function updateTotalPrice() {
+                let total = 0;
+                const selectedItems = document.querySelectorAll('#selected-items-section .meal-plan-item');
+                selectedItems.forEach(itemElement => {
+                    const itemId = itemElement.getAttribute('data-item-id');
+                    const quantity = parseInt(itemElement.querySelector('.quantity').innerText);
+                    const selectedItem = menuItems.find(item => item.id == itemId);
+                    if (selectedItem) {
+                        total += selectedItem.price * quantity;
+                    }
+                });
+                document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
+            }
+
+            // Get all required elements
+            const savePayButton = document.getElementById('save-pay-button');
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmSelectionButton = document.getElementById('confirm-selection');
+            const cancelConfirmButton = document.getElementById('cancel-confirm');
+            const selectedItemsSection = document.getElementById('selected-items-section');
+
+            console.log('Elements found:', {
+                savePayButton: !!savePayButton,
+                confirmationModal: !!confirmationModal,
+                confirmSelectionButton: !!confirmSelectionButton,
+                cancelConfirmButton: !!cancelConfirmButton,
+                selectedItemsSection: !!selectedItemsSection
             });
-            document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
-        }
 
-        document.addEventListener('DOMContentLoaded', function () {
+            // Add click handler to save pay button
+            if (savePayButton) {
+                savePayButton.onclick = function() {
+                    console.log('Save Pay Button clicked');
+                    
+                    // Collect selected items data
+                    const selectedItemsData = [];
+                    const selectedItemsElements = selectedItemsSection.querySelectorAll('.meal-plan-item');
+                    console.log('Selected Items Elements:', selectedItemsElements);
+                    
+                    selectedItemsElements.forEach(itemElement => {
+                        const itemId = itemElement.getAttribute('data-item-id');
+                        const quantity = parseInt(itemElement.querySelector('.quantity').innerText);
+                        if (itemId && quantity) {
+                            selectedItemsData.push({ id: itemId, quantity: quantity });
+                        }
+                    });
+
+                    console.log('Selected Items Data:', selectedItemsData);
+
+                    // Check if there are any selected items
+                    if (selectedItemsData.length > 0) {
+                        const itemsParam = selectedItemsData.map(item => `${item.id}-${item.quantity}`).join(',');
+                        console.log('Items Param:', itemsParam);
+                        
+                        // Show modal
+                        confirmationModal.classList.remove('hidden');
+                        console.log('Modal should be visible now');
+
+                        // Add click handlers for confirm and cancel buttons
+                        confirmSelectionButton.onclick = function() {
+                            console.log('Confirm button clicked');
+                            window.location.href = `/payment?items=${encodeURIComponent(itemsParam)}`;
+                        };
+
+                        cancelConfirmButton.onclick = function() {
+                            console.log('Cancel button clicked');
+                            confirmationModal.classList.add('hidden');
+                        };
+                    } else {
+                        alert('Vui lòng chọn ít nhất một món ăn.');
+                    }
+                };
+            }
+
+            // Rest of your existing code...
             const menuItemsContainer = document.getElementById('menu-items-grid');
             const categoryButtons = document.querySelectorAll('.menu-category-button');
-            const selectedItemsSection = document.getElementById('selected-items-section');
             const mealSectionsContainer = document.getElementById('meal-sections-container');
 
             // Function to filter items based on category
@@ -469,11 +578,11 @@
                 const items = menuItemsContainer.querySelectorAll('.menu-item-card');
                 items.forEach(item => {
                     const itemCategory = item.getAttribute('data-category');
-                     if (category === 'all' || itemCategory === category || (category === 'recomended' && (itemCategory === 'breakfast' || itemCategory === 'lunch' || itemCategory === 'dinner'))) { // Basic recomended logic
-                         item.style.display = 'flex';
-                     } else {
-                         item.style.display = 'none';
-                     }
+                    if (category === 'all' || itemCategory === category) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
                 });
             }
 
@@ -486,8 +595,10 @@
                 });
             });
 
-            // Initial display (filter to 'recomended' by default)
-            filterItems('recomended');
+            // Initial display (show all items by default)
+            filterItems('all');
+            // Set the 'all' button as active
+            document.querySelector('.menu-category-button[data-category="all"]').classList.add('active');
 
             // Make menu items draggable
             menuItemsContainer.querySelectorAll('.menu-item-card').forEach(item => {
@@ -540,14 +651,16 @@
                                     <h4>${selectedItem.name}</h4>
                                     <p>${selectedItem.price ? selectedItem.price.toFixed(2) + '$' : ''}</p>
                                 </div>
-                                <div class="quantity-control">
-                                    <button class="decrease-quantity">-</button>
-                                    <span class="quantity">1</span>
-                                    <button class="increase-quantity">+</button>
+                                <div class="item-controls"> <!-- New container -->
+                                    <div class="quantity-control">
+                                        <button class="decrease-quantity">-</button>
+                                        <span class="quantity">1</span>
+                                        <button class="increase-quantity">+</button>
+                                    </div>
+                                    <button class="delete-item-button" data-item-id="${selectedItem.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
-                                <button class="delete-item-button" data-item-id="${selectedItem.id}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
                             `;
                             selectedItemsSection.appendChild(itemElement);
                         }
@@ -570,19 +683,18 @@
                          const itemElement = deleteButton.closest('.meal-plan-item');
                          if (itemElement) {
                              itemElement.remove();
-                             // Add placeholder back if the last item is removed
-                            if (selectedItemsSection.children.length === 0) {
-                                // Only add placeholder if no items are left
+                             // Add placeholder back if no items are left
+                             const selectedItems = selectedItemsSection.querySelectorAll('.meal-plan-item');
+                             if (selectedItems.length === 0) {
                                  const placeholder = document.createElement('div');
-                                 placeholder.classList.add('meal-plan-add-placeholder', 'text-gray-500', 'border-dashed', 'border-gray-600');
+                                 placeholder.classList.add('meal-plan-add-placeholder');
                                  placeholder.innerHTML = `
-                                     <i class="fas fa-hand-point-down"></i> <!-- Example icon -->
-                                     <span>Thả món ăn vào đây</span>
+                                     <div class="text-amber-400 text-3xl mb-2">
+                                         <i class="fas fa-hand-point-down"></i>
+                                     </div>
+                                     <p class="text-gray-500 font-medium">Drag & drop dishes here</p>
                                  `;
                                  selectedItemsSection.appendChild(placeholder);
-                            } else if (selectedItemsSection.children.length === 1 && selectedItemsSection.querySelector('.meal-plan-add-placeholder')) {
-                                 // If only the placeholder is left, make sure it's visible
-                                 selectedItemsSection.querySelector('.meal-plan-add-placeholder').style.display = 'flex';
                              }
                              updateTotalPrice(); // Update total price after removing item
                          }
@@ -627,22 +739,6 @@
                 });
             }
 
-            // Scroll to Top Button
-            const scrollToTopBtn = document.createElement("div");
-            scrollToTopBtn.className = "scroll-to-top";
-            scrollToTopBtn.innerHTML = "↑";
-             if (!document.querySelector('.scroll-to-top')) {
-                document.body.appendChild(scrollToTopBtn);
-             }
-
-            // Simple Scroll-to-top visibility
-            window.addEventListener("scroll", () => {
-                if (window.scrollY > 300) {
-                    scrollToTopBtn.classList.add("visible");
-                } else {
-                    scrollToTopBtn.classList.remove("visible");
-                }
-            });
 
             // Floating Particles (simple, no GSAP)
             function createParticle() {
@@ -678,5 +774,16 @@
         });
 
     </script>
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-lg p-6 max-w-sm mx-auto">
+            <h3 class="text-lg font-bold mb-4 text-white">Confirmation</h3>
+            <p class="text-gray-300 mb-6">Bạn có chắc chắn với lựa chọn của mình không?</p>
+            <div class="flex justify-end gap-4">
+                <button id="cancel-confirm" class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-700 text-white">Hủy</button>
+                <button id="confirm-selection" class="px-4 py-2 rounded-md bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">Xác nhận</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

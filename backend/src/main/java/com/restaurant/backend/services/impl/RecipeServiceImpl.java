@@ -283,10 +283,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeDto createRecipe(CreateRecipeDto dto, MultipartFile image) throws IOException {
         Recipe recipe = recipeMapper.mapTo(dto);
-        if (image != null && !image.isEmpty()) {
-            Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
-            recipe.setRecipeImg(uploadResult.get("url"));
-        }
+        // Remove image handling from Recipe since it should be in MenuItem
         return recipeMapper.mapFrom(recipeRepository.save(recipe));
     }
 
@@ -311,24 +308,8 @@ public class RecipeServiceImpl implements RecipeService {
         if (!found.isPresent()) return null;
 
         Recipe recipe = found.get();
-        if (image != null && !image.isEmpty()) {
-            // Delete old image if exists
-            if (recipe.getRecipeImg() != null) {
-                String publicId = extractPublicId(recipe.getRecipeImg());
-                if (publicId != null) {
-                    cloudinaryService.deleteImage(publicId);
-                }
-            }
-            // Upload new image
-            Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
-            recipe.setRecipeImg(uploadResult.get("url"));
-        }
-
-        // Update recipe fields
+        // Remove image handling from Recipe since it should be in MenuItem
         recipe.setIngreQuantityKg(dto.getIngreQuantityKg());
-        if (dto.getRecipeImg() != null) {
-            recipe.setRecipeImg(dto.getRecipeImg());
-        }
 
         return recipeMapper.mapFrom(recipeRepository.save(recipe));
     }
@@ -343,9 +324,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (dto.getIngreQuantityKg() > 0) {
             recipe.setIngreQuantityKg(dto.getIngreQuantityKg());
         }
-        if (dto.getRecipeImg() != null) {
-            recipe.setRecipeImg(dto.getRecipeImg());
-        }
+        // Remove image handling from Recipe since it should be in MenuItem
 
         return recipeMapper.mapFrom(recipeRepository.save(recipe));
     }
@@ -357,33 +336,8 @@ public class RecipeServiceImpl implements RecipeService {
         if (!found.isPresent()) return false;
 
         Recipe recipe = found.get();
-        // Delete image from Cloudinary if exists
-        if (recipe.getRecipeImg() != null) {
-            try {
-                String publicId = extractPublicId(recipe.getRecipeImg());
-                if (publicId != null) {
-                    cloudinaryService.deleteImage(publicId);
-                }
-            } catch (IOException e) {
-                // Log the error but continue with delete
-                e.printStackTrace();
-            }
-        }
+        // Remove image handling from Recipe since it should be in MenuItem
         recipeRepository.delete(recipe);
         return true;
-    }
-
-    private String extractPublicId(String imageUrl) {
-        if (imageUrl == null) return null;
-        // Extract public_id from Cloudinary URL
-        // Example URL: https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/public_id.jpg
-        String[] parts = imageUrl.split("/upload/");
-        if (parts.length > 1) {
-            String[] remainingParts = parts[1].split("/");
-            if (remainingParts.length > 1) {
-                return remainingParts[remainingParts.length - 1].split("\\.")[0];
-            }
-        }
-        return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.restaurant.backend.mappers;
+package com.restaurant.backend.mappers.impl;
 
 import com.restaurant.backend.domains.dto.Voucher.VoucherDto;
 import com.restaurant.backend.domains.dto.Voucher.dto.CreateVoucherDto;
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 public class VoucherMapper {
     public Voucher mapTo(CreateVoucherDto dto) {
         Voucher voucher = new Voucher();
-        voucher.setCode(dto.getCode());
-        voucher.setDiscount(dto.getDiscount());
+        voucher.setName(dto.getName());
+        voucher.setDiscountValue(dto.getDiscountValue());
         voucher.setExpiryDate(dto.getExpiryDate());
         return voucher;
     }
@@ -18,8 +18,8 @@ public class VoucherMapper {
     public VoucherDto mapFrom(Voucher voucher) {
         VoucherDto dto = new VoucherDto();
         dto.setId(voucher.getId());
-        dto.setCode(voucher.getCode());
-        dto.setDiscount(voucher.getDiscount());
+        dto.setName(voucher.getName());
+        dto.setDiscountValue(voucher.getDiscountValue());
         dto.setExpiryDate(voucher.getExpiryDate());
         return dto;
     }

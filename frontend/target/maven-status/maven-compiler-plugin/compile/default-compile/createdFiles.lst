@@ -13,3 +13,4 @@ com/restaurant/controller/AuthController.class
 com/restaurant/config/RestTemplateConfig.class
 com/restaurant/controller/ManagerController.class
 CustomerDto.class
+com/restaurant/manager/controller/PaymentController.class

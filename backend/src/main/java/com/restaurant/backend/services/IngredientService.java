@@ -22,4 +22,7 @@ public interface IngredientService {
 
     Optional<Ingredient> findById(int id);
 
+    boolean decreaseStock(int id, double quantity);
+
+    boolean increaseStock(int id, double quantity);
 }

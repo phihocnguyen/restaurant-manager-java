@@ -1,4 +1,4 @@
-<title>Tasty Kitchen - Culinary Excellence</title>
+<title>G15 Kitchen - Culinary Excellence</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -144,18 +144,28 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: #0F0F0F;
+        background: rgba(15, 15, 15, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 9999;
         opacity: 1;
-        transition: opacity 0.5s ease;
+        transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .loading-screen.hidden {
         opacity: 0;
         pointer-events: none;
+        backdrop-filter: blur(0);
+        -webkit-backdrop-filter: blur(0);
+    }
+
+    .loading-content {
+        text-align: center;
+        position: relative;
+        padding: 2rem;
     }
 
     .loading-logo {
@@ -165,6 +175,127 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        animation: logoPulse 2s ease-in-out infinite;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        position: relative;
+    }
+
+    .loading-logo::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+        animation: linePulse 2s ease-in-out infinite;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 3px solid rgba(212, 175, 55, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary-gold);
+        animation: spin 1.5s linear infinite;
+        margin: 20px auto;
+        position: relative;
+    }
+
+    .loading-spinner::before {
+        content: '';
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        right: -3px;
+        bottom: -3px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: rgba(212, 175, 55, 0.5);
+        animation: spin 2s linear infinite;
+    }
+
+    .loading-text {
+        color: var(--primary-gold);
+        font-size: 1.2rem;
+        margin-top: 1.5rem;
+        opacity: 0;
+        animation: fadeIn 0.5s ease forwards 0.5s;
+        font-family: 'Playfair Display', serif;
+        letter-spacing: 2px;
+    }
+
+    .loading-progress {
+        width: 200px;
+        height: 2px;
+        background: rgba(212, 175, 55, 0.2);
+        margin: 20px auto;
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .loading-progress::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        background: var(--primary-gold);
+        animation: progress 5s linear forwards;
+    }
+
+    .loading-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+    }
+
+    .loading-particle {
+        position: absolute;
+        background: var(--primary-gold);
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0.6;
+        animation: particleFloat 3s ease-in-out infinite;
+        box-shadow: 0 0 10px var(--primary-gold);
+    }
+
+    @keyframes logoPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes particleFloat {
+        0% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(180deg); }
+        100% { transform: translateY(0) rotate(360deg); }
+    }
+
+    @keyframes linePulse {
+        0% { opacity: 0.3; }
+        50% { opacity: 1; }
+        100% { opacity: 0.3; }
+    }
+
+    @keyframes progress {
+        0% { width: 0; }
+        100% { width: 100%; }
     }
 
     /* Mobile Menu */
@@ -258,12 +389,52 @@
         transform: translateY(-3px);
         box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
     }
+
+    /* Add new animation classes */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease-out;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .fade-in-left {
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: all 0.6s ease-out;
+    }
+
+    .fade-in-left.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .fade-in-right {
+        opacity: 0;
+        transform: translateX(20px);
+        transition: all 0.6s ease-out;
+    }
+
+    .fade-in-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
 </style>
 </head>
 <body class="animated-bg text-white min-h-screen">
 <!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
-    <div class="loading-logo playfair">Tasty Kitchen</div>
+    <div class="loading-content">
+        <div class="loading-particles" id="loadingParticles"></div>
+        <div class="loading-logo playfair">G15 Kitchen</div>
+        <div class="loading-spinner"></div>
+        <div class="loading-progress"></div>
+        <div class="loading-text">Culinary Excellence Awaits</div>
+    </div>
 </div>
 
 <!-- Floating Particles -->
@@ -276,7 +447,7 @@
         <a href="#home" class="block text-2xl hover:text-yellow-400 transition-colors">Home</a>
         <a href="#menu" class="block text-2xl hover:text-yellow-400 transition-colors">Menu</a>
         <a href="#about" class="block text-2xl hover:text-yellow-400 transition-colors">About</a>
-        <a href="#reservation" class="block premium-btn px-8 py-3 rounded-full text-black font-semibold">Reserve Table</a>
+        <a href="#login" class="block premium-btn px-8 py-3 rounded-full text-black font-semibold">Login</a>
     </div>
 </div>
 
@@ -286,13 +457,13 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
-                    <span class="text-black font-bold text-xl">T</span>
+                    <span class="text-black font-bold text-xl">G</span>
                 </div>
-                <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Tasty Kitchen</span>
+                <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
             </div>
 
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#home" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                <a href="/" class="hover:text-yellow-400 transition-colors duration-300 relative group">
                     Home
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                 </a>
@@ -304,8 +475,8 @@
                     About
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a href="#reservation" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
-                    Reserve Table
+                <a href="/login" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
+                    Login
                 </a>
             </div>
 
@@ -360,7 +531,7 @@
         </div>
 
         <!-- Hero Image -->
-        <div class="relative">
+        <div class="relative mt-4">
             <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent rounded-3xl blur-3xl"></div>
             <div class="relative image-hover rounded-3xl overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudCUyMGZvb2R8ZW58MHx8MHx8fDA%3D" 
@@ -377,7 +548,7 @@
 </section>
 
 <!-- Featured Menu Section -->
-<section id="menu" class="py-20 px-6">
+<section id="menu" class="py-20 px-6 fade-in">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
             <h2 class="playfair text-5xl font-bold mb-6">
@@ -394,7 +565,7 @@
             <!-- Menu Item 1 -->
             <div class="glass p-6 rounded-3xl menu-card">
                 <div class="relative overflow-hidden rounded-2xl mb-6 image-hover">
-                    <img src="https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80" 
+                    <img src="https://dahliakitchen.com/wp-content/uploads/2017/03/img_4062_lzn.jpg" 
                          alt="Avocado Toast" 
                          class="w-full h-48 object-cover"/>
                     <div class="absolute top-4 right-4 glass px-3 py-1 rounded-full">
@@ -463,7 +634,7 @@
 <!-- About Section -->
 <section id="about" class="py-20 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div>
+        <div class="fade-in-left">
             <div class="relative">
                 <div class="absolute -inset-4 bg-gradient-to-r from-yellow-400/20 to-transparent rounded-3xl blur-2xl"></div>
                 <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80" 
@@ -472,7 +643,7 @@
             </div>
         </div>
 
-        <div class="space-y-8">
+        <div class="space-y-8 fade-in-right">
             <h2 class="playfair text-5xl font-bold">
                 <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
                     Our Story
@@ -480,7 +651,7 @@
             </h2>
 
             <p class="text-xl text-gray-300 leading-relaxed">
-                Born from a passion for culinary excellence, Tasty Kitchen represents the perfect harmony between traditional techniques and modern innovation.
+                Born from a passion for culinary excellence, G15 Kitchen represents the perfect harmony between traditional techniques and modern innovation.
             </p>
 
             <p class="text-gray-300 leading-relaxed">
@@ -510,7 +681,7 @@
 </section>
 
 <!-- Reservation Section -->
-<section id="reservation" class="py-20 px-6 text-gray-800">
+<section id="reservation" class="py-20 px-6 text-gray-800 fade-in">
     <div class="max-w-4xl mx-auto text-center">
         <div class="mb-8">
             <h2 class="playfair text-5xl font-bold">
@@ -567,7 +738,7 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="py-20 px-6">
+<section class="py-20 px-6 fade-in">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
             <h2 class="playfair text-5xl font-bold mb-6">
@@ -576,7 +747,7 @@
                 </span>
             </h2>
             <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                Hear from our delighted guests about their unforgettable dining experiences at Tasty Kitchen.
+                Hear from our delighted guests about their unforgettable dining experiences at G15 Kitchen.
             </p>
         </div>
 
@@ -614,7 +785,7 @@
                     </div>
                 </div>
                 <p class="text-gray-300 mb-4 leading-relaxed">
-                    "Every visit to Tasty Kitchen feels like a special occasion. The Grand Feast is my go-to for a hearty breakfast!"
+                    "Every visit to G15 Kitchen feels like a special occasion. The Grand Feast is my go-to for a hearty breakfast!"
                 </p>
                 <div class="flex items-center">
                     <div class="flex text-yellow-400">
@@ -635,7 +806,7 @@
                     </div>
                 </div>
                 <p class="text-gray-300 mb-4 leading-relaxed">
-                    "Tasty Kitchen redefines fine dining with its innovative dishes and impeccable service. A must-visit!"
+                    "G15 Kitchen redefines fine dining with its innovative dishes and impeccable service. A must-visit!"
                 </p>
                 <div class="flex items-center">
                     <div class="flex text-yellow-400">
@@ -647,7 +818,89 @@
     </div>
 </section>
 
-<!-- Global Modal Functions -->
+<!-- Footer Section -->
+<footer class="bg-black/50 backdrop-blur-lg py-16 px-6 fade-in">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <!-- Restaurant Info -->
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">G</span>
+                    </div>
+                    <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
+                </div>
+                <p class="text-gray-400 leading-relaxed">
+                    Experience culinary excellence at its finest. Our passion for food and service creates unforgettable dining moments.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="social-icon hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-icon hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h3 class="text-xl font-bold mb-6 text-white">Quick Links</h3>
+                <ul class="space-y-3">
+                    <li><a href="#home" class="text-gray-400 hover:text-yellow-400 transition-colors">Home</a></li>
+                    <li><a href="#menu" class="text-gray-400 hover:text-yellow-400 transition-colors">Menu</a></li>
+                    <li><a href="#about" class="text-gray-400 hover:text-yellow-400 transition-colors">About</a></li>
+                    <li><a href="#reservation" class="text-gray-400 hover:text-yellow-400 transition-colors">Reservation</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div>
+                <h3 class="text-xl font-bold mb-6 text-white">Contact Us</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-center space-x-3 text-gray-400">
+                        <i class="fas fa-map-marker-alt text-yellow-400"></i>
+                        <span>123 Culinary Street, Foodie City</span>
+                    </li>
+                    <li class="flex items-center space-x-3 text-gray-400">
+                        <i class="fas fa-phone text-yellow-400"></i>
+                        <span>+1 234 567 890</span>
+                    </li>
+                    <li class="flex items-center space-x-3 text-gray-400">
+                        <i class="fas fa-envelope text-yellow-400"></i>
+                        <span>info@g15kitchen.com</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div>
+                <h3 class="text-xl font-bold mb-6 text-white">Newsletter</h3>
+                <p class="text-gray-400 mb-4">Subscribe to our newsletter for updates and special offers.</p>
+                <form class="space-y-3">
+                    <input type="email" placeholder="Your email address" 
+                           class="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-yellow-400 text-white">
+                    <button type="submit" 
+                            class="w-full premium-btn px-4 py-2 rounded-lg text-black font-semibold hover:bg-yellow-500 transition-colors">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="border-t border-white/10 mt-12 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 G15 Kitchen. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <script>
     function openModal(modalId) {
         document.getElementById(modalId).classList.remove('hidden');
@@ -710,11 +963,35 @@
         setTimeout(createParticle, i * 1000);
     }
 
-    // Loading Screen Fallback
-    const loadingScreen = document.getElementById("loadingScreen");
-    setTimeout(() => {
-        if (loadingScreen) loadingScreen.classList.add("hidden");
-    }, 1500);
+    // Loading Screen Animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingParticles = document.getElementById('loadingParticles');
+        
+        // Create loading particles
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'loading-particle';
+            const size = Math.random() * 8 + 4;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particle.style.opacity = Math.random() * 0.5 + 0.3;
+            loadingParticles.appendChild(particle);
+        }
+
+        // Hide loading screen after delay
+        setTimeout(() => {
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1200);
+            }
+        }, 5000);
+    });
 
     // Reservation Table Map Logic
     document.addEventListener('DOMContentLoaded', function() {
@@ -756,6 +1033,50 @@
 
             });
         }
+    });
+
+    // Counter Animation with adjusted duration
+    function animateCounter(element) {
+        const target = parseInt(element.getAttribute('data-target'));
+        const duration = 5000; // 5 seconds
+        const step = target / (duration / 16); // 60fps
+        let current = 0;
+
+        const updateCounter = () => {
+            current += step;
+            if (current < target) {
+                element.textContent = Math.floor(current).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            } else {
+                element.textContent = target.toLocaleString();
+            }
+        };
+
+        updateCounter();
+    }
+
+    // Scroll Animation Observer
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // If it's the stats container, start the counter animation
+                if (entry.target.classList.contains('stats-container')) {
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        animateCounter(counter);
+                    });
+                }
+            }
+        });
+    }, { 
+        threshold: 0.2, // Trigger when 20% of the element is visible
+        rootMargin: '-50px'
+    });
+
+    // Observe all sections with fade-in classes
+    document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .stats-container').forEach(element => {
+        scrollObserver.observe(element);
     });
 </script>
 </body>

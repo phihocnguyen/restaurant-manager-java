@@ -15,6 +15,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.restaurant.dto.MenuItemDto;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.HashMap;
+import java.io.IOException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import java.math.BigDecimal;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/manager")
@@ -95,34 +103,85 @@ public class ManagerController {
     public String addMenu(
             @RequestParam String itemType,
             @RequestParam String itemName,
-            @RequestParam String itemImg,
-            @RequestParam Double itemSprice,
-            @RequestParam(value = "ingredientIds") List<Integer> ingredientIds,
-            @RequestParam(value = "ingredientKgs") List<Double> ingredientKgs,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam(value = "itemSprice", required = false) BigDecimal itemSprice,
+            @RequestParam(value = "instock", required = false) Double instock,
+            @RequestParam(value = "isdeleted", required = false) Boolean isdeleted,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "ingredientIds", required = false) List<Integer> ingredientIds,
+            @RequestParam(value = "ingredientKgs", required = false) List<Double> ingredientKgs,
+            RedirectAttributes redirectAttributes) throws IOException {
+
         RestTemplate restTemplate = new RestTemplate();
-        // Build menuItem
-        Map<String, Object> menuItem = new HashMap<>();
-        menuItem.put("itemType", itemType);
-        menuItem.put("itemName", itemName);
-        menuItem.put("itemImg", itemImg);
-        menuItem.put("itemSprice", itemSprice);
-        menuItem.put("isdeleted", false);
-        // Build body cho API
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("menuItem", menuItem);
-        requestBody.put("ingredientIds", ingredientIds);
-        requestBody.put("ingredientKgs", ingredientKgs);
 
-        // Call API
-        String url = "http://localhost:8080/items";
-        restTemplate.postForObject(url, requestBody, Object.class);
+        if ("FOOD".equals(itemType)) {
+            if (ingredientIds != null && !ingredientIds.isEmpty()) {
+                MultiValueMap<String, Object> multipartRequest = new LinkedMultiValueMap<>();
 
-        redirectAttributes.addFlashAttribute("success", "Đã thêm món mới!");
+                // Common menu fields
+                multipartRequest.add("itemType", itemType);
+                multipartRequest.add("itemName", itemName);
+                if (itemSprice != null) multipartRequest.add("itemSprice", itemSprice);
+                if (instock != null) multipartRequest.add("instock", instock);
+                if (isdeleted != null) multipartRequest.add("isdeleted", isdeleted);
+                if (image != null && !image.isEmpty()) {
+                    multipartRequest.add("image", image.getResource());
+                }
+
+                if (ingredientIds.size() == 1) {
+                    // Single recipe
+                    multipartRequest.add("ingreId", ingredientIds.get(0));
+                    multipartRequest.add("ingreQuantityKg", ingredientKgs != null && ingredientKgs.size() > 0 ? ingredientKgs.get(0) : 0.0);
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+                    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(multipartRequest, headers);
+                    String url = "http://localhost:8080/recipes/one";
+                    restTemplate.postForObject(url, requestEntity, Object.class);
+
+                } else {
+                    // Multiple recipes
+                    for (int i = 0; i < ingredientIds.size(); i++) {
+                        multipartRequest.add("ingreIds[]", ingredientIds.get(i));
+                        multipartRequest.add("ingreQuantityKgs[]", ingredientKgs != null && i < ingredientKgs.size() ? ingredientKgs.get(i) : 0.0);
+                    }
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+                    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(multipartRequest, headers);
+                    String url = "http://localhost:8080/recipes/many";
+                    restTemplate.postForObject(url, requestEntity, Object.class);
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Món ăn cần ít nhất một nguyên liệu!");
+                return "redirect:/manager/menu/add";
+            }
+        } else {
+            // Handle non-food items
+            MultiValueMap<String, Object> multipartRequest = new LinkedMultiValueMap<>();
+            multipartRequest.add("itemType", itemType);
+            multipartRequest.add("itemName", itemName);
+            if (itemSprice != null) multipartRequest.add("itemSprice", itemSprice);
+            if (instock != null) multipartRequest.add("instock", instock);
+            if (isdeleted != null) multipartRequest.add("isdeleted", isdeleted);
+            if (image != null && !image.isEmpty()) {
+                multipartRequest.add("image", image.getResource());
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(multipartRequest, headers);
+            String url = "http://localhost:8080/items";
+            restTemplate.postForObject(url, requestEntity, Object.class);
+        }
+
         return "redirect:/manager/menu";
     }
 
-    @GetMapping("/menu/delete/{id}")
+
+    @PostMapping("/menu/delete/{id}")
     public String deleteMenu(@PathVariable int id, RedirectAttributes redirectAttributes) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8080/items/" + id;

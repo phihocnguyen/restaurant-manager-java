@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - G15 Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-bg: #0F0F0F;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background: var(--dark-bg);
+            color: #fff;
+            padding-top: 96px;
+        }
+
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #0F0F0F, #1a1a1a, #2d2d2d, #1a1a1a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+            to { box-shadow: 0 0 40px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.3); }
+        }
+
+        .magnetic-btn {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .magnetic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(212, 175, 55, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-gold), #B8860B);
+            border-radius: 4px;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        /* New styles for improved UI */
+        .payment-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .selected-items, .customer-info {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .item-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+        }
+
+        .input-icon input, .input-icon select {
+            padding-left: 2.5rem;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            height: 48px;
+        }
+
+        .input-icon input:focus, .input-icon select:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .payment-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="animated-bg text-white min-h-screen">
+    <!-- Floating Particles -->
+    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="absolute top-6 right-6 text-white text-3xl" id="closeMobileMenu">×</button>
+        <div class="space-y-8 text-center">
+            <a th:href="@{/}" class="block text-2xl hover:text-yellow-400 transition-colors"><i class="fas fa-home mr-2"></i>Home</a>
+            <a th:href="@{/menu-client}" class="block text-2xl hover:text-yellow-400 transition-colors"><i class="fas fa-utensils mr-2"></i>Menu</a>
+            <a href="#" class="block text-2xl hover:text-yellow-400 transition-colors"><i class="fas fa-info-circle mr-2"></i>About</a>
+            <a href="#" class="premium-btn px-8 py-3 rounded-full text-black font-semibold"><i class="fas fa-chair mr-2"></i>Reserve Table</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-dark transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
+                        <span class="text-black font-bold text-xl">G</span>
+                    </div>
+                    <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
+                </div>
+    
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        Home
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        Menu
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        About
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#reservation" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
+                        Login
+                    </a>
+                </div>
+    
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden glass p-2 rounded-lg" id="mobile-menu-btn">
+                    <div class="w-6 h-6 flex flex-col justify-center space-y-1">
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-16">
+        <h2 class="text-3xl font-bold text-center mb-12 playfair"><i class="fas fa-wallet mr-2"></i>Complete Your Payment</h2>
+
+        <div class="payment-container">
+            <!-- Selected Items (Left) -->
+            <div class="selected-items">
+                <h3 class="section-title"><i class="fas fa-shopping-cart"></i>Selected Items</h3>
+                <div id="selected-items-list" class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                    <div th:each="item : ${selectedItems}" class="item-card">
+                        <img th:src="${item.imageUrl}" alt="Item Image" class="w-16 h-16 object-cover rounded-md mr-4">
+                        <div class="flex-1">
+                            <p class="font-semibold">[[${item.name}]]</p>
+                            <p class="text-sm text-gray-300"><i class="fas fa-sort-numeric-up mr-1"></i>Quantity: [[${item.quantity}]]</p>
+                        </div>
+                        <p class="font-bold text-yellow-400"><i class="fas fa-dollar-sign mr-1"></i>[[${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 2, 'POINT')}]]</p>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center border-t border-gray-600ទ0.6 pt-4 mt-4">
+                    <span class="text-lg font-bold"><i class="fas fa-money-bill-wave mr-2"></i>Total:</span>
+                    <span class="text-xl font-bold text-yellow-400">[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]] $</span>
+                    <input type="hidden" id="totalAmount" th:value="${totalAmount}">
+                </div>
+            </div>
+
+            <!-- Customer Information (Right) -->
+            <div class="customer-info">
+                <h3 class="section-title"><i class="fas fa-user"></i>Customer Information</h3>
+                <form id="payment-form" action="/payment" method="post">
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="customerName" name="customerName" required
+                                   placeholder="Full Name"
+                                   class="mt-1 block w-full rounded-md shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
+                        </div>
+                        <div class="input-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="customerPhone" name="customerPhone" required
+                                   placeholder="Phone Number"
+                                   class="mt-1 block w-full rounded-md shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
+                        </div>
+                        <div class="input-icon">
+                            <i class="fas fa-credit-card"></i>
+                            <select id="paymentMethod" name="paymentMethod" required
+                                    class="mt-1 block w-full rounded-md shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
+                                <option value="" disabled selected>Select Payment Method</option>
+                                <option value="card">Credit/Debit Card</option>
+                                <option value="cash">Cash on Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full premium-btn py-3 rounded-md text-black font-bold text-lg magnetic-btn flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i> Pay Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+            const mobileMenu = document.getElementById("mobileMenu");
+            const closeMobileMenu = document.getElementById("closeMobileMenu");
+
+            if (mobileMenuBtn && mobileMenu && closeMobileMenu) {
+                mobileMenuBtn.addEventListener("click", () => {
+                    mobileMenu.classList.toggle("active");
+                });
+
+                closeMobileMenu.addEventListener("click", () => {
+                    mobileMenu.classList.remove("active");
+                });
+            }
+
+            // Scroll to Top Button
+            const scrollToTopBtn = document.createElement("div");
+            scrollToTopBtn.className = "scroll-to-top";
+            scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+            if (!document.querySelector('.scroll-to-top')) {
+                document.body.appendChild(scrollToTopBtn);
+            }
+
+            scrollToTopBtn.addEventListener("click", () => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.classList.add("visible");
+                } else {
+                    scrollToTopBtn.classList.remove("visible");
+                }
+            });
+
+            // Floating Particles
+            function createParticle() {
+                const particle = document.createElement("div");
+                particle.className = "particle";
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                const particlesContainer = document.getElementById("particles-container");
+                if (particlesContainer) {
+                    particlesContainer.appendChild(particle);
+                    particle.animate([
+                        { transform: "translateY(0)" },
+                        { transform: "translateY(-100vh)" }
+                    ], {
+                        duration: Math.random() * 10000 + 10000,
+                        iterations: Infinity,
+                        easing: "linear"
+                    });
+                }
+            }
+
+            if (!document.querySelectorAll('.particle').length) {
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(() => createParticle(), i * 1000);
+                }
+            }
+
+            // Handle form submission
+            const paymentForm = document.getElementById('payment-form');
+            if (paymentForm) {
+                paymentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const customerName = document.getElementById('customerName').value;
+                    const customerPhone = document.getElementById('customerPhone').value;
+                    const paymentMethod = document.getElementById('paymentMethod').value;
+                    const totalAmount = document.getElementById('totalAmount').value;
+
+                    const orderData = {
+                        customerName,
+                        customerPhone,
+                        paymentMethod,
+                        totalAmount: parseFloat(totalAmount),
+                        items: selectedItems
+                    };
+
+                    console.log('Submitting order data:', orderData);
+                    alert('Order submitted! (Data logged to console)');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

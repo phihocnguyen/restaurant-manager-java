@@ -32,7 +32,4 @@ public class Recipe {
     @NotNull
     @Column(name = "ingre_quantity_kg", nullable = false)
     private Double ingreQuantityKg;
-
-    @Column(name = "recipe_img", length = Integer.MAX_VALUE)
-    private String recipeImg;
 }

@@ -7,6 +7,7 @@ import com.restaurant.backend.mappers.impl.IngredientMapper;
 import com.restaurant.backend.repositories.IngredientRepository;
 import com.restaurant.backend.services.IngredientService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -82,4 +83,31 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientRepository.findById(id);
     }
 
+    @Override
+    @Transactional
+    public boolean decreaseStock(int id, double quantity) {
+        Optional<Ingredient> found = ingredientRepository.findById(id);
+        if (!found.isPresent() || found.get().getInstockKg() < quantity) {
+            return false;
+        }
+
+        Ingredient ingre = found.get();
+        ingre.setInstockKg(ingre.getInstockKg() - quantity);
+        ingredientRepository.save(ingre);
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean increaseStock(int id, double quantity) {
+        Optional<Ingredient> found = ingredientRepository.findById(id);
+        if (!found.isPresent()) {
+            return false;
+        }
+
+        Ingredient ingre = found.get();
+        ingre.setInstockKg(ingre.getInstockKg() + quantity);
+        ingredientRepository.save(ingre);
+        return true;
+    }
 }
