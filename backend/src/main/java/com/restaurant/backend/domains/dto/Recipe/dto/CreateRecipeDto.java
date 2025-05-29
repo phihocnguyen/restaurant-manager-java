@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreateRecipeDto {
-    private Integer ingreId;
-    private Double ingreQuantityKg = 0.1;
+    private int itemId;
+    private int ingreId;
+    private double ingreQuantityKg;
+    private String recipeImg;
 }

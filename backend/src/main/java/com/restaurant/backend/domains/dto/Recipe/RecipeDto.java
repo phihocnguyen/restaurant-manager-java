@@ -7,15 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class RecipeDto {
+    private int itemId;
+    private int ingreId;
     private MenuItemDto item;
-
     private IngredientDto ingre;
-
-    private Double ingreQuantityKg = 0.1;
+    private double ingreQuantityKg;
+    private String recipeImg;
 }

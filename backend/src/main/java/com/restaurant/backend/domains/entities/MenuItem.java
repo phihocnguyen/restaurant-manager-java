@@ -42,6 +42,7 @@ public class MenuItem {
     @Column(name = "item_sprice", nullable = false, precision = 18, scale = 2)
     private BigDecimal itemSprice;
 
+    @NotNull
     @ColumnDefault("0")
     @Column(name = "instock")
     private Double instock;

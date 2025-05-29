@@ -7,10 +7,14 @@ import com.restaurant.backend.domains.entities.ItemType;
 import com.restaurant.backend.domains.entities.MenuItem;
 import com.restaurant.backend.mappers.impl.MenuItemMapper;
 import com.restaurant.backend.repositories.MenuItemRepository;
+import com.restaurant.backend.services.CloudinaryService;
 import com.restaurant.backend.services.MenuItemService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,14 +22,21 @@ import java.util.stream.Collectors;
 public class MenuItemServiceImpl implements MenuItemService {
     private final MenuItemRepository menuItemRepository;
     private final MenuItemMapper menuItemMapper;
+    private final CloudinaryService cloudinaryService;
 
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemMapper menuItemMapper) {
+    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemMapper menuItemMapper, CloudinaryService cloudinaryService) {
         this.menuItemRepository = menuItemRepository;
         this.menuItemMapper = menuItemMapper;
+        this.cloudinaryService = cloudinaryService;
     }
 
-    public MenuItemDto createMenuItem(CreateMenuItemDto dto) {
-        return menuItemMapper.mapFrom(menuItemRepository.save(menuItemMapper.mapTo(dto)));
+    public MenuItemDto createMenuItem(CreateMenuItemDto dto, MultipartFile image) throws IOException {
+        MenuItem menuItem = menuItemMapper.mapTo(dto);
+        if (image != null && !image.isEmpty()) {
+            Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
+            menuItem.setItemImg(uploadResult.get("url"));
+        }
+        return menuItemMapper.mapFrom(menuItemRepository.save(menuItem));
     }
 
     public MenuItemDto getMenuItemById(int id) {
@@ -40,13 +51,27 @@ public class MenuItemServiceImpl implements MenuItemService {
                 .collect(Collectors.toList());
     }
 
-
-    public MenuItemDto updateMenuItem(int id, UpdateMenuItemDto dto) {
+    public MenuItemDto updateMenuItem(int id, UpdateMenuItemDto dto, MultipartFile image) throws IOException {
         Optional<MenuItem> found = menuItemRepository.findById(id);
         if (!found.isPresent()) return null;
 
+        MenuItem item = found.get();
+        if (image != null && !image.isEmpty()) {
+            // Delete old image if exists
+            if (item.getItemImg() != null) {
+                String publicId = extractPublicId(item.getItemImg());
+                if (publicId != null) {
+                    cloudinaryService.deleteImage(publicId);
+                }
+            }
+            // Upload new image
+            Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
+            item.setItemImg(uploadResult.get("url"));
+        }
+
         MenuItem updated = menuItemMapper.mapTo(dto);
         updated.setId(id);
+        updated.setItemImg(item.getItemImg());
         return menuItemMapper.mapFrom(menuItemRepository.save(updated));
     }
 
@@ -69,9 +94,35 @@ public class MenuItemServiceImpl implements MenuItemService {
         if (!found.isPresent()) return false;
 
         MenuItem item = found.get();
+        // Delete image from Cloudinary if exists
+        if (item.getItemImg() != null) {
+            try {
+                String publicId = extractPublicId(item.getItemImg());
+                if (publicId != null) {
+                    cloudinaryService.deleteImage(publicId);
+                }
+            } catch (IOException e) {
+                // Log the error but continue with soft delete
+                e.printStackTrace();
+            }
+        }
         item.setIsdeleted(true);
         menuItemRepository.save(item);
         return true;
+    }
+
+    private String extractPublicId(String imageUrl) {
+        if (imageUrl == null) return null;
+        // Extract public_id from Cloudinary URL
+        // Example URL: https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/public_id.jpg
+        String[] parts = imageUrl.split("/upload/");
+        if (parts.length > 1) {
+            String[] remainingParts = parts[1].split("/");
+            if (remainingParts.length > 1) {
+                return remainingParts[remainingParts.length - 1].split("\\.")[0];
+            }
+        }
+        return null;
     }
 
     public MenuItem saveEntity(MenuItem entity) {
