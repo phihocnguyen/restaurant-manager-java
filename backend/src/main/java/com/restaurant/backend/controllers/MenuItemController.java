@@ -2,12 +2,15 @@ package com.restaurant.backend.controllers;
 
 import com.restaurant.backend.domains.dto.MenuItem.MenuItemDto;
 import com.restaurant.backend.domains.dto.MenuItem.dto.CreateMenuItemDto;
+import com.restaurant.backend.domains.dto.MenuItem.dto.CreateMenuItemFormDataDto;
 import com.restaurant.backend.domains.dto.MenuItem.dto.UpdateMenuItemDto;
 import com.restaurant.backend.services.MenuItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,8 +22,9 @@ public class MenuItemController {
     }
 
     @PostMapping(path="/items")
-    public ResponseEntity<MenuItemDto> addMenuItem(@RequestBody CreateMenuItemDto createMenuItemDto) {
-        MenuItemDto saved = this.menuItemService.createMenuItem(createMenuItemDto);
+    public ResponseEntity<MenuItemDto> addMenuItem(
+            @ModelAttribute CreateMenuItemFormDataDto formDataDto) throws IOException {
+        MenuItemDto saved = this.menuItemService.createMenuItem(formDataDto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 

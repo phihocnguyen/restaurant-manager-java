@@ -2,6 +2,7 @@ package com.restaurant.backend.services.impl;
 
 import com.restaurant.backend.domains.dto.MenuItem.MenuItemDto;
 import com.restaurant.backend.domains.dto.MenuItem.dto.CreateMenuItemDto;
+import com.restaurant.backend.domains.dto.MenuItem.dto.CreateMenuItemFormDataDto;
 import com.restaurant.backend.domains.dto.MenuItem.dto.UpdateMenuItemDto;
 import com.restaurant.backend.domains.entities.ItemType;
 import com.restaurant.backend.domains.entities.MenuItem;
@@ -30,10 +31,25 @@ public class MenuItemServiceImpl implements MenuItemService {
         this.cloudinaryService = cloudinaryService;
     }
 
-    public MenuItemDto createMenuItem(CreateMenuItemDto dto, MultipartFile image) throws IOException {
+    @Override
+    public MenuItemDto createMenuItem(CreateMenuItemDto dto) {
         MenuItem menuItem = menuItemMapper.mapTo(dto);
-        if (image != null && !image.isEmpty()) {
-            Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
+        return menuItemMapper.mapFrom(menuItemRepository.save(menuItem));
+    }
+
+    @Override
+    public MenuItemDto createMenuItem(CreateMenuItemFormDataDto dto) throws IOException {
+        MenuItem menuItem = MenuItem.builder()
+                .itemType(com.restaurant.backend.domains.entities.ItemType.valueOf(dto.getItemType().name()))
+                .itemName(dto.getItemName())
+                .itemCprice(dto.getItemCprice())
+                .itemSprice(dto.getItemSprice())
+                .instock(dto.getInstock())
+                .isdeleted(dto.getIsdeleted())
+                .build();
+
+        if (dto.getImage() != null && !dto.getImage().isEmpty()) {
+            Map<String, String> uploadResult = cloudinaryService.uploadImage(dto.getImage());
             menuItem.setItemImg(uploadResult.get("url"));
         }
         return menuItemMapper.mapFrom(menuItemRepository.save(menuItem));
@@ -49,6 +65,16 @@ public class MenuItemServiceImpl implements MenuItemService {
                 .filter(item -> !Boolean.TRUE.equals(item.getIsdeleted()))
                 .map(menuItemMapper::mapFrom)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public MenuItemDto updateMenuItem(int id, UpdateMenuItemDto dto) {
+        Optional<MenuItem> found = menuItemRepository.findById(id);
+        if (!found.isPresent()) return null;
+
+        MenuItem updated = menuItemMapper.mapTo(dto);
+        updated.setId(id);
+        return menuItemMapper.mapFrom(menuItemRepository.save(updated));
     }
 
     public MenuItemDto updateMenuItem(int id, UpdateMenuItemDto dto, MultipartFile image) throws IOException {

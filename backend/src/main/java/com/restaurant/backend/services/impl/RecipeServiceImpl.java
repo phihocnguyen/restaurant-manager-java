@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -323,10 +324,13 @@ public class RecipeServiceImpl implements RecipeService {
             recipe.setRecipeImg(uploadResult.get("url"));
         }
 
-        Recipe updated = recipeMapper.mapTo(dto);
-        updated.setId(recipeId);
-        updated.setRecipeImg(recipe.getRecipeImg());
-        return recipeMapper.mapFrom(recipeRepository.save(updated));
+        // Update recipe fields
+        recipe.setIngreQuantityKg(dto.getIngreQuantityKg());
+        if (dto.getRecipeImg() != null) {
+            recipe.setRecipeImg(dto.getRecipeImg());
+        }
+
+        return recipeMapper.mapFrom(recipeRepository.save(recipe));
     }
 
     @Override
@@ -336,7 +340,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (!found.isPresent()) return null;
 
         Recipe recipe = found.get();
-        if (dto.getIngreQuantityKg() != null) {
+        if (dto.getIngreQuantityKg() > 0) {
             recipe.setIngreQuantityKg(dto.getIngreQuantityKg());
         }
         if (dto.getRecipeImg() != null) {
