@@ -146,3 +146,30 @@ CREATE TABLE ACCOUNT (
                          ROLE_ID INT REFERENCES ACCOUNT_ROLE(ROLE_ID) ON DELETE CASCADE,
                          ISDELETED BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+-- Order Online table
+CREATE TABLE IF NOT EXISTS order_online (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(100),
+    customer_name VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    address TEXT NOT NULL,
+    note TEXT,
+    total_amount DECIMAL(10,2) NOT NULL,
+    order_time TIMESTAMP NOT NULL,
+    delivery_time TIMESTAMP,
+    status VARCHAR(20) NOT NULL,
+
+    FOREIGN KEY (user_id) REFERENCES ACCOUNT(ACC_USERNAME)
+);
+
+CREATE TABLE IF NOT EXISTS order_online_details (
+    id SERIAL PRIMARY KEY,
+    order_online_id INT NOT NULL,
+    item_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    note TEXT,
+    FOREIGN KEY (order_online_id) REFERENCES order_online(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES MENU_ITEMS(ITEM_ID) ON DELETE CASCADE
+);
