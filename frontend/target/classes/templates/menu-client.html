@@ -425,28 +425,22 @@
 
             <!-- Categories Filter -->
             <div class="flex flex-wrap mb-8">
-                <button class="menu-category-button active" data-category="all">Recomended</button>
-                <button class="menu-category-button" data-category="breakfast">Breakfast</button>
-                <button class="menu-category-button" data-category="lunch">Lunch</button>
-                <button class="menu-category-button" data-category="dinner">Dinner</button>
-                <button class="menu-category-button" data-category="ice cream">Ice Cream</button>
-                <button class="menu-category-button" data-category="coffee">Coffee</button>
-                 <button class="menu-category-button" data-category="drink">Drink</button>
-                 <button class="menu-category-button" data-category="appetizer">Appetizer</button>
-                 <button class="menu-category-button" data-category="main dish">Main dish</button>
-                 <button class="menu-category-button" data-category="dessert">Dessert</button>
+                <button class="menu-category-button active" data-category="all">All Items</button>
+                <button class="menu-category-button" data-category="food">Food</button>
+                <button class="menu-category-button" data-category="drink">Drinks</button>
+                <button class="menu-category-button" data-category="other">Other</button>
             </div>
 
             <!-- Menu Items Grid -->
             <div id="menu-items-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
                 <!-- Menu items will be loaded here by Thymeleaf -->
-                 <div th:each="item : ${menuItems}" class="menu-item-card" th:data-category="${item.category?.toLowerCase()}" th:data-item-id="${item.id}" th:draggable="true">
-                    <img th:src="${item.imageUrl}" th:alt="${item.name}" src="https://via.placeholder.com/300x150">
+                 <div th:each="item : ${menuItems}" class="menu-item-card" th:data-category="${item.itemType?.toLowerCase()}" th:data-item-id="${item.id}" th:draggable="true">
+                    <img th:src="${item.itemImg}" th:alt="${item.itemName}" src="https://via.placeholder.com/300x150">
                     <div class="menu-item-content">
-                        <h3 class="text-white">[[${item.name}]]</h3>
-                        <p class="text-gray-300">[[${item.description}]]</p>
+                        <h3 class="text-white">[[${item.itemName}]]</h3>
+                        <p class="text-gray-300">[[${item.itemType}]]</p>
                         <div class="flex items-center justify-between mt-auto">
-                            <span class="menu-item-price text-yellow-400">[[${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')}]] $</span>
+                            <span class="menu-item-price text-yellow-400">[[${#numbers.formatDecimal(item.itemSprice, 0, 'COMMA', 2, 'POINT')}]] VND</span>
                         </div>
                     </div>
                 </div>
@@ -502,10 +496,10 @@
                     const quantity = parseInt(itemElement.querySelector('.quantity').innerText);
                     const selectedItem = menuItems.find(item => item.id == itemId);
                     if (selectedItem) {
-                        total += selectedItem.price * quantity;
+                        total += selectedItem.itemSprice * quantity; // Use itemSprice
                     }
                 });
-                document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
+                document.getElementById('total-price').innerText = `${total.toLocaleString('vi-VN')} VND`; // Format as VND
             }
 
             // Get all required elements
@@ -646,10 +640,10 @@
                             itemElement.classList.add('meal-plan-item');
                             itemElement.setAttribute('data-item-id', selectedItem.id); // Add item ID for easy removal
                             itemElement.innerHTML = `
-                                <img src="${selectedItem.imageUrl || 'https://via.placeholder.com/40x40'}" alt="${selectedItem.name}">
+                                <img src="${selectedItem.itemImg || 'https://via.placeholder.com/40x40'}" alt="${selectedItem.itemName}">
                                 <div class="meal-plan-item-info">
-                                    <h4>${selectedItem.name}</h4>
-                                    <p>${selectedItem.price ? selectedItem.price.toFixed(2) + '$' : ''}</p>
+                                    <h4>${selectedItem.itemName}</h4>
+                                    <p>${selectedItem.itemSprice ? selectedItem.itemSprice.toLocaleString('vi-VN') + ' VND' : ''}</p>
                                 </div>
                                 <div class="item-controls"> <!-- New container -->
                                     <div class="quantity-control">

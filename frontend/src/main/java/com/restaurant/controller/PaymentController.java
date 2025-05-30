@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,61 +20,72 @@ import java.util.Map;
 import java.util.HashMap;
 
 @Controller
+@RequestMapping("/payment")
 public class PaymentController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${backend.api.url}")
+    @Value("${backend.api.url:http://localhost:8080}")
     private String backendApiUrl;
 
-    @GetMapping("/payment")
+    @GetMapping
     public String paymentPage(@RequestParam String items, Model model) {
-        // Parse the items parameter (format: "id1-qty1,id2-qty2,...")
         List<Map<String, Object>> selectedItems = new ArrayList<>();
         String[] itemPairs = items.split(",");
-        
+
         for (String pair : itemPairs) {
             String[] parts = pair.split("-");
             if (parts.length == 2) {
                 String itemId = parts[0];
                 int quantity = Integer.parseInt(parts[1]);
-                
-                // Fetch item details from backend
+
                 try {
+                    // Call API to get single item details
                     MenuItemDto item = restTemplate.getForObject(
-                        backendApiUrl + "/items/" + itemId,
-                        MenuItemDto.class
+                            backendApiUrl + "/items/" + itemId,
+                            MenuItemDto.class
                     );
-                    
+
                     if (item != null) {
-                        selectedItems.add(Map.of(
-                            "id", item.getId(),
-                            "name", item.getItemName(),
-                            "price", item.getItemSprice(),
-                            "quantity", quantity,
-                            "total", item.getItemSprice() * quantity
-                        ));
+                        logger.info("Successfully fetched item details for ID {}: {}", itemId, item);
+                        // Add item details and quantity to the list
+                        Map<String, Object> selectedItem = new HashMap<>();
+                        selectedItem.put("id", item.getId());
+                        selectedItem.put("name", item.getItemName()); // Use itemName from DTO
+                        selectedItem.put("price", item.getItemSprice()); // Use itemSprice from DTO
+                        selectedItem.put("quantity", quantity);
+                        selectedItem.put("total", item.getItemSprice() * quantity);
+                        selectedItem.put("imageUrl", item.getItemImg()); // Use itemImg from DTO
+
+                        selectedItems.add(selectedItem);
+                    } else {
+                        // Handle case where item is not found
+                        System.err.println("Item with ID " + itemId + " not found.");
                     }
                 } catch (Exception e) {
-                    // Log error and continue with other items
+                    // Handle API call errors
                     System.err.println("Error fetching item " + itemId + ": " + e.getMessage());
+                    // Optionally add an error message to the model
+                    model.addAttribute("error", "Failed to load item details.");
                 }
             }
         }
-        
+
         // Calculate total amount
         double totalAmount = selectedItems.stream()
-            .mapToDouble(item -> (Double) item.get("total"))
-            .sum();
-        
+                .mapToDouble(item -> (Double) item.get("total"))
+                .sum();
+
         model.addAttribute("selectedItems", selectedItems);
         model.addAttribute("totalAmount", totalAmount);
-        
-        return "payment";
+
+        return "payment"; // This should match the name of your Thymeleaf template (payment.html)
     }
 
-    @PostMapping("/payment/submit")
+    @PostMapping("/submit")
     @ResponseBody
     public ResponseEntity<?> submitOrder(@RequestBody Map<String, Object> orderData) {
         try {

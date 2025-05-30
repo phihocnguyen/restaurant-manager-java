@@ -13,34 +13,15 @@
         :root {
             --primary-gold: #D4AF37;
             --dark-bg: #0F0F0F;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --glass-bg: rgba(255, 255, 255, 0.1);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
             background: var(--dark-bg);
-            color: #fff;
-            padding-top: 96px;
         }
 
         .playfair {
             font-family: 'Playfair Display', serif;
-        }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .glass-dark {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .animated-bg {
@@ -55,32 +36,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            from { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
-            to { box-shadow: 0 0 40px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.3); }
-        }
-
-        .magnetic-btn {
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .magnetic-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(212, 175, 55, 0.6);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -93,243 +48,153 @@
             background: linear-gradient(45deg, var(--primary-gold), #B8860B);
             border-radius: 4px;
         }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 999;
-            transition: right 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .mobile-menu.active {
-            right: 0;
-        }
-
-        .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--primary-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .scroll-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .scroll-to-top:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
-        }
-
-        /* New styles for improved UI */
-        .payment-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .selected-items, .customer-info {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .item-card {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .item-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
-        }
-
-        .input-icon {
-            position: relative;
-        }
-
-        .input-icon i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-gold);
-        }
-
-        .input-icon input, .input-icon select {
-            padding-left: 2.5rem;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-            height: 48px;
-        }
-
-        .input-icon input:focus, .input-icon select:focus {
-            outline: none;
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-gold);
-            margin-bottom: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .payment-container {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
-<body class="animated-bg text-white min-h-screen">
-    <!-- Floating Particles -->
-    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="absolute top-6 right-6 text-white text-3xl" id="closeMobileMenu">×</button>
-        <div class="space-y-8 text-center">
-            <a th:href="@{/}" class="block text-2xl hover:text-yellow-400 transition-colors"><i class="fas fa-home mr-2"></i>Home</a>
-            <a th:href="@{/menu-client}" class="block text-2xl hover:text-yellow-400 transition-colors"><i class="fas fa-utensils mr-2"></i>Menu</a>
-            <a href="#" class="block text-2xl hover:text-yellow-400 transition-colors"><i class="fas fa-info-circle mr-2"></i>About</a>
-            <a href="#" class="premium-btn px-8 py-3 rounded-full text-black font-semibold"><i class="fas fa-chair mr-2"></i>Reserve Table</a>
-        </div>
-    </div>
-
+<body class="animated-bg text-white min-h-screen pt-24">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass-dark transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
-                        <span class="text-black font-bold text-xl">G</span>
-                    </div>
-                    <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
+    <nav class="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-xl border-b border-white/20 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg shadow-yellow-500/50">
+                    <span class="text-black font-bold text-xl">G</span>
                 </div>
-    
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="hover:text-yellow-400 transition-colors duration-300 relative group">
-                        Home
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                    <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
-                        Menu
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                    <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
-                        About
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                    <a href="#reservation" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
-                        Login
-                    </a>
-                </div>
-    
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden glass p-2 rounded-lg" id="mobile-menu-btn">
-                    <div class="w-6 h-6 flex flex-col justify-center space-y-1">
-                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
-                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
-                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
-                    </div>
-                </button>
+                <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
             </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    Home
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    Menu
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    About
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#reservation" class="bg-gradient-to-r from-yellow-400 to-yellow-600 px-6 py-2 rounded-full text-black font-semibold hover:shadow-lg hover:shadow-yellow-500/50 transition-all">
+                    Login
+                </a>
+            </div>
+            <button class="md:hidden bg-white/10 backdrop-blur-md p-2 rounded-lg">
+                <div class="w-6 h-6 flex flex-col justify-center space-y-1">
+                    <span class="w-full h-0.5 bg-white"></span>
+                    <span class="w-full h-0.5 bg-white"></span>
+                    <span class="w-full h-0.5 bg-white"></span>
+                </div>
+            </button>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-16">
-        <h2 class="text-3xl font-bold text-center mb-12 playfair"><i class="fas fa-wallet mr-2"></i>Complete Your Payment</h2>
-
-        <div class="payment-container">
-            <!-- Selected Items (Left) -->
-            <div class="selected-items">
-                <h3 class="section-title"><i class="fas fa-shopping-cart"></i>Selected Items</h3>
-                <div id="selected-items-list" class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                    <div th:each="item : ${selectedItems}" class="item-card">
-                        <img th:src="${item.imageUrl}" alt="Item Image" class="w-16 h-16 object-cover rounded-md mr-4">
-                        <div class="flex-1">
-                            <p class="font-semibold">[[${item.name}]]</p>
-                            <p class="text-sm text-gray-300"><i class="fas fa-sort-numeric-up mr-1"></i>Quantity: [[${item.quantity}]]</p>
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Left: Order Summary -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-semibold flex items-center gap-2">
+                        <i class="fas fa-shopping-cart text-yellow-400"></i> Pay G15 Kitchen
+                    </h2>
+                </div>
+                <div class="space-y-4">
+                    <div th:each="item : ${selectedItems}" class="flex items-center justify-between bg-white/5 rounded-lg p-4 hover:bg-white/10 transition">
+                        <div class="flex items-center gap-4">
+                            <img th:src="${item.imageUrl}" alt="Item Image" class="w-12 h-12 object-cover rounded-md">
+                            <div>
+                                <p class="font-semibold">[[${item.name}]]</p>
+                                <p class="text-sm text-gray-400">Qty [[${item.quantity}]] • $[[${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')}]] each</p>
+                            </div>
                         </div>
-                        <p class="font-bold text-yellow-400"><i class="fas fa-dollar-sign mr-1"></i>[[${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 2, 'POINT')}]]</p>
+                        <p class="font-semibold">$[[${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 2, 'POINT')}]]</p>
                     </div>
                 </div>
-                <div class="flex justify-between items-center border-t border-gray-600ទ0.6 pt-4 mt-4">
-                    <span class="text-lg font-bold"><i class="fas fa-money-bill-wave mr-2"></i>Total:</span>
-                    <span class="text-xl font-bold text-yellow-400">[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]] $</span>
-                    <input type="hidden" id="totalAmount" th:value="${totalAmount}">
+                <div class="mt-6 border-t border-white/20 pt-4">
+                    <div class="flex justify-between text-gray-400">
+                        <span>Subtotal</span>
+                        <span>$[[${#numbers.formatDecimal(totalAmount - 5, 0, 'COMMA', 2, 'POINT')}]]</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400 mt-2">
+                        <span>Shipping (Ground shipping 3-5 business days)</span>
+                        <span>$5.00</span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-gray-600 pt-4 mt-4">
+                        <span class="text-lg font-bold"><i class="fas fa-money-bill-wave mr-2"></i>Total:</span>
+                        <span class="text-xl font-bold text-yellow-400">[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]] $</span>
+                        <input type="hidden" id="totalAmount" th:value="${totalAmount}">
+                    </div>
                 </div>
             </div>
 
-            <!-- Customer Information (Right) -->
-            <div class="customer-info">
-                <h3 class="section-title"><i class="fas fa-user"></i>Customer Information</h3>
+            <!-- Right: Payment Form -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
                 <form id="payment-form" action="/payment" method="post">
-                    <div class="grid grid-cols-1 gap-4 mb-6">
-                        <div class="input-icon">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="customerName" name="customerName" required
-                                   placeholder="Full Name"
-                                   class="mt-1 block w-full rounded-md shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
-                        </div>
-                        <div class="input-icon">
-                            <i class="fas fa-phone"></i>
-                            <input type="tel" id="customerPhone" name="customerPhone" required
-                                   placeholder="Phone Number"
-                                   class="mt-1 block w-full rounded-md shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
-                        </div>
-                        <div class="input-icon">
-                            <i class="fas fa-credit-card"></i>
-                            <select id="paymentMethod" name="paymentMethod" required
-                                    class="mt-1 block w-full rounded-md shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
-                                <option value="" disabled selected>Select Payment Method</option>
-                                <option value="card">Credit/Debit Card</option>
-                                <option value="cash">Cash on Delivery</option>
-                            </select>
-                        </div>
+                  <h3 class="text-lg font-semibold mb-4">Shipping information</h3>
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-sm text-gray-400 mb-1">Email</label>
+                      <input type="email" id="customerEmail" name="customerEmail" required
+                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                             placeholder="Email">
                     </div>
-                    <button type="submit" class="w-full premium-btn py-3 rounded-md text-black font-bold text-lg magnetic-btn flex items-center justify-center gap-2">
-                        <i class="fas fa-check-circle"></i> Pay Now
-                    </button>
+                    <div>
+                      <label class="block text-sm text-gray-400 mb-1">Name</label>
+                      <input type="text" id="customerName" name="customerName" required
+                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                             placeholder="Name">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Province/City</label>
+                        <select id="province" name="provinceCode" required
+                                class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
+                            <option value="" disabled selected>Select Province/City</option>
+                        </select>
+                        </div>
+                        <div>
+                        <label class="block text-sm text-gray-400 mb-1">District</label>
+                        <select id="district" name="districtCode" required
+                                class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
+                            <option value="" disabled selected>Select District</option>
+                        </select>
+                        </div>
+                        <div>
+                        <label class="block text-sm text-gray-400 mb-1">Ward/Commune</label>
+                        <select id="ward" name="wardCode" required
+                                class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
+                            <option value="" disabled selected>Select Ward/Commune</option>
+                        </select>
+                        </div>
+                    <div>
+                      <label class="block text-sm text-gray-400 mb-1">Street Address</label>
+                      <input type="text" id="streetAddress" name="streetAddress" required
+                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                             placeholder="Street address (House number, street name, etc.)">
+                    </div>
+                    <div>
+                      <label class="block text-sm text-gray-400 mb-1">Full Address</label>
+                      <input type="text" id="address" name="address" required
+                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                             placeholder="Address">
+                    </div>
+                    <div>
+                      <label class="block text-sm text-gray-400 mb-1">Voucher (optional)</label>
+                      <input type="text" id="voucher" name="voucher"
+                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                             placeholder="Enter your voucher code">
+                    </div>
+                  </div>
+              
+                  <h3 class="text-lg font-semibold mt-6 mb-4">Payment details</h3>
+                  <!-- Payment fields unchanged, keep your original markup here -->
+              
+                  <button type="submit"
+                          class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold py-3 rounded-lg mt-6 hover:shadow-lg hover:shadow-yellow-500/50 transition flex items-center justify-center gap-2">
+                    Pay $[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]]
+                  </button>
                 </form>
-            </div>
+              
+              </div>
+              
         </div>
     </div>
 
@@ -338,92 +203,117 @@
 
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile Menu Toggle
-            const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-            const mobileMenu = document.getElementById("mobileMenu");
-            const closeMobileMenu = document.getElementById("closeMobileMenu");
-
-            if (mobileMenuBtn && mobileMenu && closeMobileMenu) {
-                mobileMenuBtn.addEventListener("click", () => {
-                    mobileMenu.classList.toggle("active");
-                });
-
-                closeMobileMenu.addEventListener("click", () => {
-                    mobileMenu.classList.remove("active");
-                });
-            }
-
-            // Scroll to Top Button
-            const scrollToTopBtn = document.createElement("div");
-            scrollToTopBtn.className = "scroll-to-top";
-            scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-            if (!document.querySelector('.scroll-to-top')) {
-                document.body.appendChild(scrollToTopBtn);
-            }
-
-            scrollToTopBtn.addEventListener("click", () => {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            });
-
-            window.addEventListener("scroll", () => {
-                if (window.scrollY > 300) {
-                    scrollToTopBtn.classList.add("visible");
-                } else {
-                    scrollToTopBtn.classList.remove("visible");
-                }
-            });
-
-            // Floating Particles
-            function createParticle() {
-                const particle = document.createElement("div");
-                particle.className = "particle";
-                const size = Math.random() * 10 + 5;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.top = `${Math.random() * 100}vh`;
-                const particlesContainer = document.getElementById("particles-container");
-                if (particlesContainer) {
-                    particlesContainer.appendChild(particle);
-                    particle.animate([
-                        { transform: "translateY(0)" },
-                        { transform: "translateY(-100vh)" }
-                    ], {
-                        duration: Math.random() * 10000 + 10000,
-                        iterations: Infinity,
-                        easing: "linear"
-                    });
-                }
-            }
-
-            if (!document.querySelectorAll('.particle').length) {
-                for (let i = 0; i < 10; i++) {
-                    setTimeout(() => createParticle(), i * 1000);
-                }
-            }
-
-            // Handle form submission
             const paymentForm = document.getElementById('payment-form');
             if (paymentForm) {
                 paymentForm.addEventListener('submit', function(event) {
                     event.preventDefault();
                     const customerName = document.getElementById('customerName').value;
-                    const customerPhone = document.getElementById('customerPhone').value;
-                    const paymentMethod = document.getElementById('paymentMethod').value;
+                    const customerEmail = document.getElementById('customerEmail').value;
                     const totalAmount = document.getElementById('totalAmount').value;
 
                     const orderData = {
                         customerName,
-                        customerPhone,
-                        paymentMethod,
+                        customerEmail,
                         totalAmount: parseFloat(totalAmount),
                         items: selectedItems
                     };
 
+                    // Assuming the submission to backend is successful, redirect to order success page
+                    // You would typically perform an AJAX request here and redirect on success
+                    // For now, we'll just redirect directly for demonstration
+                    window.location.href = '/order/success';
+
                     console.log('Submitting order data:', orderData);
-                    alert('Order submitted! (Data logged to console)');
+                    alert('Order submitted! (Data logged to console)'); // Remove this alert in production
                 });
             }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinceSelect = document.getElementById('province');
+            const districtSelect = document.getElementById('district');
+            const wardSelect = document.getElementById('ward');
+            const apiUrl = 'https://provinces.open-api.vn/api/';
+
+            // Function to fetch data from API
+            async function fetchData(endpoint) {
+                try {
+                    const response = await fetch(apiUrl + endpoint);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    return [];
+                }
+            }
+
+            // Populate provinces
+            async function populateProvinces() {
+                const provinces = await fetchData('p/');
+                provinceSelect.innerHTML = '<option value="" disabled selected>Select Province/City</option>';
+                provinces.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province.code;
+                    option.textContent = province.name;
+                    provinceSelect.appendChild(option);
+                });
+            }
+
+            // Populate districts based on province
+            async function populateDistricts(provinceCode) {
+                districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+                wardSelect.innerHTML = '<option value="" disabled selected>Select Ward/Commune</option>'; // Clear wards when province changes
+                districtSelect.disabled = true; // Disable district dropdown
+                wardSelect.disabled = true; // Disable ward dropdown
+
+                if (!provinceCode) return;
+
+                const provinceData = await fetchData(`p/${provinceCode}?depth=2`);
+                if (provinceData && provinceData.districts) {
+                     provinceData.districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.code;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                    districtSelect.disabled = false; // Enable district dropdown
+                }
+            }
+
+            // Populate wards based on district
+            async function populateWards(districtCode) {
+                wardSelect.innerHTML = '<option value="" disabled selected>Select Ward/Commune</option>';
+                wardSelect.disabled = true; // Disable ward dropdown
+
+                if (!districtCode) return;
+
+                const districtData = await fetchData(`d/${districtCode}?depth=2`);
+                 if (districtData && districtData.wards) {
+                    districtData.wards.forEach(ward => {
+                        const option = document.createElement('option');
+                        option.value = ward.code;
+                        option.textContent = ward.name;
+                        wardSelect.appendChild(option);
+                    });
+                    wardSelect.disabled = false; // Enable ward dropdown
+                }
+            }
+
+            // Event listeners
+            provinceSelect.addEventListener('change', function() {
+                populateDistricts(this.value);
+            });
+
+            districtSelect.addEventListener('change', function() {
+                populateWards(this.value);
+            });
+
+            // Initial population
+            populateProvinces();
         });
     </script>
 </body>

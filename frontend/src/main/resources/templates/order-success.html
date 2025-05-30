@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful - G15 Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-bg: #0F0F0F;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: #fff;
+            padding-top: 96px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #0F0F0F, #1a1a1a, #2d2d2d, #1a1a1a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+         .footer-section {
+             background-color: rgba(0, 0, 0, 0.3);
+             backdrop-filter: blur(10px);
+             border-top: 1px solid rgba(255, 255, 255, 0.1);
+             padding: 3rem 0;
+         }
+    </style>
+</head>
+<body class="animated-bg">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-xl border-b border-white/20 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg shadow-yellow-500/50">
+                    <span class="text-black font-bold text-xl">G</span>
+                </div>
+                <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    Home
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    Menu
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                    About
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="/login" class="bg-gradient-to-r from-yellow-400 to-yellow-600 px-6 py-2 rounded-full text-black font-semibold hover:shadow-lg hover:shadow-yellow-500/50 transition-all">
+                    Login
+                </a>
+            </div>
+            <button class="md:hidden bg-white/10 backdrop-blur-md p-2 rounded-lg">
+                <div class="w-6 h-6 flex flex-col justify-center space-y-1">
+                    <span class="w-full h-0.5 bg-white"></span>
+                    <span class="w-full h-0.5 bg-white"></span>
+                    <span class="w-full h-0.5 bg-white"></span>
+                </div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content - Order Success Message -->
+    <div class="content-area">
+        <div class="text-center bg-white/10 backdrop-blur-md rounded-xl p-8 max-w-md mx-auto border border-white/20">
+            <div class="text-green-500 text-6xl mb-6">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="text-3xl font-bold playfair text-yellow-400 mb-4">Order Successful!</h2>
+            <p class="text-gray-300 mb-6">Thank you for your order! Your meal is being prepared and will be delivered soon.</p>
+            <p class="text-gray-300 mb-8">Please check your email for the order confirmation and further details.</p>
+            <img src="https://img.freepik.com/free-vector/cloud-kitchen-service-concept-with-package-delivery-symbols-isometric-vector-illustration_98292-9326.jpg" alt="Delivery Illustration" class="mx-auto w-40 mb-6">
+            <a th:href="@{/menu-client}" class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 px-8 py-3 rounded-full text-black font-semibold hover:shadow-lg hover:shadow-yellow-500/50 transition-all">
+                Back to Menu
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-section text-gray-300">
+        <div class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4 playfair">G15 Kitchen</h3>
+                <p class="text-sm">Providing the best culinary experience with a touch of elegance.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4 playfair">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a href="/" class="hover:text-yellow-400 transition-colors duration-300">Home</a></li>
+                    <li><a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300">Menu</a></li>
+                    <li><a href="#about" class="hover:text-yellow-400 transition-colors duration-300">About Us</a></li>
+                    <li><a href="#contact" class="hover:text-yellow-400 transition-colors duration-300">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4 playfair">Contact Info</h3>
+                <p class="text-sm">123 Restaurant Lane, Culinary City</p>
+                <p class="text-sm">Email: info@g15kitchen.com</p>
+                <p class="text-sm">Phone: +123 456 7890</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 mt-8 text-center text-gray-500 text-sm">
+            © 2023 G15 Kitchen. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html> 
