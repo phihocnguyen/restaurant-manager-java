@@ -31,10 +31,12 @@
         .product-area {
             flex: 1;
             padding: 20px;
+            overflow-y: auto; /* Added for scrolling if many products */
         }
         .cart-area {
             width: 400px;
             background: #f8fafc;
+            /* FIX: Corrected the border-left syntax */
             border-left: 1px solid #e2e8f0;
         }
         .product-grid {
@@ -95,53 +97,27 @@
             background: #ff6b35 !important;
             color: white !important;
         }
-        .noodles-bg { background: linear-gradient(45deg, #ff9a9e, #fecfef); }
-        .soup-bg { background: linear-gradient(45deg, #a8edea, #fed6e3); }
-        .fried-bg { background: linear-gradient(45deg, #ffecd2, #fcb69f); }
-        .prawn-bg { background: linear-gradient(45deg, #ff8a00, #e52e71); }
-        .soba-bg { background: linear-gradient(45deg, #667eea, #764ba2); }
-        .chili-bg { background: linear-gradient(45deg, #f093fb, #f5576c); }
-        .egg-bg { background: linear-gradient(45deg, #4facfe, #00f2fe); }
-        .thai-bg { background: linear-gradient(45deg, #43e97b, #38f9d7); }
     </style>
 </head>
 <body>
     <div class="pos-container">
-        <!-- Sidebar -->
         <div class="sidebar flex flex-col items-center py-4 space-y-4">
-            <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white">
+            <a th:href="@{/sales/tables}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600">
+                <i class="fas fa-table"></i>
+            </a>
+            <a th:href="@{/sales/items}" class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white cursor-pointer hover:bg-gray-300">
                 <i class="fas fa-utensils"></i>
-            </div>
-            <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
-                <i class="fas fa-th-large"></i>
-            </div>
-            <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
-                <i class="fas fa-chart-bar"></i>
-            </div>
-            <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
-                <i class="fas fa-clock"></i>
-            </div>
-            <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
-                <i class="fas fa-question-circle"></i>
-            </div>
+            </a>
+            <a th:href="@{/sales/history}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
+                <i class="fas fa-history"></i>
+            </a>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Product Area -->
             <div class="product-area">
-                <!-- Header -->
                 <div class="flex justify-between items-center mb-6">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-800">Restro POS</h1>
-                        <div class="flex items-center mt-2">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                            <span class="text-sm text-gray-600">Kết nối WiFi</span>
-                            <span class="ml-4 px-3 py-1 bg-orange-500 text-white text-sm rounded-full">Chọn bàn</span>
-                        </div>
                     </div>
                     <div class="flex items-center space-x-4">
                         <div class="relative">
@@ -151,7 +127,6 @@
                     </div>
                 </div>
 
-                <!-- Category Tabs -->
                 <div class="flex space-x-2 mb-6">
                     <button class="px-4 py-2 rounded-lg active-tab" data-tab-status="all">
                         <i class="fas fa-list mr-2"></i>Tất cả
@@ -167,77 +142,69 @@
                     </button>
                 </div>
 
-                <!-- Product Grid -->
                 <div class="product-grid" id="productGrid">
-                    <div th:each="item : ${items}" class="product-card" 
+                    <div th:each="item : ${items}" class="product-card"
                          th:data-type="${item.itemType}"
                          th:data-name="${item.itemName}"
                          th:data-price="${item.itemSprice}"
                          onclick="addToCart(this.dataset.name, parseFloat(this.dataset.price))">
                         <div class="product-image" th:style="'background-image: url(' + ${item.itemImg} + ')'"></div>
                         <div class="text-sm font-medium text-gray-800" th:text="${item.itemName}"></div>
-                        <div class="text-sm font-bold text-gray-900 mt-1" th:text="${#numbers.formatCurrency(item.itemSprice)}"></div>
+                        <div class="text-sm font-bold text-gray-900 mt-1" th:text="${#numbers.formatDecimal(item.itemSprice, 0, 'POINT', 0, 'COMMA')} + '₫'"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Cart Area -->
             <div class="cart-area flex flex-col">
-                <!-- Cart Header -->
                 <div class="p-5 border-b border-gray-200">
                     <div class="flex justify-between items-center mb-4">
-                        <button class="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium">
-                            <i class="fas fa-plus mr-2"></i>Thêm khách hàng
-                        </button>
-                        <div class="flex space-x-2">
-                            <button class="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-plus text-gray-600"></i>
-                            </button>
-                            <button class="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-th text-gray-600"></i>
-                            </button>
-                            <button class="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-sync text-gray-600"></i>
-                            </button>
+                        <div class="flex items-center space-x-4 w-full">
+                            <div class="w-1/3">
+                                <select id="rightPanelTableSelect" class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                    <option value="">Chọn bàn</option>
+                                    <option th:each="table : ${tables}" th:value="${table.id}" th:text="'Bàn ' + ${table.tabNum}"></option>
+                                </select>
+                            </div>
+                            <div class="w-2/3">
+                                <button onclick="showOnlineOrders()" class="w-full px-6 py-2 bg-orange-500 text-white rounded-lg text-sm hover:bg-orange-600 transition-colors">
+                                    <i class="fas fa-shopping-cart mr-2"></i>Kiểm tra đơn online
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Cart Items -->
                 <div class="flex-1 overflow-y-auto" id="cartItems">
-                    <!-- Items will be added here dynamically -->
-                </div>
+                    </div>
 
-                <!-- Cart Footer -->
                 <div class="p-5 border-t border-gray-200 bg-white">
                     <div class="mb-4">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-gray-600">Tạm tính</span>
-                            <span class="font-medium" id="subtotal">$0.00</span>
+                            <span class="text-sm text-gray-600">Subtotal</span>
+                            <span class="font-medium" id="subtotal">0₫</span>
                         </div>
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-gray-600">Thuế</span>
-                            <span class="font-medium" id="tax">$0.00</span>
+                            <span class="text-sm text-gray-600">Tax (VAT)</span>
+                            <span class="font-medium" id="tax">0₫</span>
                         </div>
                         <div class="flex justify-between items-center text-lg font-bold">
-                            <span>Tổng tiền</span>
-                            <span id="total">$0.00</span>
+                            <span>Total</span>
+                            <span id="total">0₫</span>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-2">
-                        <div class="flex space-x-2">
-                            <button class="flex-1 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium">
-                                <i class="fas fa-receipt mr-1"></i>Đặt hàng
-                            </button>
-                            <div class="flex space-x-1">
-                                <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Giảm giá</button>
-                                <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Mã giảm giá</button>
-                                <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Ghi chú</button>
-                            </div>
-                        </div>
-                        <button class="w-full py-3 bg-green-500 text-white rounded-lg font-medium text-lg">
-                            <i class="fas fa-check-circle mr-2"></i>Tiến hành thanh toán
+                         <div class="flex space-x-2">
+                             <button class="flex-1 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium">
+                                 <i class="fas fa-receipt mr-1"></i>Đặt hàng
+                             </button>
+                             <div class="flex space-x-1">
+                                 <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Giảm giá</button>
+                                 <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Ghi chú</button>
+                             </div>
+                         </div>
+                        <button onclick="exportToPDF()" class="w-full py-3 bg-green-500 text-white rounded-lg font-medium text-lg">
+                            <i class="fas fa-check-circle mr-2"></i>Tiến hành phục vụ
                         </button>
                     </div>
                 </div>
@@ -245,15 +212,54 @@
         </div>
     </div>
 
-    <script>
+    <!-- Online Orders Modal -->
+    <div id="onlineOrdersModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-3/4 max-h-[80vh] overflow-hidden">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Đơn hàng online</h3>
+                <button onclick="closeOnlineOrders()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[calc(80vh-8rem)]">
+                <div id="onlineOrdersList" class="space-y-4">
+                    <!-- Orders will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script th:inline="none">
         let cart = [];
-        let orderCounter = 1;
+        let orderCounter = 1; // Used to generate unique IDs for cart items
+        let currentTable = '';
+        const TAX_RATE = 0.10; // 10% tax
+
+        // Helper function to format currency to VND
+        function formatCurrency(value) {
+            // Using Intl.NumberFormat for robust localization
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        }
+
+        // Table selection
+        function updateTableSelection(tableId) {
+            currentTable = tableId;
+            const rightPanelTableSelect = document.getElementById('rightPanelTableSelect');
+            if (rightPanelTableSelect) rightPanelTableSelect.value = tableId;
+        }
+
+        document.getElementById('rightPanelTableSelect').addEventListener('change', function() {
+            updateTableSelection(this.value);
+        });
 
         // Display items based on filter
         function displayItems(filter) {
             const productCards = document.querySelectorAll('.product-card');
             productCards.forEach(card => {
-                if (filter === 'all' || card.getAttribute('data-type') === filter) {
+                const itemType = card.getAttribute('data-type');
+                if (filter === 'all' || itemType === filter) {
                     card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
@@ -265,30 +271,26 @@
         document.querySelectorAll('[data-tab-status]').forEach(tab => {
             tab.addEventListener('click', function() {
                 const status = this.getAttribute('data-tab-status');
-                
                 document.querySelectorAll('[data-tab-status]').forEach(t => {
                     t.classList.remove('active-tab');
-                    t.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    t.classList.add('bg-gray-200', 'text-gray-700');
                 });
-                
                 this.classList.add('active-tab');
-                this.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
-                
+                this.classList.remove('bg-gray-200', 'text-gray-700');
                 displayItems(status);
             });
         });
 
         // Search functionality
         document.querySelector('input[placeholder*="Tìm kiếm sản phẩm"]').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
+            const searchTerm = this.value.toLowerCase().trim();
             const activeFilter = document.querySelector('.active-tab').getAttribute('data-tab-status');
-            
             document.querySelectorAll('.product-card').forEach(card => {
-                const itemName = card.querySelector('.text-sm.font-medium').textContent.toLowerCase();
+                const itemName = card.getAttribute('data-name').toLowerCase();
                 const itemType = card.getAttribute('data-type');
                 const matchesSearch = itemName.includes(searchTerm);
                 const matchesFilter = activeFilter === 'all' || itemType === activeFilter;
-                
+
                 if (matchesSearch && matchesFilter) {
                     card.style.display = 'block';
                 } else {
@@ -299,7 +301,6 @@
 
         function addToCart(name, price) {
             const existingItem = cart.find(item => item.name === name);
-            
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
@@ -311,7 +312,6 @@
                     discount: 0
                 });
             }
-            
             updateCartDisplay();
         }
 
@@ -338,50 +338,228 @@
             const taxElement = document.getElementById('tax');
             const totalElement = document.getElementById('total');
 
-            // Clear current cart display
             cartItemsContainer.innerHTML = '';
-
             let subtotal = 0;
 
-            cart.forEach(item => {
+            cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
 
+                // FIX: Corrected item numbering using index + 1
                 const cartItemHtml = `
                     <div class="cart-item">
                         <div class="flex-1">
                             <div class="flex justify-between items-start mb-2">
-                                <span class="font-medium text-sm">${orderCounter - cart.length + cart.indexOf(item)}. ${item.name}</span>
-                                <span class="font-bold">$${itemTotal.toFixed(2)}</span>
-                                <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 ml-2">
-                                    <i class="fas fa-times"></i>
-                                </button>
+                                <span class="font-medium text-sm">${index + 1}. ${item.name}</span>
+                                <div class="flex items-center">
+                                    <span class="font-bold mr-3">${formatCurrency(itemTotal)}</span>
+                                    <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500">
+                                        <i class="fas fa-times fa-sm"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center mt-1">
                                 <div class="quantity-controls">
-                                    <span class="text-sm text-gray-600">Số lượng</span>
                                     <button onclick="updateQuantity(${item.id}, -1)" class="quantity-btn">-</button>
                                     <span class="w-8 text-center text-sm font-medium">${item.quantity}</span>
                                     <button onclick="updateQuantity(${item.id}, 1)" class="quantity-btn">+</button>
                                 </div>
-                                <div class="text-right">
-                                    <div class="text-sm text-gray-600">Giảm giá(%)</div>
-                                    <input type="text" value="${item.discount}" class="w-12 text-center text-sm border border-gray-300 rounded px-1">
-                                </div>
+                                <span class="text-xs text-gray-500">Đơn giá: ${formatCurrency(item.price)}</span>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 cartItemsContainer.innerHTML += cartItemHtml;
             });
 
-            const tax = subtotal * 0.1; // 10% tax
+            const tax = subtotal * TAX_RATE;
             const total = subtotal + tax;
 
-            subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
-            taxElement.textContent = `$${tax.toFixed(2)}`;
-            totalElement.textContent = `$${total.toFixed(2)}`;
+            subtotalElement.textContent = formatCurrency(subtotal);
+            taxElement.textContent = formatCurrency(tax);
+            totalElement.textContent = formatCurrency(total);
         }
+
+        function exportToPDF() {
+            const selectedTable = document.getElementById('rightPanelTableSelect').value;
+            if (!selectedTable) {
+                alert('Please select a table before proceeding!');
+                return;
+            }
+             if (cart.length === 0) {
+                alert('Cart is empty. Please add items!');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Use Arial font for better English support
+            doc.setFont('Arial', 'normal');
+
+            const pdfTitle = 'Payment Invoice';
+            doc.setFontSize(22);
+            doc.text(pdfTitle, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+
+            doc.setFontSize(12);
+            doc.text(`Table No: ${selectedTable}`, 14, 35);
+            doc.text(`Time: ${new Date().toLocaleString('en-US')}`, 14, 42);
+
+            const tableData = cart.map((item, index) => [
+                index + 1,
+                item.name,
+                item.quantity,
+                formatCurrency(item.price).replace('₫', '').trim(),
+                formatCurrency(item.price * item.quantity).replace('₫', '').trim()
+            ]);
+
+            doc.autoTable({
+                startY: 50,
+                head: [['No.', 'Item Name', 'Qty', 'Unit Price', 'Subtotal']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [255, 107, 53] },
+                styles: { font: 'Arial' }
+            });
+
+            const finalY = doc.lastAutoTable.finalY;
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * TAX_RATE;
+            const total = subtotal + tax;
+
+            doc.setFontSize(12);
+            doc.text('Subtotal:', 150, finalY + 10, { align: 'right' });
+            doc.text(formatCurrency(subtotal).replace('₫', '').trim(), 200, finalY + 10, { align: 'right' });
+
+            doc.text(`Tax (VAT ${TAX_RATE * 100}%):`, 150, finalY + 17, { align: 'right' });
+            doc.text(formatCurrency(tax).replace('₫', '').trim(), 200, finalY + 17, { align: 'right' });
+
+            doc.setFontSize(14);
+            doc.setFont('Arial', 'bold');
+            doc.text('Total:', 150, finalY + 26, { align: 'right' });
+            doc.text(formatCurrency(total).replace('₫', '').trim(), 200, finalY + 26, { align: 'right' });
+
+            doc.save(`invoice-table-${selectedTable}.pdf`);
+        }
+
+        // Online Orders Modal Functions
+        function showOnlineOrders() {
+            const modal = document.getElementById('onlineOrdersModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            fetchOnlineOrders();
+        }
+
+        function closeOnlineOrders() {
+            const modal = document.getElementById('onlineOrdersModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function fetchOnlineOrders() {
+            // TODO: Replace with your actual API endpoint
+            // fetch('/api/online-orders')
+            //     .then(response => response.json())
+            //     .then(orders => {
+            //         displayOnlineOrders(orders);
+            //     })
+            //     .catch(error => {
+            //         console.error('Error fetching online orders:', error);
+            //         alert('Không thể tải đơn hàng online. Vui lòng thử lại sau.');
+            //     });
+
+            // Mock Data for demonstration
+            const mockOrders = [
+                {
+                    id: 1,
+                    customerName: 'Nguyễn Văn A',
+                    customerPhone: '0901234567',
+                    customerAddress: '123 Đường ABC, Quận 1, TP.HCM',
+                    orderTime: new Date().toISOString(),
+                    total: 150000,
+                    items: [
+                        { name: 'Phở Bò', quantity: 2, price: 50000 },
+                        { name: 'Cà Phê Sữa', quantity: 1, price: 25000 },
+                        { name: 'Mì Quảng', quantity: 1, price: 25000 }
+                    ]
+                },
+                {
+                    id: 2,
+                    customerName: 'Trần Thị B',
+                    customerPhone: '0919876543',
+                    customerAddress: '456 Đường XYZ, Quận 5, TP.HCM',
+                    orderTime: new Date(Date.now() - 60000 * 30).toISOString(), // 30 minutes ago
+                    total: 75000,
+                    items: [
+                        { name: 'Bún Chả', quantity: 1, price: 50000 },
+                        { name: 'Trà Đá', quantity: 1, price: 10000 },
+                        { name: 'Nem Rán', quantity: 1, price: 15000 }
+                    ]
+                }
+            ];
+            displayOnlineOrders(mockOrders);
+        }
+
+        function displayOnlineOrders(orders) {
+            const ordersList = document.getElementById('onlineOrdersList');
+            ordersList.innerHTML = '';
+
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<p class="text-center text-gray-500">Không có đơn hàng online nào</p>';
+                return;
+            }
+
+            orders.forEach(order => {
+                const orderElement = document.createElement('div');
+                orderElement.className = 'border border-gray-200 rounded-lg p-4';
+                orderElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 class="font-semibold">${order.customerName}</h4>
+                            <p class="text-sm text-gray-600">${order.customerPhone}</p>
+                            <p class="text-sm text-gray-600">${order.customerAddress}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">Thời gian đặt: ${new Date(order.orderTime).toLocaleString('vi-VN')}</p>
+                            <p class="font-semibold text-orange-500">${formatCurrency(order.total)}</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        ${order.items.map(item => `
+                            <div class="flex justify-between items-center text-sm">
+                                <span>${item.name} x ${item.quantity}</span>
+                                <span>${formatCurrency(item.price * item.quantity)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-4 flex justify-end space-x-2">
+                        <button onclick="acceptOrder(${order.id})" class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
+                            <i class="fas fa-check mr-1"></i>Nhận đơn
+                        </button>
+                        <button onclick="rejectOrder(${order.id})" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600">
+                            <i class="fas fa-times mr-1"></i>Từ chối
+                        </button>
+                    </div>
+                `;
+                ordersList.appendChild(orderElement);
+            });
+        }
+
+        function acceptOrder(orderId) {
+            // TODO: Implement order acceptance logic
+            console.log('Accepting order:', orderId);
+        }
+
+        function rejectOrder(orderId) {
+            // TODO: Implement order rejection logic
+            console.log('Rejecting order:', orderId);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('onlineOrdersModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeOnlineOrders();
+            }
+        });
 
         // Initialize
         updateCartDisplay();

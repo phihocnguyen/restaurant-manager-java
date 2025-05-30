@@ -59,6 +59,7 @@ public class PaymentController {
                         selectedItem.put("quantity", quantity);
                         selectedItem.put("total", item.getItemSprice() * quantity);
                         selectedItem.put("imageUrl", item.getItemImg()); // Use itemImg from DTO
+                        selectedItem.put("note", ""); // Add empty note field
 
                         selectedItems.add(selectedItem);
                     } else {
@@ -91,27 +92,24 @@ public class PaymentController {
         try {
             // Prepare the order data for the backend
             Map<String, Object> orderRequest = new HashMap<>();
-            orderRequest.put("customerName", orderData.get("fullName"));
-            orderRequest.put("phone", orderData.get("phone"));
+            orderRequest.put("customerName", orderData.get("customerName"));
+            orderRequest.put("phoneNumber", orderData.get("phoneNumber"));
             orderRequest.put("address", orderData.get("address"));
-            orderRequest.put("paymentMethod", orderData.get("paymentMethod"));
-            orderRequest.put("totalAmount", orderData.get("totalAmount"));
+            orderRequest.put("note", orderData.get("orderNote"));
             
-            // Parse items string back into a list of order items
-            String itemsStr = (String) orderData.get("items");
-            List<Map<String, Object>> orderItems = new ArrayList<>();
-            String[] itemPairs = itemsStr.split(",");
+            // Get order details
+            List<Map<String, Object>> orderDetails = new ArrayList<>();
+            List<Map<String, Object>> items = (List<Map<String, Object>>) orderData.get("orderDetails");
             
-            for (String pair : itemPairs) {
-                String[] parts = pair.split("-");
-                if (parts.length == 2) {
-                    Map<String, Object> orderItem = new HashMap<>();
-                    orderItem.put("itemId", parts[0]);
-                    orderItem.put("quantity", Integer.parseInt(parts[1]));
-                    orderItems.add(orderItem);
-                }
+            for (Map<String, Object> item : items) {
+                Map<String, Object> detail = new HashMap<>();
+                detail.put("itemId", item.get("itemId"));
+                detail.put("quantity", item.get("quantity"));
+                detail.put("price", item.get("price"));
+                detail.put("note", item.get("note"));
+                orderDetails.add(detail);
             }
-            orderRequest.put("items", orderItems);
+            orderRequest.put("orderDetails", orderDetails);
 
             // Send order to backend
             HttpHeaders headers = new HttpHeaders();
@@ -126,6 +124,7 @@ public class PaymentController {
 
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
+            logger.error("Error processing order: ", e);
             return ResponseEntity.badRequest().body("Error processing order: " + e.getMessage());
         }
     }

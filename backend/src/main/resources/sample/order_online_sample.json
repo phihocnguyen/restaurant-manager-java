@@ -1,0 +1,24 @@
+{
+  "userId": 1,
+  "customerName": "Nguyễn Văn A",
+  "phoneNumber": "0987654321",
+  "address": "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh",
+  "note": "Giao hàng giờ hành chính",
+  "orderDetails": [
+    {
+      "productId": 1,
+      "quantity": 2,
+      "note": "Không cay"
+    },
+    {
+      "productId": 3,
+      "quantity": 1,
+      "note": "Thêm sốt"
+    },
+    {
+      "productId": 5,
+      "quantity": 3,
+      "note": "Không hành"
+    }
+  ]
+} 

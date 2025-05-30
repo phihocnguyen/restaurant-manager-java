@@ -12,6 +12,7 @@ com/restaurant/dto/MenuItemDto.class
 com/restaurant/controller/AuthController.class
 com/restaurant/controller/OrderController.class
 com/restaurant/controller/SalesController$1.class
+com/restaurant/controller/SalesController$6.class
 com/restaurant/config/RestTemplateConfig.class
 com/restaurant/controller/ManagerController.class
 CustomerDto.class

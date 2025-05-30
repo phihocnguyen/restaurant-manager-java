@@ -99,20 +99,33 @@ public class SalesController {
     @GetMapping("/items")
     public String items(Model model) {
         try {
-            ResponseEntity<List<MenuItemDto>> response = restTemplate.exchange(
+            // Get items
+            ResponseEntity<List<MenuItemDto>> itemsResponse = restTemplate.exchange(
                 API_URL + "/items",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<MenuItemDto>>() {}
             );
             
-            List<MenuItemDto> items = response.getBody();
+            // Get tables
+            ResponseEntity<List<Map<String, Object>>> tablesResponse = restTemplate.exchange(
+                API_URL + "/tables",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+            );
+            
+            List<MenuItemDto> items = itemsResponse.getBody();
+            List<Map<String, Object>> tables = tablesResponse.getBody();
+            
             model.addAttribute("items", items);
+            model.addAttribute("tables", tables);
             model.addAttribute("title", "Thực đơn - Restaurant Manager");
             model.addAttribute("activeTab", "food");
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("items", new ArrayList<>());
+            model.addAttribute("tables", new ArrayList<>());
             model.addAttribute("title", "Thực đơn - Restaurant Manager");
             model.addAttribute("activeTab", "food");
         }
@@ -139,5 +152,13 @@ public class SalesController {
         model.addAttribute("title", "Món khác - Restaurant Manager");
         model.addAttribute("activeTab", "other");
         return "sales/items";
+    }
+
+    // History route
+    @GetMapping("/history")
+    public String historyPage(Model model) {
+        model.addAttribute("title", "Lịch sử đơn hàng - Restaurant Manager");
+        model.addAttribute("activeTab", "history");
+        return "sales/history";
     }
 } 
