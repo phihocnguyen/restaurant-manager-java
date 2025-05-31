@@ -5,6 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.time.Instant;
 
 @Data
 public class OrderOnlineDTO {
@@ -15,8 +16,9 @@ public class OrderOnlineDTO {
     private String address;
     private String note;
     private BigDecimal totalAmount;
-    private LocalDateTime orderTime;
-    private LocalDateTime deliveryTime;
+    private Instant orderTime;
+    private Instant deliveryTime;
     private OrderStatus status;
     private List<OrderOnlineDetailsDTO> orderDetails;
+    private String paymentMethod;
 } 

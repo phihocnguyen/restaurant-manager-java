@@ -29,4 +29,6 @@ public class ReceiptDto {
     private BigDecimal recPay;
 
     private Boolean isdeleted = false;
+
+    private String paymentMethod;
 }

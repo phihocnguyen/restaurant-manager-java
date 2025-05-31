@@ -109,71 +109,54 @@
 
                 <!-- Tables Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Active Table 1 -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="active" data-table="1">
-                        <div class="h-48 table-active flex items-center justify-center">
-                            <i class="fas fa-utensils text-white text-4xl"></i>
+                    <div th:each="table : ${tables}"
+                        class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col"
+                        th:data-status="${table.get('tabStatus')}"
+                        th:data-table="${table.get('id')}">
+                        <div
+                            th:classappend="${table.get('tabStatus') == 'OCCUPIED' ? 'table-active' : (table.get('tabStatus') == 'RESERVED' ? 'table-booking' : 'table-empty')}"
+                            class="h-48 flex items-center justify-center">
+                            <i th:classappend="${table.get('tabStatus') == 'OCCUPIED' ? 'fas fa-utensils' : (table.get('tabStatus') == 'RESERVED' ? 'fas fa-calendar-alt' : 'fas fa-chair')}"
+                                class="text-white text-4xl"></i>
                         </div>
                         <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-lg font-bold text-gray-900">Bàn 1</h3>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full table-status">
-                                    <i class="fas fa-circle text-green-500 mr-1"></i>Đang phục vụ
+                                <h3 class="text-lg font-bold text-gray-900" th:text="'Bàn ' + ${table.get('id')}"></h3>
+                                <span
+                                    th:text="${table.get('tabStatus') == 'OCCUPIED' ? 'Đang phục vụ' : (table.get('tabStatus') == 'RESERVED' ? 'Đã đặt' : 'Trống')}"
+                                    th:classappend="${table.get('tabStatus') == 'OCCUPIED' ? 'bg-green-100 text-green-800' : (table.get('tabStatus') == 'RESERVED' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800')}"
+                                    class="px-2 py-1 text-xs font-medium rounded-full table-status">
+                                    <i th:classappend="${table.get('tabStatus') == 'OCCUPIED' ? 'text-green-500' : (table.get('tabStatus') == 'RESERVED' ? 'text-orange-500' : 'text-gray-500')}"
+                                        class="fas fa-circle mr-1"></i>
                                 </span>
                             </div>
-                            <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Khách: Nguyễn Văn A</p>
-                            <p class="text-sm text-gray-500 mb-4">Thời gian: 14:30 • 3 món đã gọi</p>
-                            <div class="flex items-center justify-between mt-auto table-actions">
-                                <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="viewTableDetails('1')">
-                                    <i class="fas fa-eye mr-1"></i>Xem chi tiết
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Empty Table -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="empty" data-table="2">
-                        <div class="h-48 table-empty flex items-center justify-center">
-                            <i class="fas fa-chair text-white text-4xl"></i>
-                        </div>
-                        <div class="p-5 flex flex-col flex-grow">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-lg font-bold text-gray-900">Bàn 2</h3>
-                                <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full table-status">
-                                    <i class="fas fa-circle text-gray-500 mr-1"></i>Trống
-                                </span>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-2">4 chỗ ngồi • Sẵn sàng phục vụ</p>
-                            <p class="text-sm text-gray-500 mb-4">Lần cuối dọn: 13:45</p>
+                            <!-- Placeholder for additional details like customer/time -->
+                            <p class="text-sm text-gray-600 mb-2">Số chỗ: <span th:text="${table.get('tabNum')}"></span> chỗ</p>
+                            <p class="text-sm text-gray-500 mb-4">...</p>
                             <div class="flex items-center justify-between gap-2 mt-auto table-actions">
-                                <button class="w-1/2 px-3 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-all shadow-md flex items-center justify-center" onclick="openBookingModal('2')">
-                                    <i class="fas fa-calendar-plus mr-1.5"></i>Đặt bàn
-                                </button>
-                                <button class="w-1/2 px-3 py-2.5 bg-green-500 text-white text-sm font-medium rounded-xl hover:bg-green-600 transition-all shadow-md flex items-center justify-center" onclick="startServing('2')">
-                                    <i class="fas fa-utensils mr-1.5"></i>Phục vụ
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Booking Table -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 table-card flex flex-col" data-status="booking" data-table="3">
-                        <div class="h-48 table-booking flex items-center justify-center">
-                            <i class="fas fa-calendar-alt text-white text-4xl"></i>
-                        </div>
-                        <div class="p-5 flex flex-col flex-grow">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-lg font-bold text-gray-900">Bàn 3</h3>
-                                <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full table-status">
-                                    <i class="fas fa-circle text-orange-500 mr-1"></i>Đã đặt
-                                </span>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-2">6 chỗ ngồi • Khách: Lê Văn C</p>
-                            <p class="text-sm text-gray-500 mb-4">Thời gian đặt: 18:00 • SĐT: 0912345678</p>
-                            <div class="flex items-center justify-between mt-auto table-actions">
-                                <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="confirmBooking('3')">
-                                    <i class="fas fa-check mr-1"></i>Xác nhận
-                                </button>
+                                <!-- Action buttons based on status -->
+                                <th:block th:if="${table.get('tabStatus') == 'EMPTY'}">
+                                    <button class="w-1/2 px-3 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-all shadow-md flex items-center justify-center"
+                                            th:onclick="'openBookingModal('' + ${table.get('id')} + '')'">
+                                        <i class="fas fa-calendar-plus mr-1.5"></i>Đặt bàn
+                                    </button>
+                                    <button class="w-1/2 px-3 py-2.5 bg-green-500 text-white text-sm font-medium rounded-xl hover:bg-green-600 transition-all shadow-md flex items-center justify-center"
+                                            th:onclick="'startServing('' + ${table.get('id')} + '')'">
+                                        <i class="fas fa-utensils mr-1.5"></i>Phục vụ
+                                    </button>
+                                </th:block>
+                                <th:block th:if="${table.get('tabStatus') == 'OCCUPIED'}">
+                                    <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md"
+                                            th:onclick="'viewTableDetails('' + ${table.get('id')} + '')'">
+                                        <i class="fas fa-eye mr-1"></i>Xem chi tiết
+                                    </button>
+                                </th:block>
+                                <th:block th:if="${table.get('tabStatus') == 'RESERVED'}">
+                                    <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md"
+                                            th:onclick="'confirmBooking('' + ${table.get('id')} + '')'">
+                                        <i class="fas fa-check mr-1"></i>Xác nhận
+                                    </button>
+                                </th:block>
                             </div>
                         </div>
                     </div>
@@ -297,271 +280,12 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // Helper function to show spinner on a button
-        function showSpinner(buttonElement) {
-            buttonElement.disabled = true;
-            // Store original content to restore later
-            buttonElement.setAttribute('data-original-html', buttonElement.innerHTML);
-            buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang xử lý...';
-        }
+    
+    <!-- Sales Tables JS -->
+    <script th:src="@{/js/salesTables.js}"></script>
 
-        // Helper function to hide spinner on a button
-        function hideSpinner(buttonElement) {
-            buttonElement.disabled = false;
-            // Restore original content
-            if (buttonElement.hasAttribute('data-original-html')) {
-                buttonElement.innerHTML = buttonElement.getAttribute('data-original-html');
-                buttonElement.removeAttribute('data-original-html');
-            }
-        }
-
-        // Tab switching functionality
-        document.querySelectorAll('[data-tab-status]').forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                const status = this.getAttribute('data-tab-status');
-                
-                document.querySelectorAll('[data-tab-status]').forEach(t => {
-                    t.classList.remove('active-tab');
-                    t.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
-                });
-                this.classList.add('active-tab');
-                this.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
-                
-                document.querySelectorAll('.table-card').forEach(card => {
-                    if (status === 'all' || card.getAttribute('data-status') === status) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // View table details functionality
-        function viewTableDetails(tableNumber) {
-            // Update right panel with table details
-            const cartArea = document.querySelector('.cart-area');
-            cartArea.innerHTML = `
-                <div class="p-5 border-b border-gray-200">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">Bàn ${tableNumber}</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Trạng thái:</span>
-                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                                <i class="fas fa-circle text-green-500 mr-1"></i>Đang phục vụ
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Thời gian bắt đầu:</span>
-                            <span class="text-sm font-medium">${new Date().toLocaleTimeString()}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 p-5 overflow-y-auto">
-                    <h4 class="text-sm font-medium text-gray-700 mb-4">Danh sách món đã gọi</h4>
-                    <div class="space-y-4" id="orderItems">
-                        <!-- Fake order items -->
-                        <div class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm">
-                            <div class="flex items-center">
-                                <img src="https://images.unsplash.com/photo-1563245372-f21724e38560?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" class="w-12 h-12 rounded-lg object-cover" alt="Cơm rang">
-                                <div class="ml-3">
-                                    <h5 class="text-sm font-medium text-gray-900">Cơm rang thập cẩm</h5>
-                                    <p class="text-xs text-gray-500">1 x 45.000đ</p>
-                                </div>
-                            </div>
-                            <span class="text-sm font-medium text-gray-900">45.000đ</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm">
-                            <div class="flex items-center">
-                                <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" class="w-12 h-12 rounded-lg object-cover" alt="Phở">
-                                <div class="ml-3">
-                                    <h5 class="text-sm font-medium text-gray-900">Phở bò tái</h5>
-                                    <p class="text-xs text-gray-500">2 x 55.000đ</p>
-                                </div>
-                            </div>
-                            <span class="text-sm font-medium text-gray-900">110.000đ</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm">
-                            <div class="flex items-center">
-                                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" class="w-12 h-12 rounded-lg object-cover" alt="Burger">
-                                <div class="ml-3">
-                                    <h5 class="text-sm font-medium text-gray-900">Burger bò phô mai</h5>
-                                    <p class="text-xs text-gray-500">1 x 65.000đ</p>
-                                </div>
-                            </div>
-                            <span class="text-sm font-medium text-gray-900">65.000đ</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-5 border-t border-gray-200 bg-white">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-sm font-medium text-gray-700">Tổng tiền:</span>
-                        <span class="text-lg font-bold text-gray-900">220.000đ</span>
-                    </div>
-                    <button class="w-full px-4 py-3 bg-orange-500 text-white rounded-xl hover:opacity-90 transition-all font-medium">
-                        <i class="fas fa-utensils mr-2"></i>Thêm món
-                    </button>
-                </div>
-            `;
-            // After updating the details panel, do not reapply the current tab filter to avoid UI issues
-            // refreshTableVisibility(); // Removed this line
-        }
-
-        // Start serving functionality
-        function startServing(tableNumber) {
-            // Update UI of the specific table card
-            const tableCard = document.querySelector(`[data-table="${tableNumber}"]`);
-            if (tableCard) {
-                // Update status
-                tableCard.setAttribute('data-status', 'active');
-                const statusSpan = tableCard.querySelector('.table-status');
-                statusSpan.innerHTML = `
-                    <i class="fas fa-circle text-green-500 mr-1"></i>Đang phục vụ
-                `;
-                statusSpan.className = 'px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full table-status';
-
-                // Update background and icon
-                const iconDiv = tableCard.querySelector('.h-48');
-                iconDiv.className = 'h-48 table-active flex items-center justify-center';
-                iconDiv.innerHTML = '<i class="fas fa-utensils text-white text-4xl"></i>';
-
-                // Update actions
-                const actionsDiv = tableCard.querySelector('.table-actions');
-                actionsDiv.innerHTML = `
-                    <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="viewTableDetails('${tableNumber}')">
-                        <i class="fas fa-eye mr-1"></i>Xem chi tiết
-                    </button>
-                `;
-            }
-        }
-
-        // Booking modal functionality
-        function openBookingModal(tableNumber) {
-            document.getElementById('bookingModal').classList.remove('hidden');
-            document.getElementById('bookingModal').classList.add('flex');
-            document.getElementById('tableNumber').value = tableNumber;
-        }
-
-        function closeBookingModal() {
-            document.getElementById('bookingModal').classList.add('hidden');
-            document.getElementById('bookingModal').classList.remove('flex');
-             // Hide spinner on booking modal submit button if it was showing
-             const submitButton = document.querySelector('#bookingForm button[type="submit"]');
-             if (submitButton.disabled) {
-                 hideSpinner(submitButton);
-             }
-        }
-
-        // Handle booking form submission
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const tableNumber = document.getElementById('tableNumber').value;
-            const formData = new FormData(this);
-            
-            // Update UI of the specific table card
-            const tableCard = document.querySelector(`[data-table="${tableNumber}"]`);
-            if (tableCard) {
-                // Update status
-                tableCard.setAttribute('data-status', 'booking');
-                const statusSpan = tableCard.querySelector('.table-status');
-                statusSpan.innerHTML = `
-                    <i class="fas fa-circle text-orange-500 mr-1"></i>Đã đặt
-                `;
-                statusSpan.className = 'px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full table-status';
-
-                // Update background and icon
-                const iconDiv = tableCard.querySelector('.h-48');
-                iconDiv.className = 'h-48 table-booking flex items-center justify-center';
-                iconDiv.innerHTML = '<i class="fas fa-calendar-alt text-white text-4xl"></i>';
-
-                // Update actions
-                const actionsDiv = tableCard.querySelector('.table-actions');
-                actionsDiv.innerHTML = `
-                    <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="confirmBooking('${tableNumber}')">
-                        <i class="fas fa-check mr-1"></i>Xác nhận
-                    </button>
-                `;
-            }
-            closeBookingModal();
-        });
-
-        // Confirm booking functionality
-        function confirmBooking(tableNumber) {
-            // Update UI of the specific table card
-            const tableCard = document.querySelector(`[data-table="${tableNumber}"]`);
-            if (tableCard) {
-                // Update status
-                tableCard.setAttribute('data-status', 'active');
-                const statusSpan = tableCard.querySelector('.table-status');
-                statusSpan.innerHTML = `
-                    <i class="fas fa-circle text-green-500 mr-1"></i>Đang phục vụ
-                `;
-                statusSpan.className = 'px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full table-status';
-
-                // Update background and icon
-                const iconDiv = tableCard.querySelector('.h-48');
-                iconDiv.className = 'h-48 table-active flex items-center justify-center';
-                iconDiv.innerHTML = '<i class="fas fa-utensils text-white text-4xl"></i>';
-
-                // Update actions
-                const actionsDiv = tableCard.querySelector('.table-actions');
-                actionsDiv.innerHTML = `
-                    <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="viewTableDetails('${tableNumber}')">
-                        <i class="fas fa-eye mr-1"></i>Xem chi tiết
-                    </button>
-                `;
-            }
-        }
-
-        function refreshTableVisibility() {
-            const activeTabStatus = document.querySelector('.active-tab').getAttribute('data-tab-status');
-            document.querySelectorAll('.table-card').forEach(card => {
-                if (activeTabStatus === 'all' || card.getAttribute('data-status') === activeTabStatus) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Search functionality
-        document.querySelector('input[placeholder*="Tìm tên bàn"]').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            document.querySelectorAll('.table-card').forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const isVisibleByTab = card.style.display !== 'none'; // Check if already hidden by tab filter
-                if (title.includes(searchTerm) && isVisibleByTab) {
-                    card.style.display = 'flex';
-                } else {
-                    // Only hide if search term is present AND it's currently visible
-                     if (searchTerm !== '' && isVisibleByTab) {
-                         card.style.display = 'none';
-                    }
-                    // If search term is empty, reset display based on active tab
-                    if (searchTerm === '') {
-                         const activeTabStatus = document.querySelector('.active-tab').getAttribute('data-tab-status');
-                         if (activeTabStatus === 'all' || card.getAttribute('data-status') === activeTabStatus) {
-                            card.style.display = 'flex';
-                         } else {
-                            card.style.display = 'none';
-                         }
-                    }
-                }
-            });
-        });
-
-        // Ensure all tables are visible on page load (initial state before any filtering)
-        document.addEventListener('DOMContentLoaded', function() {
-             // Set the initial active tab and apply its filter ("Tất cả")
-             document.querySelector('[data-tab-status="all"]').click();
-        });
-
-        // The tab switching logic already handles showing/hiding based on status when a tab is clicked.
-        // No need to re-apply display logic in action functions, instead trigger tab click.
-
-
-    </script>
+    <div id="spinnerOverlay" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[100] hidden">
+        <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
 </body>
 </html>

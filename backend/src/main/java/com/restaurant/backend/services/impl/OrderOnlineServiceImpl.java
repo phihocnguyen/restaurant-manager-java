@@ -8,6 +8,7 @@ import com.restaurant.backend.domains.dto.OrderOnline.enums.OrderStatus;
 import com.restaurant.backend.domains.dto.OrderOnline.mapper.OrderOnlineMapper;
 import com.restaurant.backend.domains.dto.OrderOnline.mapper.OrderOnlineDetailsMapper;
 import com.restaurant.backend.repositories.OrderOnlineRepository;
+import com.restaurant.backend.repositories.OrderOnlineDetailsRepository;
 import com.restaurant.backend.repositories.MenuItemRepository;
 import com.restaurant.backend.services.OrderOnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,27 +25,30 @@ import java.util.stream.Collectors;
 public class OrderOnlineServiceImpl implements OrderOnlineService {
 
     private final OrderOnlineRepository orderOnlineRepository;
+    private final OrderOnlineDetailsRepository orderOnlineDetailsRepository;
     private final MenuItemRepository menuItemRepository;
     private final OrderOnlineMapper orderOnlineMapper;
-    private final OrderOnlineDetailsMapper detailsMapper;
+    private final OrderOnlineDetailsMapper orderOnlineDetailsMapper;
 
     @Autowired
     public OrderOnlineServiceImpl(
             OrderOnlineRepository orderOnlineRepository,
+            OrderOnlineDetailsRepository orderOnlineDetailsRepository,
             MenuItemRepository menuItemRepository,
             OrderOnlineMapper orderOnlineMapper,
-            OrderOnlineDetailsMapper detailsMapper) {
+            OrderOnlineDetailsMapper orderOnlineDetailsMapper) {
         this.orderOnlineRepository = orderOnlineRepository;
+        this.orderOnlineDetailsRepository = orderOnlineDetailsRepository;
         this.menuItemRepository = menuItemRepository;
         this.orderOnlineMapper = orderOnlineMapper;
-        this.detailsMapper = detailsMapper;
+        this.orderOnlineDetailsMapper = orderOnlineDetailsMapper;
     }
 
     @Override
     @Transactional
     public OrderOnlineDTO createOrder(OrderOnlineDTO orderOnlineDTO) {
         OrderOnline orderOnline = orderOnlineMapper.toEntity(orderOnlineDTO);
-        orderOnline.setOrderTime(LocalDateTime.now());
+        orderOnline.setOrderTime(Instant.now());
         orderOnline.setStatus(OrderStatus.PENDING);
 
         // Calculate total amount
@@ -55,7 +59,7 @@ public class OrderOnlineServiceImpl implements OrderOnlineService {
 
         // Map and add order details
         orderOnlineDTO.getOrderDetails().forEach(dto -> {
-            OrderOnlineDetails detail = detailsMapper.toEntity(dto);
+            OrderOnlineDetails detail = orderOnlineDetailsMapper.toEntity(dto);
             orderOnline.addOrderDetail(detail);
         });
 
@@ -98,7 +102,7 @@ public class OrderOnlineServiceImpl implements OrderOnlineService {
 
         order.setStatus(OrderStatus.valueOf(newStatus));
         if (OrderStatus.valueOf(newStatus) == OrderStatus.DELIVERING) {
-            order.setDeliveryTime(LocalDateTime.now());
+            order.setDeliveryTime(Instant.now());
         }
 
         OrderOnline updatedOrder = orderOnlineRepository.save(order);
@@ -117,5 +121,13 @@ public class OrderOnlineServiceImpl implements OrderOnlineService {
 
         order.setStatus(OrderStatus.CANCELLED);
         orderOnlineRepository.save(order);
+    }
+
+    @Override
+    public List<OrderOnlineDetailsDTO> getOrderDetailsByOrderId(Long orderId) {
+        return orderOnlineDetailsRepository.findByOrderOnlineId(orderId)
+                .stream()
+                .map(orderOnlineDetailsMapper::toDTO)
+                .collect(Collectors.toList());
     }
 } 

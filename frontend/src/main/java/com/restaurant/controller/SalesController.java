@@ -2,6 +2,7 @@ package com.restaurant.controller;
 
 import com.restaurant.dto.MenuItemDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,8 @@ public class SalesController {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String API_URL = "http://localhost:8080";
+    @Value("${backend.api.url}") // Assuming you have this property in application.properties
+    private String backendApiUrl;
 
     @GetMapping
     public String salesPage(Model model) {
@@ -29,28 +32,67 @@ public class SalesController {
         return "sales";
     }
 
-    // Tables routes
     @GetMapping("/tables")
-    public String tablesPage(Model model) {
+    public String salesTablesPage(Model model) {
+        try {
+            // Get tables from backend
+            ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+                backendApiUrl + "/tables",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+            );
+            
+            List<Map<String, Object>> tables = response.getBody();
+            
+            if (tables == null) {
+                tables = new ArrayList<>();
+            }
+
+            // Sort tables by ID
+            tables.sort((t1, t2) -> {
+                Integer id1 = (Integer) t1.get("id");
+                Integer id2 = (Integer) t2.get("id");
+                if (id1 == null && id2 == null) return 0;
+                if (id1 == null) return -1;
+                if (id2 == null) return 1;
+                return id1.compareTo(id2);
+            });
+            
+            model.addAttribute("tables", tables);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("tables", new ArrayList<>());
+        }
+        
         model.addAttribute("title", "Quản lý bàn - Restaurant Manager");
-        model.addAttribute("activeTab", "tables");
         return "sales/tables";
     }
 
-    // API endpoint to get table details
-    @GetMapping("/api/tables/{id}")
+    @GetMapping("/api/tables")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getTableDetails(@PathVariable String id) {
-        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-                API_URL + "/tables/" + id,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Map<String, Object>>() {}
-        );
+    public ResponseEntity<List> getAllTables() {
+        String url = backendApiUrl + "/tables";
+        ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
-    // API endpoint to update table status
+    @GetMapping("/api/tables/{id}")
+    @ResponseBody
+    public ResponseEntity<Map> getTableById(@PathVariable int id) {
+        String url = backendApiUrl + "/tables/" + id;
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @PutMapping("/api/tables/{id}")
+    @ResponseBody
+    public ResponseEntity<?> updateTable(@PathVariable int id, @RequestBody Map<String, Object> tableData) {
+        String url = backendApiUrl + "/tables/" + id;
+        restTemplate.put(url, tableData);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/api/tables/{id}/status")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateTableStatus(
@@ -58,7 +100,7 @@ public class SalesController {
             @RequestBody Map<String, Object> statusUpdate) {
         
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-                API_URL + "/tables/" + id + "/status",
+                backendApiUrl + "/tables/" + id + "/status",
                 HttpMethod.PUT,
                 new org.springframework.http.HttpEntity<>(statusUpdate),
                 new ParameterizedTypeReference<Map<String, Object>>() {}
@@ -71,7 +113,7 @@ public class SalesController {
     @ResponseBody
     public ResponseEntity<List<Map<String, Object>>> getTableOrders(@PathVariable String id) {
         ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
-                API_URL + "/tables/" + id + "/orders",
+                backendApiUrl + "/tables/" + id + "/orders",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
@@ -87,7 +129,7 @@ public class SalesController {
             @RequestBody Map<String, Object> order) {
         
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-                API_URL + "/tables/" + id + "/orders",
+                backendApiUrl + "/tables/" + id + "/orders",
                 HttpMethod.POST,
                 new org.springframework.http.HttpEntity<>(order),
                 new ParameterizedTypeReference<Map<String, Object>>() {}
@@ -101,7 +143,7 @@ public class SalesController {
         try {
             // Get items
             ResponseEntity<List<MenuItemDto>> itemsResponse = restTemplate.exchange(
-                API_URL + "/items",
+                backendApiUrl + "/items",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<MenuItemDto>>() {}
@@ -109,7 +151,7 @@ public class SalesController {
             
             // Get tables
             ResponseEntity<List<Map<String, Object>>> tablesResponse = restTemplate.exchange(
-                API_URL + "/tables",
+                backendApiUrl + "/tables",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
@@ -160,5 +202,82 @@ public class SalesController {
         model.addAttribute("title", "Lịch sử đơn hàng - Restaurant Manager");
         model.addAttribute("activeTab", "history");
         return "sales/history";
+    }
+
+    // API endpoint to get online orders
+    @GetMapping("/api/online-orders")
+    @ResponseBody
+    public ResponseEntity<List<Map<String, Object>>> getOnlineOrders(@RequestParam(required = false) String status) {
+        String url = status != null ? 
+            backendApiUrl + "/orders/status/" + status :
+            backendApiUrl + "/orders";
+            
+        ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+        );
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    // API endpoint to get a single online order by ID
+    @GetMapping("/api/online-orders/{id}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getOnlineOrderById(@PathVariable Long id) {
+        String url = backendApiUrl + "/orders/" + id;
+
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<Map<String, Object>>() {}
+        );
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    // API endpoint to update online order status
+    @PutMapping("/api/online-orders/{id}/status")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateOrderStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        String url = backendApiUrl + "/orders/" + id + "/status?newStatus=" + status;
+        
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+            url,
+            HttpMethod.PUT,
+            null,
+            new ParameterizedTypeReference<Map<String, Object>>() {}
+        );
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    // API endpoint to get online orders with status other than PENDING
+    @GetMapping("/api/online-orders/history")
+    @ResponseBody
+    public ResponseEntity<List<Map<String, Object>>> getOnlineOrdersHistory() {
+        String url = backendApiUrl + "/orders";
+
+        ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+        );
+
+        List<Map<String, Object>> allOrders = response.getBody();
+        List<Map<String, Object>> historyOrders = new ArrayList<>();
+
+        if (allOrders != null) {
+            for (Map<String, Object> order : allOrders) {
+                String status = (String) order.get("status");
+                if (!"PENDING".equals(status)) {
+                    historyOrders.add(order);
+                }
+            }
+        }
+
+        return ResponseEntity.status(response.getStatusCode()).body(historyOrders);
     }
 } 

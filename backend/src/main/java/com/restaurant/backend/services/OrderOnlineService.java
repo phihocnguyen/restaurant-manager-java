@@ -1,6 +1,8 @@
 package com.restaurant.backend.services;
 
 import com.restaurant.backend.domains.dto.OrderOnline.dto.OrderOnlineDTO;
+import com.restaurant.backend.domains.dto.OrderOnline.dto.OrderOnlineDetailsDTO;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -52,4 +54,11 @@ public interface OrderOnlineService {
      * @param orderId the order ID
      */
     void cancelOrder(Long orderId);
+
+    /**
+     * Get order details by order ID
+     * @param orderId the order ID
+     * @return list of order details DTOs for the order
+     */
+    List<OrderOnlineDetailsDTO> getOrderDetailsByOrderId(Long orderId);
 } 

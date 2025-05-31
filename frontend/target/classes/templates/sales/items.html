@@ -147,7 +147,9 @@
                          th:data-type="${item.itemType}"
                          th:data-name="${item.itemName}"
                          th:data-price="${item.itemSprice}"
-                         onclick="addToCart(this.dataset.name, parseFloat(this.dataset.price))">
+                         th:data-item-id="${item.id}"
+                         th:data-item-img="${item.itemImg}"
+                         onclick="addToCart(this.dataset.name, parseFloat(this.dataset.price), this.dataset.itemId, this.dataset.itemImg)">
                         <div class="product-image" th:style="'background-image: url(' + ${item.itemImg} + ')'"></div>
                         <div class="text-sm font-medium text-gray-800" th:text="${item.itemName}"></div>
                         <div class="text-sm font-bold text-gray-900 mt-1" th:text="${#numbers.formatDecimal(item.itemSprice, 0, 'POINT', 0, 'COMMA')} + '₫'"></div>
@@ -162,7 +164,7 @@
                             <div class="w-1/3">
                                 <select id="rightPanelTableSelect" class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                                     <option value="">Chọn bàn</option>
-                                    <option th:each="table : ${tables}" th:value="${table.id}" th:text="'Bàn ' + ${table.tabNum}"></option>
+                                    <option th:each="table : ${tables}" th:value="${table.id}" th:text="'Bàn ' + ${table.id}"></option>
                                 </select>
                             </div>
                             <div class="w-2/3">
@@ -203,7 +205,7 @@
                                  <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Ghi chú</button>
                              </div>
                          </div>
-                        <button onclick="exportToPDF()" class="w-full py-3 bg-green-500 text-white rounded-lg font-medium text-lg">
+                        <button onclick="processOrderToTable()" class="w-full py-3 bg-green-500 text-white rounded-lg font-medium text-lg">
                             <i class="fas fa-check-circle mr-2"></i>Tiến hành phục vụ
                         </button>
                     </div>
@@ -214,7 +216,7 @@
 
     <!-- Online Orders Modal -->
     <div id="onlineOrdersModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-lg w-3/4 max-h-[80vh] overflow-hidden">
+        <div class="bg-white rounded-lg w-3/4 max-h-[80vh] overflow-hidden relative">
             <div class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-lg font-semibold">Đơn hàng online</h3>
                 <button onclick="closeOnlineOrders()" class="text-gray-500 hover:text-gray-700">
@@ -226,6 +228,11 @@
                     <!-- Orders will be populated here -->
                 </div>
             </div>
+
+            <!-- Loading Overlay for Modal -->
+            <div id="onlineOrdersLoadingOverlay" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10 hidden">
+                <i class="fas fa-spinner fa-spin text-orange-500 text-4xl"></i>
+            </div>
         </div>
     </div>
 
@@ -234,8 +241,26 @@
     <script th:inline="none">
         let cart = [];
         let orderCounter = 1; // Used to generate unique IDs for cart items
-        let currentTable = '';
+        let currentTable = ''; // Variable to hold the ID of the currently selected table
         const TAX_RATE = 0.10; // 10% tax
+        let onlineOrdersWithNames = []; // Global variable to store online orders with item names
+
+        // Hàm lưu thông tin bàn và món ăn vào localStorage
+        function saveTableData(tableId, items) {
+            console.log('Saving data for table:', tableId, 'with items:', items);
+            const tableData = {
+                tableId: tableId,
+                items: items,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem(`table_${tableId}`, JSON.stringify(tableData));
+        }
+
+        // Hàm lấy thông tin bàn từ localStorage
+        function getTableData(tableId) {
+            const data = localStorage.getItem(`table_${tableId}`);
+            return data ? JSON.parse(data) : null;
+        }
 
         // Helper function to format currency to VND
         function formatCurrency(value) {
@@ -245,13 +270,22 @@
 
         // Table selection
         function updateTableSelection(tableId) {
+            console.log('Updating table selection to:', tableId);
             currentTable = tableId;
             const rightPanelTableSelect = document.getElementById('rightPanelTableSelect');
             if (rightPanelTableSelect) rightPanelTableSelect.value = tableId;
         }
 
         document.getElementById('rightPanelTableSelect').addEventListener('change', function() {
-            updateTableSelection(this.value);
+            const selectedTableId = this.value;
+            updateTableSelection(selectedTableId);
+
+            // Clear the cart and update display immediately when a new table is selected
+            cart = []; // Always clear cart when selecting a different table
+            orderCounter = 1; // Reset counter for the new cart session
+            // Do NOT load existing data here. It will be loaded during processOrderToTable.
+
+            updateCartDisplay(); // Update display after loading/clearing cart
         });
 
         // Display items based on filter
@@ -299,34 +333,46 @@
             });
         });
 
-        function addToCart(name, price) {
-            const existingItem = cart.find(item => item.name === name);
-            if (existingItem) {
-                existingItem.quantity += 1;
+        function addToCart(name, price, itemId, itemImg) {
+            // Find if the item already exists in the current cart using itemId
+            const existingItemIndex = cart.findIndex(item => item.itemId === itemId);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += 1;
+                // Recalculate total price for the existing item
+                cart[existingItemIndex].totalPrice = cart[existingItemIndex].price * cart[existingItemIndex].quantity;
             } else {
-                cart.push({
-                    id: orderCounter++,
+                // Assign a unique temporary ID for this cart item
+                const newItem = {
+                    id: orderCounter++, // Unique temporary ID for this cart session
+                    itemId: itemId, // Backend item ID
                     name: name,
                     price: price,
                     quantity: 1,
-                    discount: 0
-                });
+                    discount: 0,
+                    image: itemImg, // Save image URL
+                    totalPrice: price // Initial total price for one item
+                };
+                cart.push(newItem);
             }
             updateCartDisplay();
         }
 
         function removeFromCart(id) {
+            // Remove item using the temporary 'id'
             cart = cart.filter(item => item.id !== id);
             updateCartDisplay();
         }
 
         function updateQuantity(id, change) {
+            // Find item using the temporary 'id'
             const item = cart.find(item => item.id === id);
             if (item) {
                 item.quantity += change;
                 if (item.quantity <= 0) {
                     removeFromCart(id);
                 } else {
+                    // Recalculate total price for the updated item
+                    item.totalPrice = item.price * item.quantity;
                     updateCartDisplay();
                 }
             }
@@ -341,35 +387,39 @@
             cartItemsContainer.innerHTML = '';
             let subtotal = 0;
 
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-center text-gray-500">Không có món ăn nào được chọn</p>';
+            } else {
+                 cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
 
-                // FIX: Corrected item numbering using index + 1
-                const cartItemHtml = `
-                    <div class="cart-item">
-                        <div class="flex-1">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="font-medium text-sm">${index + 1}. ${item.name}</span>
-                                <div class="flex items-center">
-                                    <span class="font-bold mr-3">${formatCurrency(itemTotal)}</span>
-                                    <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500">
-                                        <i class="fas fa-times fa-sm"></i>
-                                    </button>
+                    // FIX: Corrected item numbering using index + 1
+                    const cartItemHtml = `
+                        <div class="cart-item">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-medium text-sm">${index + 1}. ${item.name}</span>
+                                    <div class="flex items-center">
+                                        <span class="font-bold mr-3">${formatCurrency(itemTotal)}</span>
+                                        <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500">
+                                            <i class="fas fa-times fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-1">
+                                    <div class="quantity-controls">
+                                        <button onclick="updateQuantity(${item.id}, -1)" class="quantity-btn">-</button>
+                                        <span class="w-8 text-center text-sm font-medium">${item.quantity}</span>
+                                        <button onclick="updateQuantity(${item.id}, 1)" class="quantity-btn">+</button>
+                                    </div>
+                                    <span class="text-xs text-gray-500">Đơn giá: ${formatCurrency(item.price)}</span>
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="quantity-controls">
-                                    <button onclick="updateQuantity(${item.id}, -1)" class="quantity-btn">-</button>
-                                    <span class="w-8 text-center text-sm font-medium">${item.quantity}</span>
-                                    <button onclick="updateQuantity(${item.id}, 1)" class="quantity-btn">+</button>
-                                </div>
-                                <span class="text-xs text-gray-500">Đơn giá: ${formatCurrency(item.price)}</span>
-                            </div>
-                        </div>
-                    </div>`;
-                cartItemsContainer.innerHTML += cartItemHtml;
-            });
+                        </div>`;
+                    cartItemsContainer.innerHTML += cartItemHtml;
+                });
+            }
 
             const tax = subtotal * TAX_RATE;
             const total = subtotal + tax;
@@ -379,8 +429,10 @@
             totalElement.textContent = formatCurrency(total);
         }
 
-        function exportToPDF() {
-            const selectedTable = document.getElementById('rightPanelTableSelect').value;
+        async function processOrderToTable() {
+            console.log('Processing order for table:', currentTable);
+            const selectedTable = currentTable;
+            
             if (!selectedTable) {
                 alert('Please select a table before proceeding!');
                 return;
@@ -390,9 +442,38 @@
                 return;
             }
 
+            // 1. Load existing data for the table
+            let tableData = getTableData(selectedTable);
+            if (!tableData) {
+                // If no existing data, start with an empty items array
+                tableData = { tableId: selectedTable, items: [], timestamp: new Date().toISOString() };
+            } else {
+                // Use existing items, but ensure they have a temporary 'id' if missing
+                 tableData.items.forEach(item => { if (!item.id) item.id = orderCounter++; });
+            }
+
+            // 2. Merge current cart items with existing table items
+            cart.forEach(cartItem => {
+                const existingItemIndex = tableData.items.findIndex(tableItem => tableItem.itemId === cartItem.itemId);
+                if (existingItemIndex > -1) {
+                    // Item exists, update quantity and total price
+                    tableData.items[existingItemIndex].quantity += cartItem.quantity;
+                    tableData.items[existingItemIndex].totalPrice = tableData.items[existingItemIndex].price * tableData.items[existingItemIndex].quantity;
+                } else {
+                    // Item is new for this table, add it
+                    // Assign a temporary ID if not already present from the current cart
+                    if (!cartItem.id) cartItem.id = orderCounter++;
+                    tableData.items.push({...cartItem}); // Push a copy to avoid reference issues
+                }
+            });
+
+            // 3. Save the merged data back to localStorage
+            saveTableData(selectedTable, tableData.items);
+
+            // 4. Generate PDF (using the merged items from tableData.items)
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             // Use Arial font for better English support
             doc.setFont('Arial', 'normal');
 
@@ -400,11 +481,15 @@
             doc.setFontSize(22);
             doc.text(pdfTitle, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
 
+            let currentY = 35;
             doc.setFontSize(12);
-            doc.text(`Table No: ${selectedTable}`, 14, 35);
-            doc.text(`Time: ${new Date().toLocaleString('en-US')}`, 14, 42);
+            doc.text(`Table No: ${selectedTable}`, 14, currentY);
+            currentY += 7;
+            doc.text(`Time: ${new Date().toLocaleString('en-US')}`, 14, currentY);
+            currentY += 10;
 
-            const tableData = cart.map((item, index) => [
+            // Use the current cart items for PDF generation (only newly added)
+            const tableDataPdf = cart.map((item, index) => [
                 index + 1,
                 item.name,
                 item.quantity,
@@ -413,24 +498,26 @@
             ]);
 
             doc.autoTable({
-                startY: 50,
+                startY: currentY,
                 head: [['No.', 'Item Name', 'Qty', 'Unit Price', 'Subtotal']],
-                body: tableData,
+                body: tableDataPdf,
                 theme: 'grid',
                 headStyles: { fillColor: [255, 107, 53] },
                 styles: { font: 'Arial' }
             });
 
             const finalY = doc.lastAutoTable.finalY;
+            // Calculate totals based on the current cart items
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * TAX_RATE;
+            const taxRate = 0.10;
+            const tax = subtotal * taxRate;
             const total = subtotal + tax;
 
             doc.setFontSize(12);
             doc.text('Subtotal:', 150, finalY + 10, { align: 'right' });
             doc.text(formatCurrency(subtotal).replace('₫', '').trim(), 200, finalY + 10, { align: 'right' });
 
-            doc.text(`Tax (VAT ${TAX_RATE * 100}%):`, 150, finalY + 17, { align: 'right' });
+            doc.text(`Tax (VAT ${taxRate * 100}%):`, 150, finalY + 17, { align: 'right' });
             doc.text(formatCurrency(tax).replace('₫', '').trim(), 200, finalY + 17, { align: 'right' });
 
             doc.setFontSize(14);
@@ -438,7 +525,13 @@
             doc.text('Total:', 150, finalY + 26, { align: 'right' });
             doc.text(formatCurrency(total).replace('₫', '').trim(), 200, finalY + 26, { align: 'right' });
 
-            doc.save(`invoice-table-${selectedTable}.pdf`);
+            doc.save(`invoice-table-${selectedTable}-${new Date().getTime()}.pdf`); // Add timestamp to filename
+
+            // 5. Clear the current cart and update display after processing
+            cart = [];
+            updateCartDisplay();
+
+            alert('Đơn hàng đã được xử lý và lưu vào bàn ' + selectedTable);
         }
 
         // Online Orders Modal Functions
@@ -455,103 +548,207 @@
             modal.classList.remove('flex');
         }
 
-        function fetchOnlineOrders() {
-            // TODO: Replace with your actual API endpoint
-            // fetch('/api/online-orders')
-            //     .then(response => response.json())
-            //     .then(orders => {
-            //         displayOnlineOrders(orders);
-            //     })
-            //     .catch(error => {
-            //         console.error('Error fetching online orders:', error);
-            //         alert('Không thể tải đơn hàng online. Vui lòng thử lại sau.');
-            //     });
+        async function fetchOnlineOrders() {
+            const loadingOverlay = document.getElementById('onlineOrdersLoadingOverlay');
+            loadingOverlay.classList.remove('hidden'); // Show spinner
 
-            // Mock Data for demonstration
-            const mockOrders = [
-                {
-                    id: 1,
-                    customerName: 'Nguyễn Văn A',
-                    customerPhone: '0901234567',
-                    customerAddress: '123 Đường ABC, Quận 1, TP.HCM',
-                    orderTime: new Date().toISOString(),
-                    total: 150000,
-                    items: [
-                        { name: 'Phở Bò', quantity: 2, price: 50000 },
-                        { name: 'Cà Phê Sữa', quantity: 1, price: 25000 },
-                        { name: 'Mì Quảng', quantity: 1, price: 25000 }
-                    ]
-                },
-                {
-                    id: 2,
-                    customerName: 'Trần Thị B',
-                    customerPhone: '0919876543',
-                    customerAddress: '456 Đường XYZ, Quận 5, TP.HCM',
-                    orderTime: new Date(Date.now() - 60000 * 30).toISOString(), // 30 minutes ago
-                    total: 75000,
-                    items: [
-                        { name: 'Bún Chả', quantity: 1, price: 50000 },
-                        { name: 'Trà Đá', quantity: 1, price: 10000 },
-                        { name: 'Nem Rán', quantity: 1, price: 15000 }
-                    ]
-                }
-            ];
-            displayOnlineOrders(mockOrders);
+            try {
+                const response = await fetch('/sales/api/online-orders?status=PENDING');
+                const orders = await response.json();
+                await displayOnlineOrders(orders); // Wait for item names to be fetched and displayed
+            } catch (error) {
+                console.error('Error fetching online orders:', error);
+                alert('Không thể tải đơn hàng online. Vui lòng thử lại sau.');
+            } finally {
+                loadingOverlay.classList.add('hidden'); // Hide spinner
+            }
         }
 
-        function displayOnlineOrders(orders) {
+        async function displayOnlineOrders(orders) {
             const ordersList = document.getElementById('onlineOrdersList');
             ordersList.innerHTML = '';
 
             if (orders.length === 0) {
                 ordersList.innerHTML = '<p class="text-center text-gray-500">Không có đơn hàng online nào</p>';
+                onlineOrdersWithNames = [];
                 return;
             }
 
-            orders.forEach(order => {
+            const processedOrders = [];
+
+            // Use a temporary loading indicator for item names if needed, or rely on main overlay
+            // For simplicity, we'll just show the main overlay during the whole fetch+display process
+
+            for (const order of orders) {
+                // Fetch item names for each order detail
+                const orderDetailsWithNames = await Promise.all(
+                    order.orderDetails.map(async (detail) => {
+                        try {
+                            const response = await fetch(`http://localhost:8080/items/${detail.itemId}`);
+                            const item = await response.json();
+                            return {
+                                ...detail,
+                                itemName: item.itemName
+                            };
+                        } catch (error) {
+                            console.error('Error fetching item name:', error);
+                            return {
+                                ...detail,
+                                itemName: `Item ${detail.itemId}`
+                            };
+                        }
+                    })
+                );
+
+                const processedOrder = { ...order, orderDetails: orderDetailsWithNames };
+                processedOrders.push(processedOrder);
+
                 const orderElement = document.createElement('div');
                 orderElement.className = 'border border-gray-200 rounded-lg p-4';
                 orderElement.innerHTML = `
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h4 class="font-semibold">${order.customerName}</h4>
-                            <p class="text-sm text-gray-600">${order.customerPhone}</p>
-                            <p class="text-sm text-gray-600">${order.customerAddress}</p>
+                            <h4 class="font-semibold">${processedOrder.customerName}</h4>
+                            <p class="text-sm text-gray-600">${processedOrder.phoneNumber}</p>
+                            <p class="text-sm text-gray-600">${processedOrder.address}</p>
+                            ${processedOrder.note ? `<p class="text-sm text-gray-600">Ghi chú: ${processedOrder.note}</p>` : ''}
                         </div>
                         <div class="text-right">
-                            <p class="text-sm text-gray-600">Thời gian đặt: ${new Date(order.orderTime).toLocaleString('vi-VN')}</p>
-                            <p class="font-semibold text-orange-500">${formatCurrency(order.total)}</p>
+                            <p class="text-sm text-gray-600">Thời gian đặt: ${new Date(processedOrder.orderTime).toLocaleString('vi-VN')}</p>
+                            <p class="font-semibold text-orange-500">${formatCurrency(processedOrder.totalAmount)}</p>
                         </div>
                     </div>
                     <div class="space-y-2">
-                        ${order.items.map(item => `
+                        ${processedOrder.orderDetails.map(detail => `
                             <div class="flex justify-between items-center text-sm">
-                                <span>${item.name} x ${item.quantity}</span>
-                                <span>${formatCurrency(item.price * item.quantity)}</span>
+                                <span>${detail.itemName} x ${detail.quantity}</span>
+                                <span>${formatCurrency(detail.price * detail.quantity)}</span>
                             </div>
+                            ${detail.note ? `<div class="text-sm text-gray-500">Ghi chú: ${detail.note}</div>` : ''}
                         `).join('')}
                     </div>
                     <div class="mt-4 flex justify-end space-x-2">
-                        <button onclick="acceptOrder(${order.id})" class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
+                        <button onclick="acceptOrder(${processedOrder.id})" class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
                             <i class="fas fa-check mr-1"></i>Nhận đơn
                         </button>
-                        <button onclick="rejectOrder(${order.id})" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600">
+                        <button onclick="rejectOrder(${processedOrder.id})" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600">
                             <i class="fas fa-times mr-1"></i>Từ chối
                         </button>
                     </div>
                 `;
                 ordersList.appendChild(orderElement);
-            });
+            }
+
+            onlineOrdersWithNames = processedOrders;
         }
 
-        function acceptOrder(orderId) {
-            // TODO: Implement order acceptance logic
-            console.log('Accepting order:', orderId);
+        async function acceptOrder(orderId) {
+            const loadingOverlay = document.getElementById('onlineOrdersLoadingOverlay');
+            loadingOverlay.classList.remove('hidden'); // Show spinner
+            
+            try {
+                const order = onlineOrdersWithNames.find(order => order.id === orderId);
+                if (!order) {
+                    throw new Error('Order not found in displayed list.');
+                }
+
+                const prepareResponse = await fetch(`/sales/api/online-orders/${orderId}/status?status=PREPARING`, {
+                    method: 'PUT'
+                });
+                if (!prepareResponse.ok) {
+                     throw new Error(`Failed to update order status: ${prepareResponse.statusText}`);
+                }
+               
+                console.log('Order status updated to PREPARING for order:', orderId);
+
+                // Generate PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.setFont('Arial', 'normal');
+
+                const pdfTitle = 'Payment Invoice';
+                doc.setFontSize(22);
+                doc.text(pdfTitle, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+
+                let currentY = 35;
+                doc.setFontSize(12);
+                doc.text(`Customer Name: ${order.customerName}`, 14, currentY);
+                currentY += 7;
+                doc.text(`Phone Number: ${order.phoneNumber}`, 14, currentY);
+                currentY += 7;
+                doc.text(`Address: ${order.address}`, 14, currentY);
+                currentY += 7;
+
+                if (order.note) {
+                    doc.text(`Order Note: ${order.note}`, 14, currentY);
+                    currentY += 7;
+                }
+                doc.text(`Order Time: ${new Date(order.orderTime).toLocaleString('en-US')}`, 14, currentY);
+                currentY += 7;
+
+                const tableData = order.orderDetails.map((detail, index) => [
+                    index + 1,
+                    detail.itemName || `Item ${detail.itemId}`, 
+                    detail.quantity,
+                    formatCurrency(detail.price).replace('₫', '').trim(),
+                    formatCurrency(detail.price * detail.quantity).replace('₫', '').trim()
+                ]);
+
+                doc.autoTable({
+                    startY: currentY,
+                    head: [['No.', 'Item Name', 'Qty', 'Unit Price', 'Subtotal']],
+                    body: tableData,
+                    theme: 'grid',
+                    headStyles: { fillColor: [255, 107, 53] },
+                    styles: { font: 'Arial' }
+                });
+
+                const finalY = doc.lastAutoTable.finalY;
+                const subtotal = order.orderDetails.reduce((sum, detail) => sum + (detail.price * detail.quantity), 0);
+                const taxRate = 0.10;
+                const tax = subtotal * taxRate;
+                const total = subtotal + tax;
+
+                doc.setFontSize(12);
+                doc.text('Subtotal:', 150, finalY + 10, { align: 'right' });
+                doc.text(formatCurrency(subtotal).replace('₫', '').trim(), 200, finalY + 10, { align: 'right' });
+
+                doc.text(`Tax (VAT ${taxRate * 100}%):`, 150, finalY + 17, { align: 'right' });
+                doc.text(formatCurrency(tax).replace('₫', '').trim(), 200, finalY + 17, { align: 'right' });
+
+                doc.setFontSize(14);
+                doc.setFont('Arial', 'bold');
+                doc.text('Total:', 150, finalY + 26, { align: 'right' });
+                doc.text(formatCurrency(total).replace('₫', '').trim(), 200, finalY + 26, { align: 'right' });
+
+                doc.save(`invoice-${order.customerName.replace(/ /g, '_')}.pdf`);
+
+            } catch (error) {
+                console.error('Error accepting order:', error);
+                alert('Không thể nhận đơn hàng. Vui lòng thử lại sau.');
+            } finally {
+                loadingOverlay.classList.add('hidden'); // Hide spinner
+                fetchOnlineOrders(); // Refresh the list
+            }
         }
 
-        function rejectOrder(orderId) {
-            // TODO: Implement order rejection logic
-            console.log('Rejecting order:', orderId);
+        async function rejectOrder(orderId) {
+            const loadingOverlay = document.getElementById('onlineOrdersLoadingOverlay');
+            loadingOverlay.classList.remove('hidden'); // Show spinner
+
+            try {
+                const response = await fetch(`/sales/api/online-orders/${orderId}/status?status=CANCELLED`, {
+                    method: 'PUT'
+                });
+                const order = await response.json();
+                console.log('Order rejected:', order);
+            } catch (error) {
+                console.error('Error rejecting order:', error);
+                alert('Không thể từ chối đơn hàng. Vui lòng thử lại sau.');
+            } finally {
+                loadingOverlay.classList.add('hidden'); // Hide spinner
+                fetchOnlineOrders(); // Refresh the list
+            }
         }
 
         // Close modal when clicking outside
@@ -561,8 +758,112 @@
             }
         });
 
-        // Initialize
+        // Call updateCartDisplay initially to show empty cart
         updateCartDisplay();
+
+        // Initialize currentTable from URL parameter on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded fired.');
+            const urlParams = new URLSearchParams(window.location.search);
+            const tableIdFromUrl = urlParams.get('tableId');
+            if (tableIdFromUrl) {
+                // Ensure the dropdown reflects the selected table from URL
+                updateTableSelection(tableIdFromUrl);
+                // Do NOT load existing items into the cart on page load
+                cart = []; // Ensure cart is empty initially
+                updateCartDisplay(); // Update display to show empty cart
+            } else {
+                // If no tableId in URL, ensure 'Chọn bàn' is selected and cart is empty
+                currentTable = ''; // Ensure currentTable variable is empty
+                const rightPanelTableSelect = document.getElementById('rightPanelTableSelect');
+                if (rightPanelTableSelect) {
+                     rightPanelTableSelect.selectedIndex = 0; // Select the first option ('Chọn bàn')
+                }
+                cart = []; // Ensure cart is empty
+                updateCartDisplay();
+             }
+            // Initial display of items (all)
+            displayItems('all');
+
+             // Re-populate table dropdown with sorted tables after they are available
+             // Assuming tables are available globally or fetched here if not.
+             // If tables are fetched via an API call directly in this JS, the sorting should happen there.
+             // Since they are passed via Thymeleaf, the sorting in Controller was attempted.
+             // Let's add sorting to the dropdown population logic if we can access the tables array here.
+
+             // *Correction*: The tables array is available via Thymeleaf in the HTML.
+             // We need to sort the options after the page loads.
+             console.log('Calling sortTableDropdown');
+             sortTableDropdown();
+
+            // After sorting and potential URL selection, ensure 'Chọn bàn' is selected if no URL tableId
+            if (!tableIdFromUrl) {
+                const rightPanelTableSelect = document.getElementById('rightPanelTableSelect');
+                 if (rightPanelTableSelect) {
+                     rightPanelTableSelect.selectedIndex = 0; // Re-select the first option ('Chọn bàn')
+                 }
+                 currentTable = ''; // Ensure currentTable is empty
+            }
+            // Also ensure the cart is empty and display updated if no tableIdFromUrl
+            if (!tableIdFromUrl && cart.length > 0) {
+                cart = [];
+                updateCartDisplay();
+            }
+        });
+
+        // Function to sort the table dropdown by ID
+        function sortTableDropdown() {
+            console.log('sortTableDropdown function started.');
+            const selectElement = document.getElementById('rightPanelTableSelect');
+            if (!selectElement) {
+                console.error('rightPanelTableSelect not found!');
+                return;
+            }
+            console.log('Found select element:', selectElement);
+
+            const options = Array.from(selectElement.options);
+            console.log('Original options:', options.map(opt => ({ value: opt.value, text: opt.text })));
+
+            // Sort options based on the numerical value of the 'value' attribute (which is table ID)
+            options.sort((a, b) => {
+                const idA = parseInt(a.value);
+                const idB = parseInt(b.value);
+                console.log(`Comparing ${a.text} (ID: ${idA}) and ${b.text} (ID: ${idB})`);
+                // Handle 'Chọn bàn' option or invalid IDs if necessary
+                if (isNaN(idA)) return -1; // Keep 'Chọn bàn' at the top
+                if (isNaN(idB)) return 1; // Keep 'Chọn bàn' at the top
+                return idA - idB;
+            });
+
+            // Clear existing options and add sorted options back
+            console.log('Clearing existing options.');
+            while (selectElement.options.length > 0) {
+                selectElement.remove(0);
+            }
+            console.log('Adding sorted options back.');
+            options.forEach(option => selectElement.add(option));
+            console.log('Sorted options added.');
+
+             // Re-select the current table if one was selected via URL
+             const urlParams = new URLSearchParams(window.location.search);
+             const tableIdFromUrl = urlParams.get('tableId');
+             console.log('Checking for tableId from URL:', tableIdFromUrl);
+             if (tableIdFromUrl) {
+                 selectElement.value = tableIdFromUrl;
+                 updateTableSelection(tableIdFromUrl); // Ensure currentTable variable is updated
+                 console.log('Selected table from URL:', tableIdFromUrl);
+             }
+            console.log('sortTableDropdown function finished.');
+        }
+
+        // The tab switching logic already handles showing/hiding based on status when a tab is clicked.
+        // No need to re-apply display logic in action functions, instead trigger tab click.
+
+        // Add a checkout function placeholder
+        function checkout(tableId) {
+             alert('Chức năng thanh toán cho bàn ' + tableId + ' sẽ được triển khai sau.');
+             // TODO: Implement checkout process
+        }
     </script>
 </body>
 </html>

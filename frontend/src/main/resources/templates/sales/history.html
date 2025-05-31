@@ -69,47 +69,9 @@
                                 <th scope="col" class="px-6 py-3 text-center">Hành động</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="bg-white border-b hover:bg-gray-50">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">#ORD-00125</th>
-                                <td class="px-6 py-4">2025-05-30 10:45 AM</td>
-                                <td class="px-6 py-4">Khách lẻ</td>
-                                <td class="px-6 py-4">Bàn 5</td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">Đã thanh toán</span>
-                                </td>
-                                <td class="px-6 py-4 text-right font-semibold text-gray-900">350,000₫</td>
-                                <td class="px-6 py-4 text-center">
-                                    <a href="#" class="font-medium text-orange-600 hover:underline">Chi tiết</a>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b hover:bg-gray-50">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">#ORD-00124</th>
-                                <td class="px-6 py-4">2025-05-30 09:12 AM</td>
-                                <td class="px-6 py-4">Trần Văn An</td>
-                                <td class="px-6 py-4">Mang đi</td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">Đã thanh toán</span>
-                                </td>
-                                <td class="px-6 py-4 text-right font-semibold text-gray-900">120,000₫</td>
-                                <td class="px-6 py-4 text-center">
-                                    <a href="#" class="font-medium text-orange-600 hover:underline">Chi tiết</a>
-                                </td>
-                            </tr>
-                             <tr class="bg-white border-b hover:bg-gray-50">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">#ORD-00123</th>
-                                <td class="px-6 py-4">2025-05-29 08:30 PM</td>
-                                <td class="px-6 py-4">Nguyễn Thị Bình</td>
-                                <td class="px-6 py-4">Bàn 2</td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">Đã hủy</span>
-                                </td>
-                                <td class="px-6 py-4 text-right font-semibold text-gray-900">540,000₫</td>
-                                <td class="px-6 py-4 text-center">
-                                    <a href="#" class="font-medium text-orange-600 hover:underline">Chi tiết</a>
-                                </td>
-                            </tr>
-                             </tbody>
+                        <tbody id="onlineOrdersHistoryTableBody">
+                            <!-- Online order history rows will be populated here by JavaScript -->
+                        </tbody>
                     </table>
 
                      <div class="flex justify-between items-center p-4">
@@ -157,6 +119,297 @@
                 clickedButton.classList.add(...activeClasses);
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchOnlineOrdersHistory();
+        });
+
+        async function fetchOnlineOrdersHistory() {
+            // TODO: Add loading spinner
+            try {
+                const response = await fetch('/sales/api/online-orders/history');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const orders = await response.json();
+                displayOnlineOrdersHistory(orders);
+            } catch (error) {
+                console.error('Error fetching online orders history:', error);
+                alert('Không thể tải lịch sử đơn hàng online. Vui lòng thử lại sau.');
+                const tableBody = document.getElementById('onlineOrdersHistoryTableBody');
+                 tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Lỗi tải dữ liệu.</td></tr>';
+            }
+        }
+
+        function displayOnlineOrdersHistory(orders) {
+            const tableBody = document.getElementById('onlineOrdersHistoryTableBody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            if (orders.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Không có lịch sử đơn hàng online.</td></tr>';
+                return;
+            }
+
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.className = 'bg-white border-b hover:bg-gray-50 cursor-pointer'; // Add cursor-pointer
+                row.onclick = () => showOnlineOrderDetailsModal(order.id); // Add click handler
+
+                // Determine status badge color (basic example, can be expanded)
+                let statusColorClass = 'bg-gray-100 text-gray-800';
+                if (order.status === 'COMPLETED') {
+                    statusColorClass = 'bg-green-100 text-green-800';
+                } else if (order.status === 'CANCELLED') {
+                    statusColorClass = 'bg-red-100 text-red-800';
+                } else if (order.status === 'PREPARING') {
+                     statusColorClass = 'bg-blue-100 text-blue-800';
+                } else if (order.status === 'DELIVERING') {
+                     statusColorClass = 'bg-yellow-100 text-yellow-800';
+                } // Add more statuses as needed
+
+                row.innerHTML = `
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">#ORD-${order.id}</th>
+                    <td class="px-6 py-4">${new Date(order.orderTime).toLocaleString('vi-VN')}</td>
+                    <td class="px-6 py-4">${order.customerName || 'Khách lẻ'}</td>
+                    <td class="px-6 py-4">${order.address || 'N/A'}</td> <!-- Using address for now, can be changed -->
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 text-xs font-medium ${statusColorClass} rounded-full">${order.status}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right font-semibold text-gray-900">${formatCurrency(order.totalAmount)}</td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="#" class="font-medium text-orange-600 hover:underline" onclick="event.stopPropagation(); showOnlineOrderDetailsModal(${order.id})">Chi tiết</a>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+         function formatCurrency(value) {
+            // Using Intl.NumberFormat for robust localization
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        }
+
+        let currentOrderId = null; // To store the ID of the order currently displayed in the modal
+
+        async function showOnlineOrderDetailsModal(orderId) {
+            currentOrderId = orderId;
+            const modal = document.getElementById('onlineOrderDetailsModal');
+            const loadingOverlay = document.getElementById('orderDetailsLoadingOverlay');
+            const orderDetailsContent = document.getElementById('orderDetailsContent');
+            const detailItemsList = document.getElementById('detailItemsList');
+            const detailStatusSelect = document.getElementById('detailStatusSelect');
+
+            orderDetailsContent.classList.add('hidden'); // Hide content while loading
+            loadingOverlay.classList.remove('hidden'); // Show spinner
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            try {
+                // Fetch order details from frontend API endpoint which calls backend
+                const response = await fetch(`/sales/api/online-orders/${orderId}`);
+                 if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const order = await response.json();
+
+                // Fetch item names for details
+                 const orderDetailsWithNames = await Promise.all(
+                    order.orderDetails.map(async (detail) => {
+                        try {
+                            const itemResponse = await fetch(`http://localhost:8080/items/${detail.itemId}`);
+                            const item = await itemResponse.json();
+                            return {
+                                ...detail,
+                                itemName: item.itemName
+                            };
+                        } catch (error) {
+                            console.error('Error fetching item name for detail:', error);
+                            return {
+                                ...detail,
+                                itemName: `Item ${detail.itemId}`
+                            };
+                        }
+                    })
+                );
+                order.orderDetails = orderDetailsWithNames; // Update order object with names
+
+                // Populate modal with data
+                document.getElementById('orderDetailId').textContent = `#ORD-${order.id}`;
+                document.getElementById('detailCustomerName').textContent = order.customerName || 'Khách lẻ';
+                document.getElementById('detailPhoneNumber').textContent = order.phoneNumber || 'N/A';
+                document.getElementById('detailAddress').textContent = order.address || 'N/A';
+                document.getElementById('detailOrderTime').textContent = new Date(order.orderTime).toLocaleString('vi-VN');
+                document.getElementById('detailOrderNote').textContent = order.note || 'Không có ghi chú';
+                document.getElementById('detailTotalAmount').textContent = formatCurrency(order.totalAmount);
+
+                // Update status badge
+                const detailStatusBadge = document.getElementById('detailStatusBadge');
+                detailStatusBadge.textContent = order.status;
+                detailStatusBadge.className = `px-2 py-1 text-xs font-medium rounded-full ${getStatusColorClass(order.status)}`;
+
+                // Populate item details
+                detailItemsList.innerHTML = '';
+                if (order.orderDetails && order.orderDetails.length > 0) {
+                     order.orderDetails.forEach(detail => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'flex justify-between items-start text-sm border-b border-gray-100 pb-2'; // Use items-start and add border
+                        itemElement.innerHTML = `
+                             <div class="flex-1 mr-4">
+                                 <span>${detail.itemName} x ${detail.quantity}</span>
+                             </div>
+                             <div class="text-right">
+                                 <span>${formatCurrency(detail.price * detail.quantity)}</span>
+                                 ${detail.note ? `<div class="text-xs text-gray-500 mt-1">Ghi chú: ${detail.note}</div>` : ''}
+                             </div>
+                         `;
+                         // Removed appending note as it's now in innerHTML
+                         detailItemsList.appendChild(itemElement);
+                     });
+                } else {
+                     detailItemsList.innerHTML = '<p class="text-center text-gray-500">Không có chi tiết món ăn.</p>';
+                }
+
+                 // Set the current status in the select dropdown
+                 detailStatusSelect.value = order.status;
+
+                orderDetailsContent.classList.remove('hidden'); // Show content
+
+            } catch (error) {
+                console.error('Error fetching order details:', error);
+                alert('Không thể tải chi tiết đơn hàng. Vui lòng thử lại sau.');
+                orderDetailsContent.innerHTML = '<p class="text-center text-red-500">Lỗi tải chi tiết đơn hàng.</p>';
+                 orderDetailsContent.classList.remove('hidden'); // Show error message
+            } finally {
+                loadingOverlay.classList.add('hidden'); // Hide spinner
+            }
+        }
+
+        function closeOnlineOrderDetailsModal() {
+            const modal = document.getElementById('onlineOrderDetailsModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            currentOrderId = null; // Clear current order ID
+        }
+
+        async function updateOrderStatusFromModal() {
+             if (!currentOrderId) return; // Do nothing if no order is selected
+
+             const statusSelect = document.getElementById('detailStatusSelect');
+             const newStatus = statusSelect.value;
+
+             const loadingOverlay = document.getElementById('orderDetailsLoadingOverlay');
+             loadingOverlay.classList.remove('hidden'); // Show spinner
+
+             try {
+                 const response = await fetch(`/sales/api/online-orders/${currentOrderId}/status?status=${newStatus}`, {
+                     method: 'PUT'
+                 });
+
+                 if (!response.ok) {
+                     throw new Error(`Failed to update order status: ${response.statusText}`);
+                 }
+
+                 const updatedOrder = await response.json();
+                 console.log('Order status updated from modal:', updatedOrder);
+
+                 // Update the status badge in the modal immediately
+                 const detailStatusBadge = document.getElementById('detailStatusBadge');
+                 detailStatusBadge.textContent = updatedOrder.status;
+                 detailStatusBadge.className = `px-2 py-1 text-xs font-medium rounded-full ${getStatusColorClass(updatedOrder.status)}`;
+
+                 // Optional: Update the table row in the history list without refetching all
+                 // This would require finding the row element by order.id and updating its status cell
+                 // For simplicity now, we'll just refetch the whole history list after closing the modal.
+
+                 alert(`Trạng thái đơn hàng #${currentOrderId} đã cập nhật thành ${updatedOrder.status}`);
+                 // Close modal and refresh history list
+                 closeOnlineOrderDetailsModal();
+                 fetchOnlineOrdersHistory();
+
+             } catch (error) {
+                 console.error('Error updating order status from modal:', error);
+                 alert('Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại sau.');
+             } finally {
+                  loadingOverlay.classList.add('hidden'); // Hide spinner
+             }
+        }
+
+        // Helper function to get status color class (duplicate, could refactor)
+        function getStatusColorClass(status) {
+            switch (status) {
+                case 'COMPLETED': return 'bg-green-100 text-green-800';
+                case 'CANCELLED': return 'bg-red-100 text-red-800';
+                case 'PREPARING': return 'bg-blue-100 text-blue-800';
+                case 'DELIVERING': return 'bg-yellow-100 text-yellow-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+         // Close modal when clicking outside
+        document.getElementById('onlineOrderDetailsModal').addEventListener('click', function(e) {
+            // Check if the click is directly on the modal background, not inside the modal content
+            if (e.target === this) {
+                closeOnlineOrderDetailsModal();
+            }
+        });
+
+    </script>
+
+    <!-- Online Order Details Modal -->
+    <div id="onlineOrderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-11/12 max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Chi tiết đơn hàng online <span id="orderDetailId"></span></h3>
+                <button onclick="closeOnlineOrderDetailsModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 flex-1 overflow-y-auto">
+                <div id="orderDetailsContent" class="space-y-4">
+                    <!-- Order details will be loaded here -->
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm text-gray-600">Tên khách hàng: <span class="font-medium text-gray-900" id="detailCustomerName"></span></p>
+                            <p class="text-sm text-gray-600">Số điện thoại: <span class="font-medium text-gray-900" id="detailPhoneNumber"></span></p>
+                            <p class="text-sm text-gray-600">Địa chỉ: <span class="font-medium text-gray-900" id="detailAddress"></span></p>
+                            <p class="text-sm text-gray-600">Thời gian đặt: <span class="font-medium text-gray-900" id="detailOrderTime"></span></p>
+                            <p class="text-sm text-gray-600">Ghi chú đơn hàng: <span class="font-medium text-gray-900" id="detailOrderNote"></span></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold text-orange-500 text-lg" id="detailTotalAmount"></p>
+                            <span class="px-2 py-1 text-xs font-medium rounded-full" id="detailStatusBadge"></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-2">Chi tiết món ăn:</h4>
+                        <div id="detailItemsList" class="border-t border-gray-200 pt-2 space-y-2">
+                            <!-- Order items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200 flex justify-end items-center space-x-3">
+                 <span class="text-sm text-gray-700 font-medium">Cập nhật trạng thái:</span>
+                 <select id="detailStatusSelect" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-500">
+                    <option value="PREPARING">PREPARING</option>
+                    <option value="DELIVERING">DELIVERING</option>
+                    <option value="COMPLETED">COMPLETED</option>
+                    <option value="CANCELLED">CANCELLED</option>
+                 </select>
+                 <button onclick="updateOrderStatusFromModal()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600">
+                     Cập nhật
+                 </button>
+            </div>
+             <!-- Loading Overlay for Modal -->
+            <div id="orderDetailsLoadingOverlay" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10 hidden">
+                <i class="fas fa-spinner fa-spin text-orange-500 text-4xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
     </script>
 </body>
 </html>

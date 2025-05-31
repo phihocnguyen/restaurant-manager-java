@@ -131,11 +131,15 @@
 
                 <!-- Tables Grid -->
                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div th:each="table, status : ${tables}" class="bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between">
+                    <div th:each="table, iterStat : ${tables}" class="bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span th:text="${status.count}"></span></h3>
+                            <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span th:text="${iterStat.count}"></span></h3>
                             <p class="text-gray-400 mb-2">Số người tối đa: <span th:text="${table.tabNum}" class="text-blue-400"></span></p>
-                            <p class="text-gray-400">Trạng thái: <span th:text="${table.tabStatus ? 'Đã có khách' : 'Còn trống'}" th:classappend="${table.tabStatus ? 'text-red-400' : 'text-green-400'}"></span></p>
+                            <p class="text-gray-400">Trạng thái: <span
+                                    th:text="${#strings.capitalize(table.tabStatus.name())}"
+                                    th:classappend="${table.tabStatus.name() == 'OCCUPIED' ? 'text-red-400' : (table.tabStatus.name() == 'RESERVED' ? 'text-yellow-400' : 'text-green-400')}">
+                                </span>
+                            </p>
                         </div>
                         <div class="flex justify-end space-x-4 mt-4">
                              <button class="text-yellow-600 hover:text-yellow-900" th:onclick="'openEditModal(' + ${table.id} + ')'">
@@ -191,10 +195,11 @@
                      <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-300">Trạng thái bàn</label>
                         <div class="mt-2">
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" id="editTabStatus" name="tabStatus" class="rounded border-gray-700 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <span class="ml-2">Đã có khách</span>
-                            </label>
+                            <select id="editTabStatus" name="tabStatus" class="mt-1 block w-full rounded-md border-gray-700 shadow-sm bg-[#334155] text-gray-100">
+                                <option value="EMPTY">Còn trống</option>
+                                <option value="OCCUPIED">Đang hoạt động</option>
+                                <option value="RESERVED">Đã đặt</option>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -237,13 +242,13 @@
 
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');
+            document.body.classList.add('modal-open'); // Prevent scrolling
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.add('hidden');
+            document.body.classList.remove('modal-open'); // Re-enable scrolling
         }
-
-
 
         function openEditModal(id) {
              const tableId = parseInt(id);
@@ -268,7 +273,7 @@
                 .then(table => {
                     document.getElementById('editTableId').value = table.id;
                     document.getElementById('editTabNum').value = table.tabNum;
-                     document.getElementById('editTabStatus').checked = table.tabStatus;
+                    document.getElementById('editTabStatus').value = table.tabStatus;
                     openModal('editTableModal');
                 })
                 .catch(error => {
@@ -292,7 +297,7 @@
             }
 
             // Set default values
-             table.tabStatus = false; // Mặc định bàn còn trống khi tạo mới
+             table.tabStatus = "EMPTY"; // Mặc định bàn còn trống khi tạo mới
              table.isdeleted = false; // Mặc định chưa xóa mềm
 
             showSpinner();
@@ -342,12 +347,9 @@
                  alert('Số người tối đa không hợp lệ.');
                  return;
             }
-            // Lấy giá trị đúng của checkbox trạng thái bàn
-            table.tabStatus = document.getElementById('editTabStatus').checked;
-            // isdeleted không thay đổi khi update thông thường
-            // Nếu backend cần isdeleted, có thể fetch bàn cũ để lấy giá trị
-            // Hoặc set mặc định false nếu update không phải soft delete
-             table.isdeleted = false; // assuming normal update doesn't change isdeleted
+            // Lấy giá trị từ dropdown
+            table.tabStatus = document.getElementById('editTabStatus').value;
+             table.isdeleted = false;
 
             showSpinner();
             fetch(`/manager/api/tables/${currentTableId}`, {
@@ -364,10 +366,10 @@
                     }
                     throw new Error('Failed to update table');
                 }
-                return response.json(); // Assuming backend returns updated table
+                return response;
             })
-            .then(updatedTable => {
-                 console.log('Table updated:', updatedTable);
+            .then(response => {
+                 console.log('Table updated:', currentTableId, response.status);
                 closeModal('editTableModal');
                 window.location.reload(); // Reload page to show updated table
             })
@@ -406,10 +408,17 @@
                 if (!response.ok) {
                      if (response.status === 404) {
                         throw new Error('Bàn không tồn tại.');
+                    } else if (response.status === 409) {
+                         throw new Error('Không thể xóa bàn đang có khách hoặc đã đặt.');
                     }
                     throw new Error('Failed to delete table');
                 }
-                 console.log('Table deleted:', currentTableId);
+                 // Không gọi response.json() vì DELETE trả về 200 OK với body trống
+                 // Chỉ kiểm tra response.ok và proceed
+                return response; // Trả về response gốc
+            })
+            .then(response => {
+                 console.log('Table deleted:', currentTableId, response.status);
                 closeModal('deleteConfirmModal');
                 window.location.reload(); // Reload page after deletion
             })
@@ -432,16 +441,55 @@
             document.getElementById('spinnerOverlay').classList.add('hidden');
         }
 
-        // Xử lý form submit (Optional, as buttons have click handlers)
-        document.addEventListener('DOMContentLoaded', function() {
-             // Optional: Prevent default form submission if using button click handlers
-            // document.querySelectorAll('form').forEach(function(form) {
-            //     form.addEventListener('submit', function(e) {
-            //         e.preventDefault();
-            //         // showSpinner(); // Show spinner on submit if needed, but handled in button clicks
-            //     });
-            // });
-        });
+        // Thêm hàm fetch danh sách bàn
+        function fetchTables() {
+            showSpinner();
+            fetch('/manager/api/tables')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch tables');
+                    }
+                    return response.json();
+                })
+                .then(tables => {
+                    const tablesGrid = document.querySelector('.grid');
+                    tablesGrid.innerHTML = ''; // Clear existing tables
+                    
+                    tables.forEach((table, index) => {
+                        const statusClass = table.tabStatus === 'OCCUPIED' ? 'text-red-400' : 
+                                         (table.tabStatus === 'RESERVED' ? 'text-yellow-400' : 'text-green-400');
+                        
+                        const tableCard = `
+                            <div class="bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span>${index + 1}</span></h3>
+                                    <p class="text-gray-400 mb-2">Số người tối đa: <span class="text-blue-400">${table.tabNum}</span></p>
+                                    <p class="text-gray-400">Trạng thái: <span class="${statusClass}">${table.tabStatus}</span></p>
+                                </div>
+                                <div class="flex justify-end space-x-4 mt-4">
+                                    <button class="text-yellow-600 hover:text-yellow-900" onclick="openEditModal(${table.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-900" onclick="confirmDelete(${table.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        tablesGrid.innerHTML += tableCard;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Không thể tải danh sách bàn. Vui lòng thử lại.');
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+        }
+
+        // Gọi fetchTables khi trang được load
+        document.addEventListener('DOMContentLoaded', fetchTables);
     </script>
 </body>
 </html> 

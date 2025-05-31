@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,14 +38,17 @@ public class OrderOnline {
     private BigDecimal totalAmount;
 
     @Column(name = "order_time", nullable = false)
-    private LocalDateTime orderTime;
+    private Instant orderTime;
 
     @Column(name = "delivery_time")
-    private LocalDateTime deliveryTime;
+    private Instant deliveryTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status")
     private OrderStatus status;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
 
     @OneToMany(mappedBy = "orderOnline", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderOnlineDetails> orderDetails = new ArrayList<>();

@@ -23,6 +23,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import java.math.BigDecimal;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import java.util.Comparator;
 
 @Controller
 @RequestMapping("/manager")
@@ -33,6 +38,58 @@ public class ManagerController {
         model.addAttribute("title", "Dashboard - Restaurant Manager");
         model.addAttribute("activeTab", "dashboard");
         return "manager/dashboard";
+    }
+
+    @GetMapping("/tables")
+    public String managerTablesPage(Model model) {
+        model.addAttribute("title", "Quản lý bàn - Restaurant Manager");
+        model.addAttribute("activeTab", "tables");
+        return "manager/tables";
+    }
+
+    @GetMapping("/api/tables")
+    @ResponseBody
+    public ResponseEntity<List> getAllTables() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/tables";
+        ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @GetMapping("/api/tables/{id}")
+    @ResponseBody
+    public ResponseEntity<Map> getTableById(@PathVariable int id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/tables/" + id;
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @PostMapping("/api/tables")
+    @ResponseBody
+    public ResponseEntity<?> createTable(@RequestBody Map<String, Object> tableData) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/tables";
+        ResponseEntity<?> response = restTemplate.postForEntity(url, tableData, Object.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @PutMapping("/api/tables/{id}")
+    @ResponseBody
+    public ResponseEntity<?> updateTable(@PathVariable int id, @RequestBody Map<String, Object> tableData) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/tables/" + id;
+        restTemplate.put(url, tableData);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/api/tables/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteTable(@PathVariable int id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/tables/" + id;
+        restTemplate.delete(url);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/menu")
@@ -295,4 +352,35 @@ public class ManagerController {
         redirectAttributes.addFlashAttribute("success", "Đã xóa nguyên liệu!");
         return "redirect:/manager/ingredients";
     }
+
+    @GetMapping("/sales/items")
+    public String salesItemsPage(@RequestParam(value = "tableId", required = false) Integer tableId, Model model) {
+        model.addAttribute("title", "Restro POS");
+
+        // Fetch menu items from backend
+        RestTemplate restTemplate = new RestTemplate();
+        String urlItems = "http://localhost:8080/items";
+        ResponseEntity<List> itemsResponse = restTemplate.getForEntity(urlItems, List.class);
+        List<Map<String, Object>> items = itemsResponse.getBody();
+        model.addAttribute("items", items);
+
+        // Fetch tables from backend and sort by ID
+        String urlTables = "http://localhost:8080/tables";
+        ResponseEntity<List> tablesResponse = restTemplate.getForEntity(urlTables, List.class);
+        List<Map<String, Object>> tables = tablesResponse.getBody();
+
+        // Sort tables by ID
+        if (tables != null) {
+            tables.sort(Comparator.comparingInt(t -> (Integer) t.get("id")));
+        }
+        model.addAttribute("tables", tables);
+
+        // Add tableId to the model if present (from URL parameter)
+        if (tableId != null) {
+            model.addAttribute("selectedTableId", tableId);
+        }
+
+        return "sales/items";
+    }
+
 } 

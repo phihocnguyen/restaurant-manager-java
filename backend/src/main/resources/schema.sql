@@ -173,3 +173,5 @@ CREATE TABLE IF NOT EXISTS order_online_details (
     FOREIGN KEY (order_online_id) REFERENCES order_online(id) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES MENU_ITEMS(ITEM_ID) ON DELETE CASCADE
 );
+
+ALTER TABLE receipts ADD COLUMN payment_method VARCHAR(50);

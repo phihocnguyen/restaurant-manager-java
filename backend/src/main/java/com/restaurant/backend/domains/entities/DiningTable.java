@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import com.restaurant.backend.domains.dto.DiningTable.enums.TableStatus;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,9 +23,9 @@ public class DiningTable {
     private Short tabNum;
 
     @NotNull
-    @ColumnDefault("false")
+    @Enumerated(EnumType.STRING)
     @Column(name = "tab_status", nullable = false)
-    private Boolean tabStatus = false;
+    private TableStatus tabStatus = TableStatus.EMPTY;
 
     @NotNull
     @ColumnDefault("false")

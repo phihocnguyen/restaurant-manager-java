@@ -50,6 +50,9 @@ public class Receipt {
     @Column(name = "isdeleted", nullable = false)
     private Boolean isdeleted = false;
 
+    @Column(name = "payment_method", nullable = true)
+    private String paymentMethod;
+
     // run right before that instance added to the db
     @PrePersist
     public void prePersist(){
