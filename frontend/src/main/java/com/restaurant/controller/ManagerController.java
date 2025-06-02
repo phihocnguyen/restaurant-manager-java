@@ -261,6 +261,13 @@ public class ManagerController {
         return "manager/orders";
     }
 
+    @GetMapping("/employees")
+    public String employees(Model model) {
+        model.addAttribute("title", "Quản lý nhân viên - Restaurant Manager");
+        model.addAttribute("activeTab", "employees");
+        return "manager/employees";
+    }
+
     @GetMapping("/settings")
     public String settings(Model model) {
         model.addAttribute("title", "Cài đặt - Restaurant Manager");
@@ -381,6 +388,59 @@ public class ManagerController {
         }
 
         return "sales/items";
+    }
+
+    // Employee API Endpoints
+    @GetMapping("/api/employees")
+    @ResponseBody
+    public ResponseEntity<List> getAllEmployees() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/employees";
+        ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @GetMapping("/api/employees/{id}")
+    @ResponseBody
+    public ResponseEntity<Map> getEmployeeById(@PathVariable int id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/employees/" + id;
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @PostMapping("/api/employees")
+    @ResponseBody
+    public ResponseEntity<?> createEmployee(@RequestBody Map<String, Object> employeeData) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/employees";
+        ResponseEntity<?> response = restTemplate.postForEntity(url, employeeData, Object.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @PutMapping("/api/employees/{id}")
+    @ResponseBody
+    public ResponseEntity<?> updateEmployee(@PathVariable int id, @RequestBody Map<String, Object> employeeData) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/employees/" + id;
+        restTemplate.put(url, employeeData);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/api/employees/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteEmployee(@PathVariable int id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/employees/" + id;
+        restTemplate.delete(url);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/schedule")
+    public String schedule(Model model) {
+        model.addAttribute("title", "Lịch làm việc nhân viên - Restaurant Manager");
+        model.addAttribute("activeTab", "schedule");
+        return "manager/schedule";
     }
 
 } 
