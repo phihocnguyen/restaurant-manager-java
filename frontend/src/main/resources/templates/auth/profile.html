@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hồ Sơ Của Tôi - G15 Kitchen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --secondary-gold: #B8860B;
+            --dark-bg: #121212;
+            --light-bg: #1E1E1E;
+            --text-muted: #A0AEC0;
+            --border-light: rgba(255, 255, 255, 0.15);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: #F7FAFC;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        .playfair { font-family: 'Playfair Display', serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .animated-bg {
+            background: linear-gradient(-45deg, var(--dark-bg), #1a1a1a, #2d2d2d, var(--dark-bg));
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
+        }
+        .premium-btn {
+            background: linear-gradient(90deg, var(--primary-gold), var(--secondary-gold));
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(90deg, #FBBF24, #D97706);
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+        .loading-screen.hidden { opacity: 0; pointer-events: none; }
+        .loading-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary-gold), #FBBF24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 1; }
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gold);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--primary-gold); }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--primary-gold);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gold);
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="animated-bg text-white min-h-screen">
+
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo playfair">G15 Kitchen</div>
+</div>
+
+    <!-- Navbar -->
+<nav class="fixed top-0 w-full z-50 glass-dark transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
+                    <span class="text-black font-bold text-xl">G</span>
+                </div>
+                <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
+            </div>
+    
+            <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        Home
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                    <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        Menu
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                    <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        About
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <div id="authSection">
+                        <!-- Login Button (shown when not logged in) -->
+                        <a href="/login" id="loginButton" class="premium-btn px-6 py-2 rounded-full text-black font-semibold">
+                            Login
+                        </a>
+                        <!-- Avatar Dropdown (shown when logged in) -->
+                    <div id="avatarDropdown" class="relative hidden">
+                            <button id="avatarButton" class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold hover:bg-yellow-500 transition-colors">
+                                <i class="fas fa-user"></i>
+                            </button>
+                        <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
+                                <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                                    <i class="fas fa-user-circle mr-2"></i> Profile
+                            </a>
+                            <hr class="my-2">
+                            <button id="logoutButton" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden glass p-2 rounded-lg" id="mobile-menu-btn">
+                    <div class="w-6 h-6 flex flex-col justify-center space-y-1">
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+            </div>
+                </button>
+        </div>
+    </div>
+</nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pt-28 pb-20 px-6">
+    <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h1 class="playfair text-5xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    Tài Khoản Của Tôi
+            </h1>
+                <p class="text-lg text-gray-300 mt-3 max-w-md mx-auto">Quản lý thông tin cá nhân và theo dõi lịch sử đơn hàng của bạn một cách dễ dàng.</p>
+        </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Profile Sidebar -->
+            <div class="lg:col-span-1 fade-in">
+                    <div class="glass p-8 rounded-2xl sticky top-24">
+                    <div class="text-center mb-8">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" 
+                             alt="User Avatar" 
+                                 class="w-28 h-28 rounded-full mx-auto border-4 border-yellow-400/30 object-cover shadow-md">
+                            <h2 id="profileUsername" class="playfair text-2xl font-bold mt-4">Jhon Morison</h2>
+                            <p id="profileEmail" class="text-gray-400 text-sm">jhon.morison@example.com</p>
+                        </div>
+                        <div class="space-y-3">
+                            <button class="w-full premium-btn px-6 py-3 rounded-full text-black font-semibold text-sm shadow-md">Chỉnh sửa hồ sơ</button>
+                            <button class="w-full glass px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/10 transition-all duration-300">Đổi mật khẩu</button>
+                        </div>
+                    </div>
+                        </div>
+
+                <!-- Order History -->
+                <div class="lg:col-span-2 fade-in">
+                    <h3 class="playfair text-3xl font-bold mb-6">Lịch sử đơn hàng</h3>
+                    <div id="orderHistoryList" class="space-y-5">
+                        <div class="text-center text-gray-400 italic">Đang tải lịch sử đơn hàng...</div>
+                    </div>
+                    <div id="paginationControls" class="flex justify-center items-center space-x-3 mt-8 hidden">
+                        <button id="prevPageButton" class="glass px-4 py-2 rounded-full text-sm font-medium hover:bg-yellow-400 hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Trước</button>
+                        <div id="pageNumbers" class="flex space-x-2"></div>
+                        <button id="nextPageButton" class="glass px-4 py-2 rounded-full text-sm font-medium hover:bg-yellow-400 hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Sau</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black/60 backdrop-blur-lg py-12 px-6">
+        <div class="max-w-7xl mx-auto text-center text-gray-400">
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="/#about" class="hover:text-yellow-400 transition-colors duration-200">About</a>
+                <a href="/#contact" class="hover:text-yellow-400 transition-colors duration-200">Contact</a>
+                <a href="/#privacy" class="hover:text-yellow-400 transition-colors duration-200">Privacy Policy</a>
+            </div>
+            <p class="text-sm">© 2025 G15 Kitchen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Order Details Modal -->
+    <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden transition-opacity duration-300">
+        <div class="bg-gray-800 rounded-2xl p-8 max-w-2xl mx-auto w-full border border-white/10 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-yellow-400 playfair">Chi tiết đơn hàng</h3>
+                <button id="closeModalButton" class="text-gray-400 hover:text-white text-2xl transition-colors duration-200">×</button>
+            </div>
+            <div id="modalOrderInfo" class="text-gray-300 text-sm mb-6 border-b border-white/10 pb-4 grid grid-cols-2 gap-4">
+                <p><span class="font-medium">ID Đơn hàng:</span> <span id="modalOrderId"></span></p>
+                <p><span class="font-medium">Ngày đặt:</span> <span id="modalOrderDate"></span></p>
+                <p><span class="font-medium">Tổng tiền:</span> <span id="modalOrderTotal"></span></p>
+                <p><span class="font-medium">Phương thức thanh toán:</span> <span id="modalPaymentMethod"></span></p>
+                <p><span class="font-medium">Trạng thái:</span> <span id="modalOrderStatus"></span></p>
+                <p><span class="font-medium">Khách hàng:</span> <span id="modalCustomerName"></span></p>
+                <p class="col-span-2"><span class="font-medium">Địa chỉ:</span> <span id="modalAddress"></span></p>
+                <p class="col-span-2"><span class="font-medium">Ghi chú:</span> <span id="modalOrderNote"></span></p>
+            </div>
+            <div id="modalOrderDetailsList" class="space-y-4 max-h-80 overflow-y-auto custom-scrollbar pr-3">
+                <div class="text-center text-gray-400 italic">Đang tải chi tiết món ăn...</div>
+            </div>
+            <div class="mt-6 text-right">
+                <button id="modalCancelButton" class="bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 transition-colors duration-300 hidden">Hủy đơn hàng</button>
+    </div>
+        </div>
+     </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Màn hình chờ ---
+    const loadingScreen = document.getElementById('loadingScreen');
+    setTimeout(() => {
+        if (loadingScreen) loadingScreen.classList.add('hidden');
+    }, 500); // Giảm thời gian chờ cho các trang con
+
+    // --- Logic xác thực người dùng và hiển thị avatar/username trên header ---
+    const loginButton = document.getElementById('loginButton');
+    const avatarDropdown = document.getElementById('avatarDropdown');
+    const avatarButton = document.getElementById('avatarButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const logoutButton = document.getElementById('logoutButton');
+
+    // Các phần tử trên trang profile để cập nhật
+    const profileUsername = document.getElementById('profileUsername');
+    const profileEmail = document.getElementById('profileEmail');
+    const orderHistoryList = document.getElementById('orderHistoryList');
+
+    // Lấy thông tin người dùng từ localStorage
+    const loggedInUserStr = localStorage.getItem('loggedInUser');
+    let loggedInUser = null;
+    if (loggedInUserStr) {
+        loggedInUser = JSON.parse(loggedInUserStr);
+    }
+
+    if (loggedInUser) {
+        // ---- Nếu người dùng đã đăng nhập ----
+        loginButton.classList.add('hidden');
+        avatarDropdown.classList.remove('hidden');
+        
+        if (loggedInUser.accUsername) {
+            avatarButton.innerHTML = loggedInUser.accUsername.charAt(0).toUpperCase();
+             if(profileUsername) profileUsername.textContent = loggedInUser.accUsername;
+            if(profileEmail) profileEmail.textContent = loggedInUser.accEmail;
+
+            fetchUserOrders(loggedInUser.accUsername);
+
+        } else {
+             // Không có username trong loggedInUser, ẩn authSection hoặc hiển thị thông báo lỗi
+            if(document.getElementById('authSection')) document.getElementById('authSection').classList.add('hidden');
+             if(orderHistoryList) orderHistoryList.innerHTML = '<div class="text-center text-red-400 italic">Không tìm thấy thông tin người dùng đăng nhập.</div>';
+        }
+    } else {
+        // ---- Nếu chưa đăng nhập ----
+        loginButton.classList.remove('hidden');
+        avatarDropdown.classList.add('hidden');
+        // Nếu chưa đăng nhập, có thể ẩn phần lịch sử đơn hàng hoặc hiển thị thông báo
+         if(orderHistoryList) orderHistoryList.innerHTML = '<div class="text-center text-gray-400 italic">Vui lòng đăng nhập để xem lịch sử đơn hàng.</div>';
+    }
+
+    // Xử lý bật/tắt dropdown
+    if(avatarButton) {
+    avatarButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+            if(dropdownMenu) dropdownMenu.classList.toggle('hidden');
+    });
+    }
+
+    // Xử lý đăng xuất
+    if(logoutButton) {
+    logoutButton.addEventListener('click', function() {
+        localStorage.removeItem('loggedInUser');
+        window.location.href = '/'; // Chuyển về trang chủ
+    });
+    }
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener('click', function() {
+        if (dropdownMenu && !dropdownMenu.classList.contains('hidden')) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+
+    // --- Logic tải và hiển thị lịch sử đơn hàng ---
+    let allUserOrders = []; // Store all fetched orders for the user profile
+    let currentUserPage = 1;
+    const userOrdersPerPage = 3; // Display 3 orders per page on profile
+
+    // Helper function to format currency to VND
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    }
+
+    // Helper function to get status color class
+    function getStatusColorClass(status) {
+        switch (status) {
+            case 'COMPLETED': return 'bg-green-500'; // Example color, adjust as needed
+            case 'CANCELLED': return 'bg-red-500'; // Example color, adjust as needed
+            case 'PENDING': return 'bg-yellow-500'; // Example color, adjust as needed
+            default: return 'bg-gray-500';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch user profile data and orders
+        fetchUserProfile();
+        fetchUserOrders();
+
+        // Close modal when clicking outside
+        document.getElementById('orderDetailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+
+        // Event listeners for pagination buttons
+        document.getElementById('prevPageButton').addEventListener('click', function() {
+            if (currentUserPage > 1) {
+                currentUserPage--;
+                displayOrderHistory(allUserOrders);
+            }
+        });
+
+        document.getElementById('nextPageButton').addEventListener('click', function() {
+            const totalPages = Math.ceil(allUserOrders.length / userOrdersPerPage);
+            if (currentUserPage < totalPages) {
+                currentUserPage++;
+                displayOrderHistory(allUserOrders);
+            }
+        });
+    });
+
+    
+
+    async function fetchUserOrders(username) {
+        if (!username) {
+            console.error('Username not found in localStorage.');
+            document.getElementById('orderHistoryList').innerHTML = '<p class="text-center text-gray-400 italic">Không thể tải lịch sử đơn hàng: Vui lòng đăng nhập.</p>';
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/orders/user/${username}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const orders = await response.json();
+            allUserOrders = orders; // Store all fetched orders
+            currentUserPage = 1; // Start on the first page
+            displayOrderHistory(allUserOrders);
+
+        } catch (error) {
+            console.error('Error fetching user orders:', error);
+            document.getElementById('orderHistoryList').innerHTML = '<p class="text-center text-gray-400 italic">Lỗi tải lịch sử đơn hàng.</p>';
+        }
+    }
+
+    function displayOrderHistory(ordersToShow) {
+        const orderHistoryList = document.getElementById('orderHistoryList');
+        orderHistoryList.innerHTML = ''; // Clear current list
+
+        const totalOrders = ordersToShow.length;
+        const totalPages = Math.ceil(totalOrders / userOrdersPerPage);
+
+        // Show/hide pagination controls
+        const paginationControls = document.getElementById('paginationControls');
+        if (totalOrders > userOrdersPerPage) {
+            paginationControls.classList.remove('hidden');
+        } else {
+            paginationControls.classList.add('hidden');
+        }
+
+        if (totalOrders === 0) {
+            orderHistoryList.innerHTML = '<p class="text-center text-gray-400 italic">Không có lịch sử đơn hàng.</p>';
+            updatePaginationControls(0, 0); // Update pagination info even if no orders
+            return;
+        }
+
+        // Get orders for the current page
+        const startIndex = (currentUserPage - 1) * userOrdersPerPage;
+        const endIndex = startIndex + userOrdersPerPage;
+        const paginatedOrders = ordersToShow.slice(startIndex, endIndex);
+
+        paginatedOrders.forEach(order => {
+            const orderElement = document.createElement('div');
+            orderElement.className = 'glass p-6 rounded-xl flex justify-between items-start mb-5'; // Added mb-5 for spacing
+            orderElement.innerHTML = `
+                <div>
+                    <p class="text-sm text-gray-400">${new Date(order.orderTime).toLocaleDateString('vi-VN')}</p>
+                    <h4 class="text-xl font-bold text-yellow-400 mt-1">Đơn hàng #${order.id}</h4>
+                    <p class="text-gray-300 mt-2">Tổng cộng: ${formatCurrency(order.totalAmount)}</p>
+                </div>
+                <div class="flex flex-col sm:items-end w-full sm:w-auto">
+                   <span class="px-3 py-1 text-xs font-medium rounded-full ${getStatusColorClass(order.status)} mb-3">${order.status}</span>
+                   <button class="view-details-button glass px-4 py-2 rounded-full text-sm font-semibold hover:bg-yellow-400 hover:text-black transition-all duration-300" data-order-id="${order.id}">Xem chi tiết</button>
+                   ${order.status === 'PENDING' ? `<button class="cancel-order-button bg-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition-colors duration-300 mt-2" data-order-id="${order.id}">Hủy đơn hàng</button>` : ''}
+                </div>
+            `;
+            orderHistoryList.appendChild(orderElement);
+        });
+
+        // Add event listeners to the buttons in the newly added order elements
+        document.querySelectorAll('.view-details-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const orderId = this.getAttribute('data-order-id');
+                 const order = allUserOrders.find(o => o.id == orderId); // Find in the full list
+                if (order) {
+                    showOrderDetailsModal(order);
+                }
+            });
+        });
+
+         document.querySelectorAll('.cancel-order-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const orderId = this.getAttribute('data-order-id');
+                // Optional: Add a confirmation dialog
+                if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+                     handleCancelOrder(orderId);
+                }
+            });
+        });
+
+        updatePaginationControls(totalOrders, totalPages);
+    }
+
+    function updatePaginationControls(totalOrders, totalPages) {
+        const prevButton = document.getElementById('prevPageButton');
+        const nextButton = document.getElementById('nextPageButton');
+        const pageNumbersDiv = document.getElementById('pageNumbers');
+
+        // Enable/disable buttons
+        prevButton.disabled = currentUserPage === 1;
+        nextButton.disabled = currentUserPage === totalPages || totalPages === 0;
+
+        // Update page numbers display (simple approach: just show current/total)
+        pageNumbersDiv.innerHTML = `Trang <span class="font-semibold">${currentUserPage}</span> / ${totalPages === 0 ? 1 : totalPages}`;
+
+         // More detailed page number links (similar to sales history)
+         pageNumbersDiv.innerHTML = ''; // Clear current page numbers
+         const maxPageLinks = 5; // Max number of page links to show
+         let startPage = Math.max(1, currentUserPage - Math.floor(maxPageLinks / 2));
+         let endPage = Math.min(totalPages, startPage + maxPageLinks - 1);
+
+          if (endPage - startPage + 1 < maxPageLinks) {
+              startPage = Math.max(1, endPage - maxPageLinks + 1);
+          }
+
+          for (let i = startPage; i <= endPage; i++) {
+              const pageLink = document.createElement('button');
+              pageLink.className = `px-3 py-1 rounded-md text-sm font-medium ${currentUserPage === i ? 'bg-yellow-400 text-black' : 'glass hover:bg-white/10 text-white'}`;
+              pageLink.textContent = i;
+              pageLink.addEventListener('click', function() {
+                  currentUserPage = i;
+                  displayOrderHistory(allUserOrders);
+              });
+              pageNumbersDiv.appendChild(pageLink);
+          }
+    }
+
+    async function showOrderDetailsModal(order) {
+        const modal = document.getElementById('orderDetailsModal');
+        document.getElementById('modalOrderId').textContent = `#ORD-${order.id}`;
+        document.getElementById('modalOrderDate').textContent = new Date(order.orderTime).toLocaleString('vi-VN');
+        document.getElementById('modalOrderTotal').textContent = formatCurrency(order.totalAmount);
+        document.getElementById('modalPaymentMethod').textContent = order.paymentMethod || 'N/A';
+        document.getElementById('modalOrderStatus').textContent = getStatusText(order.status);
+        document.getElementById('modalCustomerName').textContent = order.customerName || 'N/A';
+        document.getElementById('modalAddress').textContent = order.address || 'N/A';
+        document.getElementById('modalOrderNote').textContent = order.note || 'Không có ghi chú';
+
+        // Hiển thị/ẩn nút hủy trong modal
+        if (order.status === 'PENDING') {
+            document.getElementById('modalCancelButton').classList.remove('hidden');
+            document.getElementById('modalCancelButton').setAttribute('data-order-id', order.id);
+        } else {
+            document.getElementById('modalCancelButton').classList.add('hidden');
+            document.getElementById('modalCancelButton').removeAttribute('data-order-id');
+        }
+
+        // Fetch và hiển thị chi tiết từng món ăn
+        document.getElementById('modalOrderDetailsList').innerHTML = '<div class="text-center text-gray-400 italic">Đang tải chi tiết món ăn...</div>';
+        if (order.orderDetails && order.orderDetails.length > 0) {
+            fetchAndDisplayItemDetails(order.orderDetails);
+        } else {
+            document.getElementById('modalOrderDetailsList').innerHTML = '<div class="text-center text-gray-400 italic">Không có chi tiết món ăn.</div>';
+        }
+
+        // Hiển thị modal
+        modal.classList.remove('hidden');
+    }
+
+    // Hàm lấy text trạng thái theo status enum
+    function getStatusText(status) {
+        switch (status) {
+            case 'PENDING': return 'Đang xử lý';
+            case 'DELIVERING': return 'Đang giao hàng';
+            case 'COMPLETED': return 'Hoàn thành';
+            case 'CANCELLED': return 'Đã hủy';
+            default: return status || 'Không rõ';
+        }
+    }
+
+    // Hàm fetch và hiển thị chi tiết từng món ăn
+    async function fetchAndDisplayItemDetails(orderDetails) {
+        const modalOrderDetailsList = document.getElementById('modalOrderDetailsList');
+        modalOrderDetailsList.innerHTML = ''; // Xóa nội dung cũ
+
+        for (const detail of orderDetails) {
+            try {
+                const response = await fetch(`http://localhost:8080/items/${detail.itemId}`);
+                if (!response.ok) {
+                    console.error(`Error fetching item ${detail.itemId}:`, response.status);
+                    // Hiển thị placeholder hoặc thông báo lỗi cho món ăn này
+                     const itemElement = document.createElement('div');
+                     itemElement.classList.add('flex', 'items-center', 'gap-4', 'text-red-400');
+                     itemElement.innerHTML = `
+                         <i class="fas fa-exclamation-circle"></i>
+                         <div>
+                             <p class="font-semibold">Không thể tải thông tin món ăn (ID: ${detail.itemId})</p>
+                             <p class="text-sm text-gray-400">Số lượng: ${detail.quantity} • Giá: ${formatCurrency(detail.price)}</p>
+                             ${detail.note ? `<p class="text-sm text-gray-400 italic">Ghi chú: ${detail.note}</p>` : ''}
+                         </div>
+                     `;
+                     modalOrderDetailsList.appendChild(itemElement);
+                    continue; // Skip to next detail
+                }
+                const item = await response.json();
+
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('flex', 'items-center', 'gap-4', 'bg-gray-700/30', 'p-3', 'rounded-md');
+                itemElement.innerHTML = `
+                    <img src="${item.itemImg || 'https://via.placeholder.com/50x50'}" alt="Item Image" class="w-10 h-10 object-cover rounded-md">
+                    <div>
+                        <p class="font-semibold">${item.itemName || 'Unknown Item'}</p>
+                        <p class="text-sm text-gray-400">Số lượng: ${detail.quantity} • Giá: ${formatCurrency(item.itemSprice)}</p>
+                        ${detail.note ? `<p class="text-sm text-gray-400 italic">Ghi chú: ${detail.note}</p>` : ''}
+                    </div>
+                `;
+                modalOrderDetailsList.appendChild(itemElement);
+
+            } catch (error) {
+                console.error(`Error fetching item ${detail.itemId}:`, error);
+                // Hiển thị thông báo lỗi cho món ăn cụ thể
+                const itemElement = document.createElement('div');
+                 itemElement.classList.add('flex', 'items-center', 'gap-4', 'text-red-400', 'bg-gray-700/30', 'p-3', 'rounded-md');
+                 itemElement.innerHTML = `
+                     <i class="fas fa-exclamation-circle"></i>
+                     <div>
+                         <p class="font-semibold">Lỗi tải thông tin món ăn (ID: ${detail.itemId})</p>
+                         <p class="text-sm text-gray-400">Số lượng: ${detail.quantity} • Giá: ${formatCurrency(detail.price)}</p>
+                          ${detail.note ? `<p class="text-sm text-gray-400 italic">Ghi chú: ${detail.note}</p>` : ''}
+                     </div>
+                 `;
+                 modalOrderDetailsList.appendChild(itemElement);
+            }
+        }
+    }
+
+    // Hàm xử lý hủy đơn hàng
+    async function handleCancelOrder(orderId) {
+         try {
+            const response = await fetch(`http://localhost:8080/orders/${orderId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to cancel order ${orderId}: ${response.status}`);
+            }
+
+            document.getElementById('orderDetailsModal').classList.add('hidden'); // Đóng modal
+            // Refresh danh sách đơn hàng
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (loggedInUser && loggedInUser.accUsername) {
+                 fetchUserOrders(loggedInUser.accUsername);
+            }
+
+         } catch (error) {
+            console.error('Error cancelling order:', error);
+            alert('Không thể hủy đơn hàng. Vui lòng thử lại.');
+         }
+    }
+
+    // Event listener cho nút đóng modal
+    if(document.getElementById('closeModalButton')) {
+        document.getElementById('closeModalButton').addEventListener('click', function() {
+            if(document.getElementById('orderDetailsModal')) document.getElementById('orderDetailsModal').classList.add('hidden');
+        });
+    }
+
+    // Event listener cho nút hủy trong modal (sử dụng event delegation trên modal body nếu cần nhiều nút)
+     if(document.getElementById('modalCancelButton')) {
+         document.getElementById('modalCancelButton').addEventListener('click', function() {
+             const orderId = document.getElementById('modalCancelButton').getAttribute('data-order-id');
+             if (orderId && confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+                 handleCancelOrder(orderId);
+             }
+         });
+     }
+
+    // Đóng modal khi click ra ngoài (tùy chọn)
+    if(document.getElementById('orderDetailsModal')) {
+        document.getElementById('orderDetailsModal').addEventListener('click', function(event) {
+            // Nếu click vào nền modal (không phải bên trong content)
+            if (event.target === document.getElementById('orderDetailsModal')) {
+                document.getElementById('orderDetailsModal').classList.add('hidden');
+            }
+        });
+    }
+
+    // Trigger fade-in effect on visible elements
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // observer.unobserve(entry.target); // Uncomment if you only want to fade in once
+            }
+        });
+    }, { threshold: 0.1 }); // Adjust threshold as needed
+
+    document.querySelectorAll('.fade-in').forEach(element => {
+        observer.observe(element);
+    });
+
+});
+</script>
+
+<!-- Order Details Modal -->
+<div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-gray-800 rounded-lg p-6 max-w-lg mx-auto w-full border border-white/20">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-yellow-400 playfair">Chi tiết đơn hàng</h3>
+            <button id="closeModalButton" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+        </div>
+        <div id="modalOrderInfo" class="text-gray-300 text-sm mb-4 border-b border-white/10 pb-4">
+            <p>ID Đơn hàng: <span id="modalOrderId"></span></p>
+            <p>Ngày đặt: <span id="modalOrderDate"></span></p>
+            <p>Tổng tiền: <span id="modalOrderTotal"></span></p>
+            <p>Phương thức thanh toán: <span id="modalPaymentMethod"></span></p>
+            <p>Trạng thái: <span id="modalOrderStatus"></span></p>
+            <p>Khách hàng: <span id="modalCustomerName"></span></p>
+            <p>Địa chỉ: <span id="modalAddress"></span></p>
+            <p>Ghi chú: <span id="modalOrderNote"></span></p>
+        </div>
+        <div id="modalOrderDetailsList" class="space-y-3 max-h-60 overflow-y-auto custom-scrollbar pr-2">
+            <!-- Order items will be loaded here by JavaScript -->
+             <div class="text-center text-gray-400 italic">Đang tải chi tiết món ăn...</div>
+        </div>
+         <div class="mt-6 text-right">
+             <button id="modalCancelButton" class="bg-red-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-red-700 transition-colors duration-300 hidden">Hủy đơn hàng</button>
+         </div>
+    </div>
+</div>
+
+</body>
+</html>

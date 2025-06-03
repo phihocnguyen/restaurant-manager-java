@@ -96,23 +96,8 @@
     /* Premium Button */
     .premium-btn {
         position: relative;
-        background: linear-gradient(45deg, var(--primary-gold), #B8860B);
+        background-color: var(--primary-gold);
         overflow: hidden;
-    }
-
-    .premium-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: left 0.6s ease;
-    }
-
-    .premium-btn:hover::before {
-        left: 100%;
     }
 
     /* Floating Particles */
@@ -121,6 +106,20 @@
         background: rgba(212, 175, 55, 0.6);
         border-radius: 50%;
         pointer-events: none;
+    }
+
+    .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+    .glass-dark {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     /* Custom Scrollbar */
@@ -423,6 +422,36 @@
         opacity: 1;
         transform: translateX(0);
     }
+    .pulse-glow {
+        animation: pulse-glow 2s infinite ease-in-out;
+    }
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+        50% { box-shadow: 0 0 25px rgba(251, 191, 36, 0.8); }
+    }
+    .premium-btn {
+        background: linear-gradient(to right, #fbbF24, #f59e0b);
+    }
+    /* Style cho dropdown menu */
+    .dropdown-enter {
+        transition: all 0.3s ease-out;
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    .dropdown-enter-active {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .dropdown-exit {
+        transition: all 0.2s ease-in;
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .dropdown-exit-active {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
 </style>
 </head>
 <body class="animated-bg text-white min-h-screen">
@@ -475,9 +504,27 @@
                     About
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a href="/login" class="premium-btn px-6 py-2 rounded-full text-black font-semibold magnetic-btn">
-                    Login
-                </a>
+                <div id="authSection">
+                    <!-- Login Button (shown when not logged in) -->
+                    <a href="/login" id="loginButton" class="premium-btn px-6 py-2 rounded-full text-black font-semibold">
+                        Login
+                    </a>
+                    <!-- Avatar Dropdown (shown when logged in) -->
+                    <div id="avatarDropdown" class="relative hidden">
+                        <button id="avatarButton" class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold hover:bg-yellow-500 transition-colors">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
+                            <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                                <i class="fas fa-user-circle mr-2"></i> Profile
+                            </a>
+                            <hr class="my-2">
+                            <button id="logoutButton" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -902,6 +949,89 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy các phần tử DOM
+        const loginBtn = document.getElementById('login-btn');
+        const userProfileMenu = document.getElementById('user-profile-menu');
+        const avatarButton = document.getElementById('avatar-button');
+        const userInitial = document.getElementById('user-initial');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const logoutButton = document.getElementById('logout-button');
+
+        // Để thử nghiệm, bạn có thể đặt một đối tượng giả trong localStorage
+        // localStorage.setItem('loggedInUser', JSON.stringify({ name: 'User', email: 'user@example.com' }));
+        
+        // Kiểm tra xem thông tin người dùng có trong localStorage không
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        if (loggedInUser) {
+            // Phân tích cú pháp chuỗi JSON để lấy đối tượng người dùng
+            const user = JSON.parse(loggedInUser);
+
+            // Ẩn nút Login và hiển thị menu avatar
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
+
+            // Đặt ký tự đầu tiên của tên người dùng lên avatar
+            // Giả sử đối tượng người dùng có thuộc tính 'name'
+            if (user.name && userInitial) {
+                userInitial.textContent = user.name.charAt(0).toUpperCase();
+            } else {
+                userInitial.textContent = 'U'; // Ký tự mặc định nếu không có tên
+            }
+        } else {
+            // Nếu không có người dùng đăng nhập, đảm bảo nút Login hiển thị và menu avatar bị ẩn
+            if (loginBtn) loginBtn.classList.remove('hidden');
+            if (userProfileMenu) userProfileMenu.classList.add('hidden');
+        }
+
+        // Xử lý bật/tắt dropdown khi nhấp vào avatar
+        if (avatarButton) {
+            avatarButton.addEventListener('click', function() {
+                const isHidden = dropdownMenu.classList.contains('hidden');
+                if (isHidden) {
+                    dropdownMenu.classList.remove('hidden');
+                    // Thêm class để kích hoạt animation
+                    requestAnimationFrame(() => {
+                        dropdownMenu.classList.add('dropdown-enter-active');
+                        dropdownMenu.classList.remove('dropdown-enter');
+                    });
+                } else {
+                    // Thêm class để kích hoạt animation thoát
+                    dropdownMenu.classList.add('dropdown-exit-active');
+                    dropdownMenu.classList.remove('dropdown-enter-active');
+                    dropdownMenu.addEventListener('transitionend', () => {
+                        dropdownMenu.classList.add('hidden');
+                        dropdownMenu.classList.remove('dropdown-exit-active');
+                    }, { once: true });
+                }
+            });
+        }
+
+        // Xử lý đăng xuất khi nhấp vào nút Logout
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
+
+                // Xóa thông tin người dùng khỏi localStorage
+                localStorage.removeItem('loggedInUser');
+
+                // Tải lại trang để cập nhật giao diện
+                window.location.href = '/'; // Hoặc window.location.reload();
+            });
+        }
+
+        // Đóng dropdown nếu nhấp ra ngoài
+        window.addEventListener('click', function(event) {
+            if (!userProfileMenu.contains(event.target)) {
+                if (!dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            }
+        });
+    });
+
     function openModal(modalId) {
         document.getElementById(modalId).classList.remove('hidden');
     }
@@ -1078,6 +1208,54 @@
     document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .stats-container').forEach(element => {
         scrollObserver.observe(element);
     });
+
+    // Function to check login status and update UI
+    function updateAuthUI() {
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        const loginButton = document.getElementById('loginButton');
+        const avatarDropdown = document.getElementById('avatarDropdown');
+        const avatarButton = document.getElementById('avatarButton');
+        
+        if (loggedInUser) {
+            // User is logged in
+            loginButton.classList.add('hidden');
+            avatarDropdown.classList.remove('hidden');
+            
+            // Set avatar initial if available
+            if (loggedInUser.username) {
+                avatarButton.innerHTML = loggedInUser.username.charAt(0).toUpperCase();
+            }
+        } else {
+            // User is not logged in
+            loginButton.classList.remove('hidden');
+            avatarDropdown.classList.add('hidden');
+        }
+    }
+
+    // Toggle dropdown menu
+    document.getElementById('avatarButton')?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const avatarButton = document.getElementById('avatarButton');
+        if (dropdownMenu && !dropdownMenu.contains(e.target) && !avatarButton?.contains(e.target)) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+
+    // Handle logout
+    document.getElementById('logoutButton')?.addEventListener('click', function() {
+        localStorage.removeItem('loggedInUser');
+        window.location.href = '/';
+    });
+
+    // Check login status on page load
+    document.addEventListener('DOMContentLoaded', updateAuthUI);
 </script>
 </body>
 </html>

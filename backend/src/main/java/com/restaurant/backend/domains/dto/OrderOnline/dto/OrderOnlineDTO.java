@@ -6,11 +6,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.time.Instant;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 public class OrderOnlineDTO {
     private Long id;
-    private String userId;  // Optional
+    @JsonProperty("userId")
+    private String userId;
     private String customerName;
     private String phoneNumber;
     private String address;
@@ -20,5 +22,6 @@ public class OrderOnlineDTO {
     private Instant deliveryTime;
     private OrderStatus status;
     private List<OrderOnlineDetailsDTO> orderDetails;
+    @JsonProperty("paymentMethod")
     private String paymentMethod;
 } 

@@ -50,6 +50,14 @@ public interface OrderOnlineService {
     OrderOnlineDTO updateOrderStatus(Long orderId, String newStatus);
 
     /**
+     * Update an existing order
+     * @param orderId the ID of the order to update
+     * @param updatedOrderDTO the DTO containing updated order information
+     * @return the updated order DTO
+     */
+    OrderOnlineDTO updateOrder(Long orderId, OrderOnlineDTO updatedOrderDTO);
+
+    /**
      * Cancel an order
      * @param orderId the order ID
      */

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -51,6 +52,7 @@ public class OrderOnline {
     private String paymentMethod;
 
     @OneToMany(mappedBy = "orderOnline", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<OrderOnlineDetails> orderDetails = new ArrayList<>();
 
     @CreationTimestamp

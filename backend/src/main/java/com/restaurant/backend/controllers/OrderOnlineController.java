@@ -66,6 +66,14 @@ public class OrderOnlineController {
         return ResponseEntity.ok(order);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderOnlineDTO> updateOrder(
+            @PathVariable Long id,
+            @RequestBody OrderOnlineDTO updatedOrderDTO) {
+        OrderOnlineDTO updatedOrder = orderOnlineService.updateOrder(id, updatedOrderDTO);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelOrder(@PathVariable Long id) {
         orderOnlineService.cancelOrder(id);

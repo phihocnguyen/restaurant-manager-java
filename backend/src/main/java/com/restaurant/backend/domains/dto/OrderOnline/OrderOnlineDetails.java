@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class OrderOnlineDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_online_id", nullable = false)
+    @ToString.Exclude
     private OrderOnline orderOnline;
 
     @Column(name = "item_id", nullable = false)

@@ -27,8 +27,10 @@ com/restaurant/dto/MenuItemDto.class
 com/restaurant/controller/AuthController.class
 com/restaurant/controller/OrderController.class
 com/restaurant/controller/SalesController$6.class
+com/restaurant/dto/OrderDetailRequestDTO.class
 com/restaurant/dto/SignupRequest.class
 com/restaurant/controller/SalesController$9.class
 CustomerDto.class
 com/restaurant/dto/AccountResponse$AccountResponseBuilder.class
 com/restaurant/manager/controller/PaymentController.class
+com/restaurant/dto/OrderRequestDTO.class

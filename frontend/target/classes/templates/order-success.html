@@ -55,43 +55,80 @@
              border-top: 1px solid rgba(255, 255, 255, 0.1);
              padding: 3rem 0;
          }
+
+         .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="animated-bg">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-xl border-b border-white/20 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg shadow-yellow-500/50">
-                    <span class="text-black font-bold text-xl">G</span>
+    <nav class="fixed top-0 w-full z-50 glass-dark transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
+                        <span class="text-black font-bold text-xl">G</span>
+                    </div>
+                    <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
                 </div>
-                <span class="playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">G15 Kitchen</span>
-            </div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="/" class="hover:text-yellow-400 transition-colors duration-300 relative group">
-                    Home
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
-                    Menu
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
-                    About
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="/login" class="bg-gradient-to-r from-yellow-400 to-yellow-600 px-6 py-2 rounded-full text-black font-semibold hover:shadow-lg hover:shadow-yellow-500/50 transition-all">
-                    Login
-                </a>
-            </div>
-            <button class="md:hidden bg-white/10 backdrop-blur-md p-2 rounded-lg">
-                <div class="w-6 h-6 flex flex-col justify-center space-y-1">
-                    <span class="w-full h-0.5 bg-white"></span>
-                    <span class="w-full h-0.5 bg-white"></span>
-                    <span class="w-full h-0.5 bg-white"></span>
+    
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        Home
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a th:href="@{/menu-client}" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        Menu
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 relative group">
+                        About
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <div id="authSection">
+                        <!-- Login Button (shown when not logged in) -->
+                        <a href="/login" id="loginButton" class="premium-btn px-6 py-2 rounded-full text-black font-semibold">
+                            Login
+                        </a>
+                        <!-- Avatar Dropdown (shown when logged in) -->
+                        <div id="avatarDropdown" class="relative hidden">
+                            <button id="avatarButton" class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold hover:bg-yellow-500 transition-colors">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
+                                <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                                    <i class="fas fa-user-circle mr-2"></i> Profile
+                                </a>
+                                <hr class="my-2">
+                                <button id="logoutButton" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </button>
+    
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden glass p-2 rounded-lg" id="mobile-menu-btn">
+                    <div class="w-6 h-6 flex flex-col justify-center space-y-1">
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                        <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+                    </div>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -138,6 +175,57 @@
             © 2023 G15 Kitchen. All rights reserved.
         </div>
     </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Logic xác thực người dùng ---
+        const loginButton = document.getElementById('loginButton');
+        const avatarDropdown = document.getElementById('avatarDropdown');
+        const avatarButton = document.getElementById('avatarButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const logoutButton = document.getElementById('logoutButton');
+
+        // Lấy thông tin người dùng từ localStorage
+        const loggedInUserStr = localStorage.getItem('loggedInUser');
+        let loggedInUser = null;
+        if (loggedInUserStr) {
+            loggedInUser = JSON.parse(loggedInUserStr);
+        }
+
+        if (loggedInUser) {
+            // ---- Nếu người dùng đã đăng nhập ----
+            loginButton.classList.add('hidden');
+            avatarDropdown.classList.remove('hidden');
+            
+            if (loggedInUser.username) {
+                avatarButton.innerHTML = loggedInUser.username.charAt(0).toUpperCase();
+            }
+        } else {
+            // ---- Nếu chưa đăng nhập ----
+            loginButton.classList.remove('hidden');
+            avatarDropdown.classList.add('hidden');
+        }
+
+        // Xử lý bật/tắt dropdown
+        avatarButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        // Xử lý đăng xuất
+        logoutButton.addEventListener('click', function() {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = '/'; // Chuyển về trang chủ
+        });
+
+        // Đóng dropdown khi click ra ngoài
+        document.addEventListener('click', function() {
+            if (!dropdownMenu.classList.contains('hidden')) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    });
+    </script>
 
 </body>
 </html> 

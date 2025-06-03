@@ -55,6 +55,12 @@ public class AuthController {
         return "auth/login";
     }
 
+    @GetMapping("/profile")
+    public String profilePage(Model model) {
+        model.addAttribute("title", "Hồ Sơ Của Tôi - G15 Kitchen");
+        return "auth/profile";
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam String username,
                        @RequestParam String password,
@@ -75,14 +81,15 @@ public class AuthController {
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 AccountResponse accountResponse = response.getBody();
-                if (accountResponse != null && accountResponse.getRole() != null) {
-                    // Redirect based on role using AccountRoleResponse's getRoleName()
+                if (accountResponse != null && accountResponse.getRole() != null && accountResponse.getRole().getRoleName() != null) {
+                    // Redirect based on role name from AccountRoleResponse
                     switch (accountResponse.getRole().getRoleName()) {
-                        case "ADMIN":
+                        case "admin":
                             return "redirect:/manager/dashboard";
-                        case "CUSTOMER":
+                        case "customer":
                             return "redirect:/";
                         default:
+                            // Default redirect for other roles
                             return "redirect:/sales/items";
                     }
                 } else {
@@ -91,11 +98,9 @@ public class AuthController {
                     return "auth/login";
                 }
             } else if (response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                // Handle 401 Unauthorized
                 model.addAttribute("loginError", "Sai tài khoản hoặc mật khẩu.");
                 return "auth/login";
             } else {
-                // Handle other HTTP errors
                  model.addAttribute("loginError", "Đăng nhập thất bại: Lỗi từ server.");
                  return "auth/login";
             }

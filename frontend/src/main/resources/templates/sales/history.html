@@ -117,6 +117,7 @@
                 case 'CANCELLED': return 'bg-red-100 text-red-800';
                 case 'PREPARING': return 'bg-blue-100 text-blue-800';
                 case 'DELIVERING': return 'bg-yellow-100 text-yellow-800';
+                case 'Hoàn thành': return 'bg-green-100 text-green-800';
                 default: return 'bg-gray-100 text-gray-800';
             }
         }
@@ -305,7 +306,7 @@
             const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
 
             if (paginatedOrders.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="8" class="px-6 py-4 text-center text-gray-500">Không có lịch sử đơn hàng.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-4 text-center text-gray-500">Không có lịch sử đơn hàng.</td></tr>';
             } else {
                 paginatedOrders.forEach(order => {
                 const row = document.createElement('tr');
@@ -316,43 +317,58 @@
                     const orderTime = new Date(order.type === 'online' ? order.orderTime : order.recTime).toLocaleString('vi-VN');
                     const customerInfo = order.type === 'online' ? (order.customerName || 'Khách vãng lai') : 'Khách vãng lai';
                     const address = order.type === 'online' ? (order.address || 'N/A') : `Bàn số ${order.tabId}`;
-                    const paymentMethod = order.type === 'online' ? order.paymentMethod : order.paymentMethod;
-                    let statusText, statusColorClass;
+                    const paymentMethod = order.type === 'online' ? order.paymentMethod : order.paymentMethod; // Assume same field name for simplicity
+                    
+                    let statusCellContent;
+                    let currentStatusText;
+
                     if (order.type === 'online') {
-                        statusText = order.status;
-                        statusColorClass = getStatusColorClass(statusText);
-                    } else {
-                        statusText = 'Hoàn thành';
-                    statusColorClass = 'bg-green-100 text-green-800';
-                    }
+                         currentStatusText = order.status || 'PENDING'; // Default to PENDING if status is null
+                     } else { // Receipt
+                        currentStatusText = 'Hoàn thành';
+                     }
+
+                     const statusColorClass = getStatusColorClass(currentStatusText);
+                     statusCellContent = `
+                         <span class="px-2 py-1 text-xs font-medium ${statusColorClass} rounded-full">${currentStatusText}</span>
+                     `;
+
 
                 row.innerHTML = `
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" style="width: fit-content;">${orderId}</th>
                         <td class="px-6 py-4">${orderTime}</td>
-                        <td class="px-6 py-4">Nhân viên A</td>
+                        <td class="px-6 py-4">N/A</td> <!-- Assuming no employee info in current DTO -->
                         <td class="px-6 py-4">${customerInfo}</td>
                         <td class="px-6 py-4">${address}</td>
                         <td class="px-6 py-4">
                             <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">${paymentMethod}</span>
                         </td>
                     <td class="px-6 py-4">
-                            <span class="px-2 py-1 text-xs font-medium ${statusColorClass} rounded-full">${statusText}</span>
+                           ${statusCellContent}
                     </td>
                         <td class="px-6 py-4 text-right font-semibold text-gray-900">${formatCurrency(order.type === 'online' ? order.totalAmount : order.recPay)}</td>
                     <td class="px-6 py-4 text-center">
-                            <a href="#" class="font-medium text-orange-600 hover:underline font-bold">Chi tiết</a>
+                            <button class="view-details-button font-medium text-orange-600 hover:underline font-bold text-sm" data-order-id="${order.id}" data-order-type="${order.type}">Chi tiết</button>
                     </td>
                 `;
 
-                    const detailsLink = row.querySelector('td:last-child a');
+                    const detailsButton = row.querySelector('.view-details-button');
 
-                    if (detailsLink) {
-                        detailsLink.addEventListener('click', function(event) {
+                    if (detailsButton) {
+                        detailsButton.addEventListener('click', function(event) {
                             event.preventDefault();
                             event.stopPropagation();
-                            showOrderDetailsModal(order);
+                            // Find the order by ID in the original allOrders array
+                            const orderId = event.target.getAttribute('data-order-id');
+                            const orderType = event.target.getAttribute('data-order-type');
+                             const order = allOrders.find(o => o.id == orderId && o.type === orderType); // Match by both ID and type
+                            if (order) {
+                                showOrderDetailsModal(order);
+                            }
                         });
                     }
+
+                    // Removed status select event listener from here
 
                 tableBody.appendChild(row);
             });
@@ -499,6 +515,37 @@
                 itemsList.innerHTML = '<p class="text-center text-gray-500">Không có chi tiết món ăn.</p>';
             }
 
+            // Handle status dropdown in modal
+             const modalStatusDropdownContainer = document.getElementById('modalStatusDropdownContainer');
+             const modalStatusSelect = document.getElementById('modalStatusSelect');
+             const modalStatusBadge = document.getElementById('modalStatusBadge'); // Use the existing badge for receipts
+
+             if (order.type === 'online') {
+                 modalStatusDropdownContainer.classList.remove('hidden');
+                 modalStatusBadge.classList.add('hidden'); // Hide badge for online orders when dropdown is visible
+
+                 const currentStatus = order.status || 'PENDING';
+                 const statuses = ['PENDING', 'CONFIRMED', 'PREPARING', 'DELIVERING', 'COMPLETED', 'CANCELLED'];
+                 modalStatusSelect.innerHTML = statuses.map(status => `
+                     <option value="${status}" ${currentStatus === status ? 'selected' : ''}>${status}</option>
+                 `).join('');
+
+                 // Remove previous event listener before adding a new one
+                 modalStatusSelect.replaceWith(modalStatusSelect.cloneNode(true));
+                 const newModalStatusSelect = document.getElementById('modalStatusSelect');
+
+                 newModalStatusSelect.addEventListener('change', function(event) {
+                     const newStatus = event.target.value;
+                     console.log(`Attempting to update order ${order.id} status from modal to ${newStatus}`);
+                     updateOrderStatus(order.id, newStatus); // Use order.id which is the backend ID
+                 });
+
+             } else { // Receipt
+                 modalStatusDropdownContainer.classList.add('hidden');
+                 modalStatusBadge.classList.remove('hidden'); // Show badge for receipts
+             }
+
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
@@ -507,6 +554,46 @@
             const modal = document.getElementById('orderDetailsModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
+        }
+
+        // New function to update order status
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                // Use the PUT endpoint for updating status
+                const response = await fetch(`http://localhost:8080/orders/${orderId}/status?newStatus=${newStatus}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // Add any necessary auth headers
+                    },
+                     // Body is not strictly needed for the backend's /status endpoint if using @RequestParam,
+                     // but can be included if backend expects it or is changed to @RequestBody.
+                     // Sending a simple JSON with status for potential compatibility:
+                     body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) {
+                     const errorText = await response.text();
+                     throw new Error(`Failed to update order ${orderId} status to ${newStatus}: ${response.status} - ${errorText}`);
+                }
+
+                 // Optional: Update the order status in the allOrders array immediately for UI responsiveness
+                 const updatedOrderIndex = allOrders.findIndex(order => order.type === 'online' && order.id == orderId);
+                 if (updatedOrderIndex !== -1) {
+                     allOrders[updatedOrderIndex].status = newStatus;
+                     // Re-render the table to reflect the change immediately
+                     applyFiltersAndSearch(); // This will also re-render the table
+                 }
+
+                console.log(`Order ${orderId} status updated to ${newStatus}`);
+                // alert(`Cập nhật trạng thái đơn hàng #${orderId} thành công.`); // Optional: Show success message
+
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                 alert(`Không thể cập nhật trạng thái đơn hàng #${orderId}. Vui lòng thử lại.\nChi tiết lỗi: ${error.message}`);
+                 // Optional: Revert the select dropdown visually on error if not already handled by re-fetch
+                  fetchOrdersHistory(); // Re-fetch to ensure UI consistency
+            }
         }
     </script>
 
@@ -533,7 +620,12 @@
                         </div>
                         <div class="text-right">
                             <p class="font-semibold text-orange-500 text-lg" id="modalTotalAmount"></p>
+                            <!-- Status badge for receipts -->
                             <span class="px-2 py-1 text-xs font-medium rounded-full" id="modalStatusBadge"></span>
+                            <!-- Status dropdown for online orders -->
+                            <div id="modalStatusDropdownContainer" class="mt-2 hidden">
+                                <select id="modalStatusSelect" class="status-select border border-gray-300 rounded-md text-xs px-2 py-1"></select>
+                            </div>
                         </div>
                     </div>
 

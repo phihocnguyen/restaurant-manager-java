@@ -114,7 +114,20 @@
                         <input type="text" placeholder="Search" class="bg-[#334155] text-gray-200 rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-indigo-600">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
-                    <i class="fas fa-bell text-gray-400 hover:text-gray-100 cursor-pointer"></i>
+                    <div id="notificationBellContainer" class="relative">
+                        <i class="fas fa-bell text-gray-400 hover:text-gray-100 cursor-pointer text-xl"></i>
+                        
+                        <span id="notificationDot" class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white hidden"></span>
+                    
+                        <div id="notificationDropdown" class="absolute right-0 mt-4 w-80 bg-slate-800 rounded-lg shadow-xl border border-slate-700 hidden">
+                            <div class="p-4 font-semibold border-b border-slate-700">
+                                Thông báo đơn hàng mới
+                            </div>
+                            <div id="notificationList" class="max-h-96 overflow-y-auto">
+                                <p id="noNotifications" class="text-center text-gray-400 p-8">Không có thông báo mới.</p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex items-center space-x-2">
                          <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full">
                         <div>
@@ -338,6 +351,129 @@
                  }
              }
         });
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7aNo4XtXJhn8yqCnmGrwQxc2cr4uarl8",
+            authDomain: "se330-restaurant.firebaseapp.com",
+            databaseURL: "https://se330-restaurant-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "se330-restaurant",
+            storageBucket: "se330-restaurant.firebasestorage.app",
+            messagingSenderId: "153993493103",
+            appId: "1:153993493103:web:53336ab99178c1e7c9eb9a",
+            measurementId: "G-MXVERLH7CD"
+
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // 1. Lấy các phần tử HTML
+        const bellContainer = document.getElementById('notificationBellContainer');
+        const notificationDot = document.getElementById('notificationDot');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationList = document.getElementById('notificationList');
+        const noNotificationsMessage = document.getElementById('noNotifications');
+
+        let hasUnreadNotifications = false;
+
+        // 2. Xử lý sự kiện khi nhấp vào chuông
+        bellContainer.addEventListener('click', function() {
+            // Hiện/ẩn danh sách thông báo
+            notificationDropdown.classList.toggle('hidden');
+            
+            // Nếu có thông báo chưa đọc, thì ẩn chấm đỏ đi và đánh dấu là đã đọc
+            if (hasUnreadNotifications) {
+                notificationDot.classList.add('hidden');
+                hasUnreadNotifications = false;
+            }
+        });
+
+        // 3. Lắng nghe đơn hàng mới từ Firebase
+        const ordersRef = database.ref('orders');
+
+        // Sử dụng `on('child_added', ...)` để chỉ nhận được các đơn hàng mới được thêm vào
+        // Chúng ta sắp xếp theo `createdAt` và chỉ lấy các đơn hàng được tạo sau khi trang được tải
+        const pageLoadTimestamp = Date.now();
+
+        ordersRef.on('value', (snapshot) => {
+        // Xóa sạch danh sách hiện tại trước khi vẽ lại
+        // Đây là bước quan trọng để tránh danh sách bị lặp lại mỗi khi có cập nhật
+        notificationList.innerHTML = '';
+
+        const allOrdersObject = snapshot.val();
+
+        if (allOrdersObject) {
+            // Dữ liệu tồn tại, ẩn thông báo "Không có" đi
+            if (noNotificationsMessage) {
+                noNotificationsMessage.style.display = 'none';
+            }
+
+            // Chuyển đổi object từ Firebase thành một mảng
+            const allOrdersArray = Object.values(allOrdersObject);
+
+            // SẮP XẾP MẢNG: đơn hàng mới nhất (thời gian lớn nhất) sẽ lên đầu
+            allOrdersArray.sort((a, b) => {
+                // Giả định createdAt là ISO string hoặc timestamp number
+                const timeA = new Date(a.createdAt).getTime();
+                const timeB = new Date(b.createdAt).getTime();
+                return timeB - timeA; // Sắp xếp giảm dần (B - A)
+            });
+
+            // Lặp qua mảng ĐÃ SẮP XẾP và hiển thị từng đơn hàng
+            allOrdersArray.forEach(order => {
+                const notificationItem = document.createElement('a');
+                // Bạn có thể thêm link tới trang chi tiết đơn hàng sau này
+                notificationItem.href = `/manager/orders/${order.orderId}`; // Ví dụ
+                notificationItem.className = 'block px-4 py-3 text-sm text-gray-200 hover:bg-slate-700 border-b border-slate-700/50';
+                
+                const formattedPrice = parseFloat(order.totalPrice).toLocaleString('vi-VN');
+                const orderTime = new Date(order.createdAt).toLocaleString('vi-VN');
+
+                notificationItem.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <p class="font-semibold text-white truncate">KH: ${order.customerName}</p>
+                        <span class="text-xs px-2 py-1 rounded-full 
+                            ${order.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-green-500/20 text-green-400'}">
+                            ${order.status}
+                        </span>
+                    </div>
+                    <p class="text-gray-400">Tổng giá trị: ${formattedPrice}đ</p>
+                    <p class="text-xs text-indigo-400 mt-1">${orderTime}</p>
+                `;
+                
+                // Thêm vào danh sách
+                notificationList.appendChild(notificationItem);
+            });
+
+        } else {
+            // Nếu không có đơn hàng nào, hiển thị thông báo
+            if (noNotificationsMessage) {
+                noNotificationsMessage.style.display = 'block';
+            }
+        }
+        });
+    });
+
+        function formatTimeAgo(timestamp) {
+            const now = new Date();
+            const seconds = Math.floor((now - timestamp) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " năm trước";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " tháng trước";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " ngày trước";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " giờ trước";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " phút trước";
+            if (seconds < 10) return "vài giây trước";
+            return Math.floor(seconds) + " giây trước";
+        }
     </script>
 </body>
 </html> 

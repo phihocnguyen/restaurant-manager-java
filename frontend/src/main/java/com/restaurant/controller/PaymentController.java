@@ -13,6 +13,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.restaurant.dto.OrderRequestDTO;
+import com.restaurant.dto.OrderDetailRequestDTO;
+import java.math.BigDecimal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,41 +91,21 @@ public class PaymentController {
 
     @PostMapping("/submit")
     @ResponseBody
-    public ResponseEntity<?> submitOrder(@RequestBody Map<String, Object> orderData) {
+    public ResponseEntity<?> submitOrder(@RequestBody OrderRequestDTO orderData) {
         try {
-            // Prepare the order data for the backend
-            Map<String, Object> orderRequest = new HashMap<>();
-            orderRequest.put("customerName", orderData.get("customerName"));
-            orderRequest.put("phoneNumber", orderData.get("phoneNumber"));
-            orderRequest.put("address", orderData.get("address"));
-            orderRequest.put("note", orderData.get("orderNote"));
-            
-            // Get order details
-            List<Map<String, Object>> orderDetails = new ArrayList<>();
-            List<Map<String, Object>> items = (List<Map<String, Object>>) orderData.get("orderDetails");
-            
-            for (Map<String, Object> item : items) {
-                Map<String, Object> detail = new HashMap<>();
-                detail.put("itemId", item.get("itemId"));
-                detail.put("quantity", item.get("quantity"));
-                detail.put("price", item.get("price"));
-                detail.put("note", item.get("note"));
-                orderDetails.add(detail);
-            }
-            orderRequest.put("orderDetails", orderDetails);
-
             // Send order to backend
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Map<String, Object>> request = new HttpEntity<>(orderRequest, headers);
-            
+            HttpEntity<OrderRequestDTO> request = new HttpEntity<>(orderData, headers);
+
             ResponseEntity<?> response = restTemplate.postForEntity(
                 backendApiUrl + "/orders",
                 request,
                 Object.class
             );
 
-            return ResponseEntity.ok(response.getBody());
+            // Return the backend response body directly
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (Exception e) {
             logger.error("Error processing order: ", e);
             return ResponseEntity.badRequest().body("Error processing order: " + e.getMessage());

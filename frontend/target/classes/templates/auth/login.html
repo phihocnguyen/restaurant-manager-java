@@ -280,7 +280,7 @@
                             const response = await fetch('http://localhost:8080/login', {
                                 method: 'POST',
                                 headers: {
-                                    'Content-Type': 'application/json'
+                                    'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
                                     accUsername: username,
@@ -289,37 +289,21 @@
                             });
 
                             if (!response.ok) {
-                                // Handle specific status codes
-                                if (response.status === 401) {
-                                    throw new Error('Unauthorized'); // Throw specific error
-                                } else {
-                                    throw new Error(`Login failed with status: ${response.status}`); // Throw generic error
-                                }
+                                // Handle non-OK responses, like 401 for unauthorized
+                                const errorData = await response.json();
+                                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
                             }
 
-                            const data = await response.json();
-                            console.log(data);
+                            const accountData = await response.json(); // Assuming the response contains user data like role
                             
-                            // Redirect based on role on successful login
-                            if (data && data.role && data.role.roleName) { // Check if data and roleName exist
-                                switch (data.role.roleName) {
-                                    case 'admin':
-                                        window.location.href = '/manager/dashboard';
-                                        break;
-                                    case 'customer':
-                                        window.location.href = '/sales/items';
-                                        break;
-                                    default:
-                                        window.location.href = '/';
-                                }
+                            localStorage.setItem('loggedInUser', JSON.stringify(accountData));
+
+                            if (accountData.role.roleName === 'admin') {
+                                window.location.href = '/manager/dashboard';
+                            } else if (accountData.role.roleName === 'customer') {
+                                window.location.href = '/';
                             } else {
-                                // Handle successful response with unexpected body structure
-                                console.error('Login successful but unexpected response body:', data);
-                                if (loginErrorMessageDiv) {
-                                    loginErrorMessageDiv.textContent = 'Đăng nhập thành công nhưng dữ liệu không đầy đủ.';
-                                    loginErrorMessageDiv.style.display = 'block';
-                                }
-                                showErrorIcons(); // Show error icons even on data structure issue
+                                window.location.href = '/sales/items';
                             }
 
                         } catch (error) {
