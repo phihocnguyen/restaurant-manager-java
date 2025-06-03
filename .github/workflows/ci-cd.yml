@@ -67,15 +67,26 @@ jobs:
         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}
         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}
 
-    - name: Run Trivy vulnerability scanner
+    - name: Run Trivy vulnerability scanner (Frontend)
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}'
+        image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
+    
+    - name: Run Trivy vulnerability scanner (Backend)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
 
   snyk-scan:
     needs: build-docker-images
@@ -103,6 +114,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}'
+        command: test
         args: --severity-threshold=high
     
     - name: Run Snyk to check for vulnerabilities (Backend)
@@ -111,6 +123,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}'
+        command: test
         args: --severity-threshold=high
 
   deploy:
