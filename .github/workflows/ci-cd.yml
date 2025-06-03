@@ -54,7 +54,7 @@ jobs:
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
     
-    - name: Run Snyk to check for vulnerabilities
+    - name: Run Snyk to check for vulnerabilities (Frontend)
       uses: snyk/actions/docker@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
