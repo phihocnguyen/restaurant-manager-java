@@ -7,15 +7,15 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-scan:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     
-    - name: Set up JDK 17
+    - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
     
     - name: Build with Maven
@@ -24,6 +24,12 @@ jobs:
         mvn clean package -DskipTests
         cd ../backend
         mvn clean package -DskipTests
+
+  build-docker-images:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -34,32 +40,69 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    - name: Verify Docker Login
+    - name: Build and Push Docker images (SHA tag)
       run: |
-        docker info
-        echo "Successfully logged in to DockerHub as ${{ secrets.DOCKERHUB_USERNAME }}"
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }} ./frontend
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }} ./backend
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}
+
+  trivy-scan:
+    needs: build-docker-images
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
     
-    - name: Build Docker images
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Pull Docker images for Trivy scan
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest ./frontend
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest ./backend
-    
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}
+
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest,${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest'
+        image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
+
+  snyk-scan:
+    needs: build-docker-images
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
     
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Pull Docker images for Snyk scan
+      run: |
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}
+
     - name: Run Snyk to check for vulnerabilities (Frontend)
       uses: snyk/actions/docker@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        image: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest'
+        image: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}'
         args: --severity-threshold=high
     
     - name: Run Snyk to check for vulnerabilities (Backend)
@@ -67,13 +110,39 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        image: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest'
+        image: '${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}'
         args: --severity-threshold=high
+
+  deploy:
+    needs: [trivy-scan, snyk-scan]
+    runs-on: ubuntu-latest
     
-    - name: Push Docker images
-      if: success()
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Pull Docker images (SHA tag)
       run: |
-        echo "Pushing images to DockerHub..."
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}
+
+    - name: Tag and Push Docker images (Latest tag)
+      run: |
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest
-        echo "Successfully pushed images to DockerHub" 
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest 
