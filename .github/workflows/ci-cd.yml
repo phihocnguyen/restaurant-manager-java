@@ -40,12 +40,15 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    - name: Build and Push Docker images (SHA tag)
+    - name: Build and Push Docker images
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }} ./frontend
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }} -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest ./frontend
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }} ./backend
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest
+
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }} -t ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest ./backend
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest
 
   trivy-scan:
     needs: build-docker-images
@@ -86,7 +89,6 @@ jobs:
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
-
 
   snyk-scan:
     needs: build-docker-images
@@ -129,7 +131,6 @@ jobs:
   deploy:
     needs: [trivy-scan, snyk-scan]
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v3
     
@@ -148,14 +149,10 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    - name: Pull Docker images (SHA tag)
+    - name: Pull and Deploy Docker images
       run: |
-        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }}
-        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }}
-
-    - name: Tag and Push Docker images (Latest tag)
-      run: |
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest 
+        # Pull the latest images (they were already tagged as latest in build-docker-images job)
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-frontend:latest
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/restaurant-backend:latest
+        
+        echo "Deploying images..." 
