@@ -1,4 +1,6 @@
 let currentTableId = null;
+let currentPaymentMethod = null;
+let currentPaymentTableId = null;
 
 function openModal(modalId) {
     document.getElementById(modalId).classList.remove('hidden');
@@ -57,6 +59,12 @@ function saveTableData(tableId, items) {
 function getTableData(tableId) {
     const data = localStorage.getItem(`table_${tableId}`);
     return data ? JSON.parse(data) : null;
+}
+
+// Hàm xóa thông tin bàn khỏi localStorage sau khi thanh toán
+function resetTableData(tableId) {
+    localStorage.removeItem(`table_${tableId}`);
+    console.log(`Table ${tableId} data reset.`);
 }
 
 // Helper function to format currency to VND
@@ -159,9 +167,6 @@ async function viewTableDetails(tableId) {
                      </span>
                 </div>
                  <div class="grid grid-cols-1 gap-3">
-                     <a href="/sales/items?tableId=${tableId}" class="flex justify-center items-center px-6 py-3 bg-green-500 text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
-                         <i class="fas fa-plus mr-2"></i>Thêm món
-                     </a>
                      <button onclick="checkout(${tableId})" class="flex justify-center items-center px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-medium shadow-lg">
                          <i class="fas fa-dollar-sign mr-2"></i>Thanh toán
                     </button>
@@ -482,6 +487,165 @@ function refreshTableVisibility() {
 
 // Add a checkout function placeholder
 function checkout(tableId) {
-     alert('Chức năng thanh toán cho bàn ' + tableId + ' sẽ được triển khai sau.');
-     // TODO: Implement checkout process
+    openPaymentModal(tableId);
+}
+
+// Table filtering functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all filter buttons and table cards
+    const filterButtons = document.querySelectorAll('[data-tab-status]');
+    const tableCards = document.querySelectorAll('.table-card');
+
+    // Add click event listeners to filter buttons
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => {
+                btn.classList.remove('bg-orange-500', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+
+            // Add active class to clicked button
+            this.classList.remove('bg-gray-200', 'text-gray-700');
+            this.classList.add('bg-orange-500', 'text-white');
+
+            const selectedStatus = this.getAttribute('data-tab-status');
+
+            // Filter tables based on selected status
+            tableCards.forEach(card => {
+                const tableStatus = card.getAttribute('data-status');
+                
+                if (selectedStatus === 'all') {
+                    card.style.display = 'flex';
+                } else if (selectedStatus === 'active' && tableStatus === 'OCCUPIED') {
+                    card.style.display = 'flex';
+                } else if (selectedStatus === 'empty' && tableStatus === 'EMPTY') {
+                    card.style.display = 'flex';
+                } else if (selectedStatus === 'booking' && tableStatus === 'RESERVED') {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+
+function openPaymentModal(tableId) {
+    currentPaymentTableId = tableId;
+    const tableData = getTableData(tableId);
+    if (!tableData || !tableData.items || tableData.items.length === 0) {
+        alert('Không có món ăn nào để thanh toán!');
+        return;
+    }
+
+    const totalAmount = tableData.items.reduce((sum, item) => sum + item.totalPrice, 0);
+    document.getElementById('paymentTotalAmount').textContent = formatCurrency(totalAmount);
+    document.getElementById('paymentTableNumber').textContent = `Bàn ${tableId}`;
+    
+    // Reset payment method selection
+    document.querySelectorAll('.payment-method-btn').forEach(btn => {
+        btn.classList.remove('border-orange-500', 'bg-orange-50');
+        btn.classList.add('border-gray-200');
+    });
+    currentPaymentMethod = null;
+
+    document.getElementById('paymentModal').classList.remove('hidden');
+    document.getElementById('paymentModal').classList.add('flex');
+}
+
+function closePaymentModal() {
+    document.getElementById('paymentModal').classList.add('hidden');
+    document.getElementById('paymentModal').classList.remove('flex');
+    currentPaymentTableId = null;
+    currentPaymentMethod = null;
+}
+
+function selectPaymentMethod(method) {
+    currentPaymentMethod = method;
+    document.querySelectorAll('.payment-method-btn').forEach(btn => {
+        if (btn.getAttribute('data-method') === method) {
+            btn.classList.remove('border-gray-200');
+            btn.classList.add('border-orange-500', 'bg-orange-50');
+        } else {
+            btn.classList.remove('border-orange-500', 'bg-orange-50');
+            btn.classList.add('border-gray-200');
+        }
+    });
+}
+
+async function processPayment() {
+    if (!currentPaymentMethod) {
+        alert('Vui lòng chọn phương thức thanh toán!');
+        return;
+    }
+
+    showGlobalSpinner();
+    try {
+        const tableData = getTableData(currentPaymentTableId);
+        console.log('Table Data:', tableData); // Debug log
+
+        const totalAmount = tableData.items.reduce((sum, item) => sum + item.totalPrice, 0);
+
+        // Prepare receipt data with details as an array
+        const receiptData = {
+            receipt: {
+                tabId: parseInt(currentPaymentTableId),
+                recTime: new Date().toISOString(),
+                isdeleted: false,
+                paymentMethod: currentPaymentMethod
+            },
+            details: tableData.items.map(item => {
+                console.log('Item before mapping:', item); // Debug log
+                return {
+                    itemId: parseInt(item.itemId),
+                    quantity: parseInt(item.quantity)
+                };
+            })
+        };
+        console.log('Receipt Data to send:', receiptData); // Debug log
+
+        const response = await fetch('http://localhost:8080/receipt-details/many', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(receiptData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Update table status to EMPTY
+        const updateTableResponse = await fetch(`http://localhost:8080/tables/${currentPaymentTableId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                tabNum: tableData.tabNum,
+                tabStatus: 'EMPTY',
+                isdeleted: false
+            })
+        });
+
+        if (!updateTableResponse.ok) {
+            throw new Error(`HTTP error! status: ${updateTableResponse.status}`);
+        }
+
+        alert('Thanh toán thành công!');
+        // Reset table data
+        resetTableData(currentPaymentTableId);
+        // Close payment modal
+        closePaymentModal();
+        // Refresh the page to show updated table status
+        window.location.reload();
+
+    } catch (error) {
+        console.error('Error processing payment:', error);
+        alert('Có lỗi xảy ra khi thanh toán: ' + error.message);
+    } finally {
+        hideGlobalSpinner();
+    }
 } 

@@ -5,17 +5,21 @@ import com.restaurant.backend.domains.dto.Account.dto.ForgotPasswordDto;
 import com.restaurant.backend.domains.dto.Account.dto.UpdateAccountDto;
 import com.restaurant.backend.domains.entities.Account;
 import com.restaurant.backend.domains.entities.AccountRole;
+import com.restaurant.backend.domains.entities.Customer;
 import com.restaurant.backend.domains.dto.Account.dto.LoginDto;
 import com.restaurant.backend.mappers.impl.AccountMapper;
 import com.restaurant.backend.mappers.impl.AccountRoleMapper;
 import com.restaurant.backend.other_services.EmailService;
 import com.restaurant.backend.repositories.AccountRepository;
 import com.restaurant.backend.repositories.AccountRoleRepository;
+import com.restaurant.backend.repositories.CustomerRepository;
 import com.restaurant.backend.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +29,7 @@ import java.util.Random;
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountRoleRepository accountRoleRepository;
+    private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final EmailService emailService;
@@ -36,6 +41,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountServiceImpl(
             AccountRepository accountRepository,
             AccountRoleRepository accountRoleRepository,
+            CustomerRepository customerRepository,
             PasswordEncoder passwordEncoder,
             EmailService emailService,
             AccountMapper accountMapper,
@@ -43,6 +49,7 @@ public class AccountServiceImpl implements AccountService {
     ) {
         this.accountRepository = accountRepository;
         this.accountRoleRepository = accountRoleRepository;
+        this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.accountMapper = accountMapper;
@@ -50,8 +57,25 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public AccountDto signup(AccountDto accountDto) {
+        // Create and save account
         Account account = accountMapper.mapTo(accountDto);
+        
+        // Set default values if not provided
+        if (account.getAccBday() == null) {
+            account.setAccBday(LocalDate.now());
+        }
+        if (account.getAccGender() == null) {
+            account.setAccGender(false);
+        }
+        if (account.getAccAddress() == null) {
+            account.setAccAddress("");
+        }
+        if (account.getAccDisplayname() == null) {
+            account.setAccDisplayname("User");
+        }
+        
         AccountRole accountRole = accountRoleRepository.findByRoleName(account.getRole().getRoleName());
         if (accountRole == null) {
             accountRole = new AccountRole();
@@ -60,8 +84,21 @@ public class AccountServiceImpl implements AccountService {
         }
         account.setRole(accountRole);
         account.setAccPassword(passwordEncoder.encode(account.getAccPassword()));
-        Account saved = accountRepository.save(account);
-        return accountMapper.mapFrom(saved);
+        Account savedAccount = accountRepository.save(account);
+
+        // Create and save customer
+        Customer customer = new Customer();
+        customer.setName(accountDto.getAccDisplayname());
+        customer.setEmail(accountDto.getAccEmail());
+        customer.setPhone(accountDto.getAccPhone());
+        customer.setAddress(accountDto.getAccAddress());
+        customer.setCccd(accountDto.getCccd());
+        customer.setIsvip(false);
+        customer.setIsdeleted(false);
+        customer.setAccount(savedAccount);
+        customerRepository.save(customer);
+
+        return accountMapper.mapFrom(savedAccount);
     }
 
     @Override

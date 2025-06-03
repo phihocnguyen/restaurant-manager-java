@@ -18,10 +18,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class CreateReceiptDetailDto {
+    @NotNull
     private Integer itemId;
-
+    
+    @NotNull
     private Integer quantity;
-
-    //private BigDecimal price;
-
+    
+    private BigDecimal price;
+    
+    private Integer receiptId;
 }

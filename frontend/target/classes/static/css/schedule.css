@@ -1,0 +1,265 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.employee-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.employee-item {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.employee-item:hover {
+    background-color: #e9ecef;
+}
+
+.calendar-container {
+    flex: 1;
+    padding: 20px;
+}
+
+#calendar {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* FullCalendar Customization */
+.fc-event {
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 0.9em;
+    border: none !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.fc-event-title {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+}
+
+.fc-event-time {
+    font-size: 0.8em;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 2px;
+}
+
+/* Calendar Container */
+#calendar {
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+/* Calendar Header */
+.fc-toolbar-title {
+    font-size: 1.5em !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+}
+
+.fc-button-primary {
+    background-color: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+}
+
+.fc-button-primary:hover {
+    background-color: #4338ca !important;
+    border-color: #4338ca !important;
+}
+
+.fc-button-primary:not(:disabled):active,
+.fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #3730a3 !important;
+    border-color: #3730a3 !important;
+}
+
+/* Calendar Grid - General */
+.fc .fc-scrollgrid-sync-table {
+    border: 1px solid #e2e8f0;
+}
+
+/* Calendar Grid - Column Headers (Weekdays) */
+.fc-theme-standard th {
+    background-color: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+    border-color: #e2e8f0;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: #333;
+    font-weight: 600;
+    padding: 10px 0;
+}
+
+/* Calendar Grid - Time Grid View */
+.fc-timegrid-slot-lane,
+.fc-timegrid-slot {
+    border-bottom: 1px dashed #e2e8f0;
+    height: 2.5em !important;
+}
+
+.fc-timegrid-axis {
+    border-right: 1px solid #e2e8f0;
+    color: #64748b;
+    font-size: 0.85em;
+}
+
+.fc-timegrid-slot-label {
+    color: #64748b;
+    font-size: 0.85em;
+}
+
+/* Today Highlight */
+.fc-day-today {
+    background-color: #eff6ff !important;
+}
+
+/* Event Colors */
+/* Background color is set inline by schedule.js based on employee */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .calendar-container {
+        padding: 10px;
+    }
+
+    .fc-toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+/* Employee List Styling (using Tailwind classes in HTML) */
+.employee-list-container {
+    /* No custom styles needed here, using Tailwind classes */
+}
+
+.employee-item {
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+}
+
+.employee-item:hover {
+    filter: brightness(90%);
+} 
+
+/* --- Tùy chỉnh Danh sách Nhân viên --- */
+#external-events .employee-item {
+    padding: 12px;
+    margin-bottom: 8px;
+    color: white;
+    border-radius: 6px;
+    cursor: grab;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Background color is set inline by schedule.js */
+}
+
+#external-events .employee-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Tùy chỉnh giao diện FullCalendar cho Theme Tối --- */
+
+/* Màu nền chính của lịch (vẫn giữ nền trắng cho container) */
+/* .fc { */
+    /* color: #cbd5e1; */ /* Màu chữ chính */
+/* } */
+
+/* Header (nút prev, next, title) */
+.fc .fc-toolbar-title {
+    color: #ffffff; /* Giữ màu trắng cho title trong header */
+}
+
+.fc .fc-button {
+    background: #334155; /* Nền nút */
+    border-color: #475569;
+    color: #f1f5f9;
+}
+
+.fc .fc-button-primary:not(:disabled):hover {
+    background: #475569;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background: #6366f1; /* Màu active giống sidebar */
+    border-color: #6366f1;
+}
+
+/* Tiêu đề các ngày trong tuần */
+.fc .fc-col-header-cell-cushion {
+    color: #94a3b8; /* Màu chữ tiêu đề ngày */
+    text-decoration: none;
+}
+
+/* Nền của các ô thời gian và đường kẻ */
+.fc .fc-timegrid-slot-lane,
+.fc .fc-timegrid-slot,
+.fc .fc-timegrid-axis,
+.fc .fc-timegrid-slot-label {
+    border-color: #334155; /* Màu viền và đường kẻ giờ */
+    color: #94a3b8; /* Màu chữ giờ */
+}
+
+/* Màu ngày hôm nay */
+.fc .fc-day-today {
+    background-color: rgba(99, 102, 241, 0.1); /* Màu tím nhạt */
+}
+
+/* Sự kiện trên lịch */
+.fc .fc-event {
+    border: none; /* Bỏ viền mặc định */
+}
+
+.fc-direction-ltr .fc-timegrid-event .fc-event-main {
+    padding: 6px; /* Padding cho nội dung sự kiện */
+}

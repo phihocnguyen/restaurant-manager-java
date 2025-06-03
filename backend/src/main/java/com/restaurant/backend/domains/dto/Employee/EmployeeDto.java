@@ -21,4 +21,5 @@ public class EmployeeDto {
     private Integer workedDays;
     private BigDecimal salary;
     private Boolean isdeleted;
+    private String email;
 }

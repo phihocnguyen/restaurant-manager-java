@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeDto {
-    private int itemId;
-    private int ingreId;
-    private MenuItemDto item;
-    private IngredientDto ingre;
-    private double ingreQuantityKg;
+    private Integer id;
+    private Integer itemId;
+    private Integer ingreId;
+    private MenuItemDto menuItem;
+    private IngredientDto ingredient;
+    private Double ingreQuantityKg;
     private String recipeImg;
 }

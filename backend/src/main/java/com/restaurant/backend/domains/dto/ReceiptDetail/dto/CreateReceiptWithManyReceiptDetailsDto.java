@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class CreateReceiptWithManyReceiptDetailsDto {
-    private CreateManyReceiptDetailsDto details;
     private CreateReceiptDto receipt;
+    private List<ReceiptDetailItem> details;
 }

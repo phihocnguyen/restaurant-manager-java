@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,6 +36,9 @@ public class Receipt {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tab_id")
     private DiningTable tab;
+
+    @OneToMany(mappedBy = "rec", cascade = CascadeType.ALL)
+    private List<ReceiptDetail> recDetails;
 
     @NotNull
     @Column(name = "rec_time", nullable = true)

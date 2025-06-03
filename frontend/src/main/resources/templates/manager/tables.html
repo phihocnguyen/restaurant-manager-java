@@ -36,7 +36,7 @@
 <body class="bg-[#1e293b] text-gray-100 font-sans">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
+        <aside class="sidebar w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
             <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
                 <div class="flex items-center space-x-3">
                     <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
@@ -62,7 +62,7 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Menu</span>
                     </a>
-                     <a th:href="@{/manager/ingredients}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <a th:href="@{/manager/ingredients}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
                             <i class="fas fa-carrot text-yellow-400"></i>
                         </div>
@@ -74,23 +74,23 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Bàn</span>
                     </a>
-                     <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
                             <i class="fas fa-users text-purple-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Khách hàng</span>
                     </a>
-                    <a th:href="@{/manager/orders}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
-                        <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
-                            <i class="fas fa-receipt text-yellow-400"></i>
+                    <a th:href="@{/manager/employees}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
+                            <i class="fas fa-user-tie text-blue-400"></i>
                         </div>
-                        <span class="group-hover:text-white transition-colors">Đơn hàng</span>
+                        <span class="group-hover:text-white transition-colors">Nhân viên</span>
                     </a>
-                    <a th:href="@{/manager/settings}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
-                        <div class="bg-gray-500/20 p-2 rounded-lg mr-4 group-hover:bg-gray-500/30 transition-colors">
-                            <i class="fas fa-cog text-gray-400"></i>
+                    <a th:href="@{/sales}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
+                            <i class="fas fa-cash-register text-red-400"></i>
                         </div>
-                        <span class="group-hover:text-white transition-colors">Settings</span>
+                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
                     </a>
                 </div>
             </nav>
@@ -133,7 +133,7 @@
                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div th:each="table, iterStat : ${tables}" class="bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span th:text="${iterStat.count}"></span></h3>
+                            <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span th:text="${table.id}"></span></h3>
                             <p class="text-gray-400 mb-2">Số người tối đa: <span th:text="${table.tabNum}" class="text-blue-400"></span></p>
                             <p class="text-gray-400">Trạng thái: <span
                                     th:text="${#strings.capitalize(table.tabStatus.name())}"
@@ -415,7 +415,8 @@
                 }
                  // Không gọi response.json() vì DELETE trả về 200 OK với body trống
                  // Chỉ kiểm tra response.ok và proceed
-                return response; // Trả về response gốc
+                 console.log('Delete response status:', response.status); // Log the status
+                 return response; // Trả về response gốc
             })
             .then(response => {
                  console.log('Table deleted:', currentTableId, response.status);
@@ -452,17 +453,20 @@
                     return response.json();
                 })
                 .then(tables => {
+                    // Sort tables by ID in ascending order
+                    tables.sort((a, b) => a.id - b.id);
+
                     const tablesGrid = document.querySelector('.grid');
                     tablesGrid.innerHTML = ''; // Clear existing tables
-                    
-                    tables.forEach((table, index) => {
+
+                    tables.forEach(table => {
                         const statusClass = table.tabStatus === 'OCCUPIED' ? 'text-red-400' : 
                                          (table.tabStatus === 'RESERVED' ? 'text-yellow-400' : 'text-green-400');
-                        
+
                         const tableCard = `
                             <div class="bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between">
                                 <div>
-                                    <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span>${index + 1}</span></h3>
+                                    <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span>${table.id}</span></h3>
                                     <p class="text-gray-400 mb-2">Số người tối đa: <span class="text-blue-400">${table.tabNum}</span></p>
                                     <p class="text-gray-400">Trạng thái: <span class="${statusClass}">${table.tabStatus}</span></p>
                                 </div>

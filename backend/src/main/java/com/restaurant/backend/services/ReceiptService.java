@@ -2,6 +2,7 @@ package com.restaurant.backend.services;
 
 import com.restaurant.backend.domains.dto.Receipt.ReceiptDto;
 import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
+import com.restaurant.backend.domains.dto.Receipt.dto.ReceiptHistoryDto;
 import com.restaurant.backend.domains.entities.Receipt;
 
 import java.util.List;
@@ -15,6 +16,6 @@ public interface ReceiptService {
     public ReceiptDto update(int id, CreateReceiptDto dto);
     public ReceiptDto partialUpdate(int id, CreateReceiptDto dto);
     public boolean softDelete(int id);
-    public List<ReceiptDto> getAllReceipts();
+    public List<ReceiptHistoryDto> getAllReceipts();
     public ReceiptDto getReceiptById(int id);
 }

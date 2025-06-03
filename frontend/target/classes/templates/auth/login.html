@@ -191,16 +191,14 @@
                 <h2>🍽️ Restaurant Manager</h2>
                 <p>Đăng nhập để tiếp tục</p>
 
-                <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
+                <form id="loginForm" class="needs-validation" novalidate>
                     <div class="input-group">
-                        <input type="text" class="form-control has-icon" id="username" name="username" value="john.doe@example.com" required>
-                        <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                        <input type="text" class="form-control has-icon" id="username" name="accUsername" placeholder="Tài khoản" required>
                         <div class="invalid-feedback">Vui lòng nhập tên đăng nhập</div>
                     </div>
 
                     <div class="input-group">
-                        <input type="password" class="form-control has-icon" id="password" name="password" placeholder="Mật khẩu" required>
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control has-icon" id="password" name="accPassword" placeholder="Mật khẩu" required>
                         <div class="invalid-feedback">Vui lòng nhập mật khẩu</div>
                     </div>
 
@@ -210,6 +208,10 @@
                             <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
                         </div>
                         <a th:href="@{/forgot-password}" class="forgot-password">Quên mật khẩu?</a>
+                    </div>
+                    
+                    <div id="login-error-message" class="text-danger text-center mb-3" style="display: none;">
+                        <span></span>
                     </div>
 
                     <button type="submit" class="btn btn-signin">Đăng nhập</button>
@@ -234,13 +236,110 @@
         (function () {
             'use strict';
             const forms = document.querySelectorAll('.needs-validation');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const usernameIconSpan = document.querySelector('.username-icon');
+            const passwordIconSpan = document.querySelector('.password-icon');
+            const loginErrorMessageDiv = document.getElementById('login-error-message'); // Get reference to error message div
+
+            // Function to show error icons
+            function showErrorIcons() {
+                if (usernameIconSpan) usernameIconSpan.innerHTML = '<i class="fas fa-times-circle text-danger"></i>';
+                if (passwordIconSpan) passwordIconSpan.innerHTML = '<i class="fas fa-times-circle text-danger"></i>';
+            }
+
+            // Function to hide error feedback (icons and text)
+            function hideErrorFeedback() {
+                 if (usernameIconSpan) usernameIconSpan.innerHTML = '';
+                 if (passwordIconSpan) passwordIconSpan.innerHTML = '';
+                 if (loginErrorMessageDiv) {
+                     loginErrorMessageDiv.textContent = '';
+                     loginErrorMessageDiv.style.display = 'none';
+                 }
+            }
+
+            // Clear error feedback on input focus or change
+            usernameInput.addEventListener('focus', hideErrorFeedback);
+            passwordInput.addEventListener('focus', hideErrorFeedback);
+            usernameInput.addEventListener('input', hideErrorFeedback);
+            passwordInput.addEventListener('input', hideErrorFeedback);
+
             Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
+                form.addEventListener('submit', async event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    // Hide previous error feedback on submit
+                    hideErrorFeedback();
+
+                    if (form.checkValidity()) {
+                        const username = usernameInput.value;
+                        const password = passwordInput.value;
+                        
+                        try {
+                            const response = await fetch('http://localhost:8080/login', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    accUsername: username,
+                                    accPassword: password
+                                })
+                            });
+
+                            if (!response.ok) {
+                                // Handle specific status codes
+                                if (response.status === 401) {
+                                    throw new Error('Unauthorized'); // Throw specific error
+                                } else {
+                                    throw new Error(`Login failed with status: ${response.status}`); // Throw generic error
+                                }
+                            }
+
+                            const data = await response.json();
+                            console.log(data);
+                            
+                            // Redirect based on role on successful login
+                            if (data && data.role && data.role.roleName) { // Check if data and roleName exist
+                                switch (data.role.roleName) {
+                                    case 'admin':
+                                        window.location.href = '/manager/dashboard';
+                                        break;
+                                    case 'customer':
+                                        window.location.href = '/sales/items';
+                                        break;
+                                    default:
+                                        window.location.href = '/';
+                                }
+                            } else {
+                                // Handle successful response with unexpected body structure
+                                console.error('Login successful but unexpected response body:', data);
+                                if (loginErrorMessageDiv) {
+                                    loginErrorMessageDiv.textContent = 'Đăng nhập thành công nhưng dữ liệu không đầy đủ.';
+                                    loginErrorMessageDiv.style.display = 'block';
+                                }
+                                showErrorIcons(); // Show error icons even on data structure issue
+                            }
+
+                        } catch (error) {
+                            console.error('Login error:', error);
+                            
+                            // Show error icons on any login failure
+                            showErrorIcons();
+
+                            // Display specific text error based on caught error
+                            if (loginErrorMessageDiv) {
+                                if (error.message === 'Unauthorized') {
+                                    loginErrorMessageDiv.textContent = 'Sai tài khoản hoặc mật khẩu.';
+                                } else {
+                                    loginErrorMessageDiv.textContent = 'Đăng nhập thất bại. Vui lòng thử lại sau.';
+                                }
+                                loginErrorMessageDiv.style.display = 'block';
+                            }
+                        }
                     }
-                    form.classList.add('was-validated');
+                    
                 }, false);
             });
         })();

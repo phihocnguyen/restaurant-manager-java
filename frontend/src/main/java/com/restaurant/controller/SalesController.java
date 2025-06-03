@@ -49,7 +49,7 @@ public class SalesController {
                 tables = new ArrayList<>();
             }
 
-            // Sort tables by ID
+            // Sort tables by ID and ensure tabNum is properly mapped
             tables.sort((t1, t2) -> {
                 Integer id1 = (Integer) t1.get("id");
                 Integer id2 = (Integer) t2.get("id");
@@ -57,6 +57,13 @@ public class SalesController {
                 if (id1 == null) return -1;
                 if (id2 == null) return 1;
                 return id1.compareTo(id2);
+            });
+
+            // Ensure tabNum is properly mapped
+            tables.forEach(table -> {
+                if (table.get("tabNum") == null) {
+                    table.put("tabNum", 0); // Default value if null
+                }
             });
             
             model.addAttribute("tables", tables);
@@ -98,6 +105,20 @@ public class SalesController {
     public ResponseEntity<Map<String, Object>> updateTableStatus(
             @PathVariable String id,
             @RequestBody Map<String, Object> statusUpdate) {
+        
+        // Get current table data first
+        ResponseEntity<Map<String, Object>> currentTableResponse = restTemplate.exchange(
+                backendApiUrl + "/tables/" + id,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+        );
+        
+        Map<String, Object> currentTable = currentTableResponse.getBody();
+        if (currentTable != null) {
+            // Preserve tabNum from current table data
+            statusUpdate.put("tabNum", currentTable.get("tabNum"));
+        }
         
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                 backendApiUrl + "/tables/" + id + "/status",

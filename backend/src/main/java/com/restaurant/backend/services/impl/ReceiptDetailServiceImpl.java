@@ -13,6 +13,7 @@ import com.restaurant.backend.services.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.context.annotation.Lazy;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class ReceiptDetailServiceImpl implements ReceiptDetailService {
     private final ReceiptDetailRepository receiptDetailRepository;
-    private final ReceiptService receiptService;
+    private final @Lazy ReceiptService receiptService;
     private final ReceiptMapper receiptMapper;
     private final ReceiptDetailMapper receiptDetailMapper;
     private final EmployeeService employeeService;
@@ -31,7 +32,7 @@ public class ReceiptDetailServiceImpl implements ReceiptDetailService {
 
     public ReceiptDetailServiceImpl(
             ReceiptDetailRepository receiptDetailRepository,
-            ReceiptService receiptService,
+            @Lazy ReceiptService receiptService,
             ReceiptMapper receiptMapper,
             ReceiptDetailMapper receiptDetailMapper,
             EmployeeService employeeService,
@@ -87,6 +88,7 @@ public class ReceiptDetailServiceImpl implements ReceiptDetailService {
 
         Optional.ofNullable(dto.getIsdeleted()).ifPresent(receipt::setIsdeleted);
         Optional.ofNullable(dto.getRecTime()).ifPresent(receipt::setRecTime);
+        Optional.ofNullable(dto.getPaymentMethod()).ifPresent(receipt::setPaymentMethod);
 
         return receiptService.save(receipt);
     }
@@ -127,7 +129,7 @@ public class ReceiptDetailServiceImpl implements ReceiptDetailService {
     @Override
     public ResponseEntity<List<ReceiptDetailDto>> createReceiptWithManyDetails(CreateReceiptWithManyReceiptDetailsDto body) {
         CreateReceiptDto receiptDto = body.getReceipt();
-        List<CreateReceiptDetailDto> detailsDto = body.getDetails().getDetails();
+        List<ReceiptDetailItem> detailsDto = body.getDetails();
         Receipt receipt = buildAndSaveReceipt(receiptDto);
 
         List<ReceiptDetail> notifyChef = new ArrayList<>();
@@ -147,7 +149,7 @@ public class ReceiptDetailServiceImpl implements ReceiptDetailService {
                     .build();
             if (item.getItemType() == ItemType.FOOD) notifyChef.add(detail);
             return detail;
-        }).toList();
+        }).collect(Collectors.toList());
 
         receiptDetailRepository.saveAll(details);
         updateReceiptPayment(receipt);
@@ -208,7 +210,7 @@ public class ReceiptDetailServiceImpl implements ReceiptDetailService {
                     .build();
             if (item.getItemType() == ItemType.FOOD) notifyChef.add(detail);
             return detail;
-        }).toList();
+        }).collect(Collectors.toList());
 
         receiptDetailRepository.saveAll(details);
         updateReceiptPayment(receipt);
@@ -285,7 +287,7 @@ public class ReceiptDetailServiceImpl implements ReceiptDetailService {
 
             if (item.getItemType() == ItemType.FOOD) notifyChef.add(detail);
             return detail;
-        }).toList();
+        }).collect(Collectors.toList());
 
         List<ReceiptDetail> saved = receiptDetailRepository.saveAll(newDetails);
         updateReceiptPayment(receipt);

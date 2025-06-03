@@ -2,6 +2,7 @@ package com.restaurant.backend.mappers.impl;
 
 import com.restaurant.backend.domains.dto.Receipt.ReceiptDto;
 import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
+import com.restaurant.backend.domains.dto.Receipt.dto.ReceiptHistoryDto;
 import com.restaurant.backend.domains.entities.Receipt;
 import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;
@@ -34,5 +35,9 @@ public class ReceiptMapper implements Mapper<Receipt, ReceiptDto> {
         receipt.setRecPay(BigDecimal.ZERO); // mặc định recPay là 0
         // Các khóa phụ (emp, cus, tab) sẽ được xử lý ở Controller sau khi save, nên bỏ qua
         return receipt;
+    }
+
+    public ReceiptHistoryDto mapToHistoryDto(Receipt receipt) {
+        return modelMapper.map(receipt, ReceiptHistoryDto.class);
     }
 }

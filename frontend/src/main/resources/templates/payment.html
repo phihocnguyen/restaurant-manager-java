@@ -193,6 +193,21 @@
                              placeholder="Any special instructions for your order?"
                              rows="3"></textarea>
                     </div>
+
+                    <div>
+                      <label class="block text-sm text-gray-400 mb-1">Payment Method</label>
+                      <div class="grid grid-cols-2 gap-3">
+                        <button type="button" onclick="selectPaymentMethod('Cash')" class="payment-method-btn p-4 border-2 border-white/20 rounded-xl hover:border-yellow-400 transition-all flex items-center justify-center space-x-2" data-method="Cash">
+                            <i class="fas fa-money-bill-wave text-gray-400"></i>
+                            <span class="font-medium">Cash</span>
+                        </button>
+                        <button type="button" onclick="selectPaymentMethod('Internet Banking')" class="payment-method-btn p-4 border-2 border-white/20 rounded-xl hover:border-yellow-400 transition-all flex items-center justify-center space-x-2" data-method="Internet Banking">
+                            <i class="fas fa-university text-gray-400"></i>
+                            <span class="font-medium">Internet Banking</span>
+                        </button>
+                      </div>
+                      <input type="hidden" id="paymentMethod" name="paymentMethod" required>
+                    </div>
                   </div>
               
                   <button type="submit" id="submit-button"
@@ -211,6 +226,21 @@
     <script th:inline="javascript">
         // Get selectedItems from Thymeleaf
         const selectedItems = /*[[${selectedItems}]]*/ [];
+        let currentPaymentMethod = null;
+        
+        function selectPaymentMethod(method) {
+            currentPaymentMethod = method;
+            document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                if (btn.getAttribute('data-method') === method) {
+                    btn.classList.remove('border-white/20');
+                    btn.classList.add('border-yellow-400', 'bg-white/10');
+                } else {
+                    btn.classList.remove('border-yellow-400', 'bg-white/10');
+                    btn.classList.add('border-white/20');
+                }
+            });
+            document.getElementById('paymentMethod').value = method;
+        }
         
         document.addEventListener('DOMContentLoaded', function() {
             const paymentForm = document.getElementById('payment-form');
@@ -250,7 +280,8 @@
                             quantity: item.quantity,
                             price: item.price,
                             note: document.querySelector(`input[name="itemNote_${item.id}"]`).value || ''
-                        }))
+                        })),
+                        paymentMethod: currentPaymentMethod
                     };
 
                     try {

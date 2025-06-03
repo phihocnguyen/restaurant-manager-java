@@ -28,11 +28,23 @@
          .nav-item.active span {
             color: white;
         }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 18rem;
+            overflow-y: auto;
+        }
+        .main-content {
+            margin-left: 18rem;
+            min-height: 100vh;
+        }
     </style>
 </head>
 <body class="bg-[#1e293b] text-gray-100 font-sans">
     <div class="flex h-full">
-        <aside class="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
+        <aside class="sidebar w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
             <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
                 <div class="flex items-center space-x-3">
                     <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
@@ -58,11 +70,11 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Menu</span>
                     </a>
-                    <a th:href="@{/manager/ingredients}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl group">
+                    <a th:href="@{/manager/ingredients}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
                             <i class="fas fa-carrot text-yellow-400"></i>
                         </div>
-                        <span class="text-white font-semibold">Nguyên liệu</span>
+                        <span class="group-hover:text-white transition-colors">Nguyên liệu</span>
                     </a>
                     <a th:href="@{/manager/tables}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-orange-500/20 p-2 rounded-lg mr-4 group-hover:bg-orange-500/30 transition-colors">
@@ -76,24 +88,24 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Khách hàng</span>
                     </a>
-                    <a th:href="@{/manager/orders}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
-                        <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
-                            <i class="fas fa-receipt text-yellow-400"></i>
+                    <a th:href="@{/manager/employees}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
+                            <i class="fas fa-user-tie text-blue-400"></i>
                         </div>
-                        <span class="group-hover:text-white transition-colors">Đơn hàng</span>
+                        <span class="group-hover:text-white transition-colors">Nhân viên</span>
                     </a>
-                    <a th:href="@{/manager/settings}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
-                        <div class="bg-gray-500/20 p-2 rounded-lg mr-4 group-hover:bg-gray-500/30 transition-colors">
-                            <i class="fas fa-cog text-gray-400"></i>
+                    <a th:href="@{/sales}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
+                            <i class="fas fa-cash-register text-red-400"></i>
                         </div>
-                        <span class="group-hover:text-white transition-colors">Settings</span>
+                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
                     </a>
                 </div>
             </nav>
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col">
+        <div class="main-content flex-1 flex flex-col">
             <!-- Top Bar -->
             <header class="flex items-center justify-between p-6 bg-[#1f2937] border-b border-gray-800">
                 <h1 class="text-2xl font-semibold text-gray-100">Dashboard</h1>
@@ -151,47 +163,16 @@
                     </div>
                 </div>
 
-                <!-- Recent Orders -->
-                <div class="bg-[#1f2937] rounded-lg shadow-sm overflow-hidden">
-                    <div class="p-6">
-                        <h5 class="text-lg font-semibold text-gray-100 mb-4">Đơn hàng gần đây</h5>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-700">
-                                <thead class="bg-[#334155]">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Mã đơn</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Khách hàng</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Bàn</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Tổng tiền</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Trạng thái</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Thời gian</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-700">
-                                    <tr class="hover:bg-[#334155]">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">#ORD001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Nguyễn Văn A</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bàn 1</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">500,000đ</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-600 text-white">Hoàn thành</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">10:30 AM</td>
-                                    </tr>
-                                    <tr class="hover:bg-[#334155]">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">#ORD002</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Trần Thị B</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bàn 3</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">750,000đ</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-600 text-white">Đang xử lý</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">11:15 AM</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <!-- Add more charts section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                     <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                         <h5 class="text-lg font-semibold text-gray-100 mb-4">Doanh thu theo phương thức thanh toán</h5>
+                         <canvas id="paymentMethodChart"></canvas>
+                     </div>
+                     <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
+                         <h5 class="text-lg font-semibold text-gray-100 mb-4">Tỷ lệ trạng thái bàn</h5>
+                         <canvas id="tableStatusChart"></canvas>
+                     </div>
                 </div>
             </main>
         </div>
@@ -288,6 +269,74 @@
                     }
                 }
             }
+        });
+
+        // Payment Method Chart (Doughnut)
+        const paymentCtx = document.getElementById('paymentMethodChart').getContext('2d');
+        new Chart(paymentCtx, {
+             type: 'doughnut',
+             data: {
+                 labels: ['Tiền mặt', 'Chuyển khoản', 'Ví điện tử'],
+                 datasets: [{
+                     label: 'Số lượng giao dịch',
+                     data: [30, 50, 20], // Dummy data
+                     backgroundColor: [
+                         'rgba(255, 159, 64, 0.5)', // Orange
+                         'rgba(54, 162, 235, 0.5)',  // Blue
+                         'rgba(153, 102, 255, 0.5)' // Purple
+                     ],
+                     borderColor: [
+                         'rgba(255, 159, 64, 1)',
+                         'rgba(54, 162, 235, 1)',
+                         'rgba(153, 102, 255, 1)'
+                     ],
+                     borderWidth: 1
+                 }]
+             },
+             options: {
+                 responsive: true,
+                 plugins: {
+                     legend: {
+                         labels: {
+                             color: '#d1d5db'
+                         }
+                     }
+                 }
+             }
+        });
+
+        // Table Status Chart (Pie)
+        const tableStatusCtx = document.getElementById('tableStatusChart').getContext('2d');
+        new Chart(tableStatusCtx, {
+             type: 'pie',
+             data: {
+                 labels: ['Còn trống', 'Đang hoạt động', 'Đã đặt'],
+                 datasets: [{
+                     label: 'Số lượng bàn',
+                     data: [5, 3, 2], // Dummy data
+                     backgroundColor: [
+                         'rgba(75, 192, 192, 0.5)', // Teal/Green
+                         'rgba(255, 99, 132, 0.5)',  // Red
+                         'rgba(255, 206, 86, 0.5)'  // Yellow
+                     ],
+                     borderColor: [
+                         'rgba(75, 192, 192, 1)',
+                         'rgba(255, 99, 132, 1)',
+                         'rgba(255, 206, 86, 1)'
+                     ],
+                     borderWidth: 1
+                 }]
+             },
+             options: {
+                 responsive: true,
+                 plugins: {
+                     legend: {
+                         labels: {
+                             color: '#d1d5db'
+                         }
+                     }
+                 }
+             }
         });
     </script>
 </body>

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "customers")
@@ -39,4 +41,9 @@ public class Customer {
     @Column(name = "isdeleted", nullable = false)
     @ColumnDefault("false")
     private Boolean isdeleted = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "acc_username_fk", nullable = false)
+    private Account account;
 }

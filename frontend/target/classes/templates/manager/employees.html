@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Quản lý nhân viên - Restaurant Manager</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    
+    <style>
+        .logo-glow {
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+        .nav-item.active {
+             background: linear-gradient(to right, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5));
+             box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+        }
+         .nav-item.active span {
+            color: white;
+        }
+         .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 18rem;
+            overflow-y: auto;
+        }
+        .main-content {
+            margin-left: 18rem;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-[#1e293b] text-gray-100 font-sans">
+    <div class="flex h-full">
+        <aside class="sidebar w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
+            <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
+                        <i class="fas fa-utensils text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">G15 Kitchen</h1>
+                        <p class="text-xs text-slate-400 mt-1">Restaurant Manager</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="mt-8 flex-1 px-4">
+                <div class="space-y-2">
+                    <a th:href="@{/manager/dashboard}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
+                            <i class="fas fa-chart-line text-blue-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Dashboard</span>
+                    </a>
+                    <a th:href="@{/manager/menu}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-green-500/20 p-2 rounded-lg mr-4 group-hover:bg-green-500/30 transition-colors">
+                            <i class="fas fa-utensils text-green-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Menu</span>
+                    </a>
+                    <a th:href="@{/manager/ingredients}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-yellow-500/20 p-2 rounded-lg mr-4 group-hover:bg-yellow-500/30 transition-colors">
+                            <i class="fas fa-carrot text-yellow-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Nguyên liệu</span>
+                    </a>
+                    <a th:href="@{/manager/tables}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-orange-500/20 p-2 rounded-lg mr-4 group-hover:bg-orange-500/30 transition-colors">
+                            <i class="fas fa-table text-orange-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Bàn</span>
+                    </a>
+                    <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
+                            <i class="fas fa-users text-purple-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Khách hàng</span>
+                    </a>
+                     <a th:href="@{/manager/employees}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
+                            <i class="fas fa-user-tie text-blue-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Nhân viên</span>
+                    </a>
+                    <a th:href="@{/sales/items}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
+                            <i class="fas fa-cash-register text-red-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-content flex-1 flex flex-col">
+            <!-- Top Bar -->
+            <header class="flex items-center justify-between p-6 bg-[#1f2937] border-b border-gray-800">
+                <h1 class="text-2xl font-semibold text-gray-100">Quản lý nhân viên</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search" class="bg-[#334155] text-gray-200 rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <i class="fas fa-bell text-gray-400 hover:text-gray-100 cursor-pointer"></i>
+                    <div class="flex items-center space-x-2">
+                         <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full">
+                        <div>
+                            <p class="text-sm font-medium text-gray-100">Jhon Morison</p>
+                            <p class="text-xs text-gray-400">Admin</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Specific Content -->
+            <main class="flex-1 p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="relative flex-1 mr-4 p-4 flex items-center rounded-md border-gray-700 shadow-sm bg-[#334155] ">
+                        <i class="fas fa-search text-gray-400"></i>
+                        <input type="text" id="employeeSearchInput" class="w-full text-gray-200 pl-4 bg-transparent border-none outline-none" placeholder="Tìm kiếm nhân viên...">
+                    </div>
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center" onclick="openModal('addEmployeeModal')">
+                        <i class="fas fa-plus mr-2"></i>Thêm nhân viên mới
+                    </button>
+                </div>
+
+                <!-- Employees Table -->
+                <div class="bg-[#1f2937] rounded-lg shadow-sm overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-[#334155]">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Họ tên</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Số điện thoại</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Chức vụ</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody" class="divide-y divide-gray-700">
+                            <!-- Employee rows will be loaded here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination (Optional - add later if needed) -->
+                <!--
+                <nav class="mt-6">
+                    <ul class="flex justify-center space-x-2">
+                        <li>
+                            <a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Trước</a>
+                        </li>
+                        <li><a href="#" class="px-3 py-1.5 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">1</a></li>
+                        <li><a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">2</a></li>
+                        <li><a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">3</a></li>
+                        <li>
+                            <a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+                -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div id="addEmployeeModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-8 border w-[500px] shadow-2xl rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 text-gray-100">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-green-500/20 p-2 rounded-lg">
+                        <i class="fas fa-user-plus text-green-400"></i>
+                    </div>
+                    <h5 class="text-xl font-semibold">Thêm nhân viên mới</h5>
+                </div>
+                <button class="text-gray-400 hover:text-gray-100 transition-colors" onclick="closeModal('addEmployeeModal')">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addEmployeeForm" class="space-y-4">
+                    <div>
+                        <label for="addName" class="block text-sm font-medium text-gray-300 mb-1">Họ tên</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <input type="text" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent" id="addName" name="empName" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="addEmail" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input type="email" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent" id="addEmail" name="empEmail" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="addPhone" class="block text-sm font-medium text-gray-300 mb-1">Số điện thoại</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-phone text-gray-400"></i>
+                            </div>
+                            <input type="tel" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent" id="addPhone" name="empPhone" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="flex justify-end space-x-4 mt-8">
+                <button type="button" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center" onclick="closeModal('addEmployeeModal')">
+                    <i class="fas fa-times mr-2"></i>Đóng
+                </button>
+                <button type="button" class="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center" onclick="saveEmployee()">
+                    <i class="fas fa-save mr-2"></i>Lưu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Employee Modal -->
+    <div id="editEmployeeModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-8 border w-[500px] shadow-2xl rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 text-gray-100">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-yellow-500/20 p-2 rounded-lg">
+                        <i class="fas fa-user-edit text-yellow-400"></i>
+                    </div>
+                    <h5 class="text-xl font-semibold">Chỉnh sửa thông tin nhân viên</h5>
+                </div>
+                <button class="text-gray-400 hover:text-gray-100 transition-colors" onclick="closeModal('editEmployeeModal')">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editEmployeeForm" class="space-y-4">
+                    <input type="hidden" id="editEmployeeId" name="id">
+                    <div>
+                        <label for="editName" class="block text-sm font-medium text-gray-300 mb-1">Họ tên</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <input type="text" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-yellow-500 focus:border-transparent" id="editName" name="empName" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="editEmail" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input type="email" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-yellow-500 focus:border-transparent" id="editEmail" name="empEmail" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="editPhone" class="block text-sm font-medium text-gray-300 mb-1">Số điện thoại</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-phone text-gray-400"></i>
+                            </div>
+                            <input type="tel" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-yellow-500 focus:border-transparent" id="editPhone" name="empPhone" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="flex justify-end space-x-4 mt-8">
+                <button type="button" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center" onclick="closeModal('editEmployeeModal')">
+                    <i class="fas fa-times mr-2"></i>Đóng
+                </button>
+                <button type="button" class="px-6 py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors flex items-center" onclick="updateEmployee()">
+                    <i class="fas fa-save mr-2"></i>Cập nhật
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-8 border w-[400px] shadow-2xl rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 text-gray-100">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-100 mb-2">Xác nhận xóa</h3>
+                <p class="text-sm text-gray-300 mb-6">Bạn có chắc chắn muốn xóa nhân viên này? Hành động này không thể hoàn tác.</p>
+                <div class="flex justify-center space-x-4">
+                    <button type="button" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center" onclick="closeModal('deleteConfirmModal')">
+                        <i class="fas fa-times mr-2"></i>Hủy
+                    </button>
+                    <button type="button" class="px-6 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center" onclick="deleteEmployee()">
+                        <i class="fas fa-trash mr-2"></i>Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spinner Overlay -->
+    <div id="spinnerOverlay" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[100] hidden">
+        <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script th:src="@{/js/main.js}"></script>
+
+    <script>
+        let currentEmployeeId = null;
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.classList.add('modal-open'); // Prevent scrolling
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.classList.remove('modal-open'); // Re-enable scrolling
+        }
+
+        function showSpinner() {
+            document.getElementById('spinnerOverlay').classList.remove('hidden');
+        }
+
+        function hideSpinner() {
+            document.getElementById('spinnerOverlay').classList.add('hidden');
+        }
+
+        function fetchEmployees() {
+            showSpinner();
+            fetch('/manager/api/employees')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch employees');
+                    }
+                    return response.json();
+                })
+                .then(employees => {
+                    const tableBody = document.getElementById('employeeTableBody');
+                    tableBody.innerHTML = ''; // Clear existing rows
+
+                    employees.forEach(employee => {
+                        const row = `
+                            <tr class="hover:bg-[#334155]">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">${employee.id}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.name}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.email}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.phone}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.role}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button class="text-yellow-600 hover:text-yellow-900 mr-4" onclick="openEditModal(${employee.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-900" onclick="confirmDelete(${employee.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching employees:', error);
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+        }
+
+        function openEditModal(id) {
+            const employeeId = parseInt(id);
+            if (isNaN(employeeId)) {
+                console.error('Invalid employee ID:', id);
+                alert('ID nhân viên không hợp lệ');
+                return;
+            }
+
+            currentEmployeeId = employeeId;
+            showSpinner();
+            fetch(`/manager/api/employees/${employeeId}`)
+                .then(response => {
+                    if (!response.ok) {
+                         if (response.status === 404) {
+                            throw new Error('Nhân viên không tồn tại.');
+                        }
+                        throw new Error('Failed to fetch employee data');
+                    }
+                    return response.json();
+                })
+                .then(employee => {
+                    document.getElementById('editEmployeeId').value = employee.id;
+                    document.getElementById('editName').value = employee.name;
+                    document.getElementById('editEmail').value = employee.email;
+                    document.getElementById('editPhone').value = employee.phone;
+                    openModal('editEmployeeModal');
+                })
+                .catch(error => {
+                    console.error('Error fetching employee for edit:', error);
+                    alert(error.message || 'Không thể tải thông tin nhân viên. Vui lòng thử lại.');
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+        }
+
+        function saveEmployee() {
+            const form = document.getElementById('addEmployeeForm');
+            // Directly access input values by ID instead of using FormData
+            const employeeEmail = document.getElementById('addEmail').value; // Store email for later use
+
+            const employee = {
+                name: document.getElementById('addName').value,
+                email: employeeEmail,
+                phone: document.getElementById('addPhone').value,
+                address: "Default Address", // Default value based on payload
+                cccd: "Default CCCD", // Default value based on payload
+                role: "employee", // Default role as a string
+                salary: 0, // Default value based on payload
+                workedDays: 0, // Default value based on payload
+                sdate: new Date().toISOString().split('T')[0], // Add start date
+                isdeleted: false
+            };
+
+            // Basic validation to ensure fields are not empty
+            if (!employee.name || !employee.email || !employee.phone) {
+                alert('Please fill in all required fields: Name, Email, and Phone.');
+                return;
+            }
+
+            showSpinner();
+            fetch('/manager/api/employees', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(employee)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 409) {
+                        throw new Error('Email hoặc số điện thoại đã tồn tại!');
+                    } else {
+                        throw new Error('Failed to create employee');
+                    }
+                }
+                return response.json(); // Assuming backend returns the created employee
+            })
+            .then(createdEmployee => {
+                // Create account for the employee
+                const accountData = {
+                    accUsername: employeeEmail.split('@')[0], // Use stored email prefix as username
+                    accPassword: "123456", // Default password
+                    accEmail: employeeEmail,
+                    accDisplayname: employee.name, // Use name from original employee object
+                    accGender: false, // Default value
+                    accBday: "2000-01-01", // Default value
+                    accAddress: "Default Address", // Default value
+                    accPhone: employee.phone, // Use phone from original employee object
+                    role: {
+                        roleName: "cashier" // Default role
+                    },
+                    isdeleted: false
+                };
+
+                return fetch('http://localhost:8080/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(accountData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to create account');
+                    }
+                    return createdEmployee;
+                });
+            })
+            .then(createdEmployee => {
+                console.log('Employee and account created:', createdEmployee);
+                closeModal('addEmployeeModal');
+                fetchEmployees(); // Refresh the table
+                form.reset(); // Clear the form
+            })
+            .catch(error => {
+                console.error('Error saving employee or creating account:', error);
+                alert(error.message || 'Không thể tạo nhân viên mới hoặc tài khoản. Vui lòng thử lại.');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        function updateEmployee() {
+            if (!currentEmployeeId || isNaN(currentEmployeeId)) {
+                console.error('Invalid employee ID:', currentEmployeeId);
+                alert('ID nhân viên không hợp lệ');
+                return;
+            }
+
+            const form = document.getElementById('editEmployeeForm');
+            const formData = new FormData(form);
+            const employee = {
+                id: currentEmployeeId,
+                name: document.getElementById('editName').value,
+                email: document.getElementById('editEmail').value,
+                phone: document.getElementById('editPhone').value,
+                address: "Default Address", // Using a default for now, form doesn't have this field
+                cccd: "Default CCCD", // Using a default for now
+                role: "employee", // Default role as a string
+                salary: 0, // Using a default for now
+                workedDays: 0, // Using a default for now
+                isdeleted: false // Assuming not deleted on update
+            };
+
+            showSpinner();
+            fetch(`/manager/api/employees/${currentEmployeeId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(employee)
+            })
+            .then(response => {
+                if (!response.ok) {
+                     if (response.status === 404) {
+                        throw new Error('Nhân viên không tồn tại.');
+                    } else if (response.status === 409) { // Assuming 409 Conflict for duplicate entries
+                        throw new Error('Email hoặc số điện thoại đã tồn tại!');
+                    }
+                    throw new Error('Failed to update employee');
+                }
+                 return response; // No JSON expected for PUT success
+            })
+            .then(response => {
+                 console.log('Employee updated:', currentEmployeeId, response.status);
+                closeModal('editEmployeeModal');
+                fetchEmployees(); // Refresh the table
+            })
+            .catch(error => {
+                console.error('Error updating employee:', error);
+                alert(error.message || 'Không thể cập nhật thông tin nhân viên. Vui lòng thử lại.');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        function confirmDelete(id) {
+             const employeeId = parseInt(id);
+            if (isNaN(employeeId)) {
+                console.error('Invalid employee ID:', id);
+                alert('ID nhân viên không hợp lệ');
+                return;
+            }
+            currentEmployeeId = employeeId;
+            openModal('deleteConfirmModal');
+        }
+
+        function deleteEmployee() {
+            if (!currentEmployeeId || isNaN(currentEmployeeId)) {
+                console.error('Invalid employee ID:', currentEmployeeId);
+                alert('ID nhân viên không hợp lệ');
+                return;
+            }
+
+            showSpinner();
+            fetch(`/manager/api/employees/${currentEmployeeId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                     if (response.status === 404) {
+                        throw new Error('Nhân viên không tồn tại.');
+                    } else if (response.status === 409) { // Assuming 409 Conflict if employee is linked elsewhere
+                         throw new Error('Không thể xóa nhân viên này.');
+                    }
+                    throw new Error('Failed to delete employee');
+                }
+                 console.log('Delete response status:', response.status);
+                 return response; // No JSON expected for DELETE success
+            })
+            .then(response => {
+                 console.log('Employee deleted:', currentEmployeeId, response.status);
+                closeModal('deleteConfirmModal');
+                fetchEmployees(); // Refresh the table
+            })
+            .catch(error => {
+                console.error('Error deleting employee:', error);
+                alert(error.message || 'Không thể xóa nhân viên. Vui lòng thử lại.');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        // Initial fetch of employees when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchEmployees();
+
+             // Optional: Add search functionality
+            const searchInput = document.getElementById('employeeSearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const filterText = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#employeeTableBody tr');
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        if (text.includes(filterText)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+
+
+    </script>
+</body>
+</html> 

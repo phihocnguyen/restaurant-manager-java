@@ -2,6 +2,7 @@ package com.restaurant.backend.controllers;
 
 import com.restaurant.backend.domains.dto.Receipt.ReceiptDto;
 import com.restaurant.backend.domains.dto.Receipt.dto.CreateReceiptDto;
+import com.restaurant.backend.domains.dto.Receipt.dto.ReceiptHistoryDto;
 import com.restaurant.backend.services.ReceiptService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class ReceiptController {
     }
 
     @GetMapping("/receipts")
-    public ResponseEntity<List<ReceiptDto>> getAllReceipts() {
-        List<ReceiptDto> receipts = receiptService.getAllReceipts();
+    public ResponseEntity<List<ReceiptHistoryDto>> getAllReceipts() {
+        List<ReceiptHistoryDto> receipts = receiptService.getAllReceipts();
         return new ResponseEntity<>(receipts, HttpStatus.OK);
     }
 

@@ -7,6 +7,8 @@ import com.restaurant.backend.mappers.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class AccountMapper implements Mapper<Account, AccountDto> {
     private ModelMapper modelMapper = new ModelMapper();
@@ -21,7 +23,26 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
 
     @Override
     public Account mapTo(AccountDto accountDto) {
-        return modelMapper.map(accountDto, Account.class);
+        Account account = modelMapper.map(accountDto, Account.class);
+        
+        // Set default values if not provided
+        if (account.getAccBday() == null) {
+            account.setAccBday(LocalDate.now());
+        }
+        if (account.getAccGender() == null) {
+            account.setAccGender(false);
+        }
+        if (account.getAccAddress() == null) {
+            account.setAccAddress("");
+        }
+        if (account.getAccDisplayname() == null) {
+            account.setAccDisplayname("User");
+        }
+        if (account.getIsdeleted() == null) {
+            account.setIsdeleted(false);
+        }
+        
+        return account;
     }
 
     public Account mapTo(UpdateAccountDto updateAccountDto) {

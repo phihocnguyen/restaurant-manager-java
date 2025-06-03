@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpStatus;
+
+// Import frontend DTOs
+import com.restaurant.dto.LoginRequest;
+import com.restaurant.dto.AccountResponse;
 
 import java.util.List;
 
@@ -47,32 +52,77 @@ public class AuthController {
     @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("title", "Đăng nhập - Restaurant Manager");
-        return "login";
+        return "auth/login";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, 
+    public String login(@RequestParam String username,
                        @RequestParam String password,
-                       @RequestParam(required = false) String rememberMe) {
-        // TODO: Implement login logic
-        return "redirect:/manager/menu";
+                       @RequestParam(required = false) String rememberMe,
+                       Model model) { // Add Model to pass errors
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setAccUsername(username);
+        loginRequest.setAccPassword(password);
+
+        try {
+            // Expect frontend AccountResponse DTO
+            ResponseEntity<AccountResponse> response = restTemplate.postForEntity(
+                    API_URL + "/login",
+                    loginRequest,
+                    AccountResponse.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                AccountResponse accountResponse = response.getBody();
+                if (accountResponse != null && accountResponse.getRole() != null) {
+                    // Redirect based on role using AccountRoleResponse's getRoleName()
+                    switch (accountResponse.getRole().getRoleName()) {
+                        case "ADMIN":
+                            return "redirect:/manager/dashboard";
+                        case "CUSTOMER":
+                            return "redirect:/";
+                        default:
+                            return "redirect:/sales/items";
+                    }
+                } else {
+                    // Handle unexpected successful response body
+                    model.addAttribute("loginError", "Đăng nhập thất bại: Dữ liệu tài khoản không hợp lệ.");
+                    return "auth/login";
+                }
+            } else if (response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                // Handle 401 Unauthorized
+                model.addAttribute("loginError", "Sai tài khoản hoặc mật khẩu.");
+                return "auth/login";
+            } else {
+                // Handle other HTTP errors
+                 model.addAttribute("loginError", "Đăng nhập thất bại: Lỗi từ server.");
+                 return "auth/login";
+            }
+
+        } catch (Exception e) {
+            // Handle connection errors or other exceptions
+            System.err.println("Login API call error: " + e.getMessage());
+            model.addAttribute("loginError", "Đăng nhập thất bại: Không thể kết nối đến server.");
+            return "auth/login";
+        }
     }
 
     @GetMapping("/forgot-password")
     public String forgotPasswordPage(Model model) {
         model.addAttribute("title", "Quên mật khẩu - Restaurant Manager");
-        return "forgot-password";
+        return "auth/forgot-password";
     }
 
     @PostMapping("/forgot-password")
     public String forgotPassword(@RequestParam String email) {
         // TODO: Implement forgot password logic
-        return "redirect:/login";
+        return "redirect:auth/login";
     }
 
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("title", "Đăng ký - Restaurant Manager");
-        return "register";
+        return "auth/register";
     }
 } 
