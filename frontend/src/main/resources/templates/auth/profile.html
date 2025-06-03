@@ -321,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
         avatarDropdown.classList.remove('hidden');
         
         if (loggedInUser.accUsername) {
-            avatarButton.innerHTML = loggedInUser.accUsername.charAt(0).toUpperCase();
              if(profileUsername) profileUsername.textContent = loggedInUser.accUsername;
             if(profileEmail) profileEmail.textContent = loggedInUser.accEmail;
 
