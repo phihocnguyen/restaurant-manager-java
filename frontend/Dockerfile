@@ -6,6 +6,6 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:17-slim
 WORKDIR /app
-COPY --from=build /app/target/frontend-1.0-SNAPSHOT.jar ./app.jar
+COPY --from=build /app/target/restaurant-manager-1.0-SNAPSHOT.jar ./app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"] 
