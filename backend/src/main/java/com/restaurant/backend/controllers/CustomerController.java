@@ -33,6 +33,15 @@ public class CustomerController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<CustomerDto> getCustomerByEmail(@PathVariable String email) {
+        CustomerDto customer = customerService.getCustomerByEmail(email);
+        if (customer != null) {
+            return ResponseEntity.ok(customer);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping
     public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CreateCustomerDto createCustomerDto) {
         // Check if CCCD, email, or phone already exists

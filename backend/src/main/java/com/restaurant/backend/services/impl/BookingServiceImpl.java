@@ -12,6 +12,7 @@ import com.restaurant.backend.repositories.CustomerRepository;
 import com.restaurant.backend.repositories.DiningTableRepository;
 import com.restaurant.backend.repositories.EmployeeRepository;
 import com.restaurant.backend.services.BookingService;
+import com.restaurant.backend.domains.dto.DiningTable.enums.TableStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -133,6 +134,18 @@ public class BookingServiceImpl implements BookingService {
                 .map(booking -> {
                     booking.setStatus(status);
                     Booking updated = bookingRepository.save(booking);
+                    
+                    // Update table status when booking is confirmed
+                    if (status == 1) { // CONFIRMED
+                        DiningTable table = booking.getTable();
+                        table.setTabStatus(TableStatus.RESERVED);
+                        diningTableRepository.save(table);
+                    } else if (status == 2) { // CANCELLED
+                        DiningTable table = booking.getTable();
+                        table.setTabStatus(TableStatus.EMPTY);
+                        diningTableRepository.save(table);
+                    }
+                    
                     return new ResponseEntity<>(bookingMapper.mapFrom(updated), HttpStatus.OK);
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

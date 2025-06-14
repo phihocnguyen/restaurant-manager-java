@@ -2,15 +2,15 @@ let currentTableId = null;
 let currentPaymentMethod = null;
 let currentPaymentTableId = null;
 
-function openModal(modalId) {
-    document.getElementById(modalId).classList.remove('hidden');
-    document.body.classList.add('modal-open'); // Prevent scrolling
-}
-
-function closeModal(modalId) {
-    document.getElementById(modalId).classList.add('hidden');
-    document.body.classList.remove('modal-open'); // Re-enable scrolling
-}
+//
+// ===== CÁC HÀM TRÙNG LẶP ĐÃ ĐƯỢC XÓA =====
+//
+// 1. openModal(modalId) - Đã có trong bookingList.js
+// 2. closeModal(modalId) - Đã có trong bookingList.js
+// 3. Tạo spinnerOverlay - Đã có trong bookingList.js
+// 4. showGlobalSpinner() - Đã có trong bookingList.js
+// 5. hideGlobalSpinner() - Đã có trong bookingList.js
+//
 
 // Helper function to show spinner on a button
 function showSpinner(buttonElement) {
@@ -28,21 +28,6 @@ function hideSpinner(buttonElement) {
         buttonElement.innerHTML = buttonElement.getAttribute('data-original-html');
         buttonElement.removeAttribute('data-original-html');
     }
-}
-
-// Global spinner overlay functions
-const spinnerOverlay = document.createElement('div');
-spinnerOverlay.id = 'globalSpinnerOverlay';
-spinnerOverlay.className = 'fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[100] hidden';
-spinnerOverlay.innerHTML = '<div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>';
-document.body.appendChild(spinnerOverlay);
-
-function showGlobalSpinner() {
-    spinnerOverlay.classList.remove('hidden');
-}
-
-function hideGlobalSpinner() {
-    spinnerOverlay.classList.add('hidden');
 }
 
 // Hàm lưu thông tin bàn và món ăn vào localStorage
@@ -88,7 +73,6 @@ async function viewTableDetails(tableId) {
                 </div>
             </div>
 
-            <!-- Quick Stats -->
             <div class="grid grid-cols-2 gap-3 mb-6">
                 <div class="text-center bg-green-50 rounded-xl p-4">
                     <div class="text-xs text-green-600 font-medium mb-1">Bàn đang hoạt động</div>
@@ -150,7 +134,6 @@ async function viewTableDetails(tableId) {
             <div class="p-5 border-b border-gray-200">
                  <h3 class="text-xl font-bold text-gray-900 mb-2">Bàn: ${tableDetails.id}</h3>
                  <p class="text-sm text-gray-600 mb-2">Số chỗ: ${tableDetails.tabNum} chỗ</p>
-                 <!-- Placeholder for customer info if available -->
                  <p class="text-sm text-gray-600">Thời gian bắt đầu: ${timestamp}</p>
              </div>
              <div class="flex-1 p-5 overflow-y-auto">
@@ -210,6 +193,66 @@ async function viewTableDetails(tableId) {
     } finally {
         hideGlobalSpinner(); // Hide spinner
     }
+}
+
+function synchronizeStateOnLoad() {
+    console.log("Running state synchronization on page load...");
+    const tableCards = document.querySelectorAll('.table-card');
+
+    tableCards.forEach(card => {
+        const tableId = card.getAttribute('data-table');
+        const serverStatus = card.getAttribute('data-status');
+        
+        // Tìm phần tử để hiển thị tên khách hàng trong card này
+        const customerDisplayElement = card.querySelector('.customer-name'); // Tìm thẻ p theo class
+
+        // Lấy dữ liệu từ localStorage
+        const localTableData = getTableData(tableId);
+        const customerInfoJSON = localStorage.getItem(`table_${tableId}_customer`);
+
+        // Cập nhật giao diện tên khách hàng trên thẻ bàn
+        if (customerDisplayElement) {
+            customerDisplayElement.innerHTML = ''; // Mặc định là trống
+            if (customerInfoJSON) {
+                try {
+                    const customerInfo = JSON.parse(customerInfoJSON);
+                    if (customerInfo && customerInfo.name) {
+                        // Nếu có thông tin, hiển thị nó
+                        customerDisplayElement.textContent = customerInfo.name; // Chỉ hiển thị tên
+                    }
+                } catch (e) {
+                    console.error(`Error parsing customer info for table ${tableId}`, e);
+                }
+            }
+        }
+
+        // Dọn dẹp dữ liệu không nhất quán
+        if (serverStatus === 'EMPTY' && (localTableData || customerInfoJSON)) {
+            console.warn(`Inconsistency Found: Table ${tableId} is EMPTY on server but has local data. Cleaning up.`);
+            resetTableData(tableId);
+            localStorage.removeItem(`table_${tableId}_customer`);
+            if (customerDisplayElement) customerDisplayElement.innerHTML = '';
+        }
+
+        if (serverStatus === 'OCCUPIED' && !localTableData) {
+            console.warn(`Inconsistency Found: Table ${tableId} is OCCUPIED on server but has no local items. Creating empty cart.`);
+            saveTableData(tableId, []);
+        }
+    });
+
+    // Tự động mở lại chi tiết bàn cuối cùng được chọn trước khi reload
+    const lastSelectedTableId = sessionStorage.getItem('lastSelectedTableId');
+    if (lastSelectedTableId) {
+        const correspondingCard = document.querySelector(`.table-card[data-table="${lastSelectedTableId}"]`);
+        // Chỉ mở lại nếu bàn đó vẫn còn tồn tại và không trống
+        if (correspondingCard && correspondingCard.getAttribute('data-status') !== 'EMPTY') {
+             viewTableDetails(lastSelectedTableId);
+        } else {
+            sessionStorage.removeItem('lastSelectedTableId');
+        }
+    }
+
+    console.log("State synchronization finished.");
 }
 
 // Hàm bắt đầu phục vụ bàn
@@ -372,7 +415,6 @@ document.getElementById('bookingForm').addEventListener('submit', async function
          }
 
          closeBookingModal();
-         // No alert needed
 
     } catch (error) {
         console.error('Error booking table:', error);
@@ -386,70 +428,76 @@ document.getElementById('bookingForm').addEventListener('submit', async function
 
 // Confirm booking functionality - This should also call backend API
 async function confirmBooking(tableId) {
-     showGlobalSpinner();
-     try {
-          // Fetch current table data to get tabNum
-         const currentTableResponse = await fetch(`/sales/api/tables/${tableId}`);
-         if (!currentTableResponse.ok) {
-             throw new Error('Failed to fetch current table data');
-         }
-         const currentTableData = await currentTableResponse.json();
+    showGlobalSpinner();
+    try {
+        // --- BẮT ĐẦU THAY ĐỔI ---
+        // 1. Lấy thông tin bàn hiện tại, bao gồm cả thông tin booking và khách hàng
+        const currentTableResponse = await fetch(`/sales/api/tables/${tableId}`);
+        if (!currentTableResponse.ok) {
+            throw new Error('Failed to fetch current table data');
+        }
+        const currentTableData = await currentTableResponse.json();
 
-         // Assuming backend endpoint to update booking status or table status to OCCUPIED
-         const response = await fetch(`/sales/api/tables/${tableId}`, { // Or booking update API
-              method: 'PUT', // Or PUT/PATCH on booking API
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ 
-                  id: tableId,
-                  tabNum: currentTableData.tabNum, // Include tabNum
-                  tabStatus: 'OCCUPIED',
-              })
-          });
+        // 2. Kiểm tra và lưu thông tin khách hàng vào localStorage
+        //    Đây là bước chuyển tiếp thông tin quan trọng!
+        if (currentTableData.booking && currentTableData.booking.customer) {
+            const customer = currentTableData.booking.customer;
+            const customerDataToStore = {
+                id: customer.id,
+                name: customer.name
+                // Bạn có thể thêm các thông tin khác nếu cần
+            };
+            const customerStorageKey = `table_${tableId}_customer`;
+            localStorage.setItem(customerStorageKey, JSON.stringify(customerDataToStore));
+            console.log(`Customer ${customer.name} (ID: ${customer.id}) info stored for table ${tableId}`);
+        }
+        // --- KẾT THÚC THAY ĐỔI ---
 
-         if (!response.ok) {
-               if (response.status === 404) {
-                 throw new Error('Bàn hoặc đặt bàn không tồn tại ở Backend.');
-               } else if (response.status === 409) {
-                   throw new Error('Bàn đang có khách hoặc đã đặt (Backend).');
-               }
-              throw new Error('Lỗi khi xác nhận đặt bàn ở Backend.');
-          }
 
-         // Backend updated successfully, now update frontend UI
-         const tableCard = document.querySelector(`[data-table="${tableId}"]`);
-         if (tableCard) {
-             // Update status
-             tableCard.setAttribute('data-status', 'OCCUPIED');
-             const statusSpan = tableCard.querySelector('.table-status');
-             statusSpan.innerHTML = '<i class="fas fa-circle text-green-500 mr-1"></i>Đang phục vụ';
-             statusSpan.className = 'px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full table-status';
+        // 3. Cập nhật trạng thái bàn thành OCCUPIED
+        const response = await fetch(`/sales/api/tables/${tableId}`, {
+            method: 'PATCH', // Nên dùng PATCH để chỉ cập nhật trạng thái
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tabStatus: 'OCCUPIED',
+            })
+        });
 
-             // Update background and icon
-             const iconDiv = tableCard.querySelector('.h-48');
-             iconDiv.className = 'h-48 table-active flex items-center justify-center';
-             iconDiv.innerHTML = '<i class="fas fa-utensils text-white text-4xl"></i>';
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Bàn hoặc đặt bàn không tồn tại ở Backend.');
+            } else if (response.status === 409) {
+                throw new Error('Bàn đang có khách hoặc đã đặt (Backend).');
+            }
+            throw new Error('Lỗi khi xác nhận đặt bàn ở Backend.');
+        }
 
-             // Update actions
-             const actionsDiv = tableCard.querySelector('.table-actions');
-             actionsDiv.innerHTML = `
-                 <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="viewTableDetails('${tableId}')">
-                     <i class="fas fa-eye mr-1"></i>Xem chi tiết
-                 </button>
-             `;
-         }
-         // Show empty details panel after confirming booking and starting service
-         viewTableDetails(tableId);
+        // 4. Cập nhật giao diện (phần này giữ nguyên)
+        const tableCard = document.querySelector(`[data-table="${tableId}"]`);
+        if (tableCard) {
+            // ... (cập nhật status, icon, button)
+            tableCard.setAttribute('data-status', 'OCCUPIED');
+            // ... (các đoạn code cập nhật class và innerHTML khác)
+            const actionsDiv = tableCard.querySelector('.table-actions');
+            actionsDiv.innerHTML = `
+                <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="viewTableDetails('${tableId}')">
+                    <i class="fas fa-eye mr-1"></i>Xem chi tiết
+                </button>
+            `;
+        }
 
-     } catch (error) {
-         console.error('Error confirming booking:', error);
-         alert(error.message || 'Không thể xác nhận đặt bàn. Vui lòng thử lại.');
-     } finally {
-         hideGlobalSpinner();
-         // Re-apply filtering after status change might be needed
-         refreshTableVisibility();
-     }
+        // 5. Hiển thị chi tiết bàn (giờ đã có thông tin khách hàng)
+        viewTableDetails(tableId);
+
+    } catch (error) {
+        console.error('Error confirming booking:', error);
+        alert(error.message || 'Không thể xác nhận đặt bàn. Vui lòng thử lại.');
+    } finally {
+        hideGlobalSpinner();
+        refreshTableVisibility();
+    }
 }
 
 function refreshTableVisibility() {
@@ -495,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get all filter buttons and table cards
     const filterButtons = document.querySelectorAll('[data-tab-status]');
     const tableCards = document.querySelectorAll('.table-card');
-
+    
     // Add click event listeners to filter buttons
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -508,9 +556,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add active class to clicked button
             this.classList.remove('bg-gray-200', 'text-gray-700');
             this.classList.add('bg-orange-500', 'text-white');
-
+            
             const selectedStatus = this.getAttribute('data-tab-status');
-
+            
             // Filter tables based on selected status
             tableCards.forEach(card => {
                 const tableStatus = card.getAttribute('data-status');
@@ -529,6 +577,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+    synchronizeStateOnLoad();
 });
 
 function openPaymentModal(tableId) {
@@ -583,28 +632,65 @@ async function processPayment() {
     showGlobalSpinner();
     try {
         const tableData = getTableData(currentPaymentTableId);
-        console.log('Table Data:', tableData); // Debug log
+        console.log('Table Data:', tableData);
+
+        let customerId = null;
+        const customerStorageKey = `table_${currentPaymentTableId}_customer`;
+        const customerInfoJSON = localStorage.getItem(customerStorageKey);
+
+        if (customerInfoJSON) {
+            try {
+                const customerInfo = JSON.parse(customerInfoJSON);
+                if (customerInfo && customerInfo.id) {
+                    customerId = customerInfo.id;
+                    console.log(`Retrieved customerId: ${customerId} from key: ${customerStorageKey}`);
+                }
+            } catch (error) {
+                console.error('Error parsing customer info from localStorage:', error);
+            }
+        } else {
+             console.log(`No customer info found in localStorage for key: ${customerStorageKey}`);
+        }
 
         const totalAmount = tableData.items.reduce((sum, item) => sum + item.totalPrice, 0);
 
-        // Prepare receipt data with details as an array
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        let employeeId = null;
+
+        if (loggedInUser && loggedInUser.accEmail) {
+            try {
+                const employeeResponse = await fetch(`http://localhost:8080/employees/email/${loggedInUser.accEmail}`);
+                if (employeeResponse.ok) {
+                    const employee = await employeeResponse.json();
+                    if (employee) {
+                        employeeId = employee.id;
+                        console.log(`Retrieved employeeId for payment: ${employeeId} for email ${loggedInUser.accEmail}`);
+                    }
+                } else {
+                    console.error('Failed to fetch employee info by email:', employeeResponse.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching employee info:', error);
+            }
+        } else {
+            console.warn('loggedInUser or accEmail not found in localStorage. Employee ID will be null.');
+        }
+
+        // Chuẩn bị dữ liệu hóa đơn
         const receiptData = {
             receipt: {
                 tabId: parseInt(currentPaymentTableId),
                 recTime: new Date().toISOString(),
                 isdeleted: false,
-                paymentMethod: currentPaymentMethod
+                paymentMethod: currentPaymentMethod,
+                cusId: customerId ? parseInt(customerId) : null,
+                empId: employeeId
             },
-            details: tableData.items.map(item => {
-                console.log('Item before mapping:', item); // Debug log
-                return {
-                    itemId: parseInt(item.itemId),
-                    quantity: parseInt(item.quantity)
-                };
-            })
+            details: tableData.items.map(item => ({
+                itemId: parseInt(item.itemId),
+                quantity: parseInt(item.quantity)
+            }))
         };
-        console.log('Receipt Data to send:', receiptData); // Debug log
-
         const response = await fetch('http://localhost:8080/receipt-details/many', {
             method: 'POST',
             headers: {
@@ -616,17 +702,20 @@ async function processPayment() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
+        if (customerInfoJSON) {
+            localStorage.removeItem(customerStorageKey);
+            console.log(`Removed customer info for key: ${customerStorageKey}`);
+        }
 
-        // Update table status to EMPTY
+
         const updateTableResponse = await fetch(`http://localhost:8080/tables/${currentPaymentTableId}`, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                tabNum: tableData.tabNum,
                 tabStatus: 'EMPTY',
-                isdeleted: false
             })
         });
 
@@ -635,11 +724,8 @@ async function processPayment() {
         }
 
         alert('Thanh toán thành công!');
-        // Reset table data
         resetTableData(currentPaymentTableId);
-        // Close payment modal
         closePaymentModal();
-        // Refresh the page to show updated table status
         window.location.reload();
 
     } catch (error) {
@@ -648,4 +734,4 @@ async function processPayment() {
     } finally {
         hideGlobalSpinner();
     }
-} 
+}

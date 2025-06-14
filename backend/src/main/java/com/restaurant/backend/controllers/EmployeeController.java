@@ -34,6 +34,11 @@ public class EmployeeController {
         return employeeService.getEmployeeByCccd(cccd);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<EmployeeDto> getEmployeeByEmail(@PathVariable String email) {
+        return employeeService.getEmployeeByEmail(email);
+    }
+
     @GetMapping
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
         return employeeService.getAllEmployees();

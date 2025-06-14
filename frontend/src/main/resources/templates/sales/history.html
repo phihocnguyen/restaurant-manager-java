@@ -212,7 +212,9 @@
                     ...receipts.map(receipt => ({
                         ...receipt,
                         type: 'receipt',
-                        time: new Date(receipt.recTime)
+                        time: new Date(receipt.recTime),
+                        customerName: receipt.customerName,
+                        employeeName: receipt.employeeName
                     }))
                 ].sort((a, b) => b.time - a.time);
 
@@ -315,7 +317,7 @@
                     // ... (your existing variables like orderId, orderTime are still needed here)
                     const orderId = order.type === 'online' ? `#ORD-${order.id}` : `#REC-${order.id}`;
                     const orderTime = new Date(order.type === 'online' ? order.orderTime : order.recTime).toLocaleString('vi-VN');
-                    const customerInfo = order.type === 'online' ? (order.customerName || 'Khách vãng lai') : 'Khách vãng lai';
+                    const customerInfo = order.customerName || 'Khách vãng lai';
                     const address = order.type === 'online' ? (order.address || 'N/A') : `Bàn số ${order.tabId}`;
                     const paymentMethod = order.type === 'online' ? order.paymentMethod : order.paymentMethod; // Assume same field name for simplicity
                     
@@ -337,7 +339,7 @@
                 row.innerHTML = `
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" style="width: fit-content;">${orderId}</th>
                         <td class="px-6 py-4">${orderTime}</td>
-                        <td class="px-6 py-4">N/A</td> <!-- Assuming no employee info in current DTO -->
+                        <td class="px-6 py-4">${order.employeeName || 'N/A'}</td>
                         <td class="px-6 py-4">${customerInfo}</td>
                         <td class="px-6 py-4">${address}</td>
                         <td class="px-6 py-4">

@@ -16,6 +16,8 @@ import java.util.List;
 public class ReceiptHistoryDto {
     private Integer id;
     private Double recPay;
+    private String employeeName;
+    private String customerName;
     private String paymentMethod;
     private Instant recTime;
     private Boolean isdeleted;

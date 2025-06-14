@@ -39,6 +39,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public CustomerDto getCustomerByEmail(String email) {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer != null) {
+            return convertToDto(customer);
+        }
+        return null;
+    }
+
+    @Override
     public CustomerDto createCustomer(CreateCustomerDto createCustomerDto) {
         Customer customer = new Customer();
         customer.setName(createCustomerDto.getName());

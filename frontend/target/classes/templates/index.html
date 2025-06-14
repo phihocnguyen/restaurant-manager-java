@@ -451,6 +451,12 @@
         transform: translateY(-10px);
         opacity: 0;
     }
+    .table-selected {
+    --tw-ring-color: #10b981;
+    background-color: #a7f3d0;
+    border-color: #10b981;
+    box-shadow: var(--tw-ring-inset, 0 0 0) 0 0 0 calc(2px + var(--tw-ring-offset-width, 0px)) var(--tw-ring-color); /* Tương đương ring-2 */
+    }
 
 </style>
 </head>
@@ -740,42 +746,38 @@
 
         <div class="bg-white p-8 rounded-lg shadow-md">
             <form class="space-y-6" id="reservationForm">
+                <input type="hidden" id="selected-table-id" name="tableId" required>
+            
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
                     <div>
                         <label for="res-date" class="block text-sm font-medium text-gray-700">Ngày:</label>
-                        <input type="date" id="res-date" required
+                        <input type="date" id="res-date" name="res-date" required
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     </div>
                     <div>
                         <label for="res-time" class="block text-sm font-medium text-gray-700">Giờ:</label>
-                        <input type="time" id="res-time" required
+                        <input type="time" id="res-time" name="res-time" required
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     </div>
                     <div>
                         <label for="res-guests" class="block text-sm font-medium text-gray-700">Số người:</label>
-                         <input type="number" id="res-guests" required min="1" value="1"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <input type="number" id="res-guests" required min="1" value="1"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     </div>
                     <button type="button" class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors duration-300">Kiểm tra Tình trạng</button>
                 </div>
-
+            
                 <div id="availability-message" class="text-center text-gray-700 mt-4 hidden">
                     Available tables for <span id="available-guests"></span> person(s) on <span id="available-date"></span> at <span id="available-time"></span>.
                     click on an available table to book it
                 </div>
-
+            
                 <div id="table-map-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6 hidden">
-                    <div th:each="table : ${tables}" class="bg-gray-200 rounded-md p-3 text-center flex flex-col items-center justify-center border border-gray-300 cursor-pointer hover:bg-gray-300" 
-                         th:data-table-id="${table.id}" th:data-tab-num="${table.tabNum}" th:data-status="${table.tabStatus ? 'occupied' : 'vacant'}" th:classappend="${table.tabStatus ? 'opacity-50 cursor-not-allowed hover:bg-gray-200' : ''}">
-                        <div class="w-10 h-10 bg-gray-400 rounded-md flex items-center justify-center text-white font-bold text-lg">[[${table.tabNum}]]</div>
-                        <p class="text-xs mt-1" 
-                           th:classappend="${table.tabStatus ? 'text-red-600' : 'text-green-600'}">[[${table.tabStatus ? 'Đã có khách' : 'Còn trống'}]]</p>
                     </div>
-                </div>
-
-                <textarea placeholder="Special Requests" rows="4"
+            
+                <textarea name="specialRequests" placeholder="Special Requests" rows="4"
                           class="w-full px-6 py-4 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-all duration-300 text-gray-800"></textarea>
-
+            
                 <button type="submit" class="w-full premium-btn py-4 rounded-md text-black font-bold text-lg magnetic-btn">
                     Confirm Reservation
                 </button>
@@ -948,314 +950,6 @@
 <!-- Add Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các phần tử DOM
-        const loginBtn = document.getElementById('login-btn');
-        const userProfileMenu = document.getElementById('user-profile-menu');
-        const avatarButton = document.getElementById('avatar-button');
-        const userInitial = document.getElementById('user-initial');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-        const logoutButton = document.getElementById('logout-button');
-
-        // Để thử nghiệm, bạn có thể đặt một đối tượng giả trong localStorage
-        // localStorage.setItem('loggedInUser', JSON.stringify({ name: 'User', email: 'user@example.com' }));
-        
-        // Kiểm tra xem thông tin người dùng có trong localStorage không
-        const loggedInUser = localStorage.getItem('loggedInUser');
-
-        if (loggedInUser) {
-            // Phân tích cú pháp chuỗi JSON để lấy đối tượng người dùng
-            const user = JSON.parse(loggedInUser);
-
-            // Ẩn nút Login và hiển thị menu avatar
-            if (loginBtn) loginBtn.classList.add('hidden');
-            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
-
-            // Đặt ký tự đầu tiên của tên người dùng lên avatar
-            // Giả sử đối tượng người dùng có thuộc tính 'name'
-            if (user.name && userInitial) {
-                userInitial.textContent = user.name.charAt(0).toUpperCase();
-            } else {
-                userInitial.textContent = 'U'; // Ký tự mặc định nếu không có tên
-            }
-        } else {
-            // Nếu không có người dùng đăng nhập, đảm bảo nút Login hiển thị và menu avatar bị ẩn
-            if (loginBtn) loginBtn.classList.remove('hidden');
-            if (userProfileMenu) userProfileMenu.classList.add('hidden');
-        }
-
-        // Xử lý bật/tắt dropdown khi nhấp vào avatar
-        if (avatarButton) {
-            avatarButton.addEventListener('click', function() {
-                const isHidden = dropdownMenu.classList.contains('hidden');
-                if (isHidden) {
-                    dropdownMenu.classList.remove('hidden');
-                    // Thêm class để kích hoạt animation
-                    requestAnimationFrame(() => {
-                        dropdownMenu.classList.add('dropdown-enter-active');
-                        dropdownMenu.classList.remove('dropdown-enter');
-                    });
-                } else {
-                    // Thêm class để kích hoạt animation thoát
-                    dropdownMenu.classList.add('dropdown-exit-active');
-                    dropdownMenu.classList.remove('dropdown-enter-active');
-                    dropdownMenu.addEventListener('transitionend', () => {
-                        dropdownMenu.classList.add('hidden');
-                        dropdownMenu.classList.remove('dropdown-exit-active');
-                    }, { once: true });
-                }
-            });
-        }
-
-        // Xử lý đăng xuất khi nhấp vào nút Logout
-        if (logoutButton) {
-            logoutButton.addEventListener('click', function(event) {
-                event.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
-
-                // Xóa thông tin người dùng khỏi localStorage
-                localStorage.removeItem('loggedInUser');
-
-                // Tải lại trang để cập nhật giao diện
-                window.location.href = '/'; // Hoặc window.location.reload();
-            });
-        }
-
-        // Đóng dropdown nếu nhấp ra ngoài
-        window.addEventListener('click', function(event) {
-            if (!userProfileMenu.contains(event.target)) {
-                if (!dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.add('hidden');
-                }
-            }
-        });
-    });
-
-    function openModal(modalId) {
-        document.getElementById(modalId).classList.remove('hidden');
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.add('hidden');
-    }
-
-    // Mobile Menu Toggle
-    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-    const mobileMenu = document.getElementById("mobileMenu");
-    const closeMobileMenu = document.getElementById("closeMobileMenu");
-
-    if (mobileMenuBtn && mobileMenu && closeMobileMenu) {
-        mobileMenuBtn.addEventListener("click", () => {
-            mobileMenu.classList.toggle("active");
-        });
-
-        closeMobileMenu.addEventListener("click", () => {
-            mobileMenu.classList.remove("active");
-        });
-    }
-
-    // Scroll to Top Button
-    const scrollToTopBtn = document.createElement("div");
-    scrollToTopBtn.className = "scroll-to-top";
-    scrollToTopBtn.innerHTML = "↑";
-    document.body.appendChild(scrollToTopBtn);
-
-    scrollToTopBtn.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    // Floating Particles (simple, no GSAP)
-    function createParticle() {
-        const particle = document.createElement("div");
-        particle.className = "particle";
-        const size = Math.random() * 10 + 5;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 100}vw`;
-        particle.style.top = `${Math.random() * 100}vh`;
-        document.getElementById("particles-container").appendChild(particle);
-
-        // Simple animation
-        particle.animate([
-            { transform: "translateY(0)" },
-            { transform: "translateY(-100vh)" }
-        ], {
-            duration: Math.random() * 10000 + 10000,
-            iterations: 1,
-            easing: "linear"
-        }).onfinish = () => {
-            particle.remove();
-            createParticle();
-        };
-    }
-    for (let i = 0; i < 10; i++) {
-        setTimeout(createParticle, i * 1000);
-    }
-
-    // Loading Screen Animation
-    document.addEventListener('DOMContentLoaded', function() {
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadingParticles = document.getElementById('loadingParticles');
-        
-        // Create loading particles
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'loading-particle';
-            const size = Math.random() * 8 + 4;
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 3 + 's';
-            particle.style.opacity = Math.random() * 0.5 + 0.3;
-            loadingParticles.appendChild(particle);
-        }
-
-        // Hide loading screen after delay
-        setTimeout(() => {
-            if (loadingScreen) {
-                loadingScreen.classList.add('hidden');
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 1200);
-            }
-        }, 5000);
-    });
-
-    // Reservation Table Map Logic
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkAvailabilityBtn = document.querySelector('#reservationForm button[type="button"]');
-        const tableMapGrid = document.getElementById('table-map-grid');
-        const availabilityMessage = document.getElementById('availability-message');
-        const resDateInput = document.getElementById('res-date');
-        const resTimeInput = document.getElementById('res-time');
-        const resGuestsInput = document.getElementById('res-guests');
-        const availableGuestsSpan = document.getElementById('available-guests');
-        const availableDateSpan = document.getElementById('available-date');
-        const availableTimeSpan = document.getElementById('available-time');
-
-        if (checkAvailabilityBtn && tableMapGrid && availabilityMessage && resDateInput && resTimeInput && resGuestsInput) {
-            checkAvailabilityBtn.addEventListener('click', function() {
-                const selectedDate = resDateInput.value;
-                const selectedTime = resTimeInput.value;
-                const selectedGuests = resGuestsInput.value;
-
-                if (!selectedDate || !selectedTime || !selectedGuests) {
-                    alert('Vui lòng chọn ngày, giờ và số người.');
-                    return;
-                }
-
-                // TODO: Implement actual API call to backend to check table availability
-                // For now, just display the tables fetched by the controller and the message
-
-                // Update availability message
-                availableGuestsSpan.innerText = selectedGuests;
-                availableDateSpan.innerText = selectedDate;
-                availableTimeSpan.innerText = selectedTime;
-
-                // Show the message and table grid
-                availabilityMessage.classList.remove('hidden');
-                tableMapGrid.classList.remove('hidden');
-
-                // TODO: Filter/highlight available tables based on selected date, time, and guests
-                // This will require data from the backend API call result
-
-            });
-        }
-    });
-
-    // Counter Animation with adjusted duration
-    function animateCounter(element) {
-        const target = parseInt(element.getAttribute('data-target'));
-        const duration = 5000; // 5 seconds
-        const step = target / (duration / 16); // 60fps
-        let current = 0;
-
-        const updateCounter = () => {
-            current += step;
-            if (current < target) {
-                element.textContent = Math.floor(current).toLocaleString();
-                requestAnimationFrame(updateCounter);
-            } else {
-                element.textContent = target.toLocaleString();
-            }
-        };
-
-        updateCounter();
-    }
-
-    // Scroll Animation Observer
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                // If it's the stats container, start the counter animation
-                if (entry.target.classList.contains('stats-container')) {
-                    const counters = entry.target.querySelectorAll('.counter');
-                    counters.forEach(counter => {
-                        animateCounter(counter);
-                    });
-                }
-            }
-        });
-    }, { 
-        threshold: 0.2, // Trigger when 20% of the element is visible
-        rootMargin: '-50px'
-    });
-
-    // Observe all sections with fade-in classes
-    document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .stats-container').forEach(element => {
-        scrollObserver.observe(element);
-    });
-
-    // Function to check login status and update UI
-    function updateAuthUI() {
-        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        const loginButton = document.getElementById('loginButton');
-        const avatarDropdown = document.getElementById('avatarDropdown');
-        const avatarButton = document.getElementById('avatarButton');
-        
-        if (loggedInUser) {
-            // User is logged in
-            loginButton.classList.add('hidden');
-            avatarDropdown.classList.remove('hidden');
-            
-            // Set avatar initial if available
-            if (loggedInUser.username) {
-                avatarButton.innerHTML = loggedInUser.username.charAt(0).toUpperCase();
-            }
-        } else {
-            // User is not logged in
-            loginButton.classList.remove('hidden');
-            avatarDropdown.classList.add('hidden');
-        }
-    }
-
-    // Toggle dropdown menu
-    document.getElementById('avatarButton')?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        dropdownMenu.classList.toggle('hidden');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const avatarButton = document.getElementById('avatarButton');
-        if (dropdownMenu && !dropdownMenu.contains(e.target) && !avatarButton?.contains(e.target)) {
-            dropdownMenu.classList.add('hidden');
-        }
-    });
-
-    // Handle logout
-    document.getElementById('logoutButton')?.addEventListener('click', function() {
-        localStorage.removeItem('loggedInUser');
-        window.location.href = '/';
-    });
-
-    // Check login status on page load
-    document.addEventListener('DOMContentLoaded', updateAuthUI);
-</script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

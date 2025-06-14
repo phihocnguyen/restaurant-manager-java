@@ -38,6 +38,17 @@ public class ReceiptMapper implements Mapper<Receipt, ReceiptDto> {
     }
 
     public ReceiptHistoryDto mapToHistoryDto(Receipt receipt) {
-        return modelMapper.map(receipt, ReceiptHistoryDto.class);
+        ReceiptHistoryDto dto = modelMapper.map(receipt, ReceiptHistoryDto.class);
+        if (receipt.getEmp() != null) {
+            dto.setEmployeeName(receipt.getEmp().getName());
+        }
+
+        if (receipt.getCus() != null) {
+            dto.setCustomerName(receipt.getCus().getName());
+        } else {
+            dto.setCustomerName("Khách vãng lai");
+        }
+
+        return dto;
     }
 }

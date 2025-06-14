@@ -5,6 +5,7 @@ import com.restaurant.backend.domains.dto.Employee.dto.CreateEmployeeDto;
 import com.restaurant.backend.domains.entities.Employee;
 import com.restaurant.backend.mappers.impl.EmployeeMapper;
 import com.restaurant.backend.repositories.EmployeeRepository;
+import com.restaurant.backend.repositories.AccountRepository;
 import com.restaurant.backend.services.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,12 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final AccountRepository accountRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, AccountRepository accountRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -62,6 +65,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     public ResponseEntity<EmployeeDto> getEmployeeByCccd(String cccd) {
         return employeeRepository.findByCccd(cccd)
                 .map(employee -> new ResponseEntity<>(employeeMapper.mapFrom(employee), HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public ResponseEntity<EmployeeDto> getEmployeeByEmail(String email) {
+        // First find the account with the given email to get the phone number
+        return accountRepository.findOneByAccEmail(email)
+                .map(account -> employeeRepository.findByPhone(account.getAccPhone())
+                        .map(employee -> new ResponseEntity<>(employeeMapper.mapFrom(employee), HttpStatus.OK))
+                        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND)))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

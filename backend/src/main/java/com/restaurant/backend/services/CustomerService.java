@@ -14,6 +14,8 @@ public interface CustomerService {
 
     public CustomerDto getCustomerById(Integer id);
 
+    public CustomerDto getCustomerByEmail(String email);
+
     public CustomerDto createCustomer(CreateCustomerDto createCustomerDto);
 
     public CustomerDto updateCustomer(Integer id, CustomerDto customerDto);

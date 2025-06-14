@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     Optional<Employee> findByCccd(String cccd);
 
+    Optional<Employee> findByPhone(String phone);
+
     List<Employee> findByRoleAndIsdeletedFalse(String role);
 
     List<Employee> findByIsdeletedFalse();

@@ -17,6 +17,8 @@ public interface EmployeeService {
 
     ResponseEntity<EmployeeDto> getEmployeeByCccd(String cccd);
 
+    ResponseEntity<EmployeeDto> getEmployeeByEmail(String email);
+
     ResponseEntity<List<EmployeeDto>> getAllEmployees();
 
     ResponseEntity<List<EmployeeDto>> getEmployeesByRole(String role);
