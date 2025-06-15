@@ -133,127 +133,151 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8 max-w-5xl">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Left: Order Summary -->
-            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-semibold flex items-center gap-2">
-                        <i class="fas fa-shopping-cart text-yellow-400"></i> Pay G15 Kitchen
-                    </h2>
-                </div>
-                <div class="space-y-4">
-                    <div th:each="item : ${selectedItems}" class="flex flex-col bg-white/5 rounded-lg p-4 hover:bg-white/10 transition">
-                        <div class="flex items-center justify-between mb-2">
-                            <div class="flex items-center gap-4">
-                                <img th:src="${item.imageUrl}" alt="Item Image" class="w-12 h-12 object-cover rounded-md">
-                                <div>
-                                    <p class="font-semibold">[[${item.name}]]</p>
-                                    <p class="text-sm text-gray-400">Qty [[${item.quantity}]] • $[[${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')}]] each</p>
-                                </div>
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <div class="grid grid-cols-1 lg:grid-cols-10 gap-6">
+            <!-- Left: Payment Form (70%) -->
+            <div class="lg:col-span-7">
+                <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                    <form id="payment-form">
+                      <h3 class="text-lg font-semibold mb-4">Shipping information</h3>
+                      <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label class="block text-sm text-gray-400 mb-1">Name</label>
+                              <input type="text" id="customerName" name="customerName" required
+                                     class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                                     placeholder="Name">
                             </div>
-                            <p class="font-semibold">$[[${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 2, 'POINT')}]]</p>
+                            <div>
+                              <label class="block text-sm text-gray-400 mb-1">Phone Number</label>
+                              <input type="tel" id="phoneNumber" name="phoneNumber" required
+                                     class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                                     placeholder="Phone Number">
+                            </div>
                         </div>
-                        <div class="mt-2">
-                            <input type="text" th:name="'itemNote_' + ${item.id}" 
-                                   class="w-full bg-white/5 border border-white/20 rounded-lg p-2 text-sm focus:outline-none focus:border-yellow-400 transition"
-                                   placeholder="Add note for this item (e.g., Extra spicy, No onions)"
-                                   th:value="${item.note}">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Province/City</label>
+                                <select id="province" name="provinceCode" required
+                                        class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
+                                    <option value="" disabled selected>Select Province/City</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">District</label>
+                                <select id="district" name="districtCode" required
+                                        class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
+                                    <option value="" disabled selected>Select District</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Ward/Commune</label>
+                                <select id="ward" name="wardCode" required
+                                        class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
+                                    <option value="" disabled selected>Select Ward/Commune</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="mt-6 border-t border-white/20 pt-4">
-                    <div class="flex justify-between text-gray-400">
-                        <span>Subtotal</span>
-                        <span>$[[${#numbers.formatDecimal(totalAmount - 5, 0, 'COMMA', 2, 'POINT')}]]</span>
-                    </div>
-                    <div class="flex justify-between text-gray-400 mt-2">
-                        <span>Shipping (Ground shipping 3-5 business days)</span>
-                        <span>$5.00</span>
-                    </div>
-                    <div class="flex justify-between items-center border-t border-gray-600 pt-4 mt-4">
-                        <span class="text-lg font-bold"><i class="fas fa-money-bill-wave mr-2"></i>Total:</span>
-                        <span class="text-xl font-bold text-yellow-400">[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]] $</span>
-                        <input type="hidden" id="totalAmount" th:value="${totalAmount}">
-                    </div>
-                </div>
-            </div>
+                        
+                        <div>
+                          <label class="block text-sm text-gray-400 mb-1">Street Address</label>
+                          <input type="text" id="streetAddress" name="streetAddress" required
+                                 class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                                 placeholder="Street address (House number, street name, etc.)">
+                        </div>
+                        
+                        <div>
+                          <label class="block text-sm text-gray-400 mb-1">Order Note (Optional)</label>
+                          <textarea id="orderNote" name="orderNote"
+                                 class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
+                                 placeholder="Any special instructions for your order?"
+                                 rows="3"></textarea>
+                        </div>
 
-            <!-- Right: Payment Form -->
-            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <form id="payment-form">
-                  <h3 class="text-lg font-semibold mb-4">Shipping information</h3>
-                  <div class="space-y-4">
-                    <div>
-                      <label class="block text-sm text-gray-400 mb-1">Name</label>
-                      <input type="text" id="customerName" name="customerName" required
-                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
-                             placeholder="Name">
-                    </div>
-                    <div>
-                      <label class="block text-sm text-gray-400 mb-1">Phone Number</label>
-                      <input type="tel" id="phoneNumber" name="phoneNumber" required
-                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
-                             placeholder="Phone Number">
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-400 mb-1">Province/City</label>
-                        <select id="province" name="provinceCode" required
-                                class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
-                            <option value="" disabled selected>Select Province/City</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-400 mb-1">District</label>
-                        <select id="district" name="districtCode" required
-                                class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
-                            <option value="" disabled selected>Select District</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-400 mb-1">Ward/Commune</label>
-                        <select id="ward" name="wardCode" required
-                                class="w-full bg-black border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition">
-                            <option value="" disabled selected>Select Ward/Commune</option>
-                        </select>
-                    </div>
-                    <div>
-                      <label class="block text-sm text-gray-400 mb-1">Street Address</label>
-                      <input type="text" id="streetAddress" name="streetAddress" required
-                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
-                             placeholder="Street address (House number, street name, etc.)">
-                    </div>
-                    <div>
-                      <label class="block text-sm text-gray-400 mb-1">Order Note (Optional)</label>
-                      <textarea id="orderNote" name="orderNote"
-                             class="w-full bg-white/5 border border-white/20 rounded-lg p-3 focus:outline-none focus:border-yellow-400 transition"
-                             placeholder="Any special instructions for your order?"
-                             rows="3"></textarea>
-                    </div>
+                        <div>
+                          <label class="block text-sm text-gray-400 mb-1">Payment Method</label>
+                          <div class="grid grid-cols-2 gap-3">
+                            <button type="button" onclick="selectPaymentMethod('Cash')" class="payment-method-btn p-4 border-2 border-white/20 rounded-xl hover:border-yellow-400 transition-all flex items-center justify-center space-x-2" data-method="Cash">
+                                <i class="fas fa-money-bill-wave text-gray-400"></i>
+                                <span class="font-medium">Cash</span>
+                            </button>
+                            <button type="button" onclick="selectPaymentMethod('Internet Banking')" class="payment-method-btn p-4 border-2 border-white/20 rounded-xl hover:border-yellow-400 transition-all flex items-center justify-center space-x-2" data-method="Internet Banking">
+                                <i class="fas fa-university text-gray-400"></i>
+                                <span class="font-medium">Internet Banking</span>
+                            </button>
+                          </div>
+                          <input type="hidden" id="paymentMethod" name="paymentMethod" required>
+                        </div>
 
-                    <div>
-                      <label class="block text-sm text-gray-400 mb-1">Payment Method</label>
-                      <div class="grid grid-cols-2 gap-3">
-                        <button type="button" onclick="selectPaymentMethod('Cash')" class="payment-method-btn p-4 border-2 border-white/20 rounded-xl hover:border-yellow-400 transition-all flex items-center justify-center space-x-2" data-method="Cash">
-                            <i class="fas fa-money-bill-wave text-gray-400"></i>
-                            <span class="font-medium">Cash</span>
-                        </button>
-                        <button type="button" onclick="selectPaymentMethod('Internet Banking')" class="payment-method-btn p-4 border-2 border-white/20 rounded-xl hover:border-yellow-400 transition-all flex items-center justify-center space-x-2" data-method="Internet Banking">
-                            <i class="fas fa-university text-gray-400"></i>
-                            <span class="font-medium">Internet Banking</span>
-                        </button>
+                        <!-- VietQR Section (Hidden by default) -->
+                        <div id="vietQrSection" class="space-y-4 hidden">
+                            <h3 class="text-lg font-semibold">Thanh toán bằng VietQR</h3>
+                            <div class="flex justify-center items-center p-4 bg-white/5 rounded-lg border border-white/20">
+                                <img id="vietQrImage" src="" alt="VietQR Code" class="w-48 h-48 border border-white/10 rounded-lg"/>
+                            </div>
+                            <p class="text-sm text-gray-400 text-center">Quét mã QR để thanh toán. Vui lòng tải ảnh xác minh sau khi hoàn tất.</p>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Tải ảnh xác minh (Bắt buộc)</label>
+                                <input type="file" id="paymentProof" name="paymentProof" accept="image/*" required
+                                       class="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-sm focus:outline-none focus:border-yellow-400 transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"/>
+                            </div>
+                        </div>
                       </div>
-                      <input type="hidden" id="paymentMethod" name="paymentMethod" required>
-                    </div>
-                  </div>
-              
-                  <button type="submit" id="submit-button"
-                          class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold py-3 rounded-lg mt-6 hover:shadow-lg hover:shadow-yellow-500/50 transition flex items-center justify-center gap-2">
-                    <span>Pay $[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]]</span>
-                  </button>
-                </form>
+                  
+                      <button type="submit" id="submit-button"
+                              class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold py-3 rounded-lg mt-6 hover:shadow-lg hover:shadow-yellow-500/50 transition flex items-center justify-center gap-2">
+                        <span>Pay $[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]]</span>
+                      </button>
+                    </form>
+                </div>
             </div>
-              
+
+            <!-- Right: Order Summary (30%) -->
+            <div class="lg:col-span-3">
+                <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 sticky top-24">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                            <i class="fas fa-shopping-cart text-yellow-400"></i> Pay G15 Kitchen
+                        </h2>
+                    </div>
+                    <div class="space-y-4">
+                        <div th:each="item : ${selectedItems}" class="flex flex-col bg-white/5 rounded-lg p-4 hover:bg-white/10 transition">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <img th:src="${item.imageUrl}" alt="Item Image" class="w-10 h-10 object-cover rounded-md">
+                                    <div>
+                                        <p class="font-semibold text-sm">[[${item.name}]]</p>
+                                        <p class="text-xs text-gray-400">Qty [[${item.quantity}]] • $[[${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')}]] each</p>
+                                    </div>
+                                </div>
+                                <p class="font-semibold text-sm">$[[${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 2, 'POINT')}]]</p>
+                            </div>
+                            <div class="mt-2">
+                                <input type="text" th:name="'itemNote_' + ${item.id}" 
+                                       class="w-full bg-white/5 border border-white/20 rounded-lg p-2 text-xs focus:outline-none focus:border-yellow-400 transition"
+                                       placeholder="Add note for this item"
+                                       th:value="${item.note}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 border-t border-white/20 pt-4">
+                        <div class="flex justify-between text-gray-400 text-sm">
+                            <span>Subtotal</span>
+                            <span>$[[${#numbers.formatDecimal(totalAmount - 5, 0, 'COMMA', 2, 'POINT')}]]</span>
+                        </div>
+                        <div class="flex justify-between text-gray-400 mt-2 text-sm">
+                            <span>Shipping</span>
+                            <span>$5.00</span>
+                        </div>
+                        <div class="flex justify-between items-center border-t border-gray-600 pt-4 mt-4">
+                            <span class="text-lg font-bold"><i class="fas fa-money-bill-wave mr-2"></i>Total:</span>
+                            <span class="text-xl font-bold text-yellow-400">[[${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 2, 'POINT')}]] $</span>
+                            <input type="hidden" id="totalAmount" th:value="${totalAmount}">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -283,6 +307,33 @@
                 }
             });
             document.getElementById('paymentMethod').value = method;
+
+            // Show/hide VietQR section and set required for paymentProof
+            const vietQrSection = document.getElementById('vietQrSection');
+            const paymentProofInput = document.getElementById('paymentProof');
+
+            if (method === 'Internet Banking') {
+                vietQrSection.classList.remove('hidden');
+                paymentProofInput.required = true;
+                generateVietQR(); // Generate QR when Internet Banking is selected
+            } else {
+                vietQrSection.classList.add('hidden');
+                paymentProofInput.required = false;
+            }
+        }
+
+        function generateVietQR() {
+            const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+            const customerName = document.getElementById('customerName').value; // Get customer name
+            const bankId = '970403'; // New Bank ID
+            const accountNo = '070126475657'; // New Account Number
+            const template = 'print'; // New Template
+            const accountName = encodeURIComponent('KHONG HUYNH NGOC HAN');
+            const addInfo = encodeURIComponent(`${customerName} - Thanh Toán - G15 Kitchen`);
+
+            const vietQRUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${totalAmount}&addInfo=${addInfo}&accountName=${accountName}`;
+            document.getElementById('vietQrImage').src = vietQRUrl;
+            console.log('Generated VietQR URL:', vietQRUrl);
         }
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -294,9 +345,16 @@
                 paymentForm.addEventListener('submit', async function(event) {
                     event.preventDefault();
                     
-                    // Validate payment method
+                    // Validate payment method and proof
                     if (!currentPaymentMethod) {
                         alert('Vui lòng chọn phương thức thanh toán.');
+                        return;
+                    }
+                    if (currentPaymentMethod === 'Internet Banking' && (!document.getElementById('paymentProof').files || document.getElementById('paymentProof').files.length === 0)) {
+                        alert('Vui lòng tải lên ảnh xác minh thanh toán.');
+                        loadingOverlay.classList.add('hidden');
+                        loadingOverlay.classList.remove('flex');
+                        submitButton.disabled = false;
                         return;
                     }
                     
@@ -351,6 +409,7 @@
                     console.log('Order data being sent:', orderData);
 
                     try {
+                        // First create the order
                         const response = await fetch('http://localhost:8080/orders', {
                             method: 'POST',
                             headers: {
@@ -364,10 +423,35 @@
                         }
 
                         const result = await response.json();
+                        
+                        // If payment method is Internet Banking and there's a payment proof image
+                        if (currentPaymentMethod === 'Internet Banking' && document.getElementById('paymentProof').files.length > 0) {
+                            const formData = new FormData();
+                            formData.append('file', document.getElementById('paymentProof').files[0]);
+                            
+                            // Upload payment proof image
+                            const uploadResponse = await fetch(`http://localhost:8080/orders/${result.id}/payment-proof`, {
+                                method: 'PUT',
+                                body: formData
+                            });
+                            
+                            if (!uploadResponse.ok) {
+                                console.error('Failed to upload payment proof');
+                                throw new Error('Failed to upload payment proof');
+                            }
+                        }
+
                         const isSuccess = await submitOrderToFirebase(orderData);
                         
                         if (isSuccess) {
-                            window.location.href = '/order/success'; // Thành công thì chuyển trang
+                            // Tạo query string từ selectedItems
+                            const params = new URLSearchParams();
+                            for (const item of selectedItems) {
+                                params.append('name', item.name || item.itemName || 'Món ăn');
+                                params.append('quantity', item.quantity);
+                                params.append('price', item.price);
+                            }
+                            window.location.href = '/order/success?' + params.toString();
                         } else {
                             alert('Tạo đơn hàng thất bại. Vui lòng thử lại.');
                             loadingOverlay.classList.add('hidden');
@@ -375,10 +459,8 @@
                             submitButton.disabled = false;
                         }
                     } catch (error) {
-                        console.error('Error creating order:', error);
-                        alert('Failed to create order. Please try again.');
-                    } finally {
-                        // Hide loading state
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra. Vui lòng thử lại.');
                         loadingOverlay.classList.add('hidden');
                         loadingOverlay.classList.remove('flex');
                         submitButton.disabled = false;

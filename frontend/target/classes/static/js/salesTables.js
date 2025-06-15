@@ -106,6 +106,20 @@ async function viewTableDetails(tableId) {
         const orderItems = tableData ? tableData.items : [];
         const timestamp = tableData ? new Date(tableData.timestamp).toLocaleString() : 'N/A';
 
+        // Get customer info from localStorage, default to 'Khách vãng lai' if not found
+        let customerName = 'Khách vãng lai';
+        const customerInfoJSON = localStorage.getItem(`table_${tableId}_customer`);
+        if (customerInfoJSON) {
+            try {
+                const customerInfo = JSON.parse(customerInfoJSON);
+                if (customerInfo && customerInfo.name) {
+                    customerName = customerInfo.name;
+                }
+            } catch (e) {
+                console.error('Error parsing customer info for table', tableId, e);
+            }
+        }
+
         let orderDetailsHtml = '';
         let totalAmount = 0;
 
@@ -135,6 +149,7 @@ async function viewTableDetails(tableId) {
                  <h3 class="text-xl font-bold text-gray-900 mb-2">Bàn: ${tableDetails.id}</h3>
                  <p class="text-sm text-gray-600 mb-2">Số chỗ: ${tableDetails.tabNum} chỗ</p>
                  <p class="text-sm text-gray-600">Thời gian bắt đầu: ${timestamp}</p>
+                 <p class="text-sm text-gray-600">Tên khách hàng: ${customerName}</p>
              </div>
              <div class="flex-1 p-5 overflow-y-auto">
                  <h4 class="font-bold text-gray-800 mb-3">Chi tiết đơn hàng</h4>
@@ -262,6 +277,7 @@ async function startServing(tableId) {
     if (tableData && tableData.items.length > 0) {
          // If table has items in localStorage, just view details
          viewTableDetails(tableId);
+         synchronizeStateOnLoad();
          return;
     } else if (tableData && tableData.items.length === 0) {
          // If table exists but no items, maybe it was started but not used
@@ -272,6 +288,12 @@ async function startServing(tableId) {
          saveTableData(tableId, []);
          // No alert needed
     }
+
+    // Lưu thông tin khách hàng mặc định
+    const defaultCustomerInfo = {
+        name: "Khách vãng lai"
+    };
+    localStorage.setItem(`table_${tableId}_customer`, JSON.stringify(defaultCustomerInfo));
 
      // Fetch current table data to get tabNum
      showGlobalSpinner();
@@ -327,8 +349,7 @@ async function startServing(tableId) {
                  </button>
              `;
          }
-         // Show empty details panel after starting service
-         viewTableDetails(tableId);
+         window.location.reload()
 
      } catch (error) {
          console.error('Error starting service:', error);
@@ -408,7 +429,7 @@ document.getElementById('bookingForm').addEventListener('submit', async function
              // Update actions - Assuming confirm booking button appears after booking
              const actionsDiv = tableCard.querySelector('.table-actions');
              actionsDiv.innerHTML = `
-                  <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="confirmBooking('${tableId}')">
+                  <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="confirmBooking1('${tableId}')">
                       <i class="fas fa-check mr-1"></i>Xác nhận
                   </button>
               `;
@@ -427,10 +448,9 @@ document.getElementById('bookingForm').addEventListener('submit', async function
 });
 
 // Confirm booking functionality - This should also call backend API
-async function confirmBooking(tableId) {
+async function confirmBooking1(tableId) {
     showGlobalSpinner();
     try {
-        // --- BẮT ĐẦU THAY ĐỔI ---
         // 1. Lấy thông tin bàn hiện tại, bao gồm cả thông tin booking và khách hàng
         const currentTableResponse = await fetch(`/sales/api/tables/${tableId}`);
         if (!currentTableResponse.ok) {
@@ -438,25 +458,11 @@ async function confirmBooking(tableId) {
         }
         const currentTableData = await currentTableResponse.json();
 
-        // 2. Kiểm tra và lưu thông tin khách hàng vào localStorage
-        //    Đây là bước chuyển tiếp thông tin quan trọng!
-        if (currentTableData.booking && currentTableData.booking.customer) {
-            const customer = currentTableData.booking.customer;
-            const customerDataToStore = {
-                id: customer.id,
-                name: customer.name
-                // Bạn có thể thêm các thông tin khác nếu cần
-            };
-            const customerStorageKey = `table_${tableId}_customer`;
-            localStorage.setItem(customerStorageKey, JSON.stringify(customerDataToStore));
-            console.log(`Customer ${customer.name} (ID: ${customer.id}) info stored for table ${tableId}`);
-        }
-        // --- KẾT THÚC THAY ĐỔI ---
+        saveTableData(tableId, []);
 
-
-        // 3. Cập nhật trạng thái bàn thành OCCUPIED
-        const response = await fetch(`/sales/api/tables/${tableId}`, {
-            method: 'PATCH', // Nên dùng PATCH để chỉ cập nhật trạng thái
+        // 4. Cập nhật trạng thái bàn thành OCCUPIED
+        const response = await fetch(`http://localhost:8080/tables/${tableId}`, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -473,29 +479,15 @@ async function confirmBooking(tableId) {
             }
             throw new Error('Lỗi khi xác nhận đặt bàn ở Backend.');
         }
-
-        // 4. Cập nhật giao diện (phần này giữ nguyên)
-        const tableCard = document.querySelector(`[data-table="${tableId}"]`);
-        if (tableCard) {
-            // ... (cập nhật status, icon, button)
-            tableCard.setAttribute('data-status', 'OCCUPIED');
-            // ... (các đoạn code cập nhật class và innerHTML khác)
-            const actionsDiv = tableCard.querySelector('.table-actions');
-            actionsDiv.innerHTML = `
-                <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md" onclick="viewTableDetails('${tableId}')">
-                    <i class="fas fa-eye mr-1"></i>Xem chi tiết
-                </button>
-            `;
-        }
-
-        // 5. Hiển thị chi tiết bàn (giờ đã có thông tin khách hàng)
-        viewTableDetails(tableId);
+        
+        window.location.reload()
 
     } catch (error) {
         console.error('Error confirming booking:', error);
         alert(error.message || 'Không thể xác nhận đặt bàn. Vui lòng thử lại.');
     } finally {
         hideGlobalSpinner();
+        // Cập nhật lại bộ lọc sau khi thay đổi trạng thái
         refreshTableVisibility();
     }
 }
@@ -580,6 +572,24 @@ document.addEventListener('DOMContentLoaded', function() {
     synchronizeStateOnLoad();
 });
 
+let selectedPaymentMethod = null;
+
+
+function generateVietQR() {
+    const totalAmount = parseFloat(document.getElementById('paymentTotalAmount').textContent.replace(/[^0-9.]/g, ''));
+    const tableNumber = document.getElementById('paymentTableNumber').textContent;
+    const bankId = '970403';
+    const accountNo = '070126475657';
+    const template = 'print';
+    const accountName = encodeURIComponent('KHONG HUYNH NGOC HAN');
+    const addInfo = encodeURIComponent(`Thanh Toan Ban ${tableNumber} - G15 Kitchen`);
+
+    const vietQRUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${totalAmount}&addInfo=${addInfo}&accountName=${accountName}`;
+    document.getElementById('vietQrImage').src = vietQRUrl;
+    console.log('Generated VietQR URL for table payment:', vietQRUrl);
+}
+
+
 function openPaymentModal(tableId) {
     currentPaymentTableId = tableId;
     const tableData = getTableData(tableId);
@@ -588,7 +598,9 @@ function openPaymentModal(tableId) {
         return;
     }
 
+    console.log('Items from localStorage for table', tableId, ':', tableData.items);
     const totalAmount = tableData.items.reduce((sum, item) => sum + item.totalPrice, 0);
+    console.log('Calculated totalAmount:', totalAmount);
     document.getElementById('paymentTotalAmount').textContent = formatCurrency(totalAmount);
     document.getElementById('paymentTableNumber').textContent = `Bàn ${tableId}`;
     
@@ -601,6 +613,7 @@ function openPaymentModal(tableId) {
 
     document.getElementById('paymentModal').classList.remove('hidden');
     document.getElementById('paymentModal').classList.add('flex');
+    document.getElementById('vietQrSection').classList.add('hidden');
 }
 
 function closePaymentModal() {
@@ -614,13 +627,21 @@ function selectPaymentMethod(method) {
     currentPaymentMethod = method;
     document.querySelectorAll('.payment-method-btn').forEach(btn => {
         if (btn.getAttribute('data-method') === method) {
-            btn.classList.remove('border-gray-200');
-            btn.classList.add('border-orange-500', 'bg-orange-50');
+            btn.classList.add('border-orange-500', 'bg-orange-500/10', 'text-orange-800');
+            btn.classList.remove('border-gray-200', 'text-gray-600');
         } else {
-            btn.classList.remove('border-orange-500', 'bg-orange-50');
-            btn.classList.add('border-gray-200');
+            btn.classList.remove('border-orange-500', 'bg-orange-500/10', 'text-orange-800');
+            btn.classList.add('border-gray-200', 'text-gray-600');
         }
     });
+
+    const vietQrSection = document.getElementById('vietQrSection');
+    if (method === 'Internet Banking') {
+        vietQrSection.classList.remove('hidden');
+        generateVietQR();
+    } else {
+        vietQrSection.classList.add('hidden');
+    }
 }
 
 async function processPayment() {
@@ -708,6 +729,51 @@ async function processPayment() {
             console.log(`Removed customer info for key: ${customerStorageKey}`);
         }
 
+        // In hóa đơn PDF các món ăn
+        if (window.jspdf && window.jspdf.jsPDF) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFont('Arial', 'normal');
+            doc.setFontSize(18);
+            doc.text('HÓA ĐƠN THANH TOÁN', 105, 18, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(`Bàn: ${currentPaymentTableId}`, 14, 30);
+            doc.text(`Thời gian: ${new Date().toLocaleString('vi-VN')}`, 14, 38);
+            let employeeName = '';
+            if (loggedInUser && (loggedInUser.accDisplayName || loggedInUser.name)) {
+                employeeName = loggedInUser.accDisplayName || loggedInUser.name;
+            }
+            doc.text(`Nhân viên: ${employeeName}`, 14, 46);
+            let customerName = '';
+            if (customerInfoJSON) {
+                try {
+                    const customerInfo = JSON.parse(customerInfoJSON);
+                    customerName = customerInfo.name || 'Khách vãng lai';
+                } catch (e) { customerName = 'Khách vãng lai'; }
+            } else {
+                customerName = 'Khách vãng lai';
+            }
+            if (customerName) doc.text(`Khách hàng: ${customerName}`, 14, 54);
+            doc.autoTable({
+                startY: 60,
+                head: [['STT', 'Tên món', 'Số lượng', 'Đơn giá', 'Thành tiền']],
+                body: tableData.items.map((item, idx) => [
+                    idx + 1,
+                    item.name,
+                    item.quantity,
+                    formatCurrency(item.price),
+                    formatCurrency(item.totalPrice)
+                ]),
+                theme: 'grid',
+                headStyles: { fillColor: [255, 107, 53] },
+                styles: { font: 'Arial' }
+            });
+            const finalY = doc.lastAutoTable.finalY;
+            doc.setFontSize(13);
+            doc.text('Tổng cộng:', 150, finalY + 10, { align: 'right' });
+            doc.text(formatCurrency(totalAmount), 200, finalY + 10, { align: 'right' });
+            doc.save(`receipt-table-${currentPaymentTableId}-${Date.now()}.pdf`);
+        }
 
         const updateTableResponse = await fetch(`http://localhost:8080/tables/${currentPaymentTableId}`, {
             method: 'PATCH',
@@ -726,7 +792,7 @@ async function processPayment() {
         alert('Thanh toán thành công!');
         resetTableData(currentPaymentTableId);
         closePaymentModal();
-        window.location.reload();
+        refreshTableVisibility();
 
     } catch (error) {
         console.error('Error processing payment:', error);
@@ -734,4 +800,10 @@ async function processPayment() {
     } finally {
         hideGlobalSpinner();
     }
+}
+
+// Add logout function to salesTables.js
+function logout() {
+    localStorage.removeItem('loggedInUser');
+    window.location.href = '/login';
 }

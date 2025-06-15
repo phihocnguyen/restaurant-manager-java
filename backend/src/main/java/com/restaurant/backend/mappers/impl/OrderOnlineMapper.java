@@ -9,6 +9,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface OrderOnlineMapper {
     @Mapping(target = "orderDetails", ignore = true)
+    @Mapping(target = "employeeName", source = "employee.name")
     OrderOnlineDTO toDTO(OrderOnline orderOnline);
 
     @Mapping(target = "orderDetails", ignore = true)

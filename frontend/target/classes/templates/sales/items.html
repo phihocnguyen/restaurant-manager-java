@@ -114,6 +114,10 @@
             <a th:href="@{/manager/dashboard}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
                 <i class="fas fa-user-shield"></i>
             </a>
+            <!-- Logout Button -->
+            <button onclick="logout()" class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white mt-auto hover:bg-red-600 transition-colors">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
 
         <div class="main-content">
@@ -152,7 +156,7 @@
                          th:data-price="${item.itemSprice}"
                          th:data-item-id="${item.id}"
                          th:data-item-img="${item.itemImg}"
-                         onclick="addToCart(this.dataset.name, parseFloat(this.dataset.price), this.dataset.itemId, this.dataset.itemImg)">
+                         onclick="addToCart(this.dataset.name, this.dataset.price, this.dataset.itemId, this.dataset.itemImg)">
                         <div class="product-image" th:style="'background-image: url(' + ${item.itemImg} + ')'"></div>
                         <div class="text-sm font-medium text-gray-800" th:text="${item.itemName}"></div>
                         <div class="text-sm font-bold text-gray-900 mt-1" th:text="${#numbers.formatDecimal(item.itemSprice, 0, 'POINT', 0, 'COMMA')} + '₫'"></div>
@@ -167,7 +171,7 @@
                             <div class="w-1/3">
                                 <select id="rightPanelTableSelect" class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                                     <option value="">Chọn bàn</option>
-                                    <option th:each="table : ${tables}" th:value="${table.id}" th:text="'Bàn ' + ${table.id}"></option>
+                                    <option th:each="table : ${tables}" th:if="${table.tabStatus} == 'OCCUPIED'" th:value="${table.id}" th:text="'Bàn ' + ${table.id}"></option>
                                 </select>
                             </div>
                             <div class="w-2/3">
@@ -199,15 +203,6 @@
                     </div>
 
                     <div class="space-y-2">
-                         <div class="flex space-x-2">
-                             <button class="flex-1 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium">
-                                 <i class="fas fa-receipt mr-1"></i>Đặt hàng
-                             </button>
-                             <div class="flex space-x-1">
-                                 <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Giảm giá</button>
-                                 <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm">Ghi chú</button>
-                             </div>
-                         </div>
                         <button onclick="processOrderToTable()" class="w-full py-3 bg-green-500 text-white rounded-lg font-medium text-lg">
                             <i class="fas fa-check-circle mr-2"></i>Tiến hành phục vụ
                         </button>
@@ -336,7 +331,18 @@
             });
         });
 
-        function addToCart(name, price, itemId, itemImg) {
+        function addToCart(name, priceString, itemId, itemImg) {
+            // Clean the price string before parsing to ensure it's a valid number
+            // This handles cases where data-price might contain non-numeric characters like '₫' or commas.
+            const cleanPriceString = priceString.replace(/[^0-9.]/g, '');
+            const price = parseFloat(cleanPriceString);
+
+            if (isNaN(price)) {
+                console.error('Invalid price encountered for item:', name, 'raw string:', priceString, 'cleaned:', cleanPriceString);
+                alert('Giá sản phẩm không hợp lệ!');
+                return; // Stop function if price is not a number
+            }
+
             // Find if the item already exists in the current cart using itemId
             const existingItemIndex = cart.findIndex(item => item.itemId === itemId);
             if (existingItemIndex > -1) {
@@ -437,11 +443,11 @@
             const selectedTable = currentTable;
             
             if (!selectedTable) {
-                alert('Please select a table before proceeding!');
+                alert('Vui lòng chọn bàn trước khi tiến hành!');
                 return;
             }
-             if (cart.length === 0) {
-                alert('Cart is empty. Please add items!');
+            if (cart.length === 0) {
+                alert('Giỏ hàng trống. Vui lòng thêm món ăn!');
                 return;
             }
 
@@ -452,7 +458,11 @@
                 tableData = { tableId: selectedTable, items: [], timestamp: new Date().toISOString() };
             } else {
                 // Use existing items, but ensure they have a temporary 'id' if missing
-                 tableData.items.forEach(item => { if (!item.id) item.id = orderCounter++; });
+                tableData.items.forEach(item => { 
+                    if (!item.id) item.id = orderCounter++;
+                    // Ensure totalPrice is calculated correctly for existing items
+                    item.totalPrice = item.price * item.quantity;
+                });
             }
 
             // 2. Merge current cart items with existing table items
@@ -463,24 +473,27 @@
                     tableData.items[existingItemIndex].quantity += cartItem.quantity;
                     tableData.items[existingItemIndex].totalPrice = tableData.items[existingItemIndex].price * tableData.items[existingItemIndex].quantity;
                 } else {
-                    // Item is new for this table, add it
-                    // Assign a temporary ID if not already present from the current cart
-                    if (!cartItem.id) cartItem.id = orderCounter++;
-                    tableData.items.push({...cartItem}); // Push a copy to avoid reference issues
+                    // Item is new for this table, add it with calculated totalPrice
+                    const newItem = {
+                        ...cartItem,
+                        id: cartItem.id || orderCounter++,
+                        totalPrice: cartItem.price * cartItem.quantity // Ensure totalPrice is calculated for new items
+                    };
+                    tableData.items.push(newItem);
                 }
             });
 
             // 3. Save the merged data back to localStorage
             saveTableData(selectedTable, tableData.items);
 
-            // 4. Generate PDF (using the merged items from tableData.items)
+            // 4. Generate PDF (using the merged items from tableData.items) - This is a kitchen receipt
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
             // Use Arial font for better English support
             doc.setFont('Arial', 'normal');
 
-            const pdfTitle = 'Payment Invoice';
+            const pdfTitle = 'Kitchen Order Ticket';
             doc.setFontSize(22);
             doc.text(pdfTitle, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
 
@@ -528,16 +541,16 @@
             doc.text('Total:', 150, finalY + 26, { align: 'right' });
             doc.text(formatCurrency(total).replace('₫', '').trim(), 200, finalY + 26, { align: 'right' });
 
-            doc.save(`invoice-table-${selectedTable}-${new Date().getTime()}.pdf`); // Add timestamp to filename
+            doc.save(`kitchen-ticket-table-${selectedTable}-${new Date().getTime()}.pdf`); // Add timestamp to filename
 
             // 5. Clear the current cart and update display after processing
             cart = [];
             updateCartDisplay();
 
-            alert('Đơn hàng đã được xử lý và lưu vào bàn ' + selectedTable);
+            alert('Đơn hàng đã được xử lý và lưu vào bàn ' + selectedTable + '. Vui lòng xem hóa đơn bếp.');
         }
 
-        // Online Orders Modal Functions
+        // Online Orders Modal Functions - Restored
         function showOnlineOrders() {
             const modal = document.getElementById('onlineOrdersModal');
             modal.classList.remove('hidden');
@@ -579,11 +592,7 @@
 
             const processedOrders = [];
 
-            // Use a temporary loading indicator for item names if needed, or rely on main overlay
-            // For simplicity, we'll just show the main overlay during the whole fetch+display process
-
             for (const order of orders) {
-                // Fetch item names for each order detail
                 const orderDetailsWithNames = await Promise.all(
                     order.orderDetails.map(async (detail) => {
                         try {
@@ -648,17 +657,75 @@
         async function acceptOrder(orderId) {
             const loadingOverlay = document.getElementById('onlineOrdersLoadingOverlay');
             loadingOverlay.classList.remove('hidden'); // Show spinner
-            
             try {
                 const order = onlineOrdersWithNames.find(order => order.id === orderId);
                 if (!order) {
+                    console.error('Error: Order not found in displayed list.');
                     throw new Error('Order not found in displayed list.');
                 }
 
-                const prepareResponse = await fetch(`/sales/api/online-orders/${orderId}/status?status=PREPARING`, {
+                // Lấy accEmail từ localStorage
+                let accEmail = null;
+                let loggedInUser = null;
+                try {
+                    const loggedInUserStr = localStorage.getItem('loggedInUser');
+                    console.log('localStorage loggedInUser string:', loggedInUserStr);
+                    if (loggedInUserStr) {
+                        loggedInUser = JSON.parse(loggedInUserStr);
+                        if (loggedInUser && loggedInUser.accEmail) {
+                            accEmail = loggedInUser.accEmail;
+                            console.log('Extracted accEmail from localStorage:', accEmail);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error parsing loggedInUser from localStorage:', e);
+                    accEmail = null;
+                }
+                
+                if (!accEmail) {
+                    alert('Không xác định được email nhân viên từ tài khoản đăng nhập. Vui lòng đăng nhập lại và đảm bảo tài khoản có email hợp lệ!');
+                    loadingOverlay.classList.add('hidden');
+                    loadingOverlay.classList.remove('flex');
+                    return;
+                }
+
+                // Fetch all employees và tìm theo email
+                let employeeId = null;
+                try {
+                    console.log('Fetching employees from /manager/api/employees');
+                    const res = await fetch('http://localhost:8080/employees');
+                    if (!res.ok) {
+                        throw new Error(`Failed to fetch employees: ${res.statusText}`);
+                    }
+                    const employees = await res.json();
+                    console.log('Fetched employees:', employees);
+
+                    const found = employees.find(emp => emp.email === accEmail);
+                    if (found) {
+                        employeeId = found.id;
+                        console.log('Found employee ID:', employeeId, 'for email:', accEmail);
+                    } else {
+                        console.warn('No employee found with email:', accEmail, 'in the fetched list.');
+                    }
+                } catch (e) {
+                    console.error('Error fetching or finding employee:', e);
+                    employeeId = null;
+                }
+
+                if (!employeeId) {
+                    alert('Không tìm thấy ID nhân viên phù hợp với email đăng nhập. Vui lòng kiểm tra dữ liệu nhân viên!');
+                    loadingOverlay.classList.add('hidden');
+                    loadingOverlay.classList.remove('flex');
+                    return;
+                }
+
+                console.log('Attempting to send employeeId to backend:', employeeId);
+                const prepareResponse = await fetch(`/sales/api/online-orders/${orderId}/status?status=PREPARING&employeeId=${employeeId}`, {
                     method: 'PUT'
                 });
                 if (!prepareResponse.ok) {
+                     const errorText = await prepareResponse.text();
+                     console.error(`Failed to update order status: ${prepareResponse.status} - ${errorText}`);
                      throw new Error(`Failed to update order status: ${prepareResponse.statusText}`);
                 }
                
@@ -691,7 +758,7 @@
 
                 const tableData = order.orderDetails.map((detail, index) => [
                     index + 1,
-                    detail.itemName || `Item ${detail.itemId}`, 
+                    detail.itemName || `Item ${detail.itemId}`,
                     detail.quantity,
                     formatCurrency(detail.price).replace('₫', '').trim(),
                     formatCurrency(detail.price * detail.quantity).replace('₫', '').trim()
@@ -735,6 +802,7 @@
             }
         }
 
+        // Restore rejectOrder function
         async function rejectOrder(orderId) {
             const loadingOverlay = document.getElementById('onlineOrdersLoadingOverlay');
             loadingOverlay.classList.remove('hidden'); // Show spinner
@@ -867,6 +935,34 @@
              alert('Chức năng thanh toán cho bàn ' + tableId + ' sẽ được triển khai sau.');
              // TODO: Implement checkout process
         }
+
+        // Global spinner functions (if not already defined elsewhere)
+        function showGlobalSpinner() {
+            document.getElementById('spinnerOverlay').classList.remove('hidden');
+            document.getElementById('spinnerOverlay').classList.add('flex');
+        }
+
+        function hideGlobalSpinner() {
+            document.getElementById('spinnerOverlay').classList.add('hidden');
+            document.getElementById('spinnerOverlay').classList.remove('flex');
+        }
+
+        // Logout function
+        function logout() {
+            showGlobalSpinner();
+            // Clear any user session data from localStorage
+            localStorage.removeItem('loggedInUser');
+            localStorage.removeItem('lastSelectedTableId');
+            // Redirect to login page after a small delay to show spinner
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 500); // 500ms delay
+        }
     </script>
+
+    <!-- Spinner Overlay -->
+    <div id="spinnerOverlay" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[100] hidden">
+        <div class="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
 </body>
 </html>

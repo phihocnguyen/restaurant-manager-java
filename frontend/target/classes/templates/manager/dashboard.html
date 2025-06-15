@@ -34,11 +34,14 @@
             left: 0;
             bottom: 0;
             width: 18rem;
-            overflow-y: auto;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            z-index: 50;
         }
         .main-content {
             margin-left: 18rem;
             min-height: 100vh;
+            width: calc(100% - 18rem);
         }
     </style>
 </head>
@@ -100,6 +103,12 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
                     </a>
+                    <a th:href="@{/manager/schedule}" class="nav-item [[${#httpServletRequest.requestURI.contains('/manager/schedule')} ? 'active' : '']] flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
+                            <i class="fas fa-calendar-alt text-purple-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Lịch làm việc</span>
+                    </a>
                 </div>
             </nav>
         </aside>
@@ -128,11 +137,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                         <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full">
+                    <div class="flex items-center space-x-2 relative" id="userDropdownContainer">
+                         <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full cursor-pointer" id="userAvatar">
                         <div>
                             <p class="text-sm font-medium text-gray-100">Jhon Morison</p>
                             <p class="text-xs text-gray-400">Admin</p>
+                        </div>
+                        <div id="logoutDropdown" class="absolute right-0 mt-20 w-48 bg-slate-800 rounded-lg shadow-xl border border-slate-700 hidden z-50">
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-200 hover:bg-slate-700">Đăng xuất</a>
                         </div>
                     </div>
                 </div>
@@ -184,7 +196,9 @@
                      </div>
                      <div class="bg-[#1f2937] rounded-lg shadow-sm p-6">
                          <h5 class="text-lg font-semibold text-gray-100 mb-4">Tỷ lệ trạng thái bàn</h5>
-                         <canvas id="tableStatusChart"></canvas>
+                         <div style="min-height: 250px;">
+                             <canvas id="tableStatusChart"></canvas>
+                         </div>
                      </div>
                 </div>
             </main>
@@ -199,158 +213,349 @@
     
     <!-- Chart Initialization -->
     <script>
-        // Revenue Chart
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(revenueCtx, {
-            type: 'line',
-            data: {
-                labels: ['8h', '9h', '10h', '11h', '12h', '13h', '14h'],
-                datasets: [{
-                    label: 'Doanh thu',
-                    data: [500000, 750000, 1000000, 1500000, 1200000, 800000, 600000],
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: '#d1d5db' },
-                        grid: { color: '#4b5563' }
-                    },
-                    x: {
-                        ticks: { color: '#d1d5db' },
-                        grid: { color: '#4b5563' }
+        // Function to fetch and process data
+        async function fetchData() {
+            try {
+                console.log('fetchData function started.');
+                const [ordersResponse, receiptsResponse, tablesResponse] = await Promise.all([
+                    fetch('http://localhost:8080/orders'),
+                    fetch('http://localhost:8080/receipts'),
+                    fetch('http://localhost:8080/tables')
+                ]);
+
+                const orders = await ordersResponse.json();
+                const receipts = await receiptsResponse.json();
+                const tables = await tablesResponse.json();
+                console.log('Tables data fetched:', tables);
+
+                // Process revenue by day of week
+                const revenueByDay = new Array(7).fill(0);
+
+                // Process online orders
+                orders.forEach(order => {
+                    const orderDate = new Date(order.orderTime);
+                    const dayOfWeek = orderDate.getDay(); // 0 is Sunday, 1 is Monday, etc.
+                    if (order.status !== 'CANCELLED') {
+                        revenueByDay[dayOfWeek] += order.totalAmount;
                     }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#d1d5db'
+                });
+
+                // Process in-store receipts
+                receipts.forEach(receipt => {
+                    if (!receipt.isdeleted) {
+                        const receiptDate = new Date(receipt.recTime);
+                        const dayOfWeek = receiptDate.getDay();
+                        revenueByDay[dayOfWeek] += receipt.recPay;
+                    }
+                });
+
+                // Update revenue chart with real data
+                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                // Destroy existing chart if it exists to prevent multiple charts on re-render
+                if (window.revenueChartInstance) {
+                    window.revenueChartInstance.destroy();
+                }
+                window.revenueChartInstance = new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
+                        datasets: [{
+                            label: 'Doanh thu',
+                            data: revenueByDay,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#d1d5db',
+                                    callback: function(value) {
+                                        return value.toLocaleString('vi-VN') + 'đ';
+                                    }
+                                },
+                                grid: { color: '#4b5563' }
+                            },
+                            x: {
+                                ticks: { color: '#d1d5db' },
+                                grid: { color: '#4b5563' }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#d1d5db'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + 
+                                            context.raw.toLocaleString('vi-VN') + 'đ';
+                                    }
+                                }
+                            }
                         }
                     }
-                }
-            }
-        });
+                });
 
-        // Top Dishes Chart
-        const dishesCtx = document.getElementById('topDishesChart').getContext('2d');
-        new Chart(dishesCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Món 1', 'Món 2', 'Món 3', 'Món 4', 'Món 5'],
-                datasets: [{
-                    label: 'Số lượng bán',
-                    data: [15, 12, 10, 8, 6],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: '#d1d5db' },
-                        grid: { color: '#4b5563' }
-                    },
-                    x: {
-                        ticks: { color: '#d1d5db' },
-                        grid: { color: '#4b5563' }
+                // Process menu items sales
+                const menuItemSales = new Map();
+
+                // Process online orders
+                orders.forEach(order => {
+                    if (order.status !== 'CANCELLED') {
+                        order.orderDetails.forEach(detail => {
+                            const itemId = detail.itemId;
+                            const quantity = detail.quantity;
+                            menuItemSales.set(itemId, (menuItemSales.get(itemId) || 0) + quantity);
+                        });
                     }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#d1d5db'
+                });
+
+                // Process in-store receipts
+                receipts.forEach(receipt => {
+                    if (!receipt.isdeleted) {
+                        receipt.details.forEach(detail => {
+                            const itemId = detail.menuItem.id;
+                            const quantity = detail.quantity;
+                            menuItemSales.set(itemId, (menuItemSales.get(itemId) || 0) + quantity);
+                        });
+                    }
+                });
+
+                // Get menu item names and sort by sales
+                const menuItemsWithNames = Array.from(menuItemSales.entries()).map(([id, count]) => {
+                    const receiptWithItem = receipts.find(r => 
+                        r.details.some(d => d.menuItem.id === id)
+                    );
+                    const itemName = receiptWithItem ? 
+                        receiptWithItem.details.find(d => d.menuItem.id === id).menuItem.itemName :
+                        `Món ${id}`;
+                    return { id, name: itemName, count };
+                }).sort((a, b) => b.count - a.count).slice(0, 5);
+
+                // Update top dishes chart
+                const dishesCtx = document.getElementById('topDishesChart').getContext('2d');
+                if (window.dishesChartInstance) {
+                    window.dishesChartInstance.destroy();
+                }
+                window.dishesChartInstance = new Chart(dishesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: menuItemsWithNames.map(item => item.name),
+                        datasets: [{
+                            label: 'Số lượng bán',
+                            data: menuItemsWithNames.map(item => item.count),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#d1d5db' },
+                                grid: { color: '#4b5563' }
+                            },
+                            x: {
+                                ticks: { color: '#d1d5db' },
+                                grid: { color: '#4b5563' }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#d1d5db'
+                                }
+                            }
                         }
                     }
+                });
+
+                // Process payment methods
+                const paymentMethods = {
+                    'Cash': 0,
+                    'Internet Banking': 0
+                };
+
+                // Count payment methods from orders
+                orders.forEach(order => {
+                    if (order.status !== 'CANCELLED') {
+                        paymentMethods[order.paymentMethod]++;
+                    }
+                });
+
+                // Count payment methods from receipts
+                receipts.forEach(receipt => {
+                    if (!receipt.isdeleted) {
+                        paymentMethods[receipt.paymentMethod]++;
+                    }
+                });
+
+                // Update payment method chart
+                const paymentCtx = document.getElementById('paymentMethodChart').getContext('2d');
+                if (window.paymentChartInstance) {
+                    window.paymentChartInstance.destroy();
                 }
+                window.paymentChartInstance = new Chart(paymentCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Tiền mặt', 'Internet Banking'],
+                        datasets: [{
+                            label: 'Số lượng giao dịch',
+                            data: [paymentMethods['Cash'], paymentMethods['Internet Banking']],
+                            backgroundColor: [
+                                'rgba(255, 159, 64, 0.5)',
+                                'rgba(54, 162, 235, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#d1d5db'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Calculate today's orders count
+                const today = new Date();
+                const todayOrders = orders.filter(order => {
+                    const orderDate = new Date(order.orderTime);
+                    return orderDate.toDateString() === today.toDateString() && 
+                           order.status !== 'CANCELLED';
+                }).length;
+
+                // Update today's orders count
+                document.querySelector('.bg-\\[\\#1f2937\\] .text-blue-400').textContent = todayOrders;
+
+                // Update table counts and status chart
+                const totalTables = tables.filter(t => !t.isdeleted).length;
+                const occupiedTables = tables.filter(t => !t.isdeleted && t.tabStatus === 'OCCUPIED').length;
+                const emptyTables = tables.filter(t => !t.isdeleted && t.tabStatus === 'EMPTY').length;
+                const reservedTables = tables.filter(t => !t.isdeleted && t.tabStatus === 'RESERVED').length;
+
+                console.log('Table counts - Total:', totalTables, 'Occupied:', occupiedTables, 'Empty:', emptyTables, 'Reserved:', reservedTables);
+
+                document.querySelector('.bg-\\[\\#1f2937\\] .text-yellow-400').textContent =
+                    `${occupiedTables}/${totalTables}`;
+
+                const occupiedPercentage = totalTables > 0 ? ((occupiedTables / totalTables) * 100).toFixed(1) : 0;
+                document.querySelector('.bg-\\[\\#1f2937\\] .text-yellow-400').nextElementSibling.textContent =
+                    `${occupiedPercentage}% tổng số bàn`;
+                console.log('Occupied percentage updated to:', `${occupiedPercentage}% tổng số bàn`);
+
+                const tableStatusCtx = document.getElementById('tableStatusChart').getContext('2d');
+                // Destroy existing chart if it exists
+                if (window.tableStatusChartInstance) {
+                    window.tableStatusChartInstance.destroy();
+                }
+                window.tableStatusChartInstance = new Chart(tableStatusCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Còn trống', 'Đang hoạt động', 'Đã đặt'],
+                        datasets: [{
+                            label: 'Số lượng bàn',
+                            data: [emptyTables, occupiedTables, reservedTables],
+                            backgroundColor: [
+                                'rgba(75, 192, 192, 0.5)', // Teal/Green
+                                'rgba(255, 99, 132, 0.5)',  // Red
+                                'rgba(255, 206, 86, 0.5)'  // Yellow
+                            ],
+                            borderColor: [
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#d1d5db'
+                                }
+                            }
+                        }
+                    }
+                });
+                console.log('Table status chart initialized.');
+
+                // Calculate and update today's total revenue
+                const todayRevenue = orders
+                    .filter(order => {
+                        const orderDate = new Date(order.orderTime);
+                        return orderDate.toDateString() === today.toDateString() && 
+                               order.status !== 'CANCELLED';
+                    })
+                    .reduce((sum, order) => sum + order.totalAmount, 0) +
+                    receipts
+                    .filter(receipt => {
+                        const receiptDate = new Date(receipt.recTime);
+                        return receiptDate.toDateString() === today.toDateString() && 
+                               !receipt.isdeleted;
+                    })
+                    .reduce((sum, receipt) => sum + receipt.recPay, 0);
+
+                document.querySelector('.bg-\\[\\#1f2937\\] .text-green-400').textContent = 
+                    todayRevenue.toLocaleString('vi-VN') + 'đ';
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-        });
+        }
 
-        // Payment Method Chart (Doughnut)
-        const paymentCtx = document.getElementById('paymentMethodChart').getContext('2d');
-        new Chart(paymentCtx, {
-             type: 'doughnut',
-             data: {
-                 labels: ['Tiền mặt', 'Chuyển khoản', 'Ví điện tử'],
-                 datasets: [{
-                     label: 'Số lượng giao dịch',
-                     data: [30, 50, 20], // Dummy data
-                     backgroundColor: [
-                         'rgba(255, 159, 64, 0.5)', // Orange
-                         'rgba(54, 162, 235, 0.5)',  // Blue
-                         'rgba(153, 102, 255, 0.5)' // Purple
-                     ],
-                     borderColor: [
-                         'rgba(255, 159, 64, 1)',
-                         'rgba(54, 162, 235, 1)',
-                         'rgba(153, 102, 255, 1)'
-                     ],
-                     borderWidth: 1
-                 }]
-             },
-             options: {
-                 responsive: true,
-                 plugins: {
-                     legend: {
-                         labels: {
-                             color: '#d1d5db'
-                         }
-                     }
-                 }
-             }
-        });
+        // Call fetchData when page loads
+        document.addEventListener('DOMContentLoaded', fetchData);
 
-        // Table Status Chart (Pie)
-        const tableStatusCtx = document.getElementById('tableStatusChart').getContext('2d');
-        new Chart(tableStatusCtx, {
-             type: 'pie',
-             data: {
-                 labels: ['Còn trống', 'Đang hoạt động', 'Đã đặt'],
-                 datasets: [{
-                     label: 'Số lượng bàn',
-                     data: [5, 3, 2], // Dummy data
-                     backgroundColor: [
-                         'rgba(75, 192, 192, 0.5)', // Teal/Green
-                         'rgba(255, 99, 132, 0.5)',  // Red
-                         'rgba(255, 206, 86, 0.5)'  // Yellow
-                     ],
-                     borderColor: [
-                         'rgba(75, 192, 192, 1)',
-                         'rgba(255, 99, 132, 1)',
-                         'rgba(255, 206, 86, 1)'
-                     ],
-                     borderWidth: 1
-                 }]
-             },
-             options: {
-                 responsive: true,
-                 plugins: {
-                     legend: {
-                         labels: {
-                             color: '#d1d5db'
-                         }
-                     }
-                 }
-             }
-        });
+        // Dummy Chart Initializations (removed as they are now inside fetchData)
+        // This section will be removed by the edit.
+
+        function formatTimeAgo(timestamp) {
+            const now = new Date();
+            const seconds = Math.floor((now - timestamp) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " năm trước";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " tháng trước";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " ngày trước";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " giờ trước";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " phút trước";
+            if (seconds < 10) return "vài giây trước";
+            return Math.floor(seconds) + " giây trước";
+        }
     </script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -378,10 +583,15 @@
         const notificationList = document.getElementById('notificationList');
         const noNotificationsMessage = document.getElementById('noNotifications');
 
+        // Logout dropdown elements
+        const userAvatar = document.getElementById('userAvatar');
+        const logoutDropdown = document.getElementById('logoutDropdown');
+
         let hasUnreadNotifications = false;
 
         // 2. Xử lý sự kiện khi nhấp vào chuông
-        bellContainer.addEventListener('click', function() {
+        bellContainer.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent click from bubbling to document
             // Hiện/ẩn danh sách thông báo
             notificationDropdown.classList.toggle('hidden');
             
@@ -389,6 +599,22 @@
             if (hasUnreadNotifications) {
                 notificationDot.classList.add('hidden');
                 hasUnreadNotifications = false;
+            }
+        });
+
+        // Toggle logout dropdown visibility
+        userAvatar.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent click from bubbling to document
+            logoutDropdown.classList.toggle('hidden');
+        });
+
+        // Hide dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!notificationDropdown.contains(event.target) && !bellContainer.contains(event.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+            if (!logoutDropdown.contains(event.target) && !userAvatar.contains(event.target)) {
+                logoutDropdown.classList.add('hidden');
             }
         });
 
@@ -445,6 +671,8 @@
                     <p class="text-xs text-indigo-400 mt-1">${orderTime}</p>
                 `;
                 
+                console.log('Notification item HTML:', notificationItem.innerHTML); // Debugging line
+
                 // Thêm vào danh sách
                 notificationList.appendChild(notificationItem);
             });
@@ -457,23 +685,6 @@
         }
         });
     });
-
-        function formatTimeAgo(timestamp) {
-            const now = new Date();
-            const seconds = Math.floor((now - timestamp) / 1000);
-            let interval = seconds / 31536000;
-            if (interval > 1) return Math.floor(interval) + " năm trước";
-            interval = seconds / 2592000;
-            if (interval > 1) return Math.floor(interval) + " tháng trước";
-            interval = seconds / 86400;
-            if (interval > 1) return Math.floor(interval) + " ngày trước";
-            interval = seconds / 3600;
-            if (interval > 1) return Math.floor(interval) + " giờ trước";
-            interval = seconds / 60;
-            if (interval > 1) return Math.floor(interval) + " phút trước";
-            if (seconds < 10) return "vài giây trước";
-            return Math.floor(seconds) + " giây trước";
-        }
     </script>
 </body>
 </html> 

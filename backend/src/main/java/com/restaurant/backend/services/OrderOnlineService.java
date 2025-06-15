@@ -45,9 +45,10 @@ public interface OrderOnlineService {
      * Update order status
      * @param orderId the order ID
      * @param newStatus the new status
+     * @param employeeId the employee ID
      * @return the updated order DTO
      */
-    OrderOnlineDTO updateOrderStatus(Long orderId, String newStatus);
+    OrderOnlineDTO updateOrderStatus(Long orderId, String newStatus, Integer employeeId);
 
     /**
      * Update an existing order
@@ -69,4 +70,12 @@ public interface OrderOnlineService {
      * @return list of order details DTOs for the order
      */
     List<OrderOnlineDetailsDTO> getOrderDetailsByOrderId(Long orderId);
+
+    /**
+     * Update payment proof for an order
+     * @param orderId the order ID
+     * @param paymentImageUrl the URL of the payment image
+     * @return the updated order DTO
+     */
+    OrderOnlineDTO updatePaymentProof(Long orderId, String paymentImageUrl);
 } 

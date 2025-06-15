@@ -24,4 +24,8 @@ public class OrderOnlineDTO {
     private List<OrderOnlineDetailsDTO> orderDetails;
     @JsonProperty("paymentMethod")
     private String paymentMethod;
+    private String paymentImage;
+    private Integer employeeId;
+    private String employeeName;
+    private String orderStatus;
 } 

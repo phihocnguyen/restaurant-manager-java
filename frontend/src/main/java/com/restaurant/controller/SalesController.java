@@ -262,8 +262,14 @@ public class SalesController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateOrderStatus(
             @PathVariable Long id,
-            @RequestParam String status) {
+            @RequestParam String status,
+            @RequestParam(required = false) Integer employeeId) {
         String url = backendApiUrl + "/orders/" + id + "/status?newStatus=" + status;
+        
+        // Add employeeId to the URL if it's provided
+        if (employeeId != null) {
+            url += "&employeeId=" + employeeId;
+        }
         
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
             url,

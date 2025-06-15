@@ -6,8 +6,13 @@ import com.restaurant.backend.services.OrderOnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpStatus;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/orders")
@@ -15,6 +20,9 @@ public class OrderOnlineController {
 
     @Autowired
     private OrderOnlineService orderOnlineService;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     @PostMapping
     public ResponseEntity<OrderOnlineDTO> createOrder(@RequestBody OrderOnlineDTO orderOnline) {
@@ -59,8 +67,9 @@ public class OrderOnlineController {
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderOnlineDTO> updateOrderStatus(
             @PathVariable Long id,
-            @RequestParam String newStatus) {
-        OrderOnlineDTO order = orderOnlineService.updateOrderStatus(id, newStatus);
+            @RequestParam String newStatus,
+            @RequestParam(required = false) Integer employeeId) {
+        OrderOnlineDTO order = orderOnlineService.updateOrderStatus(id, newStatus, employeeId);
         // Load order details for the updated order
         order.setOrderDetails(orderOnlineService.getOrderDetailsByOrderId(order.getId()));
         return ResponseEntity.ok(order);
@@ -78,5 +87,22 @@ public class OrderOnlineController {
     public ResponseEntity<Void> cancelOrder(@PathVariable Long id) {
         orderOnlineService.cancelOrder(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/payment-proof")
+    public ResponseEntity<OrderOnlineDTO> uploadPaymentProof(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            // Upload file to Cloudinary
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("secure_url");
+
+            // Update order with payment image URL
+            OrderOnlineDTO updatedOrder = orderOnlineService.updatePaymentProof(id, imageUrl);
+            return ResponseEntity.ok(updatedOrder);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 } 

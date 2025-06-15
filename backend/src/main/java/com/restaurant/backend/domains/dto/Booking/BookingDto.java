@@ -21,4 +21,5 @@ public class BookingDto {
     private Instant endTime;
     private Short status; // 0: PENDING, 1: CONFIRMED, 2: CANCELLED
     private Boolean isdeleted;
+    private String specialRequest;
 }

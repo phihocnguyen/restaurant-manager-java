@@ -70,12 +70,18 @@
             <a th:href="@{/sales/tables}" class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white">
                 <i class="fas fa-table"></i>
             </a>
-            <a th:href="@{/sales/items}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
+            <a th:href="@{/sales/items}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer text-gray-600 hover:bg-gray-300">
                 <i class="fas fa-utensils"></i>
             </a>
             <a th:href="@{/sales/history}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
                 <i class="fas fa-history"></i>
             </a>
+            <a th:href="@{/manager/dashboard}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
+                <i class="fas fa-user-shield"></i>
+            </a>
+            <button onclick="logout()" class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white mt-auto hover:bg-red-600 transition-colors">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
 
         <!-- Main Content -->
@@ -147,10 +153,9 @@
                             <!-- Additional details for RESERVED or OCCUPIED tables -->
                             <div th:if="${table.get('tabStatus') == 'RESERVED'}">
                                 <p class="text-sm text-gray-600">Tên khách hàng: <span th:text="${table.get('customerName')} ?: 'Khách vãng lai'" th:data-table-id="${table.get('id')}" class="customer-name-reserved"></span></p>
-                                <p class="text-sm text-gray-600">Thời gian đặt: <span th:text="${table.get('reservationTime')} ?: 'N/A'" th:data-table-id="${table.get('id')}" class="reservation-time-reserved"></span></p>
                             </div>
                             <div th:if="${table.get('tabStatus') == 'OCCUPIED'}">
-                                <p class="text-sm text-gray-600">Tên khách hàng: <span th:text="${table.get('customerName')}" th:data-table-id="${table.get('id')}" class="customer-name"></span></p>
+                                <p class="text-sm text-gray-600">Tên khách hàng: <span th:text="${table.get('customerName') != null and !table.get('customerName').isEmpty() ? table.get('customerName') : 'Khách vãng lai'}" th:data-table-id="${table.get('id')}" class="customer-name"></span></p>
                             </div>
                             <div class="flex items-center justify-between gap-2 mt-auto table-actions">
                                 <!-- Action buttons based on status -->
@@ -172,7 +177,7 @@
                                 </th:block>
                                 <th:block th:if="${table.get('tabStatus') == 'RESERVED'}">
                                     <button class="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all shadow-md mt-2"
-                                            th:onclick="|startServing(${table.get('id')})|">
+                                            th:onclick="|confirmBooking1(${table.get('id')})|">
                                         <i class="fas fa-check mr-1"></i>Xác nhận
                                     </button>
                                 </th:block>
@@ -312,6 +317,15 @@
                     </div>
                 </div>
 
+                <!-- VietQR Section (Hidden by default) -->
+                <div id="vietQrSection" class="space-y-4 hidden">
+                    <h3 class="text-lg font-semibold text-gray-800">Thanh toán bằng VietQR</h3>
+                    <div class="flex justify-center items-center p-4 bg-gray-100 rounded-lg border border-gray-200">
+                        <img id="vietQrImage" src="" alt="VietQR Code" class="w-48 h-48 border border-gray-200 rounded-lg"/>
+                    </div>
+                    <p class="text-sm text-gray-500 text-center">Quét mã QR để thanh toán.</p>
+                </div>
+
                 <div class="flex justify-end space-x-3 pt-4">
                     <button onclick="closePaymentModal()" class="px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all">
                         Hủy
@@ -388,5 +402,8 @@
 
     <script th:src="@{/js/bookingList.js}"></script>
     <script th:src="@{/js/salesTables.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
 </body>
 </html>

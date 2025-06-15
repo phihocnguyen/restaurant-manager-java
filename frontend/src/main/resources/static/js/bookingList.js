@@ -106,11 +106,15 @@ async function loadBookingList() {
                 timeZone: 'UTC' // Explicitly set timezone to UTC
             };
             const formattedTime = date.toLocaleString('en-US', options); // Using en-US for standard format
-
+            // Lấy specialRequest/note nếu có
+            const specialRequest = booking.specialRequest || booking.note || '';
             return `
             <tr>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${booking.customer ? booking.customer.name : 'N/A'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  ${booking.customer ? booking.customer.name : 'N/A'}
+                  ${specialRequest ? `<div class='text-xs text-gray-500 mt-1 italic'>Yêu cầu: ${specialRequest}</div>` : ''}
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Bàn ${booking.table.id}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formattedTime}</td>
                 <td class="px-6 py-4 whitespace-nowrap">

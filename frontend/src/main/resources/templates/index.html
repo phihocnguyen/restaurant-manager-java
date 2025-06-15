@@ -733,13 +733,12 @@
     </div>
 </section>
 
-<!-- Reservation Section -->
 <section id="reservation" class="py-20 px-6 text-gray-800 fade-in">
     <div class="max-w-4xl mx-auto text-center">
         <div class="mb-8">
             <h2 class="playfair text-5xl font-bold">
                 <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                    Chọn Ngày và Giờ Đặt Bàn
+                    Choose Date and Time for Reservation
                 </span>
             </h2>
         </div>
@@ -750,26 +749,26 @@
             
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
                     <div>
-                        <label for="res-date" class="block text-sm font-medium text-gray-700">Ngày:</label>
+                        <label for="res-date" class="block text-sm font-medium text-gray-700">Date:</label>
                         <input type="date" id="res-date" name="res-date" required
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     </div>
                     <div>
-                        <label for="res-time" class="block text-sm font-medium text-gray-700">Giờ:</label>
+                        <label for="res-time" class="block text-sm font-medium text-gray-700">Time:</label>
                         <input type="time" id="res-time" name="res-time" required
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     </div>
                     <div>
-                        <label for="res-guests" class="block text-sm font-medium text-gray-700">Số người:</label>
+                        <label for="res-guests" class="block text-sm font-medium text-gray-700">Number of Guests:</label>
                         <input type="number" id="res-guests" required min="1" value="1"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     </div>
-                    <button type="button" class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors duration-300">Kiểm tra Tình trạng</button>
+                    <button type="button" class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors duration-300">Check Availability</button>
                 </div>
             
                 <div id="availability-message" class="text-center text-gray-700 mt-4 hidden">
                     Available tables for <span id="available-guests"></span> person(s) on <span id="available-date"></span> at <span id="available-time"></span>.
-                    click on an available table to book it
+                    Click on an available table to book it
                 </div>
             
                 <div id="table-map-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6 hidden">
@@ -785,6 +784,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- Testimonials Section -->
 <section class="py-20 px-6 fade-in">

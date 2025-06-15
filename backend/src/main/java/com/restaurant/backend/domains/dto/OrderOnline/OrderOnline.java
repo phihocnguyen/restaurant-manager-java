@@ -51,6 +51,9 @@ public class OrderOnline {
     @Column(name = "payment_method")
     private String paymentMethod;
 
+    @Column(name = "payment_image", nullable = true)
+    private String paymentImage;
+
     @OneToMany(mappedBy = "orderOnline", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<OrderOnlineDetails> orderDetails = new ArrayList<>();
@@ -62,6 +65,10 @@ public class OrderOnline {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private com.restaurant.backend.domains.entities.Employee employee;
 
     public void addOrderDetail(OrderOnlineDetails detail) {
         orderDetails.add(detail);

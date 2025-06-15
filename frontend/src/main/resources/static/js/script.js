@@ -347,7 +347,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 tableId: parseInt(hiddenSelectedTableId.value),
                 startTime: new Date(`${reservationData['res-date']}T${reservationData['res-time']}:00Z`).toISOString(),
                 endTime: new Date(new Date(`${reservationData['res-date']}T${reservationData['res-time']}:00Z`).getTime() + (2 * 60 * 60 * 1000)).toISOString(), // Cộng thêm 2 giờ
-                status: 0
+                status: 0,
+                specialRequest: reservationData['specialRequests'] || ''
             };
 
             try {

@@ -6,22 +6,52 @@
     <title>Restro POS - Lịch sử bán hàng (Tailwind Only)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    </head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+        .pos-container {
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 60px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column; /* Ensure vertical layout for content */
+            background: #ffffff;
+        }
+    </style>
+</head>
 <body class="font-sans bg-white overflow-hidden">
-    <div class="h-screen flex">
-        <div class="w-[60px] bg-slate-50 border-r border-slate-200 flex flex-col items-center py-4 space-y-4">
-            <a th:href="@{/sales/tables}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
+    <div class="pos-container">
+        <div class="sidebar flex flex-col items-center py-4 space-y-4">
+            <a th:href="@{/sales/tables}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 hover:bg-gray-300">
                 <i class="fas fa-table"></i>
             </a>
-            <a th:href="@{/sales/items}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
+            <a th:href="@{/sales/items}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer text-gray-600 hover:bg-gray-300">
                 <i class="fas fa-utensils"></i>
             </a>
-            <a th:href="@{/sales/history}" class="w-10 h-10 rounded-lg flex items-center justify-center cursor-pointer bg-orange-500 text-white">
+            <a th:href="@{/sales/history}" class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white cursor-pointer">
                 <i class="fas fa-history"></i>
             </a>
+            <a th:href="@{/manager/dashboard}" class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 cursor-pointer hover:bg-gray-300">
+                <i class="fas fa-user-shield"></i>
+            </a>
+            <button onclick="logout()" class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white mt-auto hover:bg-red-600 transition-colors">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
 
-        <div class="flex-1 flex flex-col bg-white overflow-y-auto">
+        <div class="main-content overflow-y-auto">
             <div class="flex-1 p-5">
                 <div class="flex justify-between items-center mb-6">
                     <div>
@@ -66,10 +96,11 @@
                                 <th scope="col" class="px-6 py-3">Nhân viên</th>
                                 <th scope="col" class="px-6 py-3">Khách hàng</th>
                                 <th scope="col" class="px-6 py-3">Địa chỉ</th>
-                                <th scope="col" class="px-6 py-3">Phương thức</th>
-                                <th scope="col" class="px-6 py-3">Trạng thái</th>
-                                <th scope="col" class="px-6 py-3 text-right">Tổng tiền</th>
-                                <th scope="col" class="px-6 py-3 text-center">Hành động</th>
+                                <th scope="col" class="px-6 py-3 whitespace-nowrap w-fit">Phương thức</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Hình ảnh</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng tiền</th>
+                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody id="ordersHistoryTableBody">
@@ -224,7 +255,7 @@
                 console.error('Error fetching orders history:', error);
                 alert('Không thể tải lịch sử đơn hàng. Vui lòng thử lại sau.');
                 const tableBody = document.getElementById('ordersHistoryTableBody');
-                tableBody.innerHTML = '<tr><td colspan="8" class="px-6 py-4 text-center text-gray-500">Lỗi tải dữ liệu.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-4 text-center text-gray-500">Lỗi tải dữ liệu.</td></tr>';
             }
         }
 
@@ -308,7 +339,7 @@
             const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
 
             if (paginatedOrders.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-4 text-center text-gray-500">Không có lịch sử đơn hàng.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="10" class="px-6 py-4 text-center text-gray-500">Không có lịch sử đơn hàng.</td></tr>';
             } else {
                 paginatedOrders.forEach(order => {
                 const row = document.createElement('tr');
@@ -332,21 +363,24 @@
 
                      const statusColorClass = getStatusColorClass(currentStatusText);
                      statusCellContent = `
-                         <span class="px-2 py-1 text-xs font-medium ${statusColorClass} rounded-full">${currentStatusText}</span>
+                         <span class="px-2 py-1 text-xs font-medium ${statusColorClass} rounded-full whitespace-nowrap">${currentStatusText}</span>
                      `;
 
 
                 row.innerHTML = `
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" style="width: fit-content;">${orderId}</th>
                         <td class="px-6 py-4">${orderTime}</td>
-                        <td class="px-6 py-4">${order.employeeName || 'N/A'}</td>
+                        <td class="px-6 py-4">${order.type === 'online' ? (order.employeeName || 'N/A') : (order.employeeName || 'N/A')}</td>
                         <td class="px-6 py-4">${customerInfo}</td>
                         <td class="px-6 py-4">${address}</td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap w-fit">
                             <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">${paymentMethod}</span>
                         </td>
                     <td class="px-6 py-4">
                            ${statusCellContent}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        ${order.paymentImage ? `<a href="${order.paymentImage}" target="_blank" class="text-blue-600 hover:text-blue-800"><i class="fas fa-image"></i></a>` : 'N/A'}
                     </td>
                         <td class="px-6 py-4 text-right font-semibold text-gray-900">${formatCurrency(order.type === 'online' ? order.totalAmount : order.recPay)}</td>
                     <td class="px-6 py-4 text-center">
@@ -438,7 +472,8 @@
             const modal = document.getElementById('orderDetailsModal');
             document.getElementById('modalOrderId').textContent = order.type === 'online' ? `#ORD-${order.id}` : `#REC-${order.id}`;
             document.getElementById('modalOrderTime').textContent = new Date(order.type === 'online' ? order.orderTime : order.recTime).toLocaleString('vi-VN');
-            document.getElementById('modalCustomer').textContent = order.type === 'online' ? (order.customerName || 'Khách vãng lai') : 'Khách vãng lai';
+            document.getElementById('modalEmployee').textContent = order.employeeName || 'N/A';
+            document.getElementById('modalCustomer').textContent = order.customerName || 'Khách vãng lai';
             document.getElementById('modalAddress').textContent = order.type === 'online' ? (order.address || 'N/A') : `Bàn số ${order.tabId}`;
             document.getElementById('modalPaymentMethod').textContent = order.paymentMethod;
             document.getElementById('modalTotalAmount').textContent = formatCurrency(order.type === 'online' ? order.totalAmount : order.recPay);
@@ -463,6 +498,17 @@
             } else {
                 orderNoteRow.classList.add('hidden');
                 orderNoteSpan.textContent = '';
+            }
+
+            // Payment Image
+            const paymentImageDiv = document.getElementById('modalPaymentImageDiv');
+            const paymentImageImg = document.getElementById('modalPaymentImage');
+            if (order.type === 'online' && order.paymentImage) {
+                paymentImageDiv.classList.remove('hidden');
+                paymentImageImg.src = order.paymentImage;
+            } else {
+                paymentImageDiv.classList.add('hidden');
+                paymentImageImg.src = ''; // Clear the image source if no image
             }
 
             // Item Details
@@ -558,6 +604,11 @@
             modal.classList.remove('flex');
         }
 
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = '/login';
+        }
+
         // New function to update order status
         async function updateOrderStatus(orderId, newStatus) {
             try {
@@ -614,12 +665,19 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm text-gray-600">Thời gian: <span class="font-medium text-gray-900" id="modalOrderTime"></span></p>
-                            <p class="text-sm text-gray-600">Nhân viên: <span class="font-medium text-gray-900" id="modalEmployee">Nhân viên A</span></p>
+                            <p class="text-sm text-gray-600">Nhân viên: <span class="font-medium text-gray-900" id="modalEmployee"></span></p>
                             <p class="text-sm text-gray-600">Khách hàng: <span class="font-medium text-gray-900" id="modalCustomer"></span></p>
                             <p class="text-sm text-gray-600">Địa chỉ: <span class="font-medium text-gray-900" id="modalAddress"></span></p>
                             <p class="text-sm text-gray-600">Phương thức: <span class="font-medium text-gray-900" id="modalPaymentMethod"></span></p>
                             <p class="text-sm text-gray-600" id="modalOrderNoteRow"><span class="font-medium text-gray-900" id="modalOrderNote"></span></p>
                         </div>
+
+                        <!-- New Payment Image section -->
+                        <div id="modalPaymentImageDiv" class="hidden mt-4 w-full text-center">
+                            <h4 class="font-semibold mb-2">Ảnh xác minh thanh toán:</h4>
+                            <img id="modalPaymentImage" src="" alt="Payment Proof" class="max-w-full h-auto rounded-lg shadow-md mx-auto" style="max-height: 200px; object-fit: contain;">
+                        </div>
+
                         <div class="text-right">
                             <p class="font-semibold text-orange-500 text-lg" id="modalTotalAmount"></p>
                             <!-- Status badge for receipts -->

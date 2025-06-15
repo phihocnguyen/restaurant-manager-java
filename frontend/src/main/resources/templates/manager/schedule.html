@@ -36,15 +36,13 @@
             color: white;
         }
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
             width: 18rem;
-            overflow-y: auto;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            flex-shrink: 0;
         }
         .main-content {
-            margin-left: 18rem;
+            flex: 1;
             min-height: 100vh;
         }
     </style>
@@ -84,11 +82,35 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Nguyên liệu</span>
                     </a>
+                    <a th:href="@{/manager/tables}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-orange-500/20 p-2 rounded-lg mr-4 group-hover:bg-orange-500/30 transition-colors">
+                            <i class="fas fa-table text-orange-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Bàn</span>
+                    </a>
+                    <a th:href="@{/manager/customers}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
+                            <i class="fas fa-users text-purple-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Khách hàng</span>
+                    </a>
+                    <a th:href="@{/manager/employees}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-blue-500/20 p-2 rounded-lg mr-4 group-hover:bg-blue-500/30 transition-colors">
+                            <i class="fas fa-user-tie text-blue-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Nhân viên</span>
+                    </a>
                     <a th:href="@{/manager/schedule}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
                             <i class="fas fa-calendar-alt text-purple-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Lịch làm việc</span>
+                    </a>
+                    <a th:href="@{/sales}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
+                            <i class="fas fa-cash-register text-red-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
                     </a>
                 </div>
             </nav>

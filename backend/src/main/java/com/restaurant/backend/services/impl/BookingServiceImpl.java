@@ -60,6 +60,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setEndTime(dto.getEndTime());
         booking.setStatus(dto.getStatus());
         booking.setIsdeleted(false);
+        booking.setSpecialRequest(dto.getSpecialRequest());
 
         Booking saved = bookingRepository.save(booking);
         return new ResponseEntity<>(bookingMapper.mapFrom(saved), HttpStatus.CREATED);

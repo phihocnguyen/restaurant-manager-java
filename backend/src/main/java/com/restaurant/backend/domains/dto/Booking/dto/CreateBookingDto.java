@@ -16,4 +16,5 @@ public class CreateBookingDto {
     private Instant startTime;
     private Instant endTime;
     private Short status = 0;
+    private String specialRequest;
 }

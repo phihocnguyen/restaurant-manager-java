@@ -41,4 +41,7 @@ public class Booking {
 
     @Column(name = "isdeleted", nullable = false)
     private Boolean isdeleted = false;
+
+    @Column(name = "special_request")
+    private String specialRequest;
 }

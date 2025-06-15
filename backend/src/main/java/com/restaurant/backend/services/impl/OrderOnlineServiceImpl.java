@@ -7,6 +7,8 @@ import com.restaurant.backend.domains.dto.OrderOnline.dto.OrderOnlineDetailsDTO;
 import com.restaurant.backend.domains.dto.OrderOnline.enums.OrderStatus;
 import com.restaurant.backend.domains.dto.OrderOnline.mapper.OrderOnlineMapper;
 import com.restaurant.backend.domains.dto.OrderOnline.mapper.OrderOnlineDetailsMapper;
+import com.restaurant.backend.domains.entities.Employee;
+import com.restaurant.backend.repositories.EmployeeRepository;
 import com.restaurant.backend.repositories.OrderOnlineRepository;
 import com.restaurant.backend.repositories.OrderOnlineDetailsRepository;
 import com.restaurant.backend.repositories.MenuItemRepository;
@@ -14,6 +16,7 @@ import com.restaurant.backend.services.OrderOnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -29,6 +32,7 @@ public class OrderOnlineServiceImpl implements OrderOnlineService {
     private final MenuItemRepository menuItemRepository;
     private final OrderOnlineMapper orderOnlineMapper;
     private final OrderOnlineDetailsMapper orderOnlineDetailsMapper;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public OrderOnlineServiceImpl(
@@ -36,12 +40,14 @@ public class OrderOnlineServiceImpl implements OrderOnlineService {
             OrderOnlineDetailsRepository orderOnlineDetailsRepository,
             MenuItemRepository menuItemRepository,
             OrderOnlineMapper orderOnlineMapper,
-            OrderOnlineDetailsMapper orderOnlineDetailsMapper) {
+            OrderOnlineDetailsMapper orderOnlineDetailsMapper,
+            EmployeeRepository employeeRepository) {
         this.orderOnlineRepository = orderOnlineRepository;
         this.orderOnlineDetailsRepository = orderOnlineDetailsRepository;
         this.menuItemRepository = menuItemRepository;
         this.orderOnlineMapper = orderOnlineMapper;
         this.orderOnlineDetailsMapper = orderOnlineDetailsMapper;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -107,16 +113,36 @@ public class OrderOnlineServiceImpl implements OrderOnlineService {
 
     @Override
     @Transactional
-    public OrderOnlineDTO updateOrderStatus(Long orderId, String newStatus) {
+    public OrderOnlineDTO updateOrderStatus(Long orderId, String newStatus, Integer employeeId) {
+        System.out.println("Updating order status for order ID: " + orderId + " to status: " + newStatus);
+        System.out.println("Received employee ID: " + employeeId); // Log employeeId here
+
         OrderOnline order = orderOnlineRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> {
+                    System.err.println("Order not found for ID: " + orderId); // Log if order not found
+                    return new RuntimeException("Order not found");
+                });
 
         order.setStatus(OrderStatus.valueOf(newStatus));
         if (OrderStatus.valueOf(newStatus) == OrderStatus.DELIVERING) {
             order.setDeliveryTime(Instant.now());
         }
 
+        if (employeeId != null) {
+            Employee employee = employeeRepository.findById(employeeId)
+                    .orElseThrow(() -> {
+                        System.err.println("Employee not found for ID: " + employeeId); // Log if employee not found
+                        return new RuntimeException("Employee not found");
+                    });
+            order.setEmployee(employee);
+            System.out.println("Set employee for order. Employee ID to be saved: " + employee.getId() + ", Name: " + employee.getName()); // Log employee info
+        } else {
+            System.out.println("Employee ID is null, not setting employee for order.");
+            order.setEmployee(null); // Explicitly set to null if employeeId is null, to ensure consistency
+        }
+
         OrderOnline updatedOrder = orderOnlineRepository.save(order);
+        System.out.println("Order saved. Employee ID in saved order: " + (updatedOrder.getEmployee() != null ? updatedOrder.getEmployee().getId() : "null")); // Log saved employee ID
         return orderOnlineMapper.toDTO(updatedOrder);
     }
 
@@ -162,5 +188,15 @@ public class OrderOnlineServiceImpl implements OrderOnlineService {
         resultDTO.setOrderDetails(getOrderDetailsByOrderId(updatedOrder.getId()));
 
         return resultDTO;
+    }
+
+    @Override
+    public OrderOnlineDTO updatePaymentProof(Long id, String paymentImageUrl) {
+        OrderOnline order = orderOnlineRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        
+        order.setPaymentImage(paymentImageUrl);
+        OrderOnline savedOrder = orderOnlineRepository.save(order);
+        return orderOnlineMapper.toDTO(savedOrder);
     }
 } 
