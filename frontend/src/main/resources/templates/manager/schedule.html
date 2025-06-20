@@ -100,17 +100,17 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Nhân viên</span>
                     </a>
+                    <a th:href="@{/sales/items}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
+                            <i class="fas fa-cash-register text-red-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
+                    </a>
                     <a th:href="@{/manager/schedule}" class="nav-item active flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
                             <i class="fas fa-calendar-alt text-purple-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Lịch làm việc</span>
-                    </a>
-                    <a th:href="@{/sales}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
-                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
-                            <i class="fas fa-cash-register text-red-400"></i>
-                        </div>
-                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
                     </a>
                 </div>
             </nav>
@@ -131,23 +131,8 @@
                 <div class="lg:w-1/4 w-full">
                     <div id='external-events' class="bg-slate-800 rounded-lg shadow-lg p-6">
                         <h2 class="text-xl font-semibold mb-4 text-white border-b border-slate-700 pb-3">Danh sách Nhân viên</h2>
-                        <div id="employee-list" class="space-y-3 mt-4">
-                            <div class='fc-event employee-item bg-blue-500/80' data-fullname="Nguyễn Văn A" data-jobtitle="Đầu bếp">
-                                <p class="font-bold">Nguyễn Văn A</p>
-                                <p class="text-sm text-blue-100">Đầu bếp</p>
-                            </div>
-                            <div class='fc-event employee-item bg-green-500/80' data-fullname="Trần Thị B" data-jobtitle="Phục vụ">
-                                <p class="font-bold">Trần Thị B</p>
-                                <p class="text-sm text-green-100">Phục vụ</p>
-                            </div>
-                            <div class='fc-event employee-item bg-purple-500/80' data-fullname="Lê Văn C" data-jobtitle="Pha chế">
-                                <p class="font-bold">Lê Văn C</p>
-                                <p class="text-sm text-purple-100">Pha chế</p>
-                            </div>
-                            <div class='fc-event employee-item bg-yellow-500/80' data-fullname="Phạm Thị D" data-jobtitle="Thu ngân">
-                                <p class="font-bold">Phạm Thị D</p>
-                                <p class="text-sm text-yellow-100">Thu ngân</p>
-                            </div>
+                        <div id="employee-list" class="space-y-3 mt-4 max-h-[60vh] overflow-y-auto pr-2">
+                            <!-- Employee items will be loaded dynamically -->
                         </div>
                         <p class="text-xs text-slate-400 mt-4 italic">
                             <i class="fas fa-info-circle mr-1"></i>

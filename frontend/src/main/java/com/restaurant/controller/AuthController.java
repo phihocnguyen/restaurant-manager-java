@@ -130,4 +130,9 @@ public class AuthController {
         model.addAttribute("title", "Đăng ký - Restaurant Manager");
         return "auth/register";
     }
+
+    @GetMapping("/auth/verification")
+    public String showVerificationPage() {
+        return "auth/verification";
+    }
 } 

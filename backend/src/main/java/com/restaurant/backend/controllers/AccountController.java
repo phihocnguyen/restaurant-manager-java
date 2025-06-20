@@ -9,10 +9,16 @@ import com.restaurant.backend.services.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Random;
 
 @RestController
 public class AccountController {
     private final AccountService accountService;
+    @Autowired
+    private com.restaurant.backend.other_services.EmailService emailService;
+    @Autowired
+    private com.restaurant.backend.repositories.AccountRepository accountRepository;
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
@@ -51,5 +57,20 @@ public class AccountController {
     public ResponseEntity<AccountDto> partialUpdateAccount(@RequestBody UpdateAccountDto updateAccountDto, @PathVariable String username) {
         AccountDto updated = accountService.partialUpdateAccount(updateAccountDto, username);
         return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/send-verification")
+    public ResponseEntity<String> sendVerification(@RequestParam String email) {
+        // Kiểm tra user có tồn tại không
+        var accountOpt = accountRepository.findOneByAccEmail(email);
+        if (accountOpt.isEmpty()) {
+            return new ResponseEntity<>("Email không tồn tại trong hệ thống", HttpStatus.NOT_FOUND);
+        }
+        // Sinh mã token
+        String code = String.valueOf(100000 + new Random().nextInt(899999));
+        // Gửi mail
+        emailService.sendVerificationCode(email, code);
+        // (Có thể lưu code vào DB hoặc cache nếu cần xác thực sau này)
+        return new ResponseEntity<>("Đã gửi mã xác nhận đến email", HttpStatus.OK);
     }
 }

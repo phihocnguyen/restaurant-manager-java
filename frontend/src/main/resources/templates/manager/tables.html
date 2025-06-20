@@ -4,48 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title}">Quản lý Bàn - Restaurant Manager</title>
-    
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Custom CSS (optional) -->
+
     <link th:href="@{/css/style.css}" rel="stylesheet">
 
      <style>
-        .logo-glow {
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
-        }
-        .nav-item.active {
+         .logo-glow {
+             box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+         }
+         .nav-item.active {
              background: linear-gradient(to right, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5));
              box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
-        }
-         .nav-item.active span {
-            color: white;
-        }
+         }
+          .nav-item.active span {
+             color: white;
+         }
           .modal {
-            transition: opacity 0.25s ease;
+             transition: opacity 0.25s ease;
           }
           .modal-open {
-            overflow: hidden;
+             overflow: hidden;
           }
-        .sidebar {
-            width: 18rem;
-            background: #f8fafc;
-            border-right: 1px solid #e2e8f0;
-            flex-shrink: 0;
-        }
-        .main-content {
-            flex: 1;
-            min-height: 100vh;
-        }
-    </style>
+         .sidebar {
+             width: 18rem;
+             background: #f8fafc;
+             border-right: 1px solid #e2e8f0;
+             flex-shrink: 0;
+         }
+         .main-content {
+             flex: 1;
+             min-height: 100vh;
+         }
+         /* Added for alerts */
+         .alert-fixed {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+         }
+         .alert-success { background-color: #10B981; } /* Green-500 */
+         .alert-error { background-color: #EF4444; }   /* Red-500 */
+         .alert-show { opacity: 1; }
+     </style>
 </head>
 <body class="bg-[#1e293b] text-gray-100 font-sans">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <aside class="sidebar w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 flex flex-col shadow-2xl">
             <div class="p-8 flex items-center justify-center border-b border-slate-700/50">
                 <div class="flex items-center space-x-3">
@@ -96,7 +107,7 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Nhân viên</span>
                     </a>
-                    <a th:href="@{/sales}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                    <a th:href="@{/sales/items}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
                             <i class="fas fa-cash-register text-red-400"></i>
                         </div>
@@ -112,9 +123,7 @@
             </nav>
         </aside>
 
-        <!-- Main Content Area -->
         <div class="flex-1 flex flex-col">
-            <!-- Top Bar -->
             <header class="flex items-center justify-between p-6 bg-[#1f2937] border-b border-gray-800">
                 <h1 class="text-2xl font-semibold text-gray-100">Quản lý Bàn</h1>
                 <div class="flex items-center space-x-4">
@@ -124,7 +133,7 @@
                     </div>
                     <i class="fas fa-bell text-gray-400 hover:text-gray-100 cursor-pointer"></i>
                     <div class="flex items-center space-x-2">
-                         <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full">
+                         <img src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?semt=ais_hybrid&w=740" alt="User Avatar" class="h-8 w-8 rounded-full">
                         <div>
                             <p class="text-sm font-medium text-gray-100">Jhon Morison</p>
                             <p class="text-xs text-gray-400">Admin</p>
@@ -133,7 +142,6 @@
                 </div>
             </header>
 
-            <!-- Main Content -->
             <main class="flex-1 p-6">
                  <div class="flex justify-between items-center mb-6">
                     <div class="relative flex-1 mr-4 p-4 flex items-center rounded-md border-gray-700 shadow-sm bg-[#334155] ">
@@ -145,34 +153,17 @@
                     </button>
                 </div>
 
-                <!-- Tables Grid -->
-                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div th:each="table, iterStat : ${tables}" class="bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span th:text="${table.id}"></span></h3>
-                            <p class="text-gray-400 mb-2">Số người tối đa: <span th:text="${table.tabNum}" class="text-blue-400"></span></p>
-                            <p class="text-gray-400">Trạng thái: <span
-                                    th:text="${#strings.capitalize(table.tabStatus.name())}"
-                                    th:classappend="${table.tabStatus.name() == 'OCCUPIED' ? 'text-red-400' : (table.tabStatus.name() == 'RESERVED' ? 'text-yellow-400' : 'text-green-400')}">
-                                </span>
-                            </p>
-                        </div>
-                        <div class="flex justify-end space-x-4 mt-4">
-                             <button class="text-yellow-600 hover:text-yellow-900" th:onclick="'openEditModal(' + ${table.id} + ')'">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="text-red-600 hover:text-red-900" th:onclick="'confirmDelete(' + ${table.id} + ')'">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                <div id="tablesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     </div>
-                 </div>
+
+                <nav class="mt-6">
+                    <ul id="pagination" class="flex justify-center space-x-2"></ul>
+                </nav>
 
             </main>
         </div>
     </div>
 
-    <!-- Add Table Modal -->
     <div id="addTableModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-[#1f2937] text-gray-100">
             <div class="flex justify-between items-center mb-4">
@@ -194,7 +185,6 @@
         </div>
     </div>
 
-    <!-- Edit Table Modal -->
     <div id="editTableModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-[#1f2937] text-gray-100">
             <div class="flex justify-between items-center mb-4">
@@ -227,289 +217,290 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteConfirmModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-[#1f2937] text-gray-100">
-            <div class="mt-3 text-center">
-                <h3 class="text-lg leading-6 font-medium text-gray-100">Xác nhận xóa</h3>
-                <div class="mt-2 px-7 py-3">
-                    <p class="text-sm text-gray-300">Bạn có chắc chắn muốn xóa bàn này?</p>
+    <div id="deleteConfirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-8 border w-[400px] shadow-2xl rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 text-gray-100">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
                 </div>
-                <div class="flex justify-center space-x-4 mt-4">
-                    <button type="button" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700" onclick="closeModal('deleteConfirmModal')">Hủy</button>
-                    <button type="button" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700" onclick="deleteTable()">Xóa</button>
+                <h3 class="text-lg font-medium text-gray-100 mb-2">Xác nhận xóa</h3>
+                <p class="text-sm text-gray-300 mb-6">Bạn có chắc chắn muốn xóa <b>bàn</b>? Hành động này không thể hoàn tác.</p>
+                <div class="flex justify-center space-x-4">
+                    <button type="button" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center" onclick="closeModal('deleteConfirmModal')">
+                        <i class="fas fa-times mr-2"></i>Hủy
+                    </button>
+                    <button type="button" class="px-6 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center" onclick="deleteTable()">
+                        <i class="fas fa-trash mr-2"></i>Xóa
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <!-- Custom JS -->
+
     <script th:src="@{/js/main.js}"></script>
 
     <div id="spinnerOverlay" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[100] hidden">
         <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
+    <div id="alertContainer" class="alert-fixed hidden"></div>
+
+
     <script>
-        let currentTableId = null;
+        let tables = []; // Initialize tables as an empty array
+        const pageSize = 9; // 3x3 grid
+        let currentPage = 1;
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-            document.body.classList.add('modal-open'); // Prevent scrolling
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-            document.body.classList.remove('modal-open'); // Re-enable scrolling
-        }
-
-        function openEditModal(id) {
-             const tableId = parseInt(id);
-            if (isNaN(tableId)) {
-                console.error('Invalid table ID:', id);
-                alert('ID bàn không hợp lệ');
-                return;
-            }
-            
-            currentTableId = tableId;
-            showSpinner();
-            fetch(`/manager/api/tables/${tableId}`)
-                .then(response => {
-                    if (!response.ok) {
-                         if (response.status === 404) {
-                            throw new Error('Bàn không tồn tại.');
-                        }
-                        throw new Error('Failed to fetch table data');
-                    }
-                    return response.json();
-                })
-                .then(table => {
-                    document.getElementById('editTableId').value = table.id;
-                    document.getElementById('editTabNum').value = table.tabNum;
-                    document.getElementById('editTabStatus').value = table.tabStatus;
-                    openModal('editTableModal');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert(error.message || 'Không thể tải thông tin bàn. Vui lòng thử lại.');
-                })
-                .finally(() => {
-                    hideSpinner();
-                });
-        }
-
-        function saveTable() {
-            const formData = new FormData(document.getElementById('addTableForm'));
-            const table = Object.fromEntries(formData.entries());
-
-            // Chuyển đổi tabNum sang kiểu số
-            table.tabNum = parseInt(table.tabNum);
-            if (isNaN(table.tabNum)) {
-                 alert('Số người tối đa không hợp lệ.');
-                 return;
-            }
-
-            // Set default values
-             table.tabStatus = "EMPTY"; // Mặc định bàn còn trống khi tạo mới
-             table.isdeleted = false; // Mặc định chưa xóa mềm
-
-            showSpinner();
-            fetch('/manager/api/tables', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(table)
-            })
-            .then(response => {
-                 if (response.status === 409) {
-                    throw new Error('Bàn đã tồn tại!');
-                }
-                if (!response.ok) {
-                    throw new Error('Failed to create table');
-                }
-                return response.json(); // Assuming backend returns the created table
-            })
-            .then(createdTable => {
-                 console.log('Table created:', createdTable);
-                closeModal('addTableModal');
-                window.location.reload(); // Reload page to show new table
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(error.message || 'Không thể tạo bàn mới. Vui lòng thử lại.');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
-        }
-
-        function updateTable() {
-            if (!currentTableId || isNaN(currentTableId)) {
-                console.error('Invalid table ID:', currentTableId);
-                alert('ID bàn không hợp lệ');
-                return;
-            }
-
-            const formData = new FormData(document.getElementById('editTableForm'));
-            const table = Object.fromEntries(formData.entries());
-             table.id = currentTableId; // Ensure ID is included
-             // Chuyển đổi tabNum sang kiểu số
-            table.tabNum = parseInt(table.tabNum);
-             if (isNaN(table.tabNum)) {
-                 alert('Số người tối đa không hợp lệ.');
-                 return;
-            }
-            // Lấy giá trị từ dropdown
-            table.tabStatus = document.getElementById('editTabStatus').value;
-             table.isdeleted = false;
-
-            showSpinner();
-            fetch(`/manager/api/tables/${currentTableId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(table)
-            })
-            .then(response => {
-                if (!response.ok) {
-                     if (response.status === 404) {
-                        throw new Error('Bàn không tồn tại.');
-                    }
-                    throw new Error('Failed to update table');
-                }
-                return response;
-            })
-            .then(response => {
-                 console.log('Table updated:', currentTableId, response.status);
-                closeModal('editTableModal');
-                window.location.reload(); // Reload page to show updated table
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(error.message || 'Không thể cập nhật thông tin bàn. Vui lòng thử lại.');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
-        }
-
-        function confirmDelete(id) {
-             const tableId = parseInt(id);
-            if (isNaN(tableId)) {
-                console.error('Invalid table ID:', id);
-                alert('ID bàn không hợp lệ');
-                return;
-            }
-            currentTableId = tableId;
-            openModal('deleteConfirmModal');
-        }
-
-        function deleteTable() {
-            if (!currentTableId || isNaN(currentTableId)) {
-                console.error('Invalid table ID:', currentTableId);
-                alert('ID bàn không hợp lệ');
-                return;
-            }
-
-            showSpinner();
-            fetch(`/manager/api/tables/${currentTableId}`, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (!response.ok) {
-                     if (response.status === 404) {
-                        throw new Error('Bàn không tồn tại.');
-                    } else if (response.status === 409) {
-                         throw new Error('Không thể xóa bàn đang có khách hoặc đã đặt.');
-                    }
-                    throw new Error('Failed to delete table');
-                }
-                 // Không gọi response.json() vì DELETE trả về 200 OK với body trống
-                 // Chỉ kiểm tra response.ok và proceed
-                 console.log('Delete response status:', response.status); // Log the status
-                 return response; // Trả về response gốc
-            })
-            .then(response => {
-                 console.log('Table deleted:', currentTableId, response.status);
-                closeModal('deleteConfirmModal');
-                window.location.reload(); // Reload page after deletion
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(error.message || 'Không thể xóa bàn. Vui lòng thử lại.');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
-        }
-
-        // Hàm hiển thị spinner
+        // --- Helper functions for Spinner and Alerts ---
         function showSpinner() {
             document.getElementById('spinnerOverlay').classList.remove('hidden');
         }
 
-        // Hàm ẩn spinner
         function hideSpinner() {
             document.getElementById('spinnerOverlay').classList.add('hidden');
         }
 
-        // Thêm hàm fetch danh sách bàn
-        function fetchTables() {
-            showSpinner();
-            fetch('/manager/api/tables')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch tables');
-                    }
-                    return response.json();
-                })
-                .then(tables => {
-                    // Sort tables by ID in ascending order
-                    tables.sort((a, b) => a.id - b.id);
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.textContent = message;
+            alertContainer.className = `alert-fixed alert-${type} alert-show`; // Add alert-show to trigger transition
+            alertContainer.classList.remove('hidden');
 
-                    const tablesGrid = document.querySelector('.grid');
-                    tablesGrid.innerHTML = ''; // Clear existing tables
-
-                    tables.forEach(table => {
-                        const statusClass = table.tabStatus === 'OCCUPIED' ? 'text-red-400' : 
-                                         (table.tabStatus === 'RESERVED' ? 'text-yellow-400' : 'text-green-400');
-
-                        const tableCard = `
-                            <div class="bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between">
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: <span>${table.id}</span></h3>
-                                    <p class="text-gray-400 mb-2">Số người tối đa: <span class="text-blue-400">${table.tabNum}</span></p>
-                                    <p class="text-gray-400">Trạng thái: <span class="${statusClass}">${table.tabStatus}</span></p>
-                                </div>
-                                <div class="flex justify-end space-x-4 mt-4">
-                                    <button class="text-yellow-600 hover:text-yellow-900" onclick="openEditModal(${table.id})">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-900" onclick="confirmDelete(${table.id})">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                        tablesGrid.innerHTML += tableCard;
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Không thể tải danh sách bàn. Vui lòng thử lại.');
-                })
-                .finally(() => {
-                    hideSpinner();
-                });
+            setTimeout(() => {
+                alertContainer.classList.remove('alert-show'); // Hide after some time
+                // Optionally add 'hidden' after transition
+                setTimeout(() => {
+                    alertContainer.classList.add('hidden');
+                }, 300); // Match transition duration
+            }, 3000); // Show for 3 seconds
         }
 
-        // Gọi fetchTables khi trang được load
-        document.addEventListener('DOMContentLoaded', fetchTables);
+        // --- Modal Functions (unchanged, but added for completeness) ---
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        }
+
+        // --- API Calls ---
+        // --- API Calls ---
+        async function fetchTables() {
+            showSpinner();
+            try {
+                const response = await fetch('http://localhost:8080/tables');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                tables = data.sort((a, b) => a.id - b.id);
+
+                renderTables();
+            } catch (error) {
+                console.error('Error fetching tables:', error);
+                showAlert('Không thể tải dữ liệu bàn.', 'error');
+                document.getElementById('tablesGrid').innerHTML = '<div class="col-span-3 text-center text-red-400">Có lỗi xảy ra khi tải dữ liệu bàn.</div>';
+                document.getElementById('pagination').innerHTML = '';
+            } finally {
+                hideSpinner();
+            }
+        }
+        async function saveTable() {
+            showSpinner();
+            const tabNum = document.getElementById('addTabNum').value;
+            try {
+                const response = await fetch('http://localhost:8080/tables', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ tabNum: parseInt(tabNum) })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                await response.json(); // Assuming response contains the newly added table or success status
+                closeModal('addTableModal');
+                showAlert('Thêm bàn mới thành công!', 'success');
+                fetchTables(); // Re-fetch tables to update the grid
+            } catch (error) {
+                console.error('Error saving table:', error);
+                showAlert('Thêm bàn mới thất bại: ' + error.message, 'error');
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        async function updateTable() {
+            showSpinner();
+            const id = document.getElementById('editTableId').value;
+            const tabNum = document.getElementById('editTabNum').value;
+            const tabStatus = document.getElementById('editTabStatus').value;
+
+            try {
+                const response = await fetch(`http://localhost:8080/tables/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: parseInt(id), tabNum: parseInt(tabNum), tabStatus: tabStatus })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                await response.json(); // Assuming response contains the updated table or success status
+                closeModal('editTableModal');
+                showAlert('Cập nhật bàn thành công!', 'success');
+                fetchTables(); // Re-fetch tables to update the grid
+            } catch (error) {
+                console.error('Error updating table:', error);
+                showAlert('Cập nhật bàn thất bại: ' + error.message, 'error');
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        let tableToDeleteId = null; // To store the ID of the table to be deleted
+
+        function confirmDelete(id) {
+            tableToDeleteId = id;
+            openModal('deleteConfirmModal');
+        }
+
+        async function deleteTable() {
+            showSpinner();
+            if (tableToDeleteId === null) {
+                showAlert('Không có bàn nào được chọn để xóa.', 'error');
+                hideSpinner();
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8080/tables/${tableToDeleteId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                closeModal('deleteConfirmModal');
+                showAlert('Xóa bàn thành công!', 'success');
+                tableToDeleteId = null; // Reset
+                fetchTables(); // Re-fetch tables to update the grid
+            } catch (error) {
+                console.error('Error deleting table:', error);
+                showAlert('Xóa bàn thất bại: ' + error.message, 'error');
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        function openEditModal(id) {
+            const table = tables.find(t => t.id === id);
+            if (table) {
+                document.getElementById('editTableId').value = table.id;
+                document.getElementById('editTabNum').value = table.tabNum;
+                document.getElementById('editTabStatus').value = table.tabStatus;
+                openModal('editTableModal');
+            } else {
+                showAlert('Không tìm thấy thông tin bàn để chỉnh sửa.', 'error');
+            }
+        }
+
+        // --- Rendering Functions ---
+        function renderTables() {
+            const grid = document.getElementById('tablesGrid');
+            grid.innerHTML = '';
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageTables = tables.slice(start, end);
+
+            if (pageTables.length === 0 && tables.length > 0) { // If current page is empty but there are tables
+                currentPage = Math.ceil(tables.length / pageSize); // Go to last page
+                if (currentPage === 0 && tables.length === 0) { // Handle case where all tables deleted
+                    grid.innerHTML = '<div class="col-span-3 text-center text-gray-400">Không có bàn nào</div>';
+                    renderPagination();
+                    return;
+                }
+                renderTables(); // Re-render for the adjusted page
+                return;
+            } else if (tables.length === 0) { // No tables at all
+                grid.innerHTML = '<div class="col-span-3 text-center text-gray-400">Không có bàn nào</div>';
+                renderPagination();
+                return;
+            }
+
+
+            pageTables.forEach(table => {
+                const div = document.createElement('div');
+                div.className = 'bg-[#1f2937] rounded-lg shadow-md p-6 flex flex-col justify-between';
+                div.innerHTML = `
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-100 mb-2">Bàn số: ${table.id}</h3>
+                        <p class="text-gray-400 mb-2">Số người tối đa: <span class="text-blue-400">${table.tabNum}</span></p>
+                        <p class="text-gray-400">Trạng thái: <span
+                                class="${table.tabStatus === 'OCCUPIED' ? 'text-red-400' : (table.tabStatus === 'RESERVED' ? 'text-yellow-400' : 'text-green-400')}">
+                                ${table.tabStatus === 'EMPTY' ? 'Còn trống' : (table.tabStatus === 'OCCUPIED' ? 'Đang hoạt động' : 'Đã đặt')}
+                        </span></p>
+                    </div>
+                    <div class="flex justify-end space-x-4 mt-4">
+                        <button class="text-yellow-600 hover:text-yellow-900" onclick="openEditModal(${table.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-900" onclick="confirmDelete(${table.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+            renderPagination();
+        }
+
+        function renderPagination() {
+            if (!tables || !Array.isArray(tables) || tables.length === 0) {
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            const totalPages = Math.ceil(tables.length / pageSize);
+            let html = '';
+            if (currentPage > 1) {
+                html += `<li><a href="#" onclick="gotoPage(${currentPage-1})" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Trước</a></li>`;
+            }
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<li><a href="#" onclick="gotoPage(${i})" class="px-3 py-1.5 rounded-md ${i === currentPage ? 'bg-indigo-600 text-white' : 'bg-[#334155] text-gray-300'} hover:bg-indigo-700">${i}</a></li>`;
+            }
+            if (currentPage < totalPages) {
+                html += `<li><a href="#" onclick="gotoPage(${currentPage+1})" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Sau</a></li>`;
+            }
+            document.getElementById('pagination').innerHTML = html;
+        }
+
+        function gotoPage(page) {
+            currentPage = page;
+            renderTables();
+            return false;
+        }
+
+        // --- Initial Data Load ---
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTables(); // Call API when DOM is fully loaded
+        });
     </script>
 </body>
-</html> 
+</html>

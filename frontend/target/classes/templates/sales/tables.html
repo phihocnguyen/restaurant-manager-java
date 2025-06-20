@@ -155,16 +155,11 @@
                                 <p class="text-sm text-gray-600">Tên khách hàng: <span th:text="${table.get('customerName')} ?: 'Khách vãng lai'" th:data-table-id="${table.get('id')}" class="customer-name-reserved"></span></p>
                             </div>
                             <div th:if="${table.get('tabStatus') == 'OCCUPIED'}">
-                                <p class="text-sm text-gray-600">Tên khách hàng: <span th:text="${table.get('customerName') != null and !table.get('customerName').isEmpty() ? table.get('customerName') : 'Khách vãng lai'}" th:data-table-id="${table.get('id')}" class="customer-name"></span></p>
+                                <p class="text-sm text-gray-600">Tên khách hàng: <span th:text="${table.get('customerName')} ?: 'Khách vãng lai'" th:data-table-id="${table.get('id')}" class="customer-name-reserved"></span></p>
                             </div>
                             <div class="flex items-center justify-between gap-2 mt-auto table-actions">
-                                <!-- Action buttons based on status -->
                                 <th:block th:if="${table.get('tabStatus') == 'EMPTY'}">
-                                    <button class="w-1/2 px-3 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-all shadow-md flex items-center justify-center"
-                                            th:onclick="|openBookingModal(${table.get('id')})|">
-                                        <i class="fas fa-calendar-plus mr-1.5"></i>Đặt bàn
-                                    </button>
-                                    <button class="w-1/2 px-3 py-2.5 bg-green-500 text-white text-sm font-medium rounded-xl hover:bg-green-600 transition-all shadow-md flex items-center justify-center"
+                                    <button class="w-full px-3 py-2.5 bg-green-500 text-white text-sm font-medium rounded-xl hover:bg-green-600 transition-all shadow-md flex items-center justify-center"
                                             th:onclick="|startServing(${table.get('id')})|">
                                         <i class="fas fa-utensils mr-1.5"></i>Phục vụ
                                     </button>

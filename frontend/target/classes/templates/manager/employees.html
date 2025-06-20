@@ -89,17 +89,17 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Nhân viên</span>
                     </a>
-                    <a th:href="@{/manager/schedule}" class="nav-item [[${#httpServletRequest.requestURI.contains('/manager/schedule')} ? 'active' : '']] flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
-                        <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
-                            <i class="fas fa-calendar-alt text-purple-400"></i>
-                        </div>
-                        <span class="group-hover:text-white transition-colors">Lịch làm việc</span>
-                    </a>
                     <a th:href="@{/sales/items}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
                             <i class="fas fa-cash-register text-red-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
+                    </a>
+                    <a th:href="@{/manager/schedule}" class="nav-item [[${#httpServletRequest.requestURI.contains('/manager/schedule')} ? 'active' : '']] flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
+                            <i class="fas fa-calendar-alt text-purple-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Lịch làm việc</span>
                     </a>
                 </div>
             </nav>
@@ -117,7 +117,7 @@
                     </div>
                     <i class="fas fa-bell text-gray-400 hover:text-gray-100 cursor-pointer"></i>
                     <div class="flex items-center space-x-2">
-                         <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full">
+                         <img src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?semt=ais_hybrid&w=740" alt="User Avatar" class="h-8 w-8 rounded-full">
                         <div>
                             <p class="text-sm font-medium text-gray-100">Jhon Morison</p>
                             <p class="text-xs text-gray-400">Admin</p>
@@ -147,7 +147,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Họ tên</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Số điện thoại</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Chức vụ</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Vị trí</th>
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Thao tác</th>
                             </tr>
                         </thead>
@@ -220,6 +220,23 @@
                             <input type="tel" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent" id="addPhone" name="empPhone" required>
                         </div>
                     </div>
+                    <div>
+                        <label for="addCccd" class="block text-sm font-medium text-gray-300 mb-1">CCCD</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-id-card text-gray-400"></i>
+                            </div>
+                            <input type="text" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent" id="addCccd" name="empCccd" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="addRole" class="block text-sm font-medium text-gray-300 mb-1">Chức vụ</label>
+                        <select id="addRole" name="empRole" class="w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="cashier">Thu ngân</option>
+                            <option value="kitchen">Bếp</option>
+                            <option value="delivery man">Giao hàng</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="flex justify-end space-x-4 mt-8">
@@ -277,6 +294,23 @@
                             <input type="tel" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-yellow-500 focus:border-transparent" id="editPhone" name="empPhone" required>
                         </div>
                     </div>
+                    <div>
+                        <label for="editCccd" class="block text-sm font-medium text-gray-300 mb-1">CCCD</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-id-card text-gray-400"></i>
+                            </div>
+                            <input type="text" class="pl-10 w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-yellow-500 focus:border-transparent" id="editCccd" name="empCccd" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="editRole" class="block text-sm font-medium text-gray-300 mb-1">Vị trí</label>
+                        <select id="editRole" name="empRole" class="w-full rounded-lg border-gray-700 bg-slate-700/50 text-gray-100 focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                            <option value="cashier">Thu ngân</option>
+                            <option value="kitchen">Bếp</option>
+                            <option value="delivery man">Giao hàng</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="flex justify-end space-x-4 mt-8">
@@ -298,7 +332,7 @@
                     <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
                 </div>
                 <h3 class="text-lg font-medium text-gray-100 mb-2">Xác nhận xóa</h3>
-                <p class="text-sm text-gray-300 mb-6">Bạn có chắc chắn muốn xóa nhân viên này? Hành động này không thể hoàn tác.</p>
+                <p class="text-sm text-gray-300 mb-6">Bạn có chắc chắn muốn xóa <b>nhân viên</b>? Hành động này không thể hoàn tác.</p>
                 <div class="flex justify-center space-x-4">
                     <button type="button" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center" onclick="closeModal('deleteConfirmModal')">
                         <i class="fas fa-times mr-2"></i>Hủy
@@ -343,6 +377,13 @@
             document.getElementById('spinnerOverlay').classList.add('hidden');
         }
 
+        function getRoleNameVi(role) {
+            if (role === 'cashier') return 'Thu ngân';
+            if (role === 'kitchen') return 'Bếp';
+            if (role === 'delivery man') return 'Giao hàng';
+            return role;
+        }
+
         function fetchEmployees() {
             showSpinner();
             fetch('/manager/api/employees')
@@ -353,9 +394,9 @@
                     return response.json();
                 })
                 .then(employees => {
+                    employees.sort((a, b) => a.id - b.id);
                     const tableBody = document.getElementById('employeeTableBody');
-                    tableBody.innerHTML = ''; // Clear existing rows
-
+                    tableBody.innerHTML = '';
                     employees.forEach(employee => {
                         const row = `
                             <tr class="hover:bg-[#334155]">
@@ -363,7 +404,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.name}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.email}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.phone}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${employee.role}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${getRoleNameVi(employee.role)}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button class="text-yellow-600 hover:text-yellow-900 mr-4" onclick="openEditModal(${employee.id})">
                                         <i class="fas fa-edit"></i>
@@ -410,6 +451,8 @@
                     document.getElementById('editName').value = employee.name;
                     document.getElementById('editEmail').value = employee.email;
                     document.getElementById('editPhone').value = employee.phone;
+                    document.getElementById('editCccd').value = employee.cccd || '';
+                    document.getElementById('editRole').value = employee.role || 'cashier';
                     openModal('editEmployeeModal');
                 })
                 .catch(error => {
@@ -430,12 +473,12 @@
                 name: document.getElementById('addName').value,
                 email: employeeEmail,
                 phone: document.getElementById('addPhone').value,
-                address: "Default Address", // Default value based on payload
-                cccd: document.getElementById('addName').value, // Default value based on payload
-                role: "employee", // Default role as a string
-                salary: 0, // Default value based on payload
-                workedDays: 0, // Default value based on payload
-                sdate: new Date().toISOString().split('T')[0], // Add start date
+                cccd: document.getElementById('addCccd').value,
+                role: document.getElementById('addRole').value,
+                address: "Default Address",
+                salary: 0,
+                workedDays: 0,
+                sdate: new Date().toISOString().split('T')[0],
                 isdeleted: false
             };
 
@@ -517,18 +560,17 @@
             }
 
             const form = document.getElementById('editEmployeeForm');
-            const formData = new FormData(form);
             const employee = {
                 id: currentEmployeeId,
                 name: document.getElementById('editName').value,
                 email: document.getElementById('editEmail').value,
                 phone: document.getElementById('editPhone').value,
-                address: "Default Address", // Using a default for now, form doesn't have this field
-                cccd: "Default CCCD", // Using a default for now
-                role: "employee", // Default role as a string
-                salary: 0, // Using a default for now
-                workedDays: 0, // Using a default for now
-                isdeleted: false // Assuming not deleted on update
+                cccd: document.getElementById('editCccd').value,
+                role: document.getElementById('editRole').value,
+                address: "Default Address",
+                salary: 0,
+                workedDays: 0,
+                isdeleted: false
             };
 
             showSpinner();
@@ -543,17 +585,17 @@
                 if (!response.ok) {
                      if (response.status === 404) {
                         throw new Error('Nhân viên không tồn tại.');
-                    } else if (response.status === 409) { // Assuming 409 Conflict for duplicate entries
-                        throw new Error('Email hoặc số điện thoại đã tồn tại!');
+                    } else if (response.status === 409) {
+                        throw new Error('Email, số điện thoại hoặc CCCD đã tồn tại!');
                     }
                     throw new Error('Failed to update employee');
                 }
-                 return response; // No JSON expected for PUT success
+                 return response;
             })
             .then(response => {
                  console.log('Employee updated:', currentEmployeeId, response.status);
                 closeModal('editEmployeeModal');
-                fetchEmployees(); // Refresh the table
+                fetchEmployees();
             })
             .catch(error => {
                 console.error('Error updating employee:', error);

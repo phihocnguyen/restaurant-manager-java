@@ -192,3 +192,9 @@ ALTER TABLE order_online
 ADD COLUMN employee_id INT NULL,
 ADD CONSTRAINT fk_order_online_employee
     FOREIGN KEY (employee_id) REFERENCES EMPLOYEES(EMP_ID) ON UPDATE CASCADE;
+
+ALTER TABLE order_online
+ADD COLUMN payment_image VARCHAR(255) NULL;
+
+-- Thêm trường verified cho bảng account nếu chưa có
+ALTER TABLE account ADD COLUMN IF NOT EXISTS verified BOOLEAN; 

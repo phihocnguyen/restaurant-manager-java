@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadingScreen.style.display = 'none';
             }, 1200);
         }
-    }, 5000);
+    }, 1500);
 });
 
 // Reservation Table Map Logic

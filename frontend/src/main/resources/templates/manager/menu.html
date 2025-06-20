@@ -103,17 +103,17 @@
                         </div>
                         <span class="group-hover:text-white transition-colors">Nhân viên</span>
                     </a>
+                    <a th:href="@{/sales/items}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
+                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
+                            <i class="fas fa-cash-register text-red-400"></i>
+                        </div>
+                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
+                    </a>
                     <a th:href="@{/manager/schedule}" class="nav-item [[${#httpServletRequest.requestURI.contains('/manager/schedule')} ? 'active' : '']] flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
                         <div class="bg-purple-500/20 p-2 rounded-lg mr-4 group-hover:bg-purple-500/30 transition-colors">
                             <i class="fas fa-calendar-alt text-purple-400"></i>
                         </div>
                         <span class="group-hover:text-white transition-colors">Lịch làm việc</span>
-                    </a>
-                    <a th:href="@{/sales}" class="nav-item flex items-center py-4 px-6 text-sm font-medium rounded-xl hover:bg-slate-700/50 group">
-                        <div class="bg-red-500/20 p-2 rounded-lg mr-4 group-hover:bg-red-500/30 transition-colors">
-                            <i class="fas fa-cash-register text-red-400"></i>
-                        </div>
-                        <span class="group-hover:text-white transition-colors">Trang bán hàng</span>
                     </a>
                 </div>
             </nav>
@@ -127,7 +127,7 @@
                 <div class="flex items-center space-x-4">
                     <i class="fas fa-bell text-gray-400 hover:text-gray-100 cursor-pointer"></i>
                     <div class="flex items-center space-x-2">
-                         <img th:src="@{/img/default-avatar.png}" alt="User Avatar" class="h-8 w-8 rounded-full">
+                         <img src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?semt=ais_hybrid&w=740" alt="User Avatar" class="h-8 w-8 rounded-full">
                         <div>
                             <p class="text-sm font-medium text-gray-100">Jhon Morison</p>
                             <p class="text-xs text-gray-400">Admin</p>
@@ -162,48 +162,13 @@
                 </div>
 
                 <!-- Menu Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <th:block th:each="item : ${items}">
-                        <div class="bg-[#1f2937] rounded-lg shadow-sm overflow-hidden hover:shadow-md">
-                            <div class="h-48 flex items-center justify-center bg-gray-100">
-                                <img th:src="${item.itemImg}" class="w-24 h-24 object-cover rounded-full" alt="Food">
-                            </div>
-                            <div class="p-4">
-                                <h3 class="text-lg font-medium text-gray-100 mb-1" th:text="${item.itemName}">Tên món ăn</h3>
-                                <p class="text-sm text-gray-400 mb-3">Mô tả món ăn ngắn gọn...</p>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-indigo-400" th:text="${#numbers.formatDecimal(item.itemSprice, 0, 'COMMA', 0, 'POINT')} + 'đ'">50.000đ</span>
-                                    <div class="flex space-x-2">
-                                        <form th:action="@{'/manager/menu/edit/' + ${item.id}}" method="get" style="display:inline">
-                                            <button class="px-3 py-1.5 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-700" type="submit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        </form>
-                                        <form th:action="@{'/manager/menu/delete/' + ${item.id}}" method="post" style="display:inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa món này?');">
-                                            <button class="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700" type="submit">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </th:block>
+                <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Items will be rendered by JS -->
                 </div>
 
                 <!-- Pagination -->
                 <nav class="mt-6">
-                    <ul class="flex justify-center space-x-2">
-                        <li>
-                            <a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Trước</a>
-                        </li>
-                        <li><a href="#" class="px-3 py-1.5 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">1</a></li>
-                        <li><a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">2</a></li>
-                        <li><a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">3</a></li>
-                        <li>
-                            <a href="#" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Sau</a>
-                        </li>
-                    </ul>
+                    <ul id="pagination" class="flex justify-center space-x-2"></ul>
                 </nav>
             </main>
         </div>
@@ -278,7 +243,75 @@
         </form>
       </div>
     </div>
-    <script>
+    <script th:inline="javascript">
+        const pageSize = 9; // 3x3 grid
+        let currentPage = 1;
+        const menuItems = /*[[${items}]]*/
+
+        function renderMenu() {
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = '';
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageItems = menuItems.slice(start, end);
+            
+            pageItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bg-[#1f2937] rounded-lg shadow-sm overflow-hidden hover:shadow-md';
+                div.innerHTML = `
+                    <div class="h-48 flex items-center justify-center bg-gray-100">
+                        <img src="${item.itemImg}" class="w-24 h-24 object-cover rounded-full" alt="Food">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-medium text-gray-100 mb-1">${item.itemName}</h3>
+                        <p class="text-sm text-gray-400 mb-3">Mô tả món ăn ngắn gọn...</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-bold text-indigo-400">${new Intl.NumberFormat('vi-VN').format(item.itemSprice)}đ</span>
+                            <div class="flex space-x-2">
+                                <form action="/manager/menu/edit/${item.id}" method="get" style="display:inline">
+                                    <button class="px-3 py-1.5 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-700" type="submit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </form>
+                                <form action="/manager/menu/delete/${item.id}" method="post" style="display:inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa món này?');">
+                                    <button class="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700" type="submit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(menuItems.length / pageSize);
+            let html = '';
+            if (currentPage > 1) {
+                html += `<li><a href="#" onclick="gotoPage(${currentPage-1})" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Trước</a></li>`;
+            }
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<li><a href="#" onclick="gotoPage(${i})" class="px-3 py-1.5 rounded-md ${i === currentPage ? 'bg-indigo-600 text-white' : 'bg-[#334155] text-gray-300'} hover:bg-indigo-700">${i}</a></li>`;
+            }
+            if (currentPage < totalPages) {
+                html += `<li><a href="#" onclick="gotoPage(${currentPage+1})" class="px-3 py-1.5 bg-[#334155] text-gray-300 rounded-md hover:bg-[#475569]">Sau</a></li>`;
+            }
+            document.getElementById('pagination').innerHTML = html;
+        }
+
+        function gotoPage(page) {
+            currentPage = page;
+            renderMenu();
+            return false;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMenu();
+        });
+
         // Call toggleIngredientFields on page load if in edit mode
         document.addEventListener('DOMContentLoaded', function() {
             if (document.getElementById('ingredientFields') && document.getElementById('itemType')) {

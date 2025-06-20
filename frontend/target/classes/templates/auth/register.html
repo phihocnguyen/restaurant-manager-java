@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký - G15 Kitchen</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Fonts (Roboto) -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -185,7 +182,6 @@
 </head>
 <body>
     <div class="container-fluid">
-        <!-- Register Section -->
         <div class="login-section">
             <div class="login-form">
                 <h2>🍽️ Tạo tài khoản mới</h2>
@@ -194,13 +190,13 @@
                 <form id="registerForm" class="needs-validation" novalidate>
                     <div class="input-group">
                         <input type="text" class="form-control has-icon" id="username" name="accUsername" placeholder="Tên đăng nhập" required>
-                         <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
                         <div class="invalid-feedback">Vui lòng nhập tên đăng nhập</div>
                     </div>
 
                     <div class="input-group">
                         <input type="email" class="form-control has-icon" id="email" name="accEmail" placeholder="Email" required>
-                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                         <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ</div>
                     </div>
 
@@ -210,32 +206,32 @@
                         <div class="invalid-feedback">Vui lòng nhập mật khẩu (ít nhất 6 ký tự)</div>
                     </div>
 
-                     <div class="input-group">
+                    <div class="input-group">
                         <input type="password" class="form-control has-icon" id="confirm-password" name="confirmPassword" placeholder="Xác nhận mật khẩu" required>
-                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <div class="invalid-feedback">Vui lòng xác nhận mật khẩu</div>
                     </div>
 
                     <div class="input-group">
                         <input type="text" class="form-control has-icon" id="displayname" name="accDisplayname" placeholder="Tên hiển thị">
-                         <span class="input-group-text"><i class="fas fa-signature"></i></span>
+                        <span class="input-group-text"><i class="fas fa-signature"></i></span>
                     </div>
 
                     <div class="input-group">
                         <input type="tel" class="form-control has-icon" id="phone" name="accPhone" placeholder="Số điện thoại">
-                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
                     </div>
 
                     <div class="input-group">
                         <input type="text" class="form-control has-icon" id="address" name="accAddress" placeholder="Địa chỉ">
-                         <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
                     </div>
                     
                     <div class="input-group">
-                         <input type="text" class="form-control has-icon" id="cccd" name="cccd" placeholder="Số CCCD" required>
-                          <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                         <div class="invalid-feedback">Vui lòng nhập số CCCD</div>
-                     </div>
+                        <input type="text" class="form-control has-icon" id="cccd" name="cccd" placeholder="Số CCCD" required>
+                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                        <div class="invalid-feedback">Vui lòng nhập số CCCD</div>
+                    </div>
 
                     <div id="register-error-message" class="text-danger text-center mb-3" style="display: none;"></div>
 
@@ -248,19 +244,17 @@
             </div>
         </div>
 
-        <!-- Image Section -->
         <div class="image-section"></div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Form Validation JS -->
     <script>
         // Bootstrap form validation
         (function () {
             'use strict';
             const forms = document.querySelectorAll('.needs-validation');
+
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', async event => {
                     event.preventDefault();
@@ -270,72 +264,96 @@
                     registerErrorMessageDiv.textContent = '';
                     registerErrorMessageDiv.style.display = 'none';
 
-                    if (form.checkValidity()) {
-                        const password = document.getElementById('password').value;
-                        const confirmPassword = document.getElementById('confirm-password').value;
-
-                        if (password !== confirmPassword) {
-                             registerErrorMessageDiv.textContent = 'Xác nhận mật khẩu không khớp.';
-                             registerErrorMessageDiv.style.display = 'block';
-                             form.classList.add('was-validated');
-                             return; // Stop submission
-                        }
-
-                        const username = document.getElementById('username').value;
-                        const email = document.getElementById('email').value;
-                        const displayname = document.getElementById('displayname').value;
-                        const phone = document.getElementById('phone').value;
-                        const address = document.getElementById('address').value;
-                        const cccd = document.getElementById('cccd').value;
-
-                        const signupData = {
-                            accUsername: username,
-                            accPassword: password,
-                            accEmail: email,
-                            accDisplayname: displayname,
-                            accGender: false, // Default value, adjust if needed
-                            accBday: null, // Adjust if collecting birthday
-                            accAddress: address,
-                            accPhone: phone,
-                            role: {
-                                roleName: "customer" // Default role is customer
-                            },
-                            isdeleted: false,
-                            cccd: cccd
-                        };
-
-                        try {
-                            const response = await fetch('http://localhost:8080/signup', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(signupData)
-                            });
-
-                            if (!response.ok) {
-                                // Attempt to read backend error message
-                                const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
-                                throw new Error(errorData.message || `Signup failed with status: ${response.status}`);
-                            }
-
-                            // Handle successful signup
-                            alert('Đăng ký thành công! Vui lòng đăng nhập.');
-                            window.location.href = '/login'; // Redirect to login page
-
-                        } catch (error) {
-                            console.error('Signup error:', error);
-                            registerErrorMessageDiv.textContent = `Đăng ký thất bại: ${error.message}`;
-                            registerErrorMessageDiv.style.display = 'block';
-                        }
-                    }
-                    
+                    // Thêm class 'was-validated' để hiển thị lỗi validation của Bootstrap ngay lập tức
                     form.classList.add('was-validated');
+
+                    // Kiểm tra validation của form trước khi gửi request
+                    if (!form.checkValidity()) {
+                        return; // Dừng quá trình submit
+                    }
+
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirm-password').value;
+
+                    if (password !== confirmPassword) {
+                        registerErrorMessageDiv.textContent = 'Xác nhận mật khẩu không khớp.';
+                        registerErrorMessageDiv.style.display = 'block';
+                        return; // Dừng submit
+                    }
+
+                    const username = document.getElementById('username').value;
+                    const email = document.getElementById('email').value;
+                    const displayname = document.getElementById('displayname').value;
+                    const phone = document.getElementById('phone').value;
+                    const address = document.getElementById('address').value;
+                    const cccd = document.getElementById('cccd').value;
+
+                    const signupData = {
+                        accUsername: username,
+                        accPassword: password,
+                        accEmail: email,
+                        accDisplayname: displayname,
+                        accGender: false, // Default value, adjust if needed
+                        accBday: null, // Adjust if collecting birthday
+                        accAddress: address,
+                        accPhone: phone,
+                        role: {
+                            roleName: "customer" // Default role is customer
+                        },
+                        isdeleted: false,
+                        cccd: cccd
+                    };
+
+                    try {
+                        const response = await fetch('http://localhost:8080/signup', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(signupData)
+                        });
+
+                        if (!response.ok) {
+                            let errorMsg = 'Đăng ký thất bại.';
+                            try {
+                                const errorData = await response.json();
+                                if (errorData && errorData.message) {
+                                    if (errorData.message.includes('accPhone')) {
+                                        errorMsg = 'Số điện thoại đã được sử dụng.';
+                                    } else if (errorData.message.includes('cccd')) {
+                                        errorMsg = 'Số CCCD đã được sử dụng.';
+                                    } else if (errorData.message.includes('accEmail')) {
+                                        errorMsg = 'Email đã được sử dụng.';
+                                    } else if (errorData.message.includes('accUsername')) {
+                                        errorMsg = 'Tên đăng nhập đã được sử dụng.';
+                                    } else {
+                                        errorMsg = errorData.message;
+                                    }
+                                }
+                            } catch (e) {
+                                // Fallback nếu không parse được JSON
+                                console.error("Error parsing response JSON:", e);
+                            }
+                            throw new Error(errorMsg);
+                        }
+
+                        // Gửi mail xác thực
+                        await fetch('http://localhost:8080/send-verification?email=' + encodeURIComponent(email), { method: 'POST' });
+                        localStorage.setItem('pendingVerifyEmail', email);
+                        alert('Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.');
+                        
+                        window.location.href = '/auth/verification'; // Chuyển hướng đến trang xác thực
+
+                    } catch (error) {
+                        console.error('Signup error:', error);
+                        registerErrorMessageDiv.textContent = `Đăng ký thất bại: ${error.message}`;
+                        registerErrorMessageDiv.style.display = 'block';
+                    }
                 }, false);
             });
         })();
 
-         // Optional: Add password match validation
+        // Optional: Add password match validation
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirm-password');
 
@@ -352,4 +370,4 @@
 
     </script>
 </body>
-</html> 
+</html>

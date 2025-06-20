@@ -68,4 +68,7 @@ public class Account {
     @Column(name = "isdeleted", nullable = false)
     private Boolean isdeleted = false;
 
+    @Column(name = "verified")
+    private Boolean verified;
+
 }

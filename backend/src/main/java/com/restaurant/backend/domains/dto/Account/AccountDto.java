@@ -45,4 +45,6 @@ public class AccountDto {
     private Boolean isdeleted = false;
 
     private String cccd;
+
+    private Boolean verified;
 }

@@ -1,55 +1,119 @@
+function getRoleColorHex(role) {
+    if (role === 'cashier') return '#3b82f6'; // blue
+    if (role === 'kitchen') return '#22c55e'; // green
+    if (role === 'delivery man') return '#f59e0b'; // yellow
+    return '#9ca3af'; // gray
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    /* 1. KHỞI TẠO TÍNH NĂNG KÉO-THẢ CHO DANH SÁCH NHÂN VIÊN
+    /* 0. FETCH AND RENDER EMPLOYEES
     -----------------------------------------------------------------*/
-    const containerEl = document.getElementById('external-events');
-    if (containerEl) {
-        new FullCalendar.Draggable(containerEl, {
-            itemSelector: '.employee-item',
-            eventData: function(eventEl) {
-                const fullName = eventEl.getAttribute('data-fullname');
-                const jobTitle = eventEl.getAttribute('data-jobtitle');
-
-                // --- Lấy màu từ class Tailwind --- //
-                let bgColor = '';
-                const classList = eventEl.classList;
-                for (let i = 0; i < classList.length; i++) {
-                    const className = classList[i];
-                    if (className.startsWith('bg-')) {
-                        // Đây là một class Tailwind setting background color
-                        // Chúng ta cần mapping class này sang mã màu hex
-                        // Lưu ý: Mapping này cần phải đầy đủ các màu bạn sử dụng
-                        const colorMapping = {
-                            'bg-blue-500/80': '#3b82f6', // Ví dụ: blue-500
-                            'bg-green-500/80': '#22c55e', // Ví dụ: green-500
-                            'bg-purple-500/80': '#a855f7', // Ví dụ: purple-500
-                            'bg-yellow-500/80': '#f59e0b', // Ví dụ: yellow-500
-                            // Thêm các màu khác nếu cần
-                        };
-                        bgColor = colorMapping[className] || ''; // Lấy màu từ mapping, fallback về rỗng nếu không tìm thấy
-                        break; // Thoát vòng lặp sau khi tìm thấy màu
-                    }
-                }
-                // --- Kết thúc lấy màu --- //
-
-                // Fallback về màu mặc định nếu không lấy được màu từ Tailwind
-                if (!bgColor) {
-                     bgColor = eventEl.style.backgroundColor || ''; // Lấy màu từ inline style nếu có
-                }
-
-                return {
-                    title: fullName + ' - ' + jobTitle,
-                    backgroundColor: bgColor || '#3788d8', // Sử dụng màu lấy được, fallback về màu mặc định FullCalendar nếu rỗng
-                    borderColor: bgColor || '#3788d8',
-                    allDay: false, // Explicitly set allDay to false for dragged events
-                    extendedProps: {
-                        fullName: fullName,
-                        jobTitle: jobTitle
-                    }
-                };
+    async function fetchEmployees() {
+        try {
+            const response = await fetch('http://localhost:8080/employees');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        });
-    } else {
-        console.error("Container element with id 'external-events' not found.");
+            const employees = await response.json();
+            return employees;
+        } catch (error) {
+            console.error('Error fetching employees:', error);
+            return [];
+        }
+    }
+
+    function getRandomColor() {
+        const colors = [
+            'bg-blue-500/80',
+            'bg-green-500/80',
+            'bg-purple-500/80',
+            'bg-yellow-500/80',
+            'bg-red-500/80',
+            'bg-indigo-500/80',
+            'bg-pink-500/80',
+            'bg-teal-500/80'
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function getRoleNameVi(role) {
+        if (role === 'cashier') return 'Thu ngân';
+        if (role === 'kitchen') return 'Bếp';
+        if (role === 'delivery man') return 'Giao hàng';
+        return role;
+    }
+
+    function getRoleColorClass(role) {
+        if (role === 'cashier') return 'bg-blue-500/80';
+        if (role === 'kitchen') return 'bg-green-500/80';
+        if (role === 'delivery man') return 'bg-yellow-500/80';
+        return 'bg-gray-400/80';
+    }
+
+    function getRoleTextColorClass(role) {
+        if (role === 'cashier') return 'text-blue-500-100';
+        if (role === 'kitchen') return 'text-green-500-100';
+        if (role === 'delivery man') return 'text-yellow-500-100';
+        return 'text-gray-500-100';
+    }
+
+    function renderEmployees(employees) {
+        const employeeList = document.getElementById('employee-list');
+        if (!employeeList) return;
+
+        employeeList.innerHTML = employees.map(employee => {
+            const colorClass = getRoleColorClass(employee.role);
+            const textColorClass = getRoleTextColorClass(employee.role);
+            return `
+                <div class='fc-event employee-item ${colorClass} hover:shadow-lg hover:scale-105 transition-all duration-150 cursor-pointer' 
+                     data-fullname="${employee.name}" 
+                     data-jobtitle="${getRoleNameVi(employee.role) || 'Nhân viên'}">
+                    <p class="font-bold">${employee.name}</p>
+                    <p class="text-sm ${textColorClass}">${getRoleNameVi(employee.role) || 'Nhân viên'}</p>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Fetch and render employees
+    fetchEmployees().then(employees => {
+        renderEmployees(employees);
+        initializeDraggable();
+    });
+
+    function getRoleFromVi(jobTitle) {
+        if (jobTitle === 'Thu ngân') return 'cashier';
+        if (jobTitle === 'Bếp') return 'kitchen';
+        if (jobTitle === 'Giao hàng') return 'delivery man';
+        return '';
+    }
+
+    function initializeDraggable() {
+        const containerEl = document.getElementById('external-events');
+        if (containerEl) {
+            new FullCalendar.Draggable(containerEl, {
+                itemSelector: '.employee-item',
+                eventData: function(eventEl) {
+                    const fullName = eventEl.getAttribute('data-fullname');
+                    const jobTitle = eventEl.getAttribute('data-jobtitle');
+                    const role = getRoleFromVi(jobTitle);
+                    const color = getRoleColorHex(role);
+                    return {
+                        title: fullName + ' - ' + jobTitle,
+                        backgroundColor: color,
+                        borderColor: color,
+                        allDay: false,
+                        extendedProps: {
+                            fullName: fullName,
+                            jobTitle: jobTitle,
+                            role: role
+                        }
+                    };
+                }
+            });
+        } else {
+            console.error("Container element with id 'external-events' not found.");
+        }
     }
 
     /* 2. KHỞI TẠO VÀ CẤU HÌNH LỊCH FULLCALENDAR
@@ -79,31 +143,61 @@ document.addEventListener('DOMContentLoaded', function() {
                 day: 'Ngày'
             },
             eventDrop: function(info) {
-                // alert('Ca làm việc đã được cập nhật: ' + info.event.title + ' vào lúc ' + info.event.start.toLocaleString()); // Removed alert
+                saveCalendarEvents(calendar);
                 console.log('Event dropped:', info.event.title, 'New start:', info.event.start, 'New end:', info.event.end);
             },
             eventReceive: function(info) {
-                // alert('Ca làm việc mới được thêm: ' + info.event.title + ' vào lúc ' + info.event.start.toLocaleString()); // Removed alert
+                // Gán role vào extendedProps nếu có
+                if (info.draggedEl) {
+                    const jobTitle = info.draggedEl.getAttribute('data-jobtitle');
+                    const role = getRoleFromVi(jobTitle);
+                    info.event.setExtendedProp('role', role);
+                    info.event.setProp('backgroundColor', getRoleColorHex(role));
+                    info.event.setProp('borderColor', getRoleColorHex(role));
+                }
+                saveCalendarEvents(calendar);
                 console.log('Event received:', info.event.title, 'Start:', info.event.start, 'End:', info.event.end);
             },
             select: function(info) {
                 const title = prompt('Nhập tên ca làm việc:');
                 if (title) {
-                    calendar.addEvent({
+                    // Mặc định không có role, sẽ là xám
+                    const event = calendar.addEvent({
                         title: title,
                         start: info.start,
                         end: info.end,
-                        // Removed allDay: info.allDay
+                        backgroundColor: getRoleColorHex(''),
+                        borderColor: getRoleColorHex(''),
+                        extendedProps: { role: '' }
                     });
+                    saveCalendarEvents(calendar);
                 }
                 calendar.unselect();
             },
             eventClick: function(info) {
-                // alert('Click vào ca làm việc: ' + info.event.title); // Removed alert
                 console.log('Event clicked:', info.event.title, 'Start:', info.event.start, 'End:', info.event.end);
+            },
+            eventDidMount: function(arg) {
+                // Set màu theo role
+                const role = arg.event.extendedProps.role;
+                const color = getRoleColorHex(role);
+                arg.el.style.backgroundColor = color;
+                arg.el.style.borderColor = color;
+            },
+            eventResize: function(info) {
+                saveCalendarEvents(calendar);
+                console.log('Event resized:', info.event.title, 'New start:', info.event.start, 'New end:', info.event.end);
             }
         });
 
+        // Load events from localStorage
+        loadCalendarEvents(calendar);
+        // Sau khi load, set lại màu cho các event
+        calendar.getEvents().forEach(ev => {
+            const color = getRoleColorHex(ev.extendedProps.role);
+            ev.setProp('backgroundColor', color);
+            ev.setProp('borderColor', color);
+        });
         calendar.render();
 
         /* 3. XUẤT LỊCH RA FILE EXCEL
@@ -117,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Chuyển đổi sự kiện thành dữ liệu cho Excel
                 const excelData = events.map(event => ({
                     'Nhân viên': event.extendedProps.fullName || event.title,
-                    'Chức vụ': event.extendedProps.jobTitle || '',
+                    'Vị trí': getRoleNameVi(event.extendedProps.role) || '',
                     'Ngày bắt đầu': event.start ? event.start.toLocaleDateString('vi-VN') : '',
                     'Giờ bắt đầu': event.start ? event.start.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : '',
                     'Ngày kết thúc': event.end ? event.end.toLocaleDateString('vi-VN') : '',
@@ -140,3 +234,28 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Element with id 'calendar' not found.");
     }
 });
+
+// Persist calendar events to localStorage
+function saveCalendarEvents(calendar) {
+    const events = calendar.getEvents().map(e => ({
+        title: e.title,
+        start: e.start,
+        end: e.end,
+        extendedProps: e.extendedProps,
+    }));
+    localStorage.setItem('calendarEvents', JSON.stringify(events));
+}
+
+function loadCalendarEvents(calendar) {
+    const events = JSON.parse(localStorage.getItem('calendarEvents') || '[]');
+    events.forEach(e => {
+        calendar.addEvent({
+            title: e.title,
+            start: e.start,
+            end: e.end,
+            extendedProps: e.extendedProps,
+            backgroundColor: getRoleColorHex(e.extendedProps?.role),
+            borderColor: getRoleColorHex(e.extendedProps?.role)
+        });
+    });
+}

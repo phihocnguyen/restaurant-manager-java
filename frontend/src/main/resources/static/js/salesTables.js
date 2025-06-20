@@ -58,6 +58,45 @@ function formatCurrency(value) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
+// Hàm xóa một item khỏi bàn
+function removeItemFromTable(tableId, itemId) {
+    const tableData = getTableData(tableId);
+    if (!tableData) return;
+
+    // Tìm index của item cần xóa
+    const itemIndex = tableData.items.findIndex(item => item.id === itemId);
+    if (itemIndex === -1) return;
+
+    // Xóa item khỏi mảng
+    tableData.items.splice(itemIndex, 1);
+
+    // Lưu lại dữ liệu vào localStorage
+    saveTableData(tableId, tableData.items);
+
+    // Cập nhật lại giao diện
+    viewTableDetails(tableId);
+}
+
+// Hàm cập nhật số lượng item
+function updateItemQuantity(tableId, itemId, newQuantity) {
+    const tableData = getTableData(tableId);
+    if (!tableData) return;
+    const item = tableData.items.find(item => item.id === itemId);
+    if (!item) return;
+    if (newQuantity < 1) {
+        if (confirm('Bạn có muốn xóa món này khỏi bàn không?')) {
+            removeItemFromTable(tableId, itemId);
+            return;
+        } else {
+            return;
+        }
+    }
+    item.quantity = newQuantity;
+    item.totalPrice = item.price * newQuantity;
+    saveTableData(tableId, tableData.items);
+    viewTableDetails(tableId);
+}
+
 // Hàm xem chi tiết bàn
 async function viewTableDetails(tableId) {
     showGlobalSpinner(); // Show spinner
@@ -132,11 +171,18 @@ async function viewTableDetails(tableId) {
                         <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
                         <div>
                             <h4 class="font-medium text-gray-900">${item.name}</h4>
-                            <p class="text-sm text-gray-500">Số lượng: ${item.quantity}</p>
+                            <div class="flex items-center mt-1">
+                                <button onclick="updateItemQuantity(${tableId}, ${item.id}, ${item.quantity - 1})" class="px-2 py-1 bg-gray-200 text-gray-700 rounded-l hover:bg-gray-300">-</button>
+                                <input type="number" min="1" value="${item.quantity}" onchange="updateItemQuantity(${tableId}, ${item.id}, this.valueAsNumber)" class="w-12 text-center border border-gray-300 mx-1 rounded" style="height:32px;" />
+                                <button onclick="updateItemQuantity(${tableId}, ${item.id}, ${item.quantity + 1})" class="px-2 py-1 bg-gray-200 text-gray-700 rounded-r hover:bg-gray-300">+</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="text-right">
+                    <div class="flex items-center space-x-4">
                         <p class="font-medium text-gray-900">${formatCurrency(item.totalPrice)}</p>
+                        <button onclick="removeItemFromTable(${tableId}, ${item.id})" class="p-2 text-red-500 hover:bg-red-100 rounded-full transition-colors">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             `).join('');
@@ -174,37 +220,7 @@ async function viewTableDetails(tableId) {
 
     } catch (error) {
         console.error('Error viewing table details:', error);
-        // Display error message or default content if fetching fails
-         cartArea.innerHTML = `
-             <div class="p-5 border-b border-gray-200">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Thông tin khách hàng</label>
-                <div class="relative">
-                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 bg-blue-100 p-1.5 rounded-lg">
-                        <i class="fas fa-user text-blue-600 text-sm"></i>
-                    </div>
-                    <input type="text" class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all" placeholder="Tìm tên khách hàng...">
-                </div>
-            </div>
-            <div class="flex-1 p-5">
-               <p class="text-center text-red-500">Không thể tải chi tiết bàn: ${error.message}</p>
-               ${defaultCartContent} // Optionally include quick stats
-            </div>
-            <div class="p-5 border-t border-gray-200 bg-white">
-                 <div class="grid grid-cols-1 gap-3">
-                    <button class="flex justify-center items-center px-6 py-3 bg-orange-500 text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
-                        <i class="fas fa-plus mr-2"></i>Thêm bàn mới
-                    </button>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button class="flex justify-center items-center px-4 py-3 bg-gray-500 text-white rounded-xl hover:opacity-90 transition-all font-medium">
-                            <i class="fas fa-sync mr-2"></i>Làm mới
-                        </button>
-                        <button class="flex justify-center items-center px-4 py-3 bg-green-500 text-white rounded-xl hover:opacity-90 transition-all font-medium shadow-lg">
-                            <i class="fas fa-chart-bar mr-2"></i>Báo cáo
-                        </button>
-                    </div>
-                </div>
-            </div>
-         `;
+        cartArea.innerHTML = defaultCartContent;
     } finally {
         hideGlobalSpinner(); // Hide spinner
     }
@@ -793,6 +809,9 @@ async function processPayment() {
         resetTableData(currentPaymentTableId);
         closePaymentModal();
         refreshTableVisibility();
+
+        // Sau khi thanh toán thành công:
+        location.reload();
 
     } catch (error) {
         console.error('Error processing payment:', error);

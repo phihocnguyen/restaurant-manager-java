@@ -18,7 +18,9 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
 
     @Override
     public AccountDto mapFrom(Account account) {
-        return modelMapper.map(account, AccountDto.class);
+        AccountDto dto = modelMapper.map(account, AccountDto.class);
+        dto.setVerified(account.getVerified());
+        return dto;
     }
 
     @Override
@@ -41,6 +43,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
         if (account.getIsdeleted() == null) {
             account.setIsdeleted(false);
         }
+        account.setVerified(accountDto.getVerified());
         
         return account;
     }

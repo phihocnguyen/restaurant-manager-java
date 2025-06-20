@@ -124,7 +124,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean verify(String email, String code) {
-        return code.equals(verificationCodes.get(email));
+        boolean result = code.equals(verificationCodes.get(email));
+        if (result) {
+            // Cập nhật trạng thái xác thực cho account
+            Optional<Account> accOpt = accountRepository.findOneByAccEmail(email);
+            if (accOpt.isPresent()) {
+                Account acc = accOpt.get();
+                acc.setVerified(true);
+                accountRepository.save(acc);
+            }
+        }
+        return result;
     }
 
     @Override
